@@ -1,0 +1,809 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 10 · Lesson 34: How the Internet Works | Self-Paced CS50x</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0a1a2f; --navy-2:#0f243d; --navy-3:#15314f;
+  --teal:#18c4a0; --teal-d:#0fa385; --teal-soft:#e4f8f2;
+  --coral:#f24d63; --coral-d:#d83a50; --coral-soft:#feecee;
+  --ink:#152230; --muted:#5f6c7b; --line:#e9eef2; --bg:#ffffff;
+  --soft:#f4fbf9; --card:#ffffff; --code-bg:#21252b; --max:780px;
+  --k:#2f8fb3; --k-bg:#e8f4f9; --tip:#c4881f; --tip-bg:#fdf4e3; --ok:#1f9d6b; --ok-bg:#e6f6ef;
+  --no:#e0533f; --no-bg:#fdecea; --goal:#7b54c9; --goal-bg:#f1ebfb;
+  --shadow:0 10px 30px rgba(13,30,52,.08); --shadow-sm:0 4px 14px rgba(13,30,52,.07);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.72;font-size:17px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+#progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--teal),var(--coral));z-index:200;transition:width .1s linear}
+a{color:var(--teal-d);text-decoration:none}
+a:hover{color:var(--coral)}
+h1,h2,h3{font-family:Poppins,sans-serif;color:var(--ink);letter-spacing:-.01em}
+.accent{color:var(--coral)}
+.wrap{max-width:1200px;margin:0 auto;padding:0 28px}
+
+/* ---------- Top welcome strip ---------- */
+.topbar{background:var(--navy);color:#cdd8e4;font-size:13.5px}
+.topbar .wrap{display:flex;justify-content:space-between;align-items:center;height:42px;gap:18px}
+.topbar b{color:#fff;font-weight:600}
+.topbar .right{display:flex;gap:18px;align-items:center}
+.topbar a{color:#cdd8e4}.topbar a:hover{color:var(--teal)}
+
+/* ---------- Nav ---------- */
+nav.bar{background:var(--navy-2);position:sticky;top:0;z-index:120;box-shadow:0 2px 20px rgba(0,0,0,.25)}
+nav.bar .wrap{display:flex;align-items:center;height:68px;gap:26px}
+.logo{font-family:Poppins;font-weight:800;font-size:22px;color:#fff;letter-spacing:.02em;cursor:pointer;text-decoration:none}
+a.logo:hover{color:var(--teal)}
+.lessonnav{display:flex;gap:14px;align-items:stretch;margin:60px 0 0;flex-wrap:wrap}
+.lessonnav .ln{flex:1;min-width:200px;display:flex;flex-direction:column;gap:3px;border:1px solid var(--line);border-radius:14px;padding:16px 18px;color:var(--muted);transition:.15s;background:#fff}
+.lessonnav .ln:hover{border-color:var(--teal);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.lessonnav .ln .dir{font-size:13px;font-weight:600;color:var(--teal-d)}
+.lessonnav .ln b{color:var(--ink);font-family:Poppins;font-size:15px}
+.lessonnav .ln.next{text-align:right}
+.lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
+.lessonnav .ln.home b{color:var(--teal-d)}
+.logo .dot{color:var(--teal)}
+.navlinks{display:flex;gap:24px;margin-left:8px}
+.navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
+.navlinks a:hover{color:var(--teal)}
+.nav-cta{margin-left:auto;display:flex;gap:12px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:9px;border:none;cursor:pointer;font-family:Inter;font-weight:600;border-radius:999px;transition:.18s;font-size:15px;text-decoration:none}
+.btn-primary{background:var(--teal);color:#04231c;padding:12px 22px}
+.btn-primary:hover{background:var(--teal-d);color:#fff;transform:translateY(-1px)}
+.btn-outline{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.35);padding:10px 20px}
+.btn-outline:hover{border-color:var(--teal);color:var(--teal)}
+.btn-coral{background:var(--coral);color:#fff;padding:12px 22px}
+.btn-coral:hover{background:var(--coral-d);color:#fff;transform:translateY(-1px)}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;background:radial-gradient(120% 120% at 80% 0%,var(--navy-3),var(--navy) 60%);color:#eaf1f8;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.25;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.blob{position:absolute;border-radius:50%;filter:blur(8px);opacity:.5;z-index:0}
+.blob.t{width:230px;height:230px;background:rgba(24,196,160,.30);top:-60px;right:8%}
+.blob.c{width:160px;height:160px;background:rgba(242,77,99,.28);bottom:-40px;left:42%}
+.squiggle{position:absolute;z-index:1;opacity:.85}
+.hero .wrap{position:relative;z-index:2;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;padding:70px 28px 90px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--teal);font-weight:600;font-size:14px;letter-spacing:.03em;text-transform:uppercase;margin-bottom:18px}
+.hero h1{font-size:54px;line-height:1.08;font-weight:800;margin:0 0 20px;color:#fff}
+.hero .lead{font-size:18px;color:#b9c6d6;max-width:34em;margin:0 0 30px}
+.hero-actions{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:30px}
+.play{display:inline-flex;align-items:center;gap:12px;color:#fff;font-weight:600}
+.play .circ{width:52px;height:52px;border-radius:50%;background:var(--coral);display:grid;place-items:center;box-shadow:0 8px 22px rgba(242,77,99,.45);font-size:16px;animation:pulse 2.4s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(242,77,99,.45)}70%{box-shadow:0 0 0 16px rgba(242,77,99,0)}100%{box-shadow:0 0 0 0 rgba(242,77,99,0)}}
+.chips{display:flex;gap:10px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:#dce6f0;padding:8px 14px;border-radius:999px;font-size:13.5px;font-weight:500}
+.chip b{color:#fff}
+/* hero card */
+.hero-card{position:relative;background:#fff;color:var(--ink);border-radius:22px;padding:26px;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.hero-card .ring{position:absolute;top:-26px;right:-18px;width:96px;height:96px;background:#fff;border-radius:50%;box-shadow:var(--shadow);display:grid;place-items:center}
+.hero-card .ring svg{transform:rotate(-90deg)}
+.hero-card .ring .lab{position:absolute;font-family:Poppins;font-weight:700;font-size:18px;color:var(--teal-d)}
+.hero-card h3{margin:4px 0 14px;font-size:19px}
+.hero-card ul{list-style:none;margin:0 0 18px;padding:0}
+.hero-card li{display:flex;gap:11px;align-items:flex-start;padding:9px 0;border-bottom:1px dashed var(--line);font-size:14.5px;color:#36424f}
+.hero-card li:last-child{border-bottom:none}
+.hero-card li .ic{font-size:17px;line-height:1.4}
+.float-badge{position:absolute;left:18px;bottom:-26px;background:#fff;border-radius:14px;box-shadow:var(--shadow);padding:12px 16px;display:flex;gap:10px;align-items:center;font-size:13px;font-weight:600;color:var(--ink)}
+.float-badge .n{font-family:Poppins;font-weight:800;color:var(--coral);font-size:20px}
+
+/* ---------- Content layout ---------- */
+.layout{display:grid;grid-template-columns:268px minmax(0,1fr);gap:46px;max-width:1200px;margin:0 auto;padding:0 28px}
+aside{position:sticky;top:84px;align-self:start;height:calc(100vh - 100px);overflow-y:auto;padding:26px 0}
+.toc-card{background:var(--soft);border:1px solid var(--line);border-radius:18px;padding:18px}
+.toc-close{display:none;position:absolute;top:-6px;right:-4px;width:36px;height:36px;border:none;background:var(--navy-2);color:#fff;border-radius:50%;font-size:22px;line-height:1;cursor:pointer}
+.toc-close:hover{background:var(--coral)}
+.toc-title{font-family:Poppins;font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--teal-d);margin:0 0 10px;font-weight:700}
+.toc ul{list-style:none;margin:0;padding:0}
+.toc a{display:block;color:var(--muted);font-size:14px;padding:6px 12px;border-radius:8px;border-left:2px solid transparent;line-height:1.4}
+.toc a:hover{color:var(--ink);background:#fff}
+.toc a.active{color:var(--teal-d);background:#fff;border-left-color:var(--teal);font-weight:600}
+.toc .toc li li a{padding-left:24px;font-size:13px}
+.toc a.toc-capstone{color:var(--coral);font-weight:600}
+main{padding:54px 0 120px;min-width:0}
+article{max-width:var(--max)}
+
+/* typography */
+article h2{font-size:30px;margin:56px 0 16px;font-weight:700;position:relative}
+article h2::before{content:"\2726";color:var(--teal);font-size:18px;margin-right:10px;vertical-align:2px}
+article h3{font-size:21px;margin:34px 0 10px;font-weight:600}
+article h2+h3{margin-top:18px}
+article p,article li{font-size:16.5px}
+article ul,article ol{padding-left:24px}
+article li{margin:7px 0}
+article strong{font-weight:700;color:#0f1b28}
+hr{border:none;height:1px;background:var(--line);margin:42px 0}
+
+/* tables */
+table{border-collapse:separate;border-spacing:0;width:100%;margin:24px 0;font-size:15px;border:1px solid var(--line);border-radius:14px;overflow:hidden;display:block;overflow-x:auto}
+th,td{padding:12px 15px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--navy-2);color:#eaf1f8;font-family:Poppins;font-weight:600;font-size:14px}
+tr:last-child td{border-bottom:none}
+tbody tr:nth-child(even){background:var(--soft)}
+
+/* inline + block code */
+code{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.86em;background:var(--teal-soft);color:#0c6a55;padding:.13em .42em;border-radius:6px}
+.codehilite,pre{position:relative;background:var(--code-bg);border-radius:14px;margin:22px 0;overflow:hidden;box-shadow:var(--shadow-sm)}
+.codehilite pre{margin:0;border-radius:0;box-shadow:none;background:transparent}
+.codehilite pre,pre>code{display:block;padding:42px 18px 18px;overflow-x:auto}
+.codehilite code,pre code{background:none;color:#dfe6ee;padding:0;font-size:13.5px;line-height:1.7}
+.code-bar{position:absolute;top:0;left:0;right:0;height:34px;display:flex;align-items:center;gap:7px;padding:0 15px;background:rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.07)}
+.code-bar .dot{width:11px;height:11px;border-radius:50%}
+.dot.r{background:#ff5f57}.dot.y{background:#febc2e}.dot.g{background:#28c840}
+.copy-btn{position:absolute;top:5px;right:9px;z-index:3;background:rgba(255,255,255,.08);color:#dfe6ee;border:1px solid rgba(255,255,255,.14);border-radius:8px;font-size:12px;padding:4px 11px;cursor:pointer;font-family:Inter;transition:.15s}
+.copy-btn:hover{background:var(--teal);border-color:var(--teal);color:#04231c}
+.copy-btn.done{background:var(--teal);color:#04231c;border-color:var(--teal)}
+
+/* callouts */
+blockquote{margin:24px 0;padding:16px 20px;border-radius:14px;background:var(--soft);border:1px solid var(--line);border-left:5px solid var(--teal)}
+blockquote p{margin:7px 0}blockquote p:first-child{margin-top:0}blockquote p:last-child{margin-bottom:0}
+blockquote.cl-key{background:var(--k-bg);border-left-color:var(--k);border-color:transparent}
+blockquote.cl-tip{background:var(--tip-bg);border-left-color:var(--tip);border-color:transparent}
+blockquote.cl-ok{background:var(--ok-bg);border-left-color:var(--ok);border-color:transparent}
+blockquote.cl-no{background:var(--no-bg);border-left-color:var(--no);border-color:transparent}
+blockquote.cl-goal{background:var(--goal-bg);border-left-color:var(--goal);border-color:transparent}
+
+/* capstone banner */
+h2.capstone-h{background:linear-gradient(115deg,var(--navy),var(--navy-3));color:#fff;border-radius:20px;padding:30px 28px 26px;margin-top:64px;box-shadow:0 20px 50px rgba(10,26,47,.3);overflow:hidden;position:relative}
+h2.capstone-h::before{content:"\1F6E0\FE0F  HANDS-ON PROJECT";display:block;font-family:Poppins;font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--teal);margin:0 0 8px}
+h2.capstone-h::after{content:"";position:absolute;width:150px;height:150px;border-radius:50%;background:rgba(24,196,160,.25);filter:blur(10px);top:-50px;right:-30px}
+
+/* check-off */
+.checkable{list-style:none;padding-left:0}
+.checkable li{position:relative;padding-left:36px;cursor:pointer;margin:9px 0}
+.checkable li::before{content:"";position:absolute;left:0;top:3px;width:22px;height:22px;border:2px solid var(--teal);border-radius:7px;background:#fff;transition:.15s}
+.checkable li.checked::before{background:var(--teal);border-color:var(--teal)}
+.checkable li.checked::after{content:"\2713";position:absolute;left:5px;top:1px;color:#fff;font-weight:800;font-size:15px}
+.checkable li.checked{color:var(--muted)}
+
+/* footer */
+footer.site{background:var(--navy);color:#aebccb;margin-top:90px}
+footer.site .wrap{padding:46px 28px;display:flex;justify-content:space-between;gap:26px;flex-wrap:wrap;align-items:center}
+footer.site .logo{font-size:20px}
+footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
+
+#menuBtn{display:none}
+@media(max-width:920px){
+  .topbar{display:none}
+  .nav-cta{display:none}
+  .float-badge{display:none}
+  nav.bar .wrap{gap:14px;height:60px}
+  .wrap{padding:0 20px}
+  .logo{font-size:18px;white-space:nowrap}
+  .hero .wrap{grid-template-columns:1fr;gap:30px;padding:42px 20px 56px}
+  .hero h1{font-size:33px}
+  .hero .lead{font-size:16.5px}
+  .hero-actions{gap:14px}
+  .hero-actions .btn-primary{flex:1;justify-content:center}
+  .layout{grid-template-columns:1fr;gap:0}
+  aside{position:fixed;top:0;left:0;width:84vw;max-width:320px;height:100vh;background:#fff;z-index:130;transform:translateX(-100%);transition:.25s;box-shadow:var(--shadow);padding:24px}
+  aside.open{transform:none}
+  #menuBtn{display:inline-flex}
+  .toc-close{display:block}
+  .navlinks{display:none}
+  main{padding:34px 0 80px}
+  body{font-size:16px}
+  article h2{font-size:25px}
+  h2.capstone-h{padding:24px 20px}
+}
+@media(max-width:420px){
+  .hero h1{font-size:29px}
+  .hero-actions{flex-direction:column;align-items:stretch}
+  .hero-actions .play{justify-content:center}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<div class="topbar"><div class="wrap">
+  <div>&#10024; Welcome to <b>Self-Paced CS50x</b> &middot; a self-paced course</div>
+  <div class="right"><span>CS50x 2026 · Harvard University · David J. Malan</span></div>
+</div></div>
+
+<nav class="bar"><div class="wrap">
+  <button class="btn btn-outline" id="menuBtn" style="padding:8px 14px">&#9776;</button>
+  <a class="logo" href="..\index.html">Self-Paced CS50x<span class="dot">.</span></a>
+  <div class="navlinks">
+    <a href="..\index.html">All lessons</a>
+    <a href="#overview">Overview</a>
+    <a href="#capstone">Capstone</a>
+  </div>
+  <div class="nav-cta">
+    <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
+  </div>
+</div></nav>
+
+<header class="hero">
+  <span class="blob t"></span><span class="blob c"></span>
+  <svg class="squiggle" style="top:120px;left:46%;" width="90" height="26" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#18c4a0" stroke-width="4" stroke-linecap="round"/></svg>
+  <svg class="squiggle" style="bottom:60px;right:40%;" width="70" height="22" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#f24d63" stroke-width="4" stroke-linecap="round"/></svg>
+  <div class="wrap" id="overview">
+    <div>
+      <span class="eyebrow">&#10022; Module 10 · Lesson 34</span>
+      <h1>How the Internet <span class="accent">Works</span></h1>
+      <p class="lead">Every time you load a web page, four unglamorous protocols quietly cooperate: DHCP hands your device an address the moment it boots, DNS translates a name you can remember into a number a computer can route, IP gets a packet from your machine to the right one on Earth, and TCP slices big files into numbered, guaranteed-to-arrive pieces, and once you can name what each one contributes, &quot;the internet&quot; stops being magic and starts being a system you can trace by hand.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
+        <a class="play" href="https://www.youtube.com/watch?v=yYst7puZXjw" target="_blank" rel="noopener"><span class="circ">&#9654;</span> Watch the talk</a>
+      </div>
+      <div class="chips">
+        <span class="chip">&#127908; <b>David J. Malan</b></span>
+        <span class="chip">&#9201; <b>45-60 minutes</b></span>
+        <span class="chip">&#128296; <b>Hands-on capstone</b></span>
+      </div>
+    </div>
+    <div style="position:relative">
+      <div class="hero-card">
+        <div class="ring">
+          <svg width="74" height="74"><circle cx="37" cy="37" r="31" stroke="#eef2f5" stroke-width="7" fill="none"/><circle cx="37" cy="37" r="31" stroke="#18c4a0" stroke-width="7" fill="none" stroke-linecap="round" stroke-dasharray="195" stroke-dashoffset="40"/></svg>
+          <span class="lab">&#10022;</span>
+        </div>
+        <h3>What you&#39;ll get</h3>
+        <ul>
+          <li><span class="ic">&#9989;</span><span>Plain-language teaching with every term defined</span></li>
+          <li><span class="ic">&#128221;</span><span>Code snippets pulled from the talk</span></li>
+          <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
+          <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
+        </ul>
+        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <aside id="sidebar"><div class="toc-card">
+    <button class="toc-close" id="tocClose" aria-label="Close menu">&times;</button>
+    <p class="toc-title">On this page</p>
+    <div class="toc">
+<ul>
+<li><a href="#in-one-sentence">In one sentence</a></li>
+<li><a href="#first-principles-companion">First-principles companion</a></li>
+<li><a href="#a-few-plain-language-basics-first">A few plain-language basics first</a></li>
+<li><a href="#why-this-lesson-matters">Why this lesson matters</a></li>
+<li><a href="#learning-objectives">Learning objectives</a></li>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#part-1-from-a-black-terminal-to-a-browser-near-you">Part 1: From a black terminal to a browser near you</a></li>
+<li><a href="#part-2-ip-giving-every-device-on-earth-a-unique-address">Part 2: IP (giving every device on Earth a unique address)</a></li>
+<li><a href="#part-3-tcp-port-numbers-and-guaranteed-delivery">Part 3: TCP (port numbers and guaranteed delivery)</a></li>
+<li><a href="#part-4-dns-trading-numbers-for-names">Part 4: DNS (trading numbers for names)</a></li>
+<li><a href="#part-5-dhcp-how-your-device-learns-the-rules-the-moment-it-boots">Part 5: DHCP (how your device learns the rules the moment it boots)</a></li>
+<li><a href="#part-6-putting-it-all-together-the-journey-of-one-packet">Part 6: Putting it all together (the journey of one packet)</a></li>
+<li><a href="#key-takeaways">Key takeaways</a></li>
+<li><a href="#common-pitfalls">Common pitfalls</a></li>
+<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: Trace a packet's journey to Harvard</a><ul>
+<li><a href="#what-you-will-build">What you will build</a></li>
+<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
+<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
+<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
+</ul>
+</li>
+<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
+<li><a href="#exercise-1-the-ipv4-ceiling-by-hand-foundational">Exercise 1: The IPv4 ceiling, by hand (foundational)</a></li>
+<li><a href="#exercise-2-read-an-envelope-intermediate">Exercise 2: Read an envelope (intermediate)</a></li>
+<li><a href="#exercise-3-trace-the-hierarchy-from-memory-advanced">Exercise 3: Trace the hierarchy from memory (advanced)</a></li>
+</ul>
+</li>
+<li><a href="#cheat-sheet">Cheat sheet</a></li>
+<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
+</ul>
+</div>
+
+  </div></aside>
+  <main id="start">
+    <article>
+      <hr />
+<h2 id="in-one-sentence">In one sentence</h2>
+<p>Every time you load a web page, four unglamorous protocols quietly cooperate: DHCP hands your device an address the moment it boots, DNS translates a name you can remember into a number a computer can route, IP gets a packet from your machine to the right one on Earth, and TCP slices big files into numbered, guaranteed-to-arrive pieces, and once you can name what each one contributes, "the internet" stops being magic and starts being a system you can trace by hand.</p>
+<blockquote>
+<p>🎯 <strong>Where this lesson is heading.</strong> It builds to a hands-on <strong>Capstone Project</strong> where you run real lookups from your own codespace and sketch the full labeled journey of one packet from you to harvard.edu. Everything before the Capstone teaches the pieces you'll be labeling. If you want to see the finish line first, jump to the <strong>"Capstone Project"</strong> section, then come back.</p>
+</blockquote>
+<h2 id="first-principles-companion">First-principles companion</h2>
+<blockquote>
+<p>💡 <strong>The durable idea behind this lesson.</strong> Browsers and codespaces will change; the addressing scheme underneath them will not.</p>
+<ul>
+<li><strong><a href="https://www.rfc-editor.org/rfc/rfc791">RFC 791: Internet Protocol</a></strong> (DARPA/IETF, September 1981). This is the actual specification behind the "arcane diagram" of a 32-bit IP datagram Malan puts on screen: the formal, timeless definition of what goes on the outside of every packet's envelope, independent of any browser, language, or decade.</li>
+</ul>
+</blockquote>
+<h2 id="a-few-plain-language-basics-first">A few plain-language basics first</h2>
+<p>This lesson uses some everyday terms. Here they are in plain words:</p>
+<ul>
+<li><strong>Network:</strong> a group of computers connected so they can exchange information, whether by wires or wirelessly.</li>
+<li><strong>Router:</strong> a computer whose only job is to forward data toward its destination, deciding, packet by packet, which wire or connection to send it out on next.</li>
+<li><strong>Protocol:</strong> an agreed-upon set of rules for how to communicate, so that two computers (or two people) know what to expect from each other. A handshake between two strangers is a human protocol; TCP/IP is a computer one.</li>
+<li><strong>IP address:</strong> a numeric address assigned to a device so it can be uniquely found on a network, the way a street address uniquely locates a building.</li>
+<li><strong>Packet:</strong> a small chunk of data traveling across a network, wrapped with addressing information the way a letter is wrapped in an envelope. (Also called a datagram.)</li>
+<li><strong>Port number:</strong> a number written alongside an IP address that identifies <em>which service</em> on that computer a packet is meant for (a web page, versus email, versus a video call).</li>
+<li><strong>Domain name / DNS:</strong> a domain name is the human-friendly name for a website (like <code>harvard.edu</code>); DNS (Domain Name System) is the service that translates that name into the IP address computers actually need.</li>
+<li><strong>DHCP:</strong> the service that automatically hands a device its IP address (and other settings) the moment it joins a network, so no human has to type any of it in by hand.</li>
+</ul>
+<p>You do not need to memorise these. Each is explained again the first time it matters.</p>
+<h2 id="why-this-lesson-matters">Why this lesson matters</h2>
+<p>Every problem set you've written so far has lived entirely inside one machine: a black-and-white terminal window, text in, text out. As Malan puts it at the start of this lecture, that's about to change: <strong>"the apps that you and I are using like every day are in the form of a web browser and on our phone."</strong> Starting today, your code has to leave the building. It has to travel across wires and radio waves, find a specific computer among billions, and get an answer back, reliably, without you or the user ever thinking about it. This lesson is the "how" underneath that trust. Once you can explain what DHCP, DNS, IP, and TCP each contribute, you'll never look at a URL, a loading spinner, or a "can't reach this page" error the same way again, and by the time your own final project is live on the internet, every one of these protocols will be quietly carrying real visitors' requests to it.</p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<p>By the end of this lesson you will be able to:</p>
+<ol>
+<li>Explain what a network, a router, and a protocol are, and summarize how ARPANET became today's internet.</li>
+<li>Do the bit-math behind an IPv4 address (why it's 32 bits, why that caps the internet at about 4 billion addresses) and explain why IPv6 exists.</li>
+<li>Describe what lives "on the outside of the envelope" of a packet (source/destination IP addresses and port numbers) and explain how TCP fragments large files and guarantees they arrive intact.</li>
+<li>Explain how DNS turns a domain name into an IP address through a hierarchical, cached, recursive lookup, and what a registrar does.</li>
+<li>Explain what DHCP configures automatically the moment a device joins a network, and why that used to be done by hand.</li>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li><strong>Module 1 · Lesson 2: Bits and Binary</strong>: you'll reuse the exact same place-value math (8 bits → 256 values) to understand why an IPv4 address is 32 bits, and the "everything is bits in an envelope" framing carries straight through.</li>
+<li><strong>Module 0: Pre-flight</strong>: a working cs50.dev codespace, since the Capstone runs real lookup commands in its terminal.</li>
+<li>No prior networking knowledge assumed. (Module 9's AI lessons are not required background for this one: this lesson simply follows next in the course sequence.)</li>
+</ul>
+<hr />
+<h2 id="part-1-from-a-black-terminal-to-a-browser-near-you">Part 1: From a black terminal to a browser near you</h2>
+<p>Every program you've written up to now, in Scratch, C, or Python, ran and stayed on one machine: your own codespace, printing to your own terminal. Malan opens this lecture by naming the shift that's about to happen:</p>
+<blockquote>
+<p>"up until now, of course, in so many of our problem sets like we've been writing command line code like a black and white terminal window and everything is very keyboard based, very textual, but of course like the apps that you and I are using like every day are in the form of a web browser and on our phone." (David Malan)</p>
+</blockquote>
+<p>To make that shift, you first need to understand the thing your code is about to live on: the internet. In the simplest terms, Malan defines the building block underneath it:</p>
+<blockquote>
+<p>"networks are interconnections of computers, whether with wires or wirelessly." (David Malan)</p>
+</blockquote>
+<p>You already have a network at home, one on this campus, one at a company. As soon as you start connecting <em>networks</em> to other networks, you get, in effect, a network of networks: the internet. It didn't start out global. Rewind to 1969:</p>
+<blockquote>
+<p>"really something known as ARPANET for the Advanced Research Projects Agency, a project from the Department of Defense that was really designed to interconnect what limited supercomputers we had." (David Malan)</p>
+</blockquote>
+<p>ARPANET began as just a handful of nodes, UCLA and a few others, with Harvard and MIT joining within about a year. Today's internet is the same idea at planetary scale, held together by devices called <strong>routers</strong>, whose entire job is to forward data toward its destination, one hop at a time, in whichever direction gets it closer.</p>
+<p>To make that concrete, Malan's teaching fellows performed a live "packet-routing" skit over Zoom: each person played a router, passing along <strong>packets</strong>, chunks of data Malan describes with a physical metaphor:</p>
+<blockquote>
+<p>"packets of information which metaphorically you can think of as just like a little white envelope like this that we use to send things via snail mail via the US Postal Service or beyond that internationally." (David Malan)</p>
+</blockquote>
+<p>The point of the skit wasn't that there was one correct path from sender to receiver. There wasn't. As Malan notes, a packet "could have gone up and then to the left. It could have gone left and then up. It could have zigzagged", and that's genuinely how the real internet behaves: a packet's path depends on which wires and wireless links happen to be available and how routers are configured that moment, not on some single fixed route.</p>
+<p>For any of this coordination to work, every router and device has to speak the same language: a <strong>protocol</strong>, which Malan grounds in something you already do every day:</p>
+<blockquote>
+<p>"when I meet someone for the first time, I very often instinctively sort of extend my hand just sort of hoping that they too will extend their hand and shake." (David Malan)</p>
+</blockquote>
+<p>That handshake works because both people silently agreed in advance on the rule. Computers need the exact same kind of agreement, just expressed in bits instead of body language, and the specific agreement nearly everything on the internet uses is a pair of protocols called <strong>TCP/IP</strong>, defined as <strong>"a set of conventions that governs how computers behave on the internet."</strong></p>
+<blockquote>
+<p>🔑 <strong>The internet is just networks of networks, moved by routers that agree on a shared protocol.</strong> There is no single correct path a packet must take: only a shared set of rules every router along whatever path it does take has to honor.</p>
+</blockquote>
+<hr />
+<h2 id="part-2-ip-giving-every-device-on-earth-a-unique-address">Part 2: IP (giving every device on Earth a unique address)</h2>
+<p>TCP/IP is actually two different protocols solving two different problems. Start with the second half of that name, IP:</p>
+<blockquote>
+<p>"IP, short for Internet Protocol, is simply a protocol that decides to give all of us a unique address in the world." (David Malan)</p>
+</blockquote>
+<p>Just as Memorial Hall has a street address (45 Quincy Street, Cambridge, MA 02138), every device on the internet (a Mac, a phone, a server) gets a numeric <strong>IP address</strong>. You've seen the format: four numbers separated by dots, like <code>1.2.3.4</code>, formally called <strong>dotted decimal notation</strong>.</p>
+<p>Here's where Lesson 2's bit-counting comes back. Each of those four numbers ranges from 0 to 255: 256 total possibilities. From Lesson 2 you already know 256 = 2⁸, so each number takes <strong>8 bits</strong>. Four numbers × 8 bits each gives:</p>
+<div class="codehilite"><pre><span></span><code>   4 numbers  ×  8 bits each  =  32 bits total (an IPv4 address)
+
+   2^32 possible values ≈ 4.3 billion unique addresses
+</code></pre></div>
+
+<p>Four billion sounds enormous, until you remember that most people in the room own at least two internet-connected devices, and the "internet of things" adds appliances, doorbells, and light bulbs to the count. That ceiling is exactly why the world is gradually moving to <strong>IPv6</strong>, which uses 128 bits instead of 32:</p>
+<blockquote>
+<p>"IP addresses are 32 bits, little trivia that's germane only insofar as it does kind of limit how many total devices we could seem to have in the world." (David Malan)</p>
+</blockquote>
+<p>128 bits gives vastly more addresses than 32 (enough, as Malan puts it, "for the foreseeable future"), but the transition from IPv4 to IPv6 has been underway for decades and is still only partly complete, which is why this course (like most teaching material) still uses IPv4 addresses for simplicity.</p>
+<p>Every packet's "envelope" carries, among other bits, a source IP address and a destination IP address. If Phyllis (<code>5.6.7.8</code>) is sending something to Brian (<code>1.2.3.4</code>), she writes his address as the destination and her own as the return address, exactly like a piece of physical mail:</p>
+<div class="codehilite"><pre><span></span><code> ┌── OUTSIDE OF THE ENVELOPE ─────────────────────┐
+ │  To:    1.2.3.4     (Brian&#39;s IP address)       │
+ │  From:  5.6.7.8     (Phyllis&#39;s IP address)     │
+ ├─────────────────────────────────────────────────┤
+ │  [ contents of the envelope, sealed inside ]    │
+ └─────────────────────────────────────────────────┘
+</code></pre></div>
+
+<blockquote>
+<p>🔑 <strong>IP's entire job is uniquely addressing computers, nothing more.</strong> It does not promise the data will arrive, and it says nothing about <em>what kind</em> of data is inside. Solving those two problems is TCP's job, next.</p>
+</blockquote>
+<hr />
+<h2 id="part-3-tcp-port-numbers-and-guaranteed-delivery">Part 3: TCP (port numbers and guaranteed delivery)</h2>
+<p>A single server can do far more than one thing at once: serve email, host a video call, run a game, and serve web pages, all at the same address. IP alone can't tell those apart: it only gets a packet to the right <em>computer</em>, not the right <em>service on</em> that computer. That's the problem TCP solves, using <strong>port numbers</strong>:</p>
+<blockquote>
+<p>"TCP allows a computer to distinguish whether it has received a packet that's an email or receive a packet that's a chat message or a piece of a video conference or the like." (David Malan)</p>
+</blockquote>
+<p>Port numbers are small, standardized values written on the outside of the envelope alongside the IP addresses. Two you'll use constantly:</p>
+<table>
+<thead>
+<tr>
+<th>Port</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>80</td>
+<td>Plain HTTP (an unencrypted request for a web page)</td>
+</tr>
+<tr>
+<td>443</td>
+<td>HTTPS (an encrypted, secure request for a web page, the <code>S</code> in the URL)</td>
+</tr>
+</tbody>
+</table>
+<p>So when your browser requests <code>https://www.harvard.edu</code>, unbeknownst to you it writes Harvard's IP address <em>and</em> the number 443 on the outside of the envelope: telling Harvard's server, in effect, "this is a request for a secure web page, not an email." Phyllis also writes her own IP address <em>and</em> a port number of her own in the return-address corner, so Brian's reply reaches the right browser tab even if she has several tabs and apps open at once.</p>
+<p>TCP solves a second problem too: reliability over long distances and large files. Suppose Phyllis wants to send a large image, say, a big, happy cat JPEG. Sending it as one giant envelope would hog the connection and prevent anyone else from using the internet at that moment. So:</p>
+<blockquote>
+<p>"at the risk of a bit of heresy, we can actually tear this cat in half and fragment it really." (David Malan)</p>
+</blockquote>
+<p>TCP breaks a large file into multiple packets, each carrying part of the data plus a <strong>sequence number</strong>, a label like "piece 1 of 4," "piece 2 of 4," and so on. When packets arrive, possibly out of order (remember, each one may have taken a different path through the network), the receiving computer uses those sequence numbers to check whether anything is missing and to reassemble the pieces in the right order. If some are missing, the receiver can ask the sender to resend just those pieces, which is exactly what "guaranteed delivery" means here:</p>
+<blockquote>
+<p>"TCP guarantees delivery by just doing some bookkeeping on the outside of these envelopes." (David Malan)</p>
+</blockquote>
+<p>Put together: <strong>IP</strong> gets a packet to the right computer; <strong>TCP</strong> gets it to the right service on that computer (via a port number), breaks large data into numbered pieces, and makes sure every piece actually arrives.</p>
+<blockquote>
+<p>✅ <strong>What to do about it:</strong> whenever you see <code>https://</code> in a URL, you can now translate it in your head: "this connection is quietly using port 443, and whatever comes back will arrive complete, even if it had to travel in pieces."</p>
+</blockquote>
+<hr />
+<h2 id="part-4-dns-trading-numbers-for-names">Part 4: DNS (trading numbers for names)</h2>
+<p>Nobody wants to type <code>1.2.3.4</code> into a browser to visit a website. Instead you type <code>harvard.edu</code> or <code>google.com</code>, a <strong>domain name</strong>. Something has to translate that name into the IP address computers actually need, and that something is <strong>DNS</strong>:</p>
+<blockquote>
+<p>"there's another acronym in the world and there's another technology used on the internet, namely DNS for domain name system, and this is just a certain type of server that every home has, even if you didn't know it. Every campus has, every company has." (David Malan)</p>
+</blockquote>
+<p>Under the hood, a DNS server is essentially a giant two-column lookup table: domain names in one column, matching IP addresses in the other. When your device tries to reach <code>harvard.edu</code> for the first time since booting up, it doesn't already know Harvard's IP address (nobody pre-installs billions of IP addresses onto your phone), so it asks a nearby DNS server the question for you.</p>
+<p>Where do domain names themselves come from? You rent them:</p>
+<blockquote>
+<p>"You can go to any number of what are called internet registrars and pay them some money, and it's essentially on a rental basis, so you rent a domain name for a year or maybe 3 or 5 years at a time." (David Malan)</p>
+</blockquote>
+<p>Whoever rents a domain then configures some DNS server, somewhere, to know the IP address of the server that will host that domain's website.</p>
+<p>DNS is deliberately <strong>hierarchical</strong>. Somewhere out in the world sit <strong>root servers</strong>:</p>
+<blockquote>
+<p>"there is out there somewhere these so-called root servers that essentially know what the IP addresses are of all of the dot-coms, for instance, or all of the dot EDUs or the like." (David Malan)</p>
+</blockquote>
+<p>But your own computer doesn't ask a root server first: it's far more efficient to ask the <em>local</em> network. At home, that's the DNS server built into your home router; on campus, it's Harvard's own DNS server. If that local server already knows the answer (because someone else recently asked the same question), it just replies immediately. If it doesn't know, the question escalates upward:</p>
+<blockquote>
+<p>"this whole design is recursive, to borrow a term from a few weeks ago, in that if my computer doesn't know the answer... it eventually gets escalated to those so-called root servers, but then cached (that is, remembered) by all of these other DNS servers along the way." (David Malan)</p>
+</blockquote>
+<p>Here's the whole lookup chain, sketched out:</p>
+<div class="codehilite"><pre><span></span><code> You type: https://www.harvard.edu
+
+ 1. Your device        --  &quot;What&#39;s the IP address for www.harvard.edu?&quot;
+        │
+        ▼
+ 2. Local DNS server    --  (home router, or Harvard&#39;s own campus server)
+        │  Already knows? → answers immediately (it was cached from an earlier lookup)
+        │  Doesn&#39;t know?
+        ▼
+ 3. Root server         --  knows which servers handle all the .edu domains
+        │
+        ▼
+ 4. Answer flows back down the same chain, and every server along
+    the way CACHES it, so the next lookup for www.harvard.edu is instant
+        │
+        ▼
+ 5. Your device writes 1.2.3.4 on the outside of its envelope,
+    and the IP/TCP conversation from Parts 2-3 can finally begin
+</code></pre></div>
+
+<p>The whole system is, in Malan's summary, satisfyingly unglamorous:</p>
+<blockquote>
+<p>"It's a big cheat sheet of domain names to IP addresses and the server is responding for us." (David Malan)</p>
+<p>💡 <strong>Nuance:</strong> caching is why DNS mostly feels instant. The very first time anyone nearby visits a brand-new domain, there may be a slightly longer pause while the answer gets escalated up the chain; every lookup after that, from you or your neighbors, is served from a nearby cache instead.</p>
+</blockquote>
+<hr />
+<h2 id="part-5-dhcp-how-your-device-learns-the-rules-the-moment-it-boots">Part 5: DHCP (how your device learns the rules the moment it boots)</h2>
+<p>Everything so far assumes your own device already knows several things: its own IP address, the IP address of a DNS server to ask, and the IP address of the router to hand packets off to. Where does <em>that</em> information come from? One more acronym: <strong>DHCP</strong>, Dynamic Host Configuration Protocol.</p>
+<blockquote>
+<p>"How do I know what my Mac IP address should be? How do I know what my phone's IP address should be? How do I know what the IP address is of the DNS server of whom I should be asking any of these questions? ... DHCP is the solution to all of those problems." (David Malan)</p>
+</blockquote>
+<p>It wasn't always automatic. Malan recalls a time before DHCP existed, when people had to type in their own IP address, DNS server, and router address by hand, based on numbers someone else told them. Today, the moment you boot up a laptop or phone and join a network, your device does this instead:</p>
+<blockquote>
+<p>"it essentially broadcasts a message like Hello world, what's my IP address?" (David Malan)</p>
+</blockquote>
+<p>Somewhere on that local network (wired or wireless, at home, on campus, or in a company), a DHCP server is listening for exactly that broadcast, and answers it:</p>
+<blockquote>
+<p>"DHCP server on that local network wired or wirelessly that will respond based on how Harvard or Comcast or Verizon or someone at home has configured it to tell you what your device's IP address is, what the IP is of your local router, what the IP address is or are of your DNS servers, and the like." (David Malan)</p>
+</blockquote>
+<p>In one broadcast-and-reply exchange, DHCP hands your device everything Parts 2 through 4 assumed it already had: its own IP address, the router's address (where to send outbound packets), and the DNS server's address (who to ask for domain-name lookups). That's why plugging in an ethernet cable or joining Wi-Fi "just works" today, with no manual configuration at all. As Malan puts it, with evident appreciation for a problem you'll never have to think about again:</p>
+<blockquote>
+<p>💡 <strong>"Dynamic host configuration protocol didn't always exist. Wonderful that it now does."</strong> (David Malan)</p>
+</blockquote>
+<hr />
+<h2 id="part-6-putting-it-all-together-the-journey-of-one-packet">Part 6: Putting it all together (the journey of one packet)</h2>
+<p>Every piece from Parts 1-5 fires in a specific order, every single time you load a page. Here's the whole trip, end to end:</p>
+<div class="codehilite"><pre><span></span><code> STEP 0: BOOT UP
+   Your laptop joins Wi-Fi.
+   DHCP broadcasts &quot;hello, what&#39;s my IP?&quot; and gets back:
+     - this device&#39;s own IP address
+     - the local router&#39;s IP address
+     - a DNS server&#39;s IP address
+
+ STEP 1: RESOLVE THE NAME
+   You type https://www.harvard.edu into your browser.
+   DNS is asked &quot;what&#39;s the IP for www.harvard.edu?&quot;:
+   the local DNS server answers (cached) or escalates to a root server.
+   Result: an IP address, e.g. 1.2.3.4
+
+ STEP 2: ADDRESS THE ENVELOPE
+   Your device builds a packet:
+     destination IP   = 1.2.3.4        (Harvard&#39;s server, from DNS)
+     destination port = 443             (HTTPS, because of the &quot;s&quot;)
+     source IP        = your own address   (from DHCP)
+     source port       = a number just for this browser tab
+
+ STEP 3: SLICE AND SEND (TCP)
+   If there&#39;s a lot of data, TCP breaks it into numbered pieces
+   (&quot;1 of 4,&quot; &quot;2 of 4,&quot; ...) so no single transfer hogs the network.
+
+ STEP 4: ROUTE IT (IP + routers)
+   Each packet hops router to router, not necessarily the same path
+   as the packet before or after it, until it reaches 1.2.3.4.
+
+ STEP 5: REASSEMBLE AND REPLY
+   Harvard&#39;s server checks the sequence numbers, reassembles the
+   pieces, and sends a reply addressed back to your IP and port.
+   TCP on your end confirms nothing is missing; if it is, it asks
+   for a resend.
+</code></pre></div>
+
+<blockquote>
+<p>🔑 <strong>Four protocols, four separate jobs.</strong> DHCP gets your device its own identity on the network. DNS turns a name into an address. IP gets a packet to the right computer. TCP gets it to the right service on that computer and guarantees every piece arrives. None of the four can substitute for another: each solves exactly one part of the problem.</p>
+</blockquote>
+<hr />
+<h2 id="key-takeaways">Key takeaways</h2>
+<ol>
+<li><strong>The internet is a network of networks</strong>, held together by routers that all agree on the same protocol (a shared set of communication rules): TCP/IP.</li>
+<li><strong>An IPv4 address is 32 bits</strong>: four numbers from 0-255 (each 8 bits), giving about 4.3 billion possible addresses, which is why the world is gradually adopting 128-bit IPv6.</li>
+<li><strong>TCP adds port numbers and guaranteed delivery on top of IP.</strong> Port numbers say <em>which service</em> a packet is for (80 for HTTP, 443 for HTTPS); sequence numbers let TCP fragment large files and confirm every piece arrived.</li>
+<li><strong>DNS is a hierarchical, cached, recursive lookup</strong> that turns a domain name into an IP address: your local network is asked first, and only unanswered questions escalate up toward root servers.</li>
+<li><strong>DHCP is what lets a device configure itself automatically</strong> the moment it joins a network, handing out its own IP address, the router's address, and a DNS server's address, all in one broadcast-and-reply exchange.</li>
+<li><strong>A packet is just a structured chunk of bytes in an envelope</strong>, the same "everything is bits, arranged by agreement" idea from Lesson 2, just now with fields for addresses, ports, and sequence numbers instead of ASCII or RGB.</li>
+</ol>
+<h2 id="common-pitfalls">Common pitfalls</h2>
+<ul>
+<li>❌ Assuming a packet takes one fixed, predictable path from sender to receiver. Fix: remember the routing skit. Each packet may take a different route, and that's fine, because TCP checks that all the pieces eventually arrive.</li>
+<li>❌ Confusing IP and TCP as the same thing. Fix: IP addresses the <em>computer</em>; TCP addresses the <em>service on that computer</em> (via ports) and guarantees delivery. They solve different problems and always travel together.</li>
+<li>❌ Thinking DNS lookups always take the same amount of time. Fix: a brand-new domain may need to escalate all the way to a root server; anything recently looked up nearby is answered instantly from a cache.</li>
+<li>❌ Forgetting that DHCP hands out more than just an IP address. Fix: it also configures your device's router address and DNS server address, three settings in one exchange, not one.</li>
+<li>❌ Treating "IPv4 vs. IPv6" as ancient history that's already finished. Fix: as Malan notes, the transition has been "in motion" for 20-30 years and still isn't complete: IPv4 is still what you'll mostly see and use.</li>
+</ul>
+<hr />
+<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: Trace a packet's journey to Harvard</h2>
+<blockquote>
+<p>This is the main hands-on project for the lesson. Using only free, standard commands already available on cs50.dev, you'll look up real IP addresses and then sketch, by hand, the complete labeled journey of one packet from your codespace to harvard.edu, naming DHCP, DNS, IP, TCP, and ports at every hop. When you eventually host your own final project, this exact journey is what every visitor's request will take to reach it.</p>
+</blockquote>
+<h3 id="what-you-will-build">What you will build</h3>
+<p>A short lookup log from your own cs50.dev terminal, plus a labeled text diagram (in a plain <code>.txt</code> or <code>.md</code> file) tracing one packet's full round trip. Its pieces:</p>
+<ul>
+<li>Real IP addresses for several domains, obtained with <code>nslookup</code> or <code>host</code>.</li>
+<li>A short written observation about what those results tell you about DNS.</li>
+<li>A complete, labeled diagram of one request's journey, naming every protocol from this lesson at the point where it acts.</li>
+</ul>
+<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
+<table>
+<thead>
+<tr>
+<th>Lesson idea</th>
+<th>Where you use it in the capstone</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DNS resolves names to IPs (Part 4)</td>
+<td>Milestone 1: you resolve real domains yourself</td>
+</tr>
+<tr>
+<td>DNS caching and hierarchy (Part 4)</td>
+<td>Milestone 2: you look for evidence of it</td>
+</tr>
+<tr>
+<td>IP addresses and dotted decimal (Part 2)</td>
+<td>Milestone 3: you label the diagram's IP fields</td>
+</tr>
+<tr>
+<td>TCP ports and sequencing (Part 3)</td>
+<td>Milestone 3: you label the diagram's port/TCP fields</td>
+</tr>
+<tr>
+<td>DHCP assigns identity at boot (Part 5)</td>
+<td>Milestone 3: you label where DHCP already did its job</td>
+</tr>
+</tbody>
+</table>
+<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
+<ol>
+<li><strong>Resolve real domains.</strong> In your cs50.dev terminal, run <code>nslookup harvard.edu</code> (or <code>host harvard.edu</code> if you prefer). Do the same for at least two more domains of your choosing, for example <code>cs50.dev</code> and <code>wikipedia.org</code>. Write down each domain's resolved IPv4 address(es) in a short log.</li>
+<li><strong>Look for the hierarchy and caching in action.</strong> Run <code>nslookup</code> on the <em>same</em> domain a second time and compare the response time or output to the first lookup. Note anything different (some domains return several IP addresses at once: that's normal, since one domain name can point to a cluster of servers, exactly as Malan describes for <code>www</code>).</li>
+<li><strong>Sketch the full journey of one packet.</strong> In a text file, draw a labeled, step-by-step diagram (using the Part 6 diagram as a model, not to copy verbatim) of what happens when your codespace requests <code>https://www.harvard.edu</code>, starting from "device already has an IP from DHCP" through DNS resolution, envelope addressing (destination IP + port 443, your IP + a port), TCP fragmentation if relevant, and the reply coming back. Every arrow in your diagram should be labeled with which protocol (DHCP, DNS, IP, or TCP) is responsible for that step.</li>
+<li><strong>Confirm the port reasoning.</strong> For each domain you looked up in Milestone 1, write one sentence stating which port a browser would use to reach it over HTTPS, and why (this should just be "443," reasoned from Part 3; the goal is fluency, not new information).</li>
+<li><strong>Stretch goals.</strong> Run <code>nslookup</code> on a domain you're confident doesn't exist (like <code>thisdomaindoesnotexist12345.com</code>) and note how the failure looks different from a successful lookup. Or, run <code>nslookup</code> on the <em>same</em> domain from two different networks (e.g., your codespace vs. your phone's hotspot) and compare whether you get the same IP address back.</li>
+</ol>
+<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
+<ul>
+<li>✅ You have real, resolved IPv4 addresses for at least three different domains, obtained with <code>nslookup</code> or <code>host</code>.</li>
+<li>✅ You can point to your own lookup log and explain, out loud, which part was DNS doing its job.</li>
+<li>✅ Your packet-journey diagram names DHCP, DNS, IP, TCP, and at least one port number, each at the specific step where it acts.</li>
+<li>✅ You can explain, in one sentence, why two lookups of the same domain might return different response times.</li>
+</ul>
+<blockquote>
+<p>💡 <strong>Keep yourself honest:</strong> don't just describe the journey from memory: run the actual <code>nslookup</code> commands first and build your diagram from what you genuinely saw on screen, the same way Malan pulled up real headers with <code>curl</code> rather than just describing them.</p>
+</blockquote>
+<hr />
+<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
+<blockquote>
+<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
+</blockquote>
+<h3 id="exercise-1-the-ipv4-ceiling-by-hand-foundational">Exercise 1: The IPv4 ceiling, by hand (foundational)</h3>
+<p>Without a calculator, confirm that an IPv4 address is 32 bits: four numbers, each ranging 0-255. Using the place-value technique from Lesson 2 (place values 128, 64, 32, 16, 8, 4, 2, 1), convert the number 200 into 8-bit binary by hand. Then explain, in one sentence, why 2³² addresses is a hard ceiling rather than just a rough estimate.</p>
+<h3 id="exercise-2-read-an-envelope-intermediate">Exercise 2: Read an envelope (intermediate)</h3>
+<p>Given this packet summary: destination IP <code>192.0.2.10</code>, destination port <code>443</code>, source IP <code>192.0.2.55</code>, source port <code>52104</code>, sequence <code>2 of 3</code>, write one sentence each explaining what IP contributed to this envelope, what TCP contributed, and what would happen if packet "1 of 3" never arrived.</p>
+<h3 id="exercise-3-trace-the-hierarchy-from-memory-advanced">Exercise 3: Trace the hierarchy from memory (advanced)</h3>
+<p>Without rereading Part 4, write out the full DNS lookup chain for a domain your device has never visited before, in order, naming every stop (your device, local DNS server, root server) and explaining what gets cached and where. Then check your answer against Part 4's diagram and note anything you got wrong or left out.</p>
+<hr />
+<h2 id="cheat-sheet">Cheat sheet</h2>
+<div class="codehilite"><pre><span></span><code>THE FOUR PROTOCOLS, ONE JOB EACH
+  DHCP  -- hands your device its IP, router IP, and DNS server IP, at boot
+  DNS   -- translates a domain name (harvard.edu) into an IP address
+  IP    -- gets a packet to the right COMPUTER (via IP address)
+  TCP   -- gets a packet to the right SERVICE on that computer (via a port),
+           fragments large data into numbered pieces, and guarantees delivery
+
+IPv4 ADDRESS MATH
+  4 numbers, each 0-255 (= 2^8 = 8 bits)  -&gt;  4 x 8 = 32 bits total
+  2^32 =~ 4.3 billion possible addresses
+  IPv6 uses 128 bits instead -- vastly more addresses, still rolling out
+
+COMMON PORTS
+  80  = HTTP  (plain, unencrypted web request)
+  443 = HTTPS (encrypted web request -- the &quot;s&quot; in https://)
+
+DNS LOOKUP ORDER (recursive + cached)
+  your device -&gt; local DNS server (cached? answer now)
+             -&gt; [if unknown] root server -&gt; answer flows back, gets cached
+
+USEFUL COMMANDS (free, built into cs50.dev)
+  nslookup harvard.edu     -- ask DNS for a domain&#39;s IP address
+  host harvard.edu         -- same idea, different tool
+
+PACKET = STRUCTURED BYTES IN AN ENVELOPE
+  outside: destination IP + port, source IP + port, sequence number
+  inside:  the actual data (or one numbered fragment of it)
+</code></pre></div>
+
+<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
+<ul>
+<li><strong>Earlier, Module 1 · Lesson 2 ("Bits and Binary"):</strong> you learned that everything a computer stores is bits arranged by agreement: ASCII bytes, RGB bytes. This lesson's packets are the exact same idea: structured bytes in an envelope, just with fields for addresses, ports, and sequence numbers instead of characters or colors.</li>
+<li><strong>Immediately before, Module 9 · Lesson 33 ("How machines learn"):</strong> a different topic in the same course, and the last lesson before this module's shift to the web.</li>
+<li><strong>Next, Module 10 · Lesson 35 ("HTTP and the browser"):</strong> you'll pick up exactly where this lesson's envelopes leave off: what actually goes <em>inside</em> them when you request a web page, using the port 80/443 distinction from Part 3 as your starting point.</li>
+<li><strong>Later, Module 11 (Flask web apps):</strong> the server you build and host yourself will sit on the receiving end of exactly this DHCP → DNS → IP → TCP journey, for every single visitor.</li>
+</ul>
+<hr />
+<p><em>Source: "CS50x 2026 - Lecture 8 - HTML, CSS, JavaScript" by David J. Malan, Harvard University. Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+    </article>
+    <section class="lesson-sync" data-lesson-id="34"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../progress.html">Progress tracker &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="..\module-9-ai\33-how-machines-learn.html"><span class="dir">&#8592; Previous</span><b>How Machines Learn</b></a><a class="ln home" href="..\index.html"><b>All lessons</b></a><a class="ln next" href="35-http-and-the-browser.html"><span class="dir">Next &#8594;</span><b>HTTP and the Browser</b></a></nav>
+  </main>
+</div>
+
+<footer class="site"><div class="wrap">
+  <a class="logo" href="..\index.html">Self-Paced CS50x<span class="dot">.</span></a>
+  <span class="fnote">An unofficial self-paced companion generated from the CS50x 2026 lecture transcripts. CS50 is created by David J. Malan and Harvard University. Watch the original lectures and do the official problem sets at cs50.harvard.edu/x. Code snippets are illustrative reconstructions.</span>
+</div></footer>
+
+<style>pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.codehilite .hll { background-color: #ffffcc }
+.codehilite { background: #282C34; color: #ABB2BF }
+.codehilite .c { color: #7F848E } /* Comment */
+.codehilite .err { color: #ABB2BF } /* Error */
+.codehilite .esc { color: #ABB2BF } /* Escape */
+.codehilite .g { color: #ABB2BF } /* Generic */
+.codehilite .k { color: #C678DD } /* Keyword */
+.codehilite .l { color: #ABB2BF } /* Literal */
+.codehilite .n { color: #E06C75 } /* Name */
+.codehilite .o { color: #56B6C2 } /* Operator */
+.codehilite .x { color: #ABB2BF } /* Other */
+.codehilite .p { color: #ABB2BF } /* Punctuation */
+.codehilite .ch { color: #7F848E } /* Comment.Hashbang */
+.codehilite .cm { color: #7F848E } /* Comment.Multiline */
+.codehilite .cp { color: #7F848E } /* Comment.Preproc */
+.codehilite .cpf { color: #7F848E } /* Comment.PreprocFile */
+.codehilite .c1 { color: #7F848E } /* Comment.Single */
+.codehilite .cs { color: #7F848E } /* Comment.Special */
+.codehilite .gd { color: #E06C75 } /* Generic.Deleted */
+.codehilite .ge { color: #ABB2BF; font-style: italic } /* Generic.Emph */
+.codehilite .ges { color: #ABB2BF } /* Generic.EmphStrong */
+.codehilite .gr { color: #E06C75 } /* Generic.Error */
+.codehilite .gh { color: #ABB2BF; font-weight: bold } /* Generic.Heading */
+.codehilite .gi { color: #98C379 } /* Generic.Inserted */
+.codehilite .go { color: #E06C75 } /* Generic.Output */
+.codehilite .gp { color: #ABB2BF } /* Generic.Prompt */
+.codehilite .gs { color: #ABB2BF; font-weight: bold } /* Generic.Strong */
+.codehilite .gu { color: #ABB2BF; font-weight: bold } /* Generic.Subheading */
+.codehilite .gt { color: #E06C75 } /* Generic.Traceback */
+.codehilite .kc { color: #E5C07B } /* Keyword.Constant */
+.codehilite .kd { color: #C678DD } /* Keyword.Declaration */
+.codehilite .kn { color: #C678DD } /* Keyword.Namespace */
+.codehilite .kp { color: #C678DD } /* Keyword.Pseudo */
+.codehilite .kr { color: #C678DD } /* Keyword.Reserved */
+.codehilite .kt { color: #E5C07B } /* Keyword.Type */
+.codehilite .ld { color: #ABB2BF } /* Literal.Date */
+.codehilite .m { color: #D19A66 } /* Literal.Number */
+.codehilite .s { color: #98C379 } /* Literal.String */
+.codehilite .na { color: #E06C75 } /* Name.Attribute */
+.codehilite .nb { color: #E5C07B } /* Name.Builtin */
+.codehilite .nc { color: #E5C07B } /* Name.Class */
+.codehilite .no { color: #E06C75 } /* Name.Constant */
+.codehilite .nd { color: #61AFEF } /* Name.Decorator */
+.codehilite .ni { color: #E06C75 } /* Name.Entity */
+.codehilite .ne { color: #E06C75 } /* Name.Exception */
+.codehilite .nf { color: #61AFEF; font-weight: bold } /* Name.Function */
+.codehilite .nl { color: #E06C75 } /* Name.Label */
+.codehilite .nn { color: #E06C75 } /* Name.Namespace */
+.codehilite .nx { color: #E06C75 } /* Name.Other */
+.codehilite .py { color: #E06C75 } /* Name.Property */
+.codehilite .nt { color: #E06C75 } /* Name.Tag */
+.codehilite .nv { color: #E06C75 } /* Name.Variable */
+.codehilite .ow { color: #56B6C2 } /* Operator.Word */
+.codehilite .pm { color: #ABB2BF } /* Punctuation.Marker */
+.codehilite .w { color: #ABB2BF } /* Text.Whitespace */
+.codehilite .mb { color: #D19A66 } /* Literal.Number.Bin */
+.codehilite .mf { color: #D19A66 } /* Literal.Number.Float */
+.codehilite .mh { color: #D19A66 } /* Literal.Number.Hex */
+.codehilite .mi { color: #D19A66 } /* Literal.Number.Integer */
+.codehilite .mo { color: #D19A66 } /* Literal.Number.Oct */
+.codehilite .sa { color: #98C379 } /* Literal.String.Affix */
+.codehilite .sb { color: #98C379 } /* Literal.String.Backtick */
+.codehilite .sc { color: #98C379 } /* Literal.String.Char */
+.codehilite .dl { color: #98C379 } /* Literal.String.Delimiter */
+.codehilite .sd { color: #98C379 } /* Literal.String.Doc */
+.codehilite .s2 { color: #98C379 } /* Literal.String.Double */
+.codehilite .se { color: #98C379 } /* Literal.String.Escape */
+.codehilite .sh { color: #98C379 } /* Literal.String.Heredoc */
+.codehilite .si { color: #98C379 } /* Literal.String.Interpol */
+.codehilite .sx { color: #98C379 } /* Literal.String.Other */
+.codehilite .sr { color: #98C379 } /* Literal.String.Regex */
+.codehilite .s1 { color: #98C379 } /* Literal.String.Single */
+.codehilite .ss { color: #98C379 } /* Literal.String.Symbol */
+.codehilite .bp { color: #E5C07B } /* Name.Builtin.Pseudo */
+.codehilite .fm { color: #56B6C2; font-weight: bold } /* Name.Function.Magic */
+.codehilite .vc { color: #E06C75 } /* Name.Variable.Class */
+.codehilite .vg { color: #E06C75 } /* Name.Variable.Global */
+.codehilite .vi { color: #E06C75 } /* Name.Variable.Instance */
+.codehilite .vm { color: #E06C75 } /* Name.Variable.Magic */
+.codehilite .il { color: #D19A66 } /* Literal.Number.Integer.Long */</style>
+<script>
+// mobile menu
+const sb=document.getElementById('sidebar'),mb=document.getElementById('menuBtn');
+if(mb){mb.onclick=()=>sb.classList.toggle('open');sb.addEventListener('click',e=>{if(e.target.tagName==='A')sb.classList.remove('open')});}
+const tc=document.getElementById('tocClose');if(tc){tc.onclick=()=>sb.classList.remove('open');}
+// progress
+const prog=document.getElementById('progress');
+addEventListener('scroll',()=>{const h=document.body.scrollHeight-innerHeight;prog.style.width=(h>0?scrollY/h*100:0)+'%'});
+// code chrome + copy
+document.querySelectorAll('.codehilite, pre').forEach(block=>{
+  if(block.parentElement.classList.contains('codehilite'))return;
+  const bar=document.createElement('div');bar.className='code-bar';
+  bar.innerHTML='<span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>';
+  block.appendChild(bar);
+  const btn=document.createElement('button');btn.className='copy-btn';btn.textContent='Copy';
+  btn.onclick=()=>{const t=block.querySelector('code')?.innerText||block.innerText;
+    navigator.clipboard.writeText(t.replace(/\nCopy$/,''));btn.textContent='Copied!';btn.classList.add('done');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('done')},1500)};
+  block.appendChild(btn);
+});
+// callouts by leading emoji
+const map={'\u{1F511}':'cl-key','\u{1F4A1}':'cl-tip','✅':'cl-ok','❌':'cl-no','\u{1F3AF}':'cl-goal','\u{1F6E0}':'cl-goal'};
+document.querySelectorAll('blockquote').forEach(q=>{const t=(q.textContent||'').trim();for(const e in map){if(t.startsWith(e)){q.classList.add(map[e]);break}}});
+// check-off
+function makeCheckable(rx){document.querySelectorAll('h2,h3').forEach(h=>{if(!rx.test(h.textContent))return;let el=h.nextElementSibling;
+  while(el&&!/^H[1-3]$/.test(el.tagName)){if(el.tagName==='OL'||el.tagName==='UL'){el.classList.add('checkable');
+    el.querySelectorAll(':scope>li').forEach(li=>{const key='cwc:'+location.pathname+':'+li.textContent.slice(0,60);
+      if(localStorage.getItem(key))li.classList.add('checked');
+      li.addEventListener('click',ev=>{if(ev.target.tagName==='A')return;li.classList.toggle('checked');
+        li.classList.contains('checked')?localStorage.setItem(key,'1'):localStorage.removeItem(key)});});}el=el.nextElementSibling;}});}
+makeCheckable(/learning objectives|milestones/i);
+// scrollspy
+const links=[...document.querySelectorAll('.toc a')];
+const heads=links.map(a=>a.getAttribute('href')).filter(h=>h&&h.startsWith('#')).map(h=>document.getElementById(h.slice(1))).filter(Boolean);
+const spy=()=>{let cur=heads[0]?.id;for(const h of heads){if(h.getBoundingClientRect().top<150)cur=h.id}
+  links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur))};
+addEventListener('scroll',spy);spy();
+</script>
+<script type="module" src="../assets/sync.js"></script></body>
+</html>

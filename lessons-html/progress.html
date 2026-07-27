@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Progress Tracker: Self-Paced CS50x</title>
+<style>
+  :root{
+    --navy:#0a1a2f; --navy-2:#0f243d; --navy-3:#16324f;
+    --ink:#e8eef6; --muted:#9fb3c8; --line:#1e3a5a;
+    --teal:#2dd4bf; --coral:#ff6f61; --gold:#f5c451; --green:#34d399;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:linear-gradient(180deg,var(--navy),#08131f);color:var(--ink);
+    font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh;padding:0 0 80px}
+  a{color:var(--teal);text-decoration:none} a:hover{text-decoration:underline}
+  .wrap{max-width:920px;margin:0 auto;padding:0 20px}
+  header{padding:34px 0 8px}
+  .eyebrow{color:var(--teal);font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:.72rem}
+  h1{font-size:1.9rem;margin:.15em 0 .1em} h1 .a{color:var(--coral)}
+  .sub{color:var(--muted);margin:0}
+  .backlink{display:inline-block;margin-top:12px;font-size:.9rem}
+
+  .account{margin-top:18px;background:var(--navy-2);border:1px solid var(--line);border-radius:12px;
+    padding:13px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .account .dot{width:9px;height:9px;border-radius:50%;background:var(--muted);flex:0 0 auto}
+  .account.on .dot{background:var(--green)}
+  .account #acct-msg{color:var(--muted);font-size:.9rem;flex:1 1 auto}
+  .account button{background:var(--teal);color:#05202a;border:0;border-radius:9px;padding:8px 15px;font:600 .92rem system-ui;cursor:pointer}
+  .account button.ghost{background:var(--navy-3);color:var(--ink);border:1px solid var(--line)}
+
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0 8px}
+  @media(max-width:680px){.stats{grid-template-columns:repeat(2,1fr)}}
+  .tile{background:var(--navy-2);border:1px solid var(--line);border-radius:14px;padding:16px 16px 14px}
+  .tile .big{font-size:1.9rem;font-weight:700;line-height:1.1}
+  .tile .lbl{color:var(--muted);font-size:.78rem;margin-top:4px}
+  .tile.accent .big{color:var(--teal)} .tile.streak .big{color:var(--gold)}
+  .tile.finish .big{font-size:1.15rem;padding-top:8px}
+
+  .barwrap{background:var(--navy-2);border:1px solid var(--line);border-radius:999px;height:16px;overflow:hidden;margin:10px 0 4px}
+  .bar{height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--green));transition:width .4s ease}
+  .barrow{display:flex;justify-content:space-between;color:var(--muted);font-size:.82rem}
+
+  .pace{display:flex;align-items:center;gap:10px;margin:22px 0 4px;flex-wrap:wrap}
+  .pace span{color:var(--muted);font-size:.9rem}
+  .pace button{background:var(--navy-2);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;font:inherit}
+  .pace button.on{background:var(--teal);color:#05202a;border-color:var(--teal);font-weight:600}
+
+  .mod{margin-top:24px}
+  .mod h2{font-size:1.02rem;margin:0 0 2px;display:flex;align-items:baseline;gap:10px}
+  .mod h2 .mnum{color:var(--coral);font-weight:700}
+  .mod h2 .mcount{color:var(--muted);font-weight:400;font-size:.8rem;margin-left:auto}
+  .mod.optional h2 .mnum{color:var(--gold)}
+  ul.lessons{list-style:none;margin:8px 0 0;padding:0;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  li.lesson{display:flex;align-items:center;gap:12px;padding:11px 14px;background:var(--navy-2);border-top:1px solid var(--line)}
+  li.lesson:first-child{border-top:none}
+  li.lesson.done{background:linear-gradient(90deg,rgba(45,212,191,.10),var(--navy-2) 60%)}
+  .box{flex:0 0 auto;width:22px;height:22px;border:2px solid var(--line);border-radius:6px;cursor:pointer;display:grid;place-items:center;color:transparent;font-weight:800;font-size:.85rem;user-select:none;transition:.15s}
+  li.lesson.done .box{background:var(--teal);border-color:var(--teal);color:#05202a}
+  .box:hover{border-color:var(--teal)}
+  .lnum{color:var(--muted);font-variant-numeric:tabular-nums;width:1.6em;text-align:right;flex:0 0 auto}
+  .ltitle{flex:1 1 auto;min-width:0} .ltitle a{color:var(--ink)} .ltitle a:hover{color:var(--teal)}
+  li.lesson.done .ltitle a{color:var(--muted)}
+  .ldate{color:var(--muted);font-size:.76rem;flex:0 0 auto;white-space:nowrap}
+  .opt-badge{color:var(--gold);font-size:.7rem;border:1px solid var(--gold);border-radius:6px;padding:0 6px;flex:0 0 auto}
+
+  .actions{margin-top:32px;padding-top:20px;border-top:1px solid var(--line);display:flex;gap:10px;flex-wrap:wrap}
+  .actions button{background:var(--navy-2);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px 14px;cursor:pointer;font:inherit}
+  .actions button:hover{border-color:var(--teal)}
+  .actions button.danger:hover{border-color:var(--coral);color:var(--coral)}
+  .note{color:var(--muted);font-size:.8rem;margin-top:14px}
+  dialog{background:var(--navy-2);color:var(--ink);border:1px solid var(--line);border-radius:12px;max-width:520px;width:92%}
+  dialog textarea{width:100%;height:150px;background:var(--navy);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px;font:13px/1.4 ui-monospace,monospace}
+  dialog .row{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Progress tracker</div>
+    <h1>Self-Paced <span class="a">CS50x</span></h1>
+    <p class="sub">Tick a lesson when you finish it, or use the "Mark complete" button on the lesson itself. Sign in to sync across your laptop and phone.</p>
+    <a class="backlink" href="index.html">Open the course landing page &rarr;</a>
+
+    <div class="account" id="account">
+      <span class="dot"></span>
+      <span id="acct-msg">Starting up...</span>
+      <button id="acct-btn" style="display:none"></button>
+    </div>
+  </header>
+
+  <section class="stats">
+    <div class="tile accent"><div class="big" id="s-count">0/43</div><div class="lbl">core lessons done</div></div>
+    <div class="tile"><div class="big" id="s-pct">0%</div><div class="lbl">of the course</div></div>
+    <div class="tile streak"><div class="big" id="s-streak">0</div><div class="lbl">day streak</div></div>
+    <div class="tile finish"><div class="big" id="s-finish">set a pace</div><div class="lbl">projected finish</div></div>
+  </section>
+
+  <div class="barwrap"><div class="bar" id="bar"></div></div>
+  <div class="barrow"><span id="b-left">43 lessons to go</span><span id="b-week">0 done in the last 7 days</span></div>
+
+  <div class="pace">
+    <span>My pace:</span>
+    <button data-p="1">1 / day</button>
+    <button data-p="2">2 / day</button>
+    <button data-p="3">3 / day</button>
+    <button data-p="5">5 / day</button>
+    <span id="pace-note"></span>
+  </div>
+
+  <main id="list"></main>
+
+  <div class="actions">
+    <button id="backup">Back up my progress</button>
+    <button id="restore">Restore from backup</button>
+    <button class="danger" id="reset">Reset all</button>
+  </div>
+  <p class="note">Signed in, your progress lives in your account and syncs to every device you sign in on. Signed out, it is kept in this browser only. Back up / Restore lets you move a copy by hand if you ever need to.</p>
+</div>
+
+<dialog id="dlg">
+  <p id="dlg-msg" style="margin:0 0 8px"></p>
+  <textarea id="dlg-text"></textarea>
+  <div class="row">
+    <button id="dlg-cancel">Close</button>
+    <button id="dlg-ok" style="display:none">Restore</button>
+  </div>
+</dialog>
+
+<script type="module" src="assets/sync.js"></script>
+<script type="module">
+const M = {
+  0:["Pre-flight: getting set up","module-0-preflight"],
+  1:["Computational thinking","module-1-computational-thinking"],
+  2:["First real programs in C","module-2-c"],
+  3:["Debugging and what the compiler hides","module-3-debugging"],
+  4:["Algorithms","module-4-algorithms"],
+  5:["Memory","module-5-memory"],
+  6:["Data structures","module-6-data-structures"],
+  7:["Python","module-7-python"],
+  8:["SQL and databases","module-8-sql"],
+  9:["Artificial intelligence","module-9-ai"],
+  10:["The web","module-10-web"],
+  11:["Web apps with Flask","module-11-flask"],
+  12:["The finish line","module-12-finish-line"],
+};
+const LESSONS = [
+  [0,0,"Pre-Flight: Your Tools, Accounts, and First Success","00-pre-flight",true],
+  [1,1,"Welcome to CS50: Computers, Thinking, and a Live AI Chatbot","01-welcome-to-cs50"],
+  [2,1,"Bits and Binary: How Computers Represent Everything","02-bits-and-binary"],
+  [3,1,"Your First Algorithms: Search and Pseudocode","03-first-algorithms"],
+  [4,1,"Programming in Scratch","04-programming-in-scratch"],
+  [5,2,"Hello, C: From Blocks to Code","05-hello-c"],
+  [6,2,"Input, Variables, and the Command Line","06-input-variables-cli"],
+  [7,2,"Conditionals and Loops","07-conditionals-and-loops"],
+  [8,2,"Functions, Code Quality, and the Limits of Numbers","08-functions-and-limits"],
+  [9,3,"The Art of Debugging","09-art-of-debugging"],
+  [10,3,"From Source Code to Machine Code","10-source-to-machine-code"],
+  [11,3,"Arrays and Strings Under the Hood","11-arrays-and-strings"],
+  [12,3,"Command-Line Arguments and a First Cipher","12-cli-args-and-cipher"],
+  [13,4,"Thinking in Running Time: Big O","13-big-o"],
+  [14,4,"Searching Arrays in C","14-searching"],
+  [15,4,"Sorting, the Slow Way: Selection and Bubble Sort","15-selection-bubble-sort"],
+  [16,4,"Recursion and Merge Sort","16-recursion-merge-sort"],
+  [17,5,"Pixels, Hexadecimal, and Memory Addresses","17-pixels-hex-addresses"],
+  [18,5,"Pointers, and What Strings Really Are","18-pointers-and-strings"],
+  [19,5,"malloc, free, and Hunting Memory Bugs","19-malloc-free-valgrind"],
+  [20,5,"Pass-by-Reference and File I/O","20-pass-by-reference-files"],
+  [21,6,"Stacks, Queues, and Resizable Arrays","21-stacks-queues-arrays"],
+  [22,6,"Linked Lists","22-linked-lists"],
+  [23,6,"Trees, Hash Tables, and Tries","23-trees-hash-tables-tries"],
+  [24,7,"Why Python? Your First Scripts","24-why-python"],
+  [25,7,"Python Essentials: Variables, Conditionals, Strings","25-python-essentials"],
+  [26,7,"Loops, Functions, and Exceptions","26-loops-functions-exceptions"],
+  [27,7,"Lists, Dictionaries, and the pip Ecosystem","27-lists-dicts-pip"],
+  [28,8,"From Flat Files to Python Dictionaries","28-files-to-python"],
+  [29,8,"SQL Fundamentals: CRUD","29-sql-fundamentals"],
+  [30,8,"Relational Design and JOINs","30-relational-design-joins"],
+  [31,8,"Indexes, Injection, and Race Conditions","31-indexes-injection-transactions"],
+  [32,9,"Using AI Well: Prompts and Copilots","32-using-ai-well"],
+  [33,9,"How Machines Learn","33-how-machines-learn"],
+  [34,10,"How the Internet Works","34-how-the-internet-works"],
+  [35,10,"HTTP and the Browser","35-http-and-the-browser"],
+  [36,10,"Building Pages with HTML","36-html"],
+  [37,10,"CSS and JavaScript","37-css-and-javascript"],
+  [38,11,"Flask Fundamentals: Routes and Templates","38-flask-fundamentals"],
+  [39,11,"Forms, Layouts, and GET vs POST","39-forms-layouts-get-post"],
+  [40,11,"A Real App: Validation and Databases","40-validation-and-databases"],
+  [41,11,"Sessions, Carts, and APIs","41-sessions-carts-apis"],
+  [42,12,"Abstraction, Precision, and How Far You've Come","42-abstraction-and-the-arc"],
+  [43,12,"Shipping Your Final Project","43-shipping-final-project"],
+];
+const CORE_TOTAL = LESSONS.filter(l=>!l[4]).length;
+
+const CS = window.CourseSync;
+function fmt(iso){ if(!iso) return ""; const [y,m,d]=iso.split("-").map(Number); return new Date(y,m-1,d).toLocaleDateString(undefined,{month:"short",day:"numeric"}); }
+function todayISO(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function daysBetween(a,b){ return Math.round((new Date(b+"T00:00")-new Date(a+"T00:00"))/86400000); }
+
+function render(){
+  const list=document.getElementById("list"); list.innerHTML="";
+  let curMod=null, ul=null;
+  for(const [n,mod,title,slug,optional] of LESSONS){
+    if(mod!==curMod){
+      curMod=mod;
+      const sec=document.createElement("section");
+      sec.className="mod"+(optional?" optional":"");
+      const inMod=LESSONS.filter(l=>l[1]===mod);
+      const doneIn=inMod.filter(l=>CS.isDone(l[0])).length;
+      sec.innerHTML=`<h2><span class="mnum">${optional?"0":"Module "+mod}</span> ${M[mod][0]} <span class="mcount">${doneIn}/${inMod.length} done</span></h2>`;
+      ul=document.createElement("ul"); ul.className="lessons"; sec.appendChild(ul); list.appendChild(sec);
+    }
+    const li=document.createElement("li");
+    li.className="lesson"+(CS.isDone(n)?" done":"");
+    const href=M[mod][1]+"/"+slug+".html";
+    li.innerHTML=`<span class="box" data-n="${n}">&#10003;</span>`+
+      `<span class="lnum">${optional?"0":n}</span>`+
+      `<span class="ltitle"><a href="${href}">${title}</a></span>`+
+      (optional?`<span class="opt-badge">optional</span>`:"")+
+      `<span class="ldate">${CS.isDone(n)?fmt(CS.dateOf(n)):""}</span>`;
+    ul.appendChild(li);
+  }
+  list.querySelectorAll(".box").forEach(b=>b.addEventListener("click",()=>CS.toggleLesson(+b.dataset.n)));
+  updateStats(); paintPace(); paintAccount();
+}
+
+function currentStreak(){
+  const dates=[...new Set(Object.values(CS.state().lessons))].sort();
+  if(!dates.length) return 0;
+  if(daysBetween(dates[dates.length-1],todayISO())>1) return 0;
+  let s=1; for(let i=dates.length-1;i>0;i--){ if(daysBetween(dates[i-1],dates[i])===1) s++; else break; } return s;
+}
+function updateStats(){
+  const coreDone=LESSONS.filter(l=>!l[4]&&CS.isDone(l[0])).length;
+  const pct=Math.round(coreDone/CORE_TOTAL*100);
+  document.getElementById("s-count").textContent=coreDone+"/"+CORE_TOTAL;
+  document.getElementById("s-pct").textContent=pct+"%";
+  document.getElementById("bar").style.width=pct+"%";
+  const left=CORE_TOTAL-coreDone;
+  document.getElementById("b-left").textContent=left===0?"All core lessons complete":left+" lesson"+(left===1?"":"s")+" to go";
+  document.getElementById("s-streak").textContent=currentStreak();
+  const t=todayISO();
+  const week=Object.values(CS.state().lessons).filter(d=>daysBetween(d,t)>=0&&daysBetween(d,t)<7).length;
+  document.getElementById("b-week").textContent=week+" done in the last 7 days";
+  const fin=document.getElementById("s-finish"), pace=CS.state().pace||1;
+  if(left===0){ fin.textContent="Done! \u{1F389}"; document.getElementById("pace-note").textContent=""; }
+  else{
+    const days=Math.ceil(left/pace); const d=new Date(); d.setDate(d.getDate()+days);
+    fin.textContent=d.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"});
+    document.getElementById("pace-note").textContent=`at ${pace}/day, about ${days} day${days===1?"":"s"} left`;
+  }
+}
+function paintPace(){ document.querySelectorAll(".pace button").forEach(b=>b.classList.toggle("on",+b.dataset.p===(CS.state().pace||1))); }
+document.querySelectorAll(".pace button").forEach(b=>b.addEventListener("click",()=>CS.setPace(+b.dataset.p)));
+
+function paintAccount(){
+  const box=document.getElementById("account"), msg=document.getElementById("acct-msg"), btn=document.getElementById("acct-btn");
+  const u=CS.user();
+  box.classList.toggle("on",!!u);
+  if(!CS.configured()){
+    msg.textContent="Cross-device sync is not set up yet, so progress is saved in this browser only.";
+    btn.style.display="none";
+  } else if(u){
+    msg.textContent="Synced as "+(u.name||u.email||"you")+". Your progress follows you to any device you sign in on.";
+    btn.style.display=""; btn.textContent="Sign out"; btn.className="ghost";
+  } else {
+    msg.textContent="Sign in to sync your progress across your laptop and phone.";
+    btn.style.display=""; btn.textContent="Sign in with Google"; btn.className="";
+  }
+}
+document.getElementById("acct-btn").addEventListener("click",()=>{ CS.user()?CS.signOut():CS.signIn(); });
+
+// backup / restore / reset
+const dlg=document.getElementById("dlg"), dtext=document.getElementById("dlg-text"),
+      dmsg=document.getElementById("dlg-msg"), dok=document.getElementById("dlg-ok");
+document.getElementById("backup").addEventListener("click",()=>{
+  dmsg.textContent="Copy this and keep it safe. Paste it back with Restore to recover your progress.";
+  dtext.value=CS.exportData(); dtext.readOnly=true; dok.style.display="none"; dlg.showModal(); dtext.select();
+});
+document.getElementById("restore").addEventListener("click",()=>{
+  dmsg.textContent="Paste a backup here and press Restore. This replaces your current progress.";
+  dtext.value=""; dtext.readOnly=false; dok.style.display=""; dlg.showModal();
+});
+dok.addEventListener("click",()=>{ if(CS.importData(dtext.value.trim())) dlg.close(); else alert("That does not look like a valid backup."); });
+document.getElementById("dlg-cancel").addEventListener("click",()=>dlg.close());
+document.getElementById("reset").addEventListener("click",()=>{ if(confirm("Clear all progress? Back it up first if you want a copy.")) CS.reset(); });
+
+CS.onChange(render);
+render();
+</script>
+</body>
+</html>

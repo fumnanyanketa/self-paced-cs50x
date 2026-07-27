@@ -1,0 +1,752 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 9 · Lesson 32: Using AI Well: Prompts and Copilots | Self-Paced CS50x</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0a1a2f; --navy-2:#0f243d; --navy-3:#15314f;
+  --teal:#18c4a0; --teal-d:#0fa385; --teal-soft:#e4f8f2;
+  --coral:#f24d63; --coral-d:#d83a50; --coral-soft:#feecee;
+  --ink:#152230; --muted:#5f6c7b; --line:#e9eef2; --bg:#ffffff;
+  --soft:#f4fbf9; --card:#ffffff; --code-bg:#21252b; --max:780px;
+  --k:#2f8fb3; --k-bg:#e8f4f9; --tip:#c4881f; --tip-bg:#fdf4e3; --ok:#1f9d6b; --ok-bg:#e6f6ef;
+  --no:#e0533f; --no-bg:#fdecea; --goal:#7b54c9; --goal-bg:#f1ebfb;
+  --shadow:0 10px 30px rgba(13,30,52,.08); --shadow-sm:0 4px 14px rgba(13,30,52,.07);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.72;font-size:17px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+#progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--teal),var(--coral));z-index:200;transition:width .1s linear}
+a{color:var(--teal-d);text-decoration:none}
+a:hover{color:var(--coral)}
+h1,h2,h3{font-family:Poppins,sans-serif;color:var(--ink);letter-spacing:-.01em}
+.accent{color:var(--coral)}
+.wrap{max-width:1200px;margin:0 auto;padding:0 28px}
+
+/* ---------- Top welcome strip ---------- */
+.topbar{background:var(--navy);color:#cdd8e4;font-size:13.5px}
+.topbar .wrap{display:flex;justify-content:space-between;align-items:center;height:42px;gap:18px}
+.topbar b{color:#fff;font-weight:600}
+.topbar .right{display:flex;gap:18px;align-items:center}
+.topbar a{color:#cdd8e4}.topbar a:hover{color:var(--teal)}
+
+/* ---------- Nav ---------- */
+nav.bar{background:var(--navy-2);position:sticky;top:0;z-index:120;box-shadow:0 2px 20px rgba(0,0,0,.25)}
+nav.bar .wrap{display:flex;align-items:center;height:68px;gap:26px}
+.logo{font-family:Poppins;font-weight:800;font-size:22px;color:#fff;letter-spacing:.02em;cursor:pointer;text-decoration:none}
+a.logo:hover{color:var(--teal)}
+.lessonnav{display:flex;gap:14px;align-items:stretch;margin:60px 0 0;flex-wrap:wrap}
+.lessonnav .ln{flex:1;min-width:200px;display:flex;flex-direction:column;gap:3px;border:1px solid var(--line);border-radius:14px;padding:16px 18px;color:var(--muted);transition:.15s;background:#fff}
+.lessonnav .ln:hover{border-color:var(--teal);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.lessonnav .ln .dir{font-size:13px;font-weight:600;color:var(--teal-d)}
+.lessonnav .ln b{color:var(--ink);font-family:Poppins;font-size:15px}
+.lessonnav .ln.next{text-align:right}
+.lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
+.lessonnav .ln.home b{color:var(--teal-d)}
+.logo .dot{color:var(--teal)}
+.navlinks{display:flex;gap:24px;margin-left:8px}
+.navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
+.navlinks a:hover{color:var(--teal)}
+.nav-cta{margin-left:auto;display:flex;gap:12px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:9px;border:none;cursor:pointer;font-family:Inter;font-weight:600;border-radius:999px;transition:.18s;font-size:15px;text-decoration:none}
+.btn-primary{background:var(--teal);color:#04231c;padding:12px 22px}
+.btn-primary:hover{background:var(--teal-d);color:#fff;transform:translateY(-1px)}
+.btn-outline{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.35);padding:10px 20px}
+.btn-outline:hover{border-color:var(--teal);color:var(--teal)}
+.btn-coral{background:var(--coral);color:#fff;padding:12px 22px}
+.btn-coral:hover{background:var(--coral-d);color:#fff;transform:translateY(-1px)}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;background:radial-gradient(120% 120% at 80% 0%,var(--navy-3),var(--navy) 60%);color:#eaf1f8;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.25;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.blob{position:absolute;border-radius:50%;filter:blur(8px);opacity:.5;z-index:0}
+.blob.t{width:230px;height:230px;background:rgba(24,196,160,.30);top:-60px;right:8%}
+.blob.c{width:160px;height:160px;background:rgba(242,77,99,.28);bottom:-40px;left:42%}
+.squiggle{position:absolute;z-index:1;opacity:.85}
+.hero .wrap{position:relative;z-index:2;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;padding:70px 28px 90px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--teal);font-weight:600;font-size:14px;letter-spacing:.03em;text-transform:uppercase;margin-bottom:18px}
+.hero h1{font-size:54px;line-height:1.08;font-weight:800;margin:0 0 20px;color:#fff}
+.hero .lead{font-size:18px;color:#b9c6d6;max-width:34em;margin:0 0 30px}
+.hero-actions{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:30px}
+.play{display:inline-flex;align-items:center;gap:12px;color:#fff;font-weight:600}
+.play .circ{width:52px;height:52px;border-radius:50%;background:var(--coral);display:grid;place-items:center;box-shadow:0 8px 22px rgba(242,77,99,.45);font-size:16px;animation:pulse 2.4s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(242,77,99,.45)}70%{box-shadow:0 0 0 16px rgba(242,77,99,0)}100%{box-shadow:0 0 0 0 rgba(242,77,99,0)}}
+.chips{display:flex;gap:10px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:#dce6f0;padding:8px 14px;border-radius:999px;font-size:13.5px;font-weight:500}
+.chip b{color:#fff}
+/* hero card */
+.hero-card{position:relative;background:#fff;color:var(--ink);border-radius:22px;padding:26px;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.hero-card .ring{position:absolute;top:-26px;right:-18px;width:96px;height:96px;background:#fff;border-radius:50%;box-shadow:var(--shadow);display:grid;place-items:center}
+.hero-card .ring svg{transform:rotate(-90deg)}
+.hero-card .ring .lab{position:absolute;font-family:Poppins;font-weight:700;font-size:18px;color:var(--teal-d)}
+.hero-card h3{margin:4px 0 14px;font-size:19px}
+.hero-card ul{list-style:none;margin:0 0 18px;padding:0}
+.hero-card li{display:flex;gap:11px;align-items:flex-start;padding:9px 0;border-bottom:1px dashed var(--line);font-size:14.5px;color:#36424f}
+.hero-card li:last-child{border-bottom:none}
+.hero-card li .ic{font-size:17px;line-height:1.4}
+.float-badge{position:absolute;left:18px;bottom:-26px;background:#fff;border-radius:14px;box-shadow:var(--shadow);padding:12px 16px;display:flex;gap:10px;align-items:center;font-size:13px;font-weight:600;color:var(--ink)}
+.float-badge .n{font-family:Poppins;font-weight:800;color:var(--coral);font-size:20px}
+
+/* ---------- Content layout ---------- */
+.layout{display:grid;grid-template-columns:268px minmax(0,1fr);gap:46px;max-width:1200px;margin:0 auto;padding:0 28px}
+aside{position:sticky;top:84px;align-self:start;height:calc(100vh - 100px);overflow-y:auto;padding:26px 0}
+.toc-card{background:var(--soft);border:1px solid var(--line);border-radius:18px;padding:18px}
+.toc-close{display:none;position:absolute;top:-6px;right:-4px;width:36px;height:36px;border:none;background:var(--navy-2);color:#fff;border-radius:50%;font-size:22px;line-height:1;cursor:pointer}
+.toc-close:hover{background:var(--coral)}
+.toc-title{font-family:Poppins;font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--teal-d);margin:0 0 10px;font-weight:700}
+.toc ul{list-style:none;margin:0;padding:0}
+.toc a{display:block;color:var(--muted);font-size:14px;padding:6px 12px;border-radius:8px;border-left:2px solid transparent;line-height:1.4}
+.toc a:hover{color:var(--ink);background:#fff}
+.toc a.active{color:var(--teal-d);background:#fff;border-left-color:var(--teal);font-weight:600}
+.toc .toc li li a{padding-left:24px;font-size:13px}
+.toc a.toc-capstone{color:var(--coral);font-weight:600}
+main{padding:54px 0 120px;min-width:0}
+article{max-width:var(--max)}
+
+/* typography */
+article h2{font-size:30px;margin:56px 0 16px;font-weight:700;position:relative}
+article h2::before{content:"\2726";color:var(--teal);font-size:18px;margin-right:10px;vertical-align:2px}
+article h3{font-size:21px;margin:34px 0 10px;font-weight:600}
+article h2+h3{margin-top:18px}
+article p,article li{font-size:16.5px}
+article ul,article ol{padding-left:24px}
+article li{margin:7px 0}
+article strong{font-weight:700;color:#0f1b28}
+hr{border:none;height:1px;background:var(--line);margin:42px 0}
+
+/* tables */
+table{border-collapse:separate;border-spacing:0;width:100%;margin:24px 0;font-size:15px;border:1px solid var(--line);border-radius:14px;overflow:hidden;display:block;overflow-x:auto}
+th,td{padding:12px 15px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--navy-2);color:#eaf1f8;font-family:Poppins;font-weight:600;font-size:14px}
+tr:last-child td{border-bottom:none}
+tbody tr:nth-child(even){background:var(--soft)}
+
+/* inline + block code */
+code{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.86em;background:var(--teal-soft);color:#0c6a55;padding:.13em .42em;border-radius:6px}
+.codehilite,pre{position:relative;background:var(--code-bg);border-radius:14px;margin:22px 0;overflow:hidden;box-shadow:var(--shadow-sm)}
+.codehilite pre{margin:0;border-radius:0;box-shadow:none;background:transparent}
+.codehilite pre,pre>code{display:block;padding:42px 18px 18px;overflow-x:auto}
+.codehilite code,pre code{background:none;color:#dfe6ee;padding:0;font-size:13.5px;line-height:1.7}
+.code-bar{position:absolute;top:0;left:0;right:0;height:34px;display:flex;align-items:center;gap:7px;padding:0 15px;background:rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.07)}
+.code-bar .dot{width:11px;height:11px;border-radius:50%}
+.dot.r{background:#ff5f57}.dot.y{background:#febc2e}.dot.g{background:#28c840}
+.copy-btn{position:absolute;top:5px;right:9px;z-index:3;background:rgba(255,255,255,.08);color:#dfe6ee;border:1px solid rgba(255,255,255,.14);border-radius:8px;font-size:12px;padding:4px 11px;cursor:pointer;font-family:Inter;transition:.15s}
+.copy-btn:hover{background:var(--teal);border-color:var(--teal);color:#04231c}
+.copy-btn.done{background:var(--teal);color:#04231c;border-color:var(--teal)}
+
+/* callouts */
+blockquote{margin:24px 0;padding:16px 20px;border-radius:14px;background:var(--soft);border:1px solid var(--line);border-left:5px solid var(--teal)}
+blockquote p{margin:7px 0}blockquote p:first-child{margin-top:0}blockquote p:last-child{margin-bottom:0}
+blockquote.cl-key{background:var(--k-bg);border-left-color:var(--k);border-color:transparent}
+blockquote.cl-tip{background:var(--tip-bg);border-left-color:var(--tip);border-color:transparent}
+blockquote.cl-ok{background:var(--ok-bg);border-left-color:var(--ok);border-color:transparent}
+blockquote.cl-no{background:var(--no-bg);border-left-color:var(--no);border-color:transparent}
+blockquote.cl-goal{background:var(--goal-bg);border-left-color:var(--goal);border-color:transparent}
+
+/* capstone banner */
+h2.capstone-h{background:linear-gradient(115deg,var(--navy),var(--navy-3));color:#fff;border-radius:20px;padding:30px 28px 26px;margin-top:64px;box-shadow:0 20px 50px rgba(10,26,47,.3);overflow:hidden;position:relative}
+h2.capstone-h::before{content:"\1F6E0\FE0F  HANDS-ON PROJECT";display:block;font-family:Poppins;font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--teal);margin:0 0 8px}
+h2.capstone-h::after{content:"";position:absolute;width:150px;height:150px;border-radius:50%;background:rgba(24,196,160,.25);filter:blur(10px);top:-50px;right:-30px}
+
+/* check-off */
+.checkable{list-style:none;padding-left:0}
+.checkable li{position:relative;padding-left:36px;cursor:pointer;margin:9px 0}
+.checkable li::before{content:"";position:absolute;left:0;top:3px;width:22px;height:22px;border:2px solid var(--teal);border-radius:7px;background:#fff;transition:.15s}
+.checkable li.checked::before{background:var(--teal);border-color:var(--teal)}
+.checkable li.checked::after{content:"\2713";position:absolute;left:5px;top:1px;color:#fff;font-weight:800;font-size:15px}
+.checkable li.checked{color:var(--muted)}
+
+/* footer */
+footer.site{background:var(--navy);color:#aebccb;margin-top:90px}
+footer.site .wrap{padding:46px 28px;display:flex;justify-content:space-between;gap:26px;flex-wrap:wrap;align-items:center}
+footer.site .logo{font-size:20px}
+footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
+
+#menuBtn{display:none}
+@media(max-width:920px){
+  .topbar{display:none}
+  .nav-cta{display:none}
+  .float-badge{display:none}
+  nav.bar .wrap{gap:14px;height:60px}
+  .wrap{padding:0 20px}
+  .logo{font-size:18px;white-space:nowrap}
+  .hero .wrap{grid-template-columns:1fr;gap:30px;padding:42px 20px 56px}
+  .hero h1{font-size:33px}
+  .hero .lead{font-size:16.5px}
+  .hero-actions{gap:14px}
+  .hero-actions .btn-primary{flex:1;justify-content:center}
+  .layout{grid-template-columns:1fr;gap:0}
+  aside{position:fixed;top:0;left:0;width:84vw;max-width:320px;height:100vh;background:#fff;z-index:130;transform:translateX(-100%);transition:.25s;box-shadow:var(--shadow);padding:24px}
+  aside.open{transform:none}
+  #menuBtn{display:inline-flex}
+  .toc-close{display:block}
+  .navlinks{display:none}
+  main{padding:34px 0 80px}
+  body{font-size:16px}
+  article h2{font-size:25px}
+  h2.capstone-h{padding:24px 20px}
+}
+@media(max-width:420px){
+  .hero h1{font-size:29px}
+  .hero-actions{flex-direction:column;align-items:stretch}
+  .hero-actions .play{justify-content:center}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<div class="topbar"><div class="wrap">
+  <div>&#10024; Welcome to <b>Self-Paced CS50x</b> &middot; a self-paced course</div>
+  <div class="right"><span>CS50x 2026 · Harvard University · David J. Malan</span></div>
+</div></div>
+
+<nav class="bar"><div class="wrap">
+  <button class="btn btn-outline" id="menuBtn" style="padding:8px 14px">&#9776;</button>
+  <a class="logo" href="..\index.html">Self-Paced CS50x<span class="dot">.</span></a>
+  <div class="navlinks">
+    <a href="..\index.html">All lessons</a>
+    <a href="#overview">Overview</a>
+    <a href="#capstone">Capstone</a>
+  </div>
+  <div class="nav-cta">
+    <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
+  </div>
+</div></nav>
+
+<header class="hero">
+  <span class="blob t"></span><span class="blob c"></span>
+  <svg class="squiggle" style="top:120px;left:46%;" width="90" height="26" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#18c4a0" stroke-width="4" stroke-linecap="round"/></svg>
+  <svg class="squiggle" style="bottom:60px;right:40%;" width="70" height="22" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#f24d63" stroke-width="4" stroke-linecap="round"/></svg>
+  <div class="wrap" id="overview">
+    <div>
+      <span class="eyebrow">&#10022; Module 9 · Lesson 32</span>
+      <h1>Using AI Well: Prompts and <span class="accent">Copilots</span></h1>
+      <p class="lead">CS50&#x27;s duck went from silently quacking at confused students to holding real English conversations once it was built on two ideas anyone can use today (a system prompt that fixes an AI&#x27;s personality and rules in advance, and a user prompt that asks it one specific question), and once you can spot those two ingredients inside CS50&#x27;s own code and inside an AI pair-programmer like GitHub Copilot, you can use these tools to write real code responsibly instead of just accepting whatever they hand back.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
+        <a class="play" href="https://www.youtube.com/watch?v=-9bo8HlSxwQ" target="_blank" rel="noopener"><span class="circ">&#9654;</span> Watch the talk</a>
+      </div>
+      <div class="chips">
+        <span class="chip">&#127908; <b>David J. Malan</b></span>
+        <span class="chip">&#9201; <b>45 minutes</b></span>
+        <span class="chip">&#128296; <b>Hands-on capstone</b></span>
+      </div>
+    </div>
+    <div style="position:relative">
+      <div class="hero-card">
+        <div class="ring">
+          <svg width="74" height="74"><circle cx="37" cy="37" r="31" stroke="#eef2f5" stroke-width="7" fill="none"/><circle cx="37" cy="37" r="31" stroke="#18c4a0" stroke-width="7" fill="none" stroke-linecap="round" stroke-dasharray="195" stroke-dashoffset="40"/></svg>
+          <span class="lab">&#10022;</span>
+        </div>
+        <h3>What you&#39;ll get</h3>
+        <ul>
+          <li><span class="ic">&#9989;</span><span>Plain-language teaching with every term defined</span></li>
+          <li><span class="ic">&#128221;</span><span>Code snippets pulled from the talk</span></li>
+          <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
+          <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
+        </ul>
+        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <aside id="sidebar"><div class="toc-card">
+    <button class="toc-close" id="tocClose" aria-label="Close menu">&times;</button>
+    <p class="toc-title">On this page</p>
+    <div class="toc">
+<ul>
+<li><a href="#in-one-sentence">In one sentence</a></li>
+<li><a href="#first-principles-companion">First-principles companion</a></li>
+<li><a href="#a-few-plain-language-basics-first">A few plain-language basics first</a></li>
+<li><a href="#why-this-lesson-matters">Why this lesson matters</a></li>
+<li><a href="#learning-objectives">Learning objectives</a></li>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#part-1-the-rubber-ducks-history-from-silent-quacker-to-english-speaking-tutor">Part 1: The rubber duck's history (from silent quacker to English-speaking tutor)</a></li>
+<li><a href="#part-2-the-ai-vs-reality-game-how-good-has-this-gotten">Part 2: The AI-vs-reality game (how good has this gotten?)</a></li>
+<li><a href="#part-3-inside-the-duck-apis-system-prompts-and-prompt-engineering">Part 3: Inside the duck (APIs, system prompts, and prompt engineering)</a></li>
+<li><a href="#part-4-the-week-0-code-finally-explained-line-by-line">Part 4: The week-0 code, finally explained line by line</a></li>
+<li><a href="#part-5-watching-copilot-write-code-and-why-you-still-have-to-read-it">Part 5: Watching Copilot write code (and why you still have to read it)</a></li>
+<li><a href="#part-6-how-the-pieces-combine">Part 6: How the pieces combine</a></li>
+<li><a href="#key-takeaways">Key takeaways</a></li>
+<li><a href="#common-pitfalls">Common pitfalls</a></li>
+<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: Build (and Break) a Study-Buddy Persona, Then Critique the Duck's Code</a><ul>
+<li><a href="#what-you-will-build">What you will build</a></li>
+<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
+<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
+<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
+</ul>
+</li>
+<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
+<li><a href="#exercise-1-redraw-the-architecture-foundational">Exercise 1: Redraw the architecture (foundational)</a></li>
+<li><a href="#exercise-2-predict-the-boundary-intermediate">Exercise 2: Predict the boundary (intermediate)</a></li>
+<li><a href="#exercise-3-play-the-game-yourself-advanced">Exercise 3: Play the game yourself (advanced)</a></li>
+</ul>
+</li>
+<li><a href="#cheat-sheet">Cheat sheet</a></li>
+<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
+</ul>
+</div>
+
+  </div></aside>
+  <main id="start">
+    <article>
+      <hr />
+<h2 id="in-one-sentence">In one sentence</h2>
+<p>CS50's duck went from silently quacking at confused students to holding real English conversations once it was built on two ideas anyone can use today (a <strong>system prompt</strong> that fixes an AI's personality and rules in advance, and a <strong>user prompt</strong> that asks it one specific question), and once you can spot those two ingredients inside CS50's own code and inside an AI pair-programmer like GitHub Copilot, you can use these tools to write real code responsibly instead of just accepting whatever they hand back.</p>
+<blockquote>
+<p>🎯 <strong>Where this lesson is heading.</strong> It builds to a hands-on <strong>Capstone Project</strong> where you write three system prompts of increasing specificity for a study-buddy persona, test all three against CS50's own free duck, and then use that same duck to scaffold (and critique line by line) a small function you already understand. Everything before the Capstone teaches the skills you will use there. If you want to see the finish line first, jump to the <strong>"Capstone Project"</strong> section, then come back.</p>
+</blockquote>
+<h2 id="first-principles-companion">First-principles companion</h2>
+<blockquote>
+<p>💡 <strong>The durable idea behind this lesson.</strong> The talk is recent, but the underlying idea is not.</p>
+<ul>
+<li><strong><a href="https://en.wikipedia.org/wiki/The_Pragmatic_Programmer">The Pragmatic Programmer</a></strong> (Andrew Hunt and David Thomas, 1999). This is the book generally credited with popularizing "rubber duck debugging", the practice this entire lesson's duck is named after: explaining your problem out loud, in complete and precise detail, to a silent listener, until the act of explaining it fully reveals the bug to <em>you</em>. Prompt engineering, which you'll meet in Part 3, is the same discipline aimed at an AI instead of a toy on your desk: the more completely and precisely you explain yourself, the better the answer you get back.</li>
+</ul>
+</blockquote>
+<h2 id="a-few-plain-language-basics-first">A few plain-language basics first</h2>
+<p>This lesson uses some everyday-sounding terms in a specific way. Here they are in plain words:</p>
+<ul>
+<li><strong>Artificial intelligence (AI):</strong> technology that finds patterns in large amounts of data and uses those patterns to produce an answer, a decision, or new content, instead of following a fixed list of <code>if/else</code> rules that a human wrote out in advance for every possible case.</li>
+<li><strong>Generative AI:</strong> a kind of AI that produces new material (text, images, sound, video, even code) rather than just labeling or sorting things people already made. The duck, GitHub Copilot, and tools like ChatGPT, Claude, and Gemini all belong to this category.</li>
+<li><strong>Model:</strong> the specific trained AI "engine" that a request gets sent to (for example, one particular version of GPT). Different models can be faster, cheaper, or more capable; you choose one by name.</li>
+<li><strong>API (application programming interface):</strong> a set of features a company exposes so that other programmers can build on top of its software without recreating it themselves. CS50's duck is built on APIs from companies like OpenAI and Microsoft.</li>
+<li><strong>Prompt engineering:</strong> the practice of writing clear, detailed, well-structured instructions to an AI so it's likely to hand back the answer you actually want. Despite the fancy-sounding name, as you'll read below, it's mostly just asking good questions.</li>
+<li><strong>System prompt:</strong> standing instructions a programmer writes once, in advance, that shape how the AI behaves for every question that follows: its personality, its rules, its boundaries.</li>
+<li><strong>User prompt:</strong> the specific question a person types in at that moment. This is what changes every single time, while the system prompt stays fixed.</li>
+<li><strong>GitHub Copilot:</strong> an AI pair-programmer built into a code editor (here, Visual Studio Code) that can read the code you already have open and either autocomplete it or write new code from a plain-English chat request.</li>
+</ul>
+<p>You do not need to memorise these. Each is explained again the first time it matters below.</p>
+<h2 id="why-this-lesson-matters">Why this lesson matters</h2>
+<p>Back in Lesson 1, you watched Malan build a ten-line chatbot and watched one sentence, a system prompt, turn it from a plain assistant into a cat. That felt like a toy. It wasn't. The exact same pattern, the same <code>client.responses.create()</code> call, is what's actually running behind CS50's own duck, and it's the same pattern behind every AI assistant you'll touch for the rest of this course, including, eventually, your own final project.</p>
+<p>Malan is candid that using AI well changes what's possible for a beginner almost overnight. Comparing the hours students spend on a problem set to how fast an AI can scaffold a first draft, he says plainly that once you have the underlying vocabulary, "it will allow you to implement far grander projects, far greater projects than has been possible to date, certainly in just a few weeks we have to do it, because of this amplification of your own abilities." That's the promise. This lesson is also honest about the catch: amplification only helps if you can still tell good code from bad, which is exactly what the rest of this course is building in you.</p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<p>By the end of this lesson you will be able to:</p>
+<ol>
+<li>Explain how CS50's duck evolved from a silent quacker to an English-speaking AI tutor, and why the silent version already worked for many students.</li>
+<li>Given a system prompt and a user prompt, predict how each one shapes an AI's answer, and correctly identify which is which inside real code.</li>
+<li>Trace, line by line, what <code>client.responses.create(model=..., input=..., instructions=...)</code> does, the exact code introduced in Lesson 1, using the terms "model," "user prompt," and "system prompt" correctly.</li>
+<li>Use an AI assistant to scaffold a small function you already understand, and critique its output line by line instead of accepting it uncritically.</li>
+<li>Write system prompts of increasing specificity for a persona, and describe concretely how the AI's behavior changes as the prompt gets more specific.</li>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li><strong>Module 1 · Lesson 1 (Welcome to CS50):</strong> the user-prompt/system-prompt vocabulary and the ten-line chatbot script this lesson expands on line by line.</li>
+<li><strong>Module 8 · Lesson 31 (Indexes, injection, and race conditions):</strong> the immediately preceding lesson. No SQL knowledge is needed here. This module is a self-contained detour into AI.</li>
+<li>Helpful but not required: having attempted the <code>speller</code> (<code>dictionary.c</code>) and Mario (<code>mario.c</code>) problem sets yourself in C, since both appear as live demos below. If you haven't reached them yet, the demos still make sense on their own.</li>
+</ul>
+<hr />
+<h2 id="part-1-the-rubber-ducks-history-from-silent-quacker-to-english-speaking-tutor">Part 1: The rubber duck's history (from silent quacker to English-speaking tutor)</h2>
+<p>Long before AI, there was already "sort of a thing in programming circles to have a rubber duck on your desk," as Malan puts it: a real, physical rubber duck you talk to when you're stuck. The idea: in the absence of a friend, family member, or teaching assistant to ask, you <em>verbalize</em> your confusion out loud to the duck. Quite often, simply forcing yourself to explain the problem clearly enough for a silent object to "understand" it is what makes the bug obvious to you. Nothing about the duck is smart. The thinking is entirely yours. This is exactly the "rubber duck debugging" technique named in this lesson's First-principles companion above.</p>
+<p>CS50 gave every student a physical duck, then "virtualized" it inside the course's own programming environment (a tool called Visual Studio Code, reachable at cs50.dev). For its first few years, the virtual duck's chat window would accept any typed question, and no matter what you asked, it only ever quacked back at you, giving no real answer at all. And yet, by Malan's account, that alone was often enough: the <em>process</em> of typing out your confusion, not any answer from the duck, was what solved the problem.</p>
+<p>Then, in 2023, everything changed. As Malan tells it, it came as no surprise, given the sudden rise of tools like ChatGPT, Claude, and Gemini, that "in 2023 the same duck started responding to students in English and that now is the tool that they have available, which is in effect meant to be a less helpful version of Chat GPT, one that doesn't just spoil answers outright, but tries to guide them to solutions akin to any good teacher or tutor." The duck kept its old job (provoke you into explaining yourself) but gained the ability to talk back like a patient tutor instead of a silent toy.</p>
+<blockquote>
+<p>🔑 <strong>The single most important takeaway of this part:</strong> the duck's whole design philosophy, before and after 2023, is <em>guide, don't spoil</em>. A good tutor (and a well-designed AI tutor) doesn't hand you the answer; it asks the next useful question.</p>
+</blockquote>
+<hr />
+<h2 id="part-2-the-ai-vs-reality-game-how-good-has-this-gotten">Part 2: The AI-vs-reality game (how good has this gotten?)</h2>
+<p>To make the stakes of "generative AI" concrete before explaining how it works, Malan ran a live audience poll using real examples the <em>New York Times</em> had published comparing AI-generated content to the real thing. The game, each round: two items on screen, pick which one is AI.</p>
+<p><strong>Round 1: two photographs.</strong> More than 70% of the audience correctly picked the AI-generated photo. It had, in Malan's words, "looked a little too good or maybe a little too unreal."</p>
+<p><strong>Round 2: two more photographs.</strong> A majority guessed "left." The actual answer: it was a trick question. <strong>Both</strong> photographs were AI-generated. Neither person in either photo exists.</p>
+<p><strong>Round 3: two short texts,</strong> framed with the question "did a 4th grader write this, or the new chatbot?"</p>
+<blockquote>
+<p><strong>Text 1:</strong> "I'd like to bring a yummy sandwich and a cold juice box for lunch. Sometimes I'll even pack a tasty piece of fruit or a bag of crunchy chips. As we eat, we chat and laugh and catch up on each other's day."</p>
+<p><strong>Text 2:</strong> "My mother packs me a sandwich, a drink, fruit, and a treat. When I get into a lunchroom, I find an empty table and sit there and eat my lunch. My friends come and sit down with me."</p>
+</blockquote>
+<p>The audience majority guessed Text 1 was the AI, and this time, they were right. As Malan explains, "the answer here, in fact, is that SA 1 is the AI, because indeed SA 2 is more akin to what a 4th, or if I may, a 5th grader would write." One tell: Text 1's grown-up phrase "catch up on each other's day" is not typical vocabulary for the age group it's imitating; Text 2's plainer, more literal sentences ("My mother packs me...") read as more genuinely childlike.</p>
+<p>Three rounds, three different outcomes: correctly spotted, completely fooled, and correctly spotted again. Malan's own conclusion: "this game is not something we can play for years to come, because it's just going to get too hard to discern something that's AI-generated or not." That's not a reason to panic. It's the reason the rest of this lesson (and this whole module) exists: if you can no longer tell by eye, you need to understand what's actually happening underneath.</p>
+<hr />
+<h2 id="part-3-inside-the-duck-apis-system-prompts-and-prompt-engineering">Part 3: Inside the duck (APIs, system prompts, and prompt engineering)</h2>
+<p>Here's the architecture, in Malan's description: a student uses a CS50 tool; that tool talks to a CS50-built website called <strong>cs50.ai</strong>; CS50's own code on that site talks to third-party <strong>APIs</strong> (from companies like OpenAI and Microsoft, who have done "the hard work of developing these models") plus, in Malan's words, "some local sauce that we CS50 add into the mix to make it specific, the duck's answers, to CS50 itself."</p>
+<div class="codehilite"><pre><span></span><code>   You (student)
+        |
+        v
+   cs50.ai  (CS50&#39;s own website and code, the &quot;local sauce&quot;)
+        |
+        v
+   Third-party API  (OpenAI, Microsoft, ...)
+        |
+        v
+   The underlying model
+</code></pre></div>
+
+<p>That "local sauce" is where <strong>prompt engineering</strong> comes in, a term Malan is quick to deflate: "prompt engineering really, it's not so much a form of engineering as it is a form of asking good questions. And being detailed in your question, giving context to the underlying AI, so that the answer with high probability is what you want back." No special credential is required: just clarity and detail.</p>
+<p>Prompt engineering, as CS50 practices it, produces two distinct pieces of text:</p>
+<ul>
+<li>A <strong>system prompt</strong>: instructions written by CS50 staff, in English, once, that push the underlying AI toward a certain personality and a specific area of expertise.</li>
+<li>A <strong>user prompt</strong>: whatever the student actually types in that moment.</li>
+</ul>
+<p>Malan reads the <em>essence</em> of the duck's real system prompt aloud:</p>
+<blockquote>
+<p>"You are a friendly and supportive teaching assistant for CS 50. You are also a rubber duck, and that is sufficient to turn an AI into a rubber duck, it turns out. Answer student questions only about CS 50 in the field of computer science. Do not answer questions about unrelated topics."</p>
+</blockquote>
+<p>And crucially, one more line:</p>
+<blockquote>
+<p>"Do not provide full answers to problem sets, as this would violate academic honesty."</p>
+</blockquote>
+<p>That last line is doing real work: it's the reason the duck will coach you toward a solution but won't just write your problem set for you. In the actual prompt CS50 sends, this whole block of instructions ends with the words "Answer this question:", and it's right after that point that CS50's code pastes in whatever the student typed, the user prompt, before sending the combined text off to the model.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>System prompt</th>
+<th>User prompt</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Who writes it</td>
+<td>CS50 staff, in advance</td>
+<td>The student, each time</td>
+</tr>
+<tr>
+<td>How often it changes</td>
+<td>Rarely: it's standing policy</td>
+<td>Every single question</td>
+</tr>
+<tr>
+<td>What it controls</td>
+<td>The duck's identity, topic, and boundaries (including "no full pset answers")</td>
+<td><em>What</em> is being asked right now</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>🔑 <strong>The single most important takeaway of this part:</strong> the duck isn't a different, dumber AI model than ChatGPT. It's very likely the <em>same kind</em> of model, wrapped in a system prompt that tells it who to be and what not to do. Prompt engineering is how CS50 turned a general-purpose AI into a course-specific tutor without writing a single line of new AI itself.</p>
+</blockquote>
+<hr />
+<h2 id="part-4-the-week-0-code-finally-explained-line-by-line">Part 4: The week-0 code, finally explained line by line</h2>
+<p>Recall the ten-line chatbot from Lesson 1. At the time, some of it was left unexplained. Now, with this architecture in hand, Malan revisits that exact code:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">()</span>
+
+<span class="n">user_prompt</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;What would you like to ask? &quot;</span><span class="p">)</span>
+<span class="n">system_prompt</span> <span class="o">=</span> <span class="s2">&quot;Limit your answer to one sentence.&quot;</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">responses</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-5&quot;</span><span class="p">,</span>
+    <span class="nb">input</span><span class="o">=</span><span class="n">user_prompt</span><span class="p">,</span>
+    <span class="n">instructions</span><span class="o">=</span><span class="n">system_prompt</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">output_text</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Malan's own description of the one line that does the real work: "we created a variable called response which was meant to represent the response from OpenAI['s] server. We used <code>client.responses.create</code>, which is a function or method that OpenAI gives us that allows us to pass in three arguments: the input from the user, that is the user prompt; the instructions from us, that is the system prompt; and then the specific model or version of AI that we wanted to use."</p>
+<p>Mapped onto the code:</p>
+<ul>
+<li><code>model="gpt-5"</code>: which trained AI engine to send the request to.</li>
+<li><code>input=user_prompt</code>: the student's specific question, changing every time.</li>
+<li><code>instructions=system_prompt</code>: the standing rules, set once by the programmer (or, in CS50's real duck, by CS50 staff, the same "friendly and supportive teaching assistant" text you read in Part 3).</li>
+</ul>
+<p>And the last line, <code>print(response.output_text)</code>, is simply, in Malan's words, how "we were able to answer questions like what is CS 50 or the like." This is not a simplified toy version of how the duck works. It is, structurally, exactly how the duck works. Swap the hardcoded <code>system_prompt</code> string for CS50's real one, point a browser interface at it instead of a terminal, and you have cs50.ai.</p>
+<blockquote>
+<p>✅ <strong>What to do about it:</strong> any time you see an AI feature anywhere (a duck, a chatbot, a coding assistant), ask yourself what its system prompt probably says. That's usually the fastest way to understand <em>why</em> it behaves the way it does.</p>
+</blockquote>
+<hr />
+<h2 id="part-5-watching-copilot-write-code-and-why-you-still-have-to-read-it">Part 5: Watching Copilot write code (and why you still have to read it)</h2>
+<p>CS50 disables one particular AI feature for students from day one: <strong>GitHub Copilot</strong>, an AI pair-programmer built into Visual Studio Code. Malan notes it's "very similar in spirit to products from Google and Anthropic and other companies as well, but this is the one that comes from Microsoft," via GitHub. Students aren't allowed to use it until their final projects, which is deliberate, as you'll see below.</p>
+<p><strong>Demo 1: filling in <code>speller</code>'s <code>dictionary.c</code>.</strong> Weeks earlier, students had to implement several blank functions in a spell-checker, often taking, in Malan's estimate, "5 hours, 10 hours, 15 hours." With Copilot's chat panel open next to <code>dictionary.c</code>, Malan simply types a request: "implement the check function... using a hash table in C," and Copilot proposes working code, highlighted in green, that he can accept with one click. He does the same for the <code>load</code> function. Copilot isn't guessing blindly. It's using real context: the open file itself, the <code>//</code> comments students already had explaining each function's job, and the function's declared inputs and outputs. Malan is careful to name a limit here too: "co-pilot in general, as well as a lot of AI tools[,] are familiar with CS50 itself because it's been freely available as open courseware for years," meaning this demo's uncanny accuracy is partly because CS50's own problem sets are already in these tools' training data, not proof that any brand-new, private problem would go this smoothly.</p>
+<p><strong>Demo 2: generating <code>mario.c</code> from scratch.</strong> Malan creates a completely empty file, then types one plain-English instruction into Copilot's chat: "please implement a program in C that prints a left aligned pyramid of bricks using hash symbols for bricks and use the CS50 library to ask the user for a non-negative height as an integer." That single sentence is the entire English description of an assignment (Problem Set 1's Mario) that normally takes real effort to implement from a blank file. Copilot produces a complete, working program (a loop asking for a height using the CS50 library, then nested loops printing rows of <code>#</code> characters) in seconds.</p>
+<p>Malan is unusually blunt about the risk right after clicking "keep" on the first demo: "I'll assume that it's correct, but that's actually quite a big assumption." He goes further, naming exactly what makes that assumption dangerous or safe: "if you don't have an eye for what you're looking at, there's no way you're going to be able to troubleshoot an issue in here, explain it to someone else, make marginal changes or the like." The payoff, though, is real, once you <em>do</em> have that eye: "this kind of functionality in AI amplifies your capabilities as a programmer sort of overnight."</p>
+<blockquote>
+<p>❌ <strong>The trap to avoid:</strong> treating a green-highlighted Copilot suggestion as finished just because it appeared instantly. The muscle memory you're building in Modules 2 through 8 (reading C and Python by eye, tracing what a loop actually does) is precisely the "eye" Malan says you need before AI-written code is safe to keep.</p>
+</blockquote>
+<hr />
+<h2 id="part-6-how-the-pieces-combine">Part 6: How the pieces combine</h2>
+<p>Every idea in this lesson is one loop, repeated at every scale from the duck to Copilot:</p>
+<div class="codehilite"><pre><span></span><code>  YOUR QUESTION (user prompt)
+          |
+          v
+  STANDING RULES (system prompt) -- shapes tone, topic, boundaries
+          |
+          v
+  client.responses.create(model, input, instructions)  -- the API call
+          |
+          v
+  GENERATED TEXT OR CODE
+          |
+          v
+  YOU READ IT LINE BY LINE, BEFORE YOU TRUST IT   &lt;-- the step this lesson insists on
+</code></pre></div>
+
+<p>The duck, the AI-vs-reality game, and Copilot are three different surfaces on top of the exact same underlying idea: a system prompt plus a user prompt, sent through an API, to a model, producing an output that is very often good, and occasionally, confidently, wrong. Knowing that loop is what lets you use any future AI tool well, not just these two.</p>
+<hr />
+<h2 id="key-takeaways">Key takeaways</h2>
+<ol>
+<li><strong>The duck didn't get "smarter" until 2023</strong>: before that, quacking alone often worked, because verbalizing your own confusion out loud is frequently enough to spot the bug yourself.</li>
+<li><strong>Prompt engineering is asking good, detailed questions</strong>: in Malan's own words, "not so much a form of engineering as it is a form of asking good questions."</li>
+<li><strong>Every AI request splits into two prompts:</strong> a system prompt (standing rules, set once) and a user prompt (the question, set every time). CS50's duck's system prompt is what stops it from just handing out problem-set answers.</li>
+<li><strong><code>client.responses.create(model=, input=, instructions=)</code> from Lesson 1 is literally the same call running underneath cs50.ai</strong>: the toy chatbot and the real duck share one architecture.</li>
+<li><strong>AI-generated text, photos, and code are now good enough to fool most people, most of the time</strong>: which is exactly why you must keep reading critically instead of clicking "keep" on faith.</li>
+<li><strong>AI amplifies your capability; it does not replace your judgment</strong>: which is why CS50 withholds Copilot until your final project, once you already have the vocabulary to check its work.</li>
+</ol>
+<h2 id="common-pitfalls">Common pitfalls</h2>
+<ul>
+<li>❌ Assuming AI-generated code is correct because it compiled or looked plausible: Malan's own words: "I'll assume that it's correct, but that's actually quite a big assumption."</li>
+<li>❌ Mixing up which prompt is which: the <strong>system prompt</strong> is the standing rules set once by whoever built the tool (including "do not provide full answers to problem sets"); the <strong>user prompt</strong> is only your one-off question.</li>
+<li>❌ Writing vague, one-word prompts and expecting a great answer back: prompt engineering means being specific and giving context, not typing less.</li>
+<li>❌ Asking an AI to scaffold something you don't understand at all yet: you won't have "an eye for what you're looking at" to catch its mistakes.</li>
+<li>❌ Assuming Copilot's success on a CS50 problem set predicts equally good results on a brand-new, private problem: CS50's material is public and in these tools' training data; your own future projects generally won't be.</li>
+</ul>
+<hr />
+<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: Build (and Break) a Study-Buddy Persona, Then Critique the Duck's Code</h2>
+<blockquote>
+<p>This is the main hands-on project for the lesson. Using CS50's own free duck at <strong>cs50.ai</strong> (sign in with a free GitHub account, no paid API key needed), you'll prove to yourself, with real saved output, that specificity in a system prompt changes an AI's behavior, and that you cannot safely trust AI-written code without reading it line by line.</p>
+</blockquote>
+<h3 id="what-you-will-build">What you will build</h3>
+<p>Two short, concrete artifacts:</p>
+<ol>
+<li><strong>Three system prompts of increasing specificity</strong> for a "study buddy" persona, each tested against the exact same user question, with your own written notes on how the behavior changed.</li>
+<li><strong>One small C or Python function</strong>, scaffolded by the duck, that you already understand well enough to critique line by line.</li>
+</ol>
+<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
+<table>
+<thead>
+<tr>
+<th>Lesson idea</th>
+<th>Where you use it in the Capstone</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Prompt engineering ("asking good questions")</td>
+<td>Writing three system prompts that get progressively more detailed</td>
+</tr>
+<tr>
+<td>System prompt vs. user prompt</td>
+<td>Your test question (user prompt) stays fixed while only the system prompt changes</td>
+</tr>
+<tr>
+<td>CS50's real system prompt (identity + domain + "do not")</td>
+<td>Your most detailed system prompt copies that same three-part structure</td>
+</tr>
+<tr>
+<td><code>client.responses.create(model, input, instructions)</code></td>
+<td>Exactly what's running behind the scenes every time you chat with the duck</td>
+</tr>
+<tr>
+<td>"That's actually quite a big assumption"</td>
+<td>The discipline behind your line-by-line critique of the duck's scaffolded function</td>
+</tr>
+</tbody>
+</table>
+<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
+<ol>
+<li><strong>Sign in to cs50.ai for free.</strong> Go to <strong>cs50.ai</strong> and sign in with a free GitHub account: this is the same duck Malan demos live, and it costs nothing. (No GitHub account? Create one free at github.com; it takes about two minutes.)</li>
+<li><strong>Write System Prompt A: bare minimum.</strong> One short sentence and nothing else, e.g., <em>"You are a study buddy."</em></li>
+<li><strong>Write System Prompt B: more specific.</strong> Add a subject, a tone, and one boundary, e.g., <em>"You are a patient, encouraging study buddy helping a beginner learn Python. Use simple analogies. Never just give the final answer. Ask a guiding question instead."</em></li>
+<li><strong>Write System Prompt C: CS50-style.</strong> Model it directly on the three-part structure from Part 3 (identity, domain, and an explicit "do not"), e.g., <em>"You are a friendly, patient study buddy for a beginner learning [pick one topic: loops, functions, or hash tables]. Answer only questions about that topic and general computer science; do not answer unrelated questions. If asked to just solve a problem outright, do not give the full solution. Ask a guiding question instead."</em></li>
+<li><strong>Fix one user prompt and test all three.</strong> Pick one real, honest question: something like <em>"I don't understand how a for loop works, can you just show me the answer?"</em> (deliberately phrased to test the "don't just give the answer" boundary). Paste it, completely unchanged, against System Prompt A, then B, then C. Save all three real replies.</li>
+<li><strong>Write your comparison.</strong> In a few sentences per prompt, describe concretely how the reply changed (tone, whether it refused to "just give the answer," whether it stayed on topic) as the system prompt got more specific.</li>
+<li><strong>Pick one function you already understand.</strong> Choose something small you've implemented before and can explain without looking anything up: a <code>check</code> function, an <code>is_prime</code> function, a simple <code>average</code> or <code>swap</code> function, in C or Python.</li>
+<li><strong>Ask the duck to scaffold it from a plain-English description</strong>: following Malan's Mario demo, describe only the inputs, the task, and the return value in one or two sentences, without pasting your own code, and ask the duck to write the function.</li>
+<li><strong>Critique the output line by line.</strong> For every line the duck returns, write one honest note: correct, incorrect, or "I'd do this differently, because..." Don't skip a single line, and don't just "click keep."</li>
+</ol>
+<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
+<ul>
+<li>✅ Three real, saved replies from the duck (persona A, B, and C) to the identical question.</li>
+<li>✅ A short written comparison naming at least one concrete behavior change as the system prompt got more specific.</li>
+<li>✅ A duck-scaffolded function, plus a line-by-line critique that addresses every line.</li>
+<li>✅ You can state, in one sentence, one thing the duck's code got right and one thing you would change.</li>
+</ul>
+<blockquote>
+<p>💡 <strong>Keep yourself honest:</strong> pick a function for step 7 that you can already explain cold, not one you're secretly hoping the duck will teach you for the first time. Malan's caution is the whole point: "if you don't have an eye for what you're looking at, there's no way you're going to be able to troubleshoot an issue in here." This same duck, used with this same discipline, is exactly what you'll lean on later to move faster on your final project, a database-backed web app, without letting it think for you.</p>
+</blockquote>
+<hr />
+<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
+<blockquote>
+<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
+</blockquote>
+<h3 id="exercise-1-redraw-the-architecture-foundational">Exercise 1: Redraw the architecture (foundational)</h3>
+<p>From memory, describe or sketch CS50's duck architecture from Part 3 (student → cs50.ai → third-party API → model), labeling exactly where the system prompt and the user prompt each live in that chain.</p>
+<h3 id="exercise-2-predict-the-boundary-intermediate">Exercise 2: Predict the boundary (intermediate)</h3>
+<p>Reread CS50's real system prompt quoted in Part 3. Predict, in writing, what the duck would do if a student's user prompt were "Just give me the full code for pset3." Then name the exact sentence in the system prompt that determines that behavior.</p>
+<h3 id="exercise-3-play-the-game-yourself-advanced">Exercise 3: Play the game yourself (advanced)</h3>
+<p>Write two short paragraphs on the same everyday topic (for example, "my weekend"): one entirely in your own words, one generated by an AI from a plain prompt. Ask a friend to guess which is which, the way Malan's audience did in Part 2, and write down what gave it away.</p>
+<hr />
+<h2 id="cheat-sheet">Cheat sheet</h2>
+<div class="codehilite"><pre><span></span><code>RUBBER DUCK, THEN AND NOW
+  Pre-2023: silent duck, quacks only   -&gt; verbalizing your bug was often enough
+  2023+:    English-speaking AI duck  -&gt; guides you, doesn&#39;t just hand you the answer
+
+DUCK ARCHITECTURE
+  You -&gt; cs50.ai (CS50&#39;s code) -&gt; third-party API (OpenAI / Microsoft) -&gt; model
+                    ^
+                    CS50&#39;s own &quot;local sauce&quot;: the system prompt
+
+TWO KINDS OF PROMPT
+  SYSTEM PROMPT = standing rules, written once, by the programmer/course staff
+  USER PROMPT   = the one-off question, written every time, by the person asking
+
+THE DUCK&#39;S REAL SYSTEM PROMPT, IN THREE PARTS
+  1. Identity:  &quot;You are a friendly and supportive teaching assistant... a rubber duck.&quot;
+  2. Domain:    &quot;Answer student questions only about CS50 ... Do not answer ... unrelated topics.&quot;
+  3. Boundary:  &quot;Do not provide full answers to problem sets, as this would violate academic honesty.&quot;
+
+WEEK-0 CODE, FULL CIRCLE
+  response = client.responses.create(
+      model=&quot;gpt-5&quot;,                 # which AI engine
+      input=user_prompt,             # the question -- changes every time
+      instructions=system_prompt,    # the standing rules -- set once
+  )
+  print(response.output_text)
+
+BEFORE YOU ACCEPT AI-WRITTEN CODE
+  - Do you already understand what this function is supposed to do?
+  - Read every line -- does it match what YOU would have written?
+  - &quot;I&#39;ll assume that it&#39;s correct, but that&#39;s actually quite a big assumption.&quot; -- Malan
+</code></pre></div>
+
+<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
+<ul>
+<li><strong>Earlier, Module 1 · Lesson 1 (Welcome to CS50):</strong> introduced the ten-line chatbot and the system-prompt/user-prompt split as a brand-new idea; this lesson finally walks that same <code>client.responses.create()</code> call line by line and shows it running for real, as CS50's own duck.</li>
+<li><strong>Earlier, Module 8 · Lesson 31 (Indexes, injection, and race conditions):</strong> the immediately preceding lesson; nothing from it is required here: this module is a deliberate, self-contained detour into AI before the course returns to building.</li>
+<li><strong>Next, Module 9 · Lesson 33 (How machines learn):</strong> goes underneath prompts and APIs entirely, to the decision trees, reinforcement learning, and neural networks that make any of this (the duck, Copilot, the AI-vs-reality game) possible in the first place.</li>
+<li><strong>Later, your final project:</strong> the same duck and the same prompt-engineering discipline from this lesson's Capstone is exactly what you're encouraged to lean on when you build your database-backed web app at the end of this course, a fast, tireless junior colleague that speeds you up, never a replacement for your own judgment about what it hands you back.</li>
+</ul>
+<hr />
+<p><em>Source: "CS50x 2026 - Artificial Intelligence" by David J. Malan, Harvard University. Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current OpenAI SDK and cs50.ai interface.</em></p>
+    </article>
+    <section class="lesson-sync" data-lesson-id="32"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../progress.html">Progress tracker &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="..\module-8-sql\31-indexes-injection-transactions.html"><span class="dir">&#8592; Previous</span><b>Indexes, Injection, and Race Conditions</b></a><a class="ln home" href="..\index.html"><b>All lessons</b></a><a class="ln next" href="33-how-machines-learn.html"><span class="dir">Next &#8594;</span><b>How Machines Learn</b></a></nav>
+  </main>
+</div>
+
+<footer class="site"><div class="wrap">
+  <a class="logo" href="..\index.html">Self-Paced CS50x<span class="dot">.</span></a>
+  <span class="fnote">An unofficial self-paced companion generated from the CS50x 2026 lecture transcripts. CS50 is created by David J. Malan and Harvard University. Watch the original lectures and do the official problem sets at cs50.harvard.edu/x. Code snippets are illustrative reconstructions.</span>
+</div></footer>
+
+<style>pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.codehilite .hll { background-color: #ffffcc }
+.codehilite { background: #282C34; color: #ABB2BF }
+.codehilite .c { color: #7F848E } /* Comment */
+.codehilite .err { color: #ABB2BF } /* Error */
+.codehilite .esc { color: #ABB2BF } /* Escape */
+.codehilite .g { color: #ABB2BF } /* Generic */
+.codehilite .k { color: #C678DD } /* Keyword */
+.codehilite .l { color: #ABB2BF } /* Literal */
+.codehilite .n { color: #E06C75 } /* Name */
+.codehilite .o { color: #56B6C2 } /* Operator */
+.codehilite .x { color: #ABB2BF } /* Other */
+.codehilite .p { color: #ABB2BF } /* Punctuation */
+.codehilite .ch { color: #7F848E } /* Comment.Hashbang */
+.codehilite .cm { color: #7F848E } /* Comment.Multiline */
+.codehilite .cp { color: #7F848E } /* Comment.Preproc */
+.codehilite .cpf { color: #7F848E } /* Comment.PreprocFile */
+.codehilite .c1 { color: #7F848E } /* Comment.Single */
+.codehilite .cs { color: #7F848E } /* Comment.Special */
+.codehilite .gd { color: #E06C75 } /* Generic.Deleted */
+.codehilite .ge { color: #ABB2BF; font-style: italic } /* Generic.Emph */
+.codehilite .ges { color: #ABB2BF } /* Generic.EmphStrong */
+.codehilite .gr { color: #E06C75 } /* Generic.Error */
+.codehilite .gh { color: #ABB2BF; font-weight: bold } /* Generic.Heading */
+.codehilite .gi { color: #98C379 } /* Generic.Inserted */
+.codehilite .go { color: #E06C75 } /* Generic.Output */
+.codehilite .gp { color: #ABB2BF } /* Generic.Prompt */
+.codehilite .gs { color: #ABB2BF; font-weight: bold } /* Generic.Strong */
+.codehilite .gu { color: #ABB2BF; font-weight: bold } /* Generic.Subheading */
+.codehilite .gt { color: #E06C75 } /* Generic.Traceback */
+.codehilite .kc { color: #E5C07B } /* Keyword.Constant */
+.codehilite .kd { color: #C678DD } /* Keyword.Declaration */
+.codehilite .kn { color: #C678DD } /* Keyword.Namespace */
+.codehilite .kp { color: #C678DD } /* Keyword.Pseudo */
+.codehilite .kr { color: #C678DD } /* Keyword.Reserved */
+.codehilite .kt { color: #E5C07B } /* Keyword.Type */
+.codehilite .ld { color: #ABB2BF } /* Literal.Date */
+.codehilite .m { color: #D19A66 } /* Literal.Number */
+.codehilite .s { color: #98C379 } /* Literal.String */
+.codehilite .na { color: #E06C75 } /* Name.Attribute */
+.codehilite .nb { color: #E5C07B } /* Name.Builtin */
+.codehilite .nc { color: #E5C07B } /* Name.Class */
+.codehilite .no { color: #E06C75 } /* Name.Constant */
+.codehilite .nd { color: #61AFEF } /* Name.Decorator */
+.codehilite .ni { color: #E06C75 } /* Name.Entity */
+.codehilite .ne { color: #E06C75 } /* Name.Exception */
+.codehilite .nf { color: #61AFEF; font-weight: bold } /* Name.Function */
+.codehilite .nl { color: #E06C75 } /* Name.Label */
+.codehilite .nn { color: #E06C75 } /* Name.Namespace */
+.codehilite .nx { color: #E06C75 } /* Name.Other */
+.codehilite .py { color: #E06C75 } /* Name.Property */
+.codehilite .nt { color: #E06C75 } /* Name.Tag */
+.codehilite .nv { color: #E06C75 } /* Name.Variable */
+.codehilite .ow { color: #56B6C2 } /* Operator.Word */
+.codehilite .pm { color: #ABB2BF } /* Punctuation.Marker */
+.codehilite .w { color: #ABB2BF } /* Text.Whitespace */
+.codehilite .mb { color: #D19A66 } /* Literal.Number.Bin */
+.codehilite .mf { color: #D19A66 } /* Literal.Number.Float */
+.codehilite .mh { color: #D19A66 } /* Literal.Number.Hex */
+.codehilite .mi { color: #D19A66 } /* Literal.Number.Integer */
+.codehilite .mo { color: #D19A66 } /* Literal.Number.Oct */
+.codehilite .sa { color: #98C379 } /* Literal.String.Affix */
+.codehilite .sb { color: #98C379 } /* Literal.String.Backtick */
+.codehilite .sc { color: #98C379 } /* Literal.String.Char */
+.codehilite .dl { color: #98C379 } /* Literal.String.Delimiter */
+.codehilite .sd { color: #98C379 } /* Literal.String.Doc */
+.codehilite .s2 { color: #98C379 } /* Literal.String.Double */
+.codehilite .se { color: #98C379 } /* Literal.String.Escape */
+.codehilite .sh { color: #98C379 } /* Literal.String.Heredoc */
+.codehilite .si { color: #98C379 } /* Literal.String.Interpol */
+.codehilite .sx { color: #98C379 } /* Literal.String.Other */
+.codehilite .sr { color: #98C379 } /* Literal.String.Regex */
+.codehilite .s1 { color: #98C379 } /* Literal.String.Single */
+.codehilite .ss { color: #98C379 } /* Literal.String.Symbol */
+.codehilite .bp { color: #E5C07B } /* Name.Builtin.Pseudo */
+.codehilite .fm { color: #56B6C2; font-weight: bold } /* Name.Function.Magic */
+.codehilite .vc { color: #E06C75 } /* Name.Variable.Class */
+.codehilite .vg { color: #E06C75 } /* Name.Variable.Global */
+.codehilite .vi { color: #E06C75 } /* Name.Variable.Instance */
+.codehilite .vm { color: #E06C75 } /* Name.Variable.Magic */
+.codehilite .il { color: #D19A66 } /* Literal.Number.Integer.Long */</style>
+<script>
+// mobile menu
+const sb=document.getElementById('sidebar'),mb=document.getElementById('menuBtn');
+if(mb){mb.onclick=()=>sb.classList.toggle('open');sb.addEventListener('click',e=>{if(e.target.tagName==='A')sb.classList.remove('open')});}
+const tc=document.getElementById('tocClose');if(tc){tc.onclick=()=>sb.classList.remove('open');}
+// progress
+const prog=document.getElementById('progress');
+addEventListener('scroll',()=>{const h=document.body.scrollHeight-innerHeight;prog.style.width=(h>0?scrollY/h*100:0)+'%'});
+// code chrome + copy
+document.querySelectorAll('.codehilite, pre').forEach(block=>{
+  if(block.parentElement.classList.contains('codehilite'))return;
+  const bar=document.createElement('div');bar.className='code-bar';
+  bar.innerHTML='<span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>';
+  block.appendChild(bar);
+  const btn=document.createElement('button');btn.className='copy-btn';btn.textContent='Copy';
+  btn.onclick=()=>{const t=block.querySelector('code')?.innerText||block.innerText;
+    navigator.clipboard.writeText(t.replace(/\nCopy$/,''));btn.textContent='Copied!';btn.classList.add('done');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('done')},1500)};
+  block.appendChild(btn);
+});
+// callouts by leading emoji
+const map={'\u{1F511}':'cl-key','\u{1F4A1}':'cl-tip','✅':'cl-ok','❌':'cl-no','\u{1F3AF}':'cl-goal','\u{1F6E0}':'cl-goal'};
+document.querySelectorAll('blockquote').forEach(q=>{const t=(q.textContent||'').trim();for(const e in map){if(t.startsWith(e)){q.classList.add(map[e]);break}}});
+// check-off
+function makeCheckable(rx){document.querySelectorAll('h2,h3').forEach(h=>{if(!rx.test(h.textContent))return;let el=h.nextElementSibling;
+  while(el&&!/^H[1-3]$/.test(el.tagName)){if(el.tagName==='OL'||el.tagName==='UL'){el.classList.add('checkable');
+    el.querySelectorAll(':scope>li').forEach(li=>{const key='cwc:'+location.pathname+':'+li.textContent.slice(0,60);
+      if(localStorage.getItem(key))li.classList.add('checked');
+      li.addEventListener('click',ev=>{if(ev.target.tagName==='A')return;li.classList.toggle('checked');
+        li.classList.contains('checked')?localStorage.setItem(key,'1'):localStorage.removeItem(key)});});}el=el.nextElementSibling;}});}
+makeCheckable(/learning objectives|milestones/i);
+// scrollspy
+const links=[...document.querySelectorAll('.toc a')];
+const heads=links.map(a=>a.getAttribute('href')).filter(h=>h&&h.startsWith('#')).map(h=>document.getElementById(h.slice(1))).filter(Boolean);
+const spy=()=>{let cur=heads[0]?.id;for(const h of heads){if(h.getBoundingClientRect().top<150)cur=h.id}
+  links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur))};
+addEventListener('scroll',spy);spy();
+</script>
+<script type="module" src="../assets/sync.js"></script></body>
+</html>

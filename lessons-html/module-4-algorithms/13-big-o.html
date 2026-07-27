@@ -1,0 +1,721 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 4 · Lesson 13: Thinking in Running Time: Big O | Self-Paced CS50x</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0a1a2f; --navy-2:#0f243d; --navy-3:#15314f;
+  --teal:#18c4a0; --teal-d:#0fa385; --teal-soft:#e4f8f2;
+  --coral:#f24d63; --coral-d:#d83a50; --coral-soft:#feecee;
+  --ink:#152230; --muted:#5f6c7b; --line:#e9eef2; --bg:#ffffff;
+  --soft:#f4fbf9; --card:#ffffff; --code-bg:#21252b; --max:780px;
+  --k:#2f8fb3; --k-bg:#e8f4f9; --tip:#c4881f; --tip-bg:#fdf4e3; --ok:#1f9d6b; --ok-bg:#e6f6ef;
+  --no:#e0533f; --no-bg:#fdecea; --goal:#7b54c9; --goal-bg:#f1ebfb;
+  --shadow:0 10px 30px rgba(13,30,52,.08); --shadow-sm:0 4px 14px rgba(13,30,52,.07);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.72;font-size:17px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+#progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--teal),var(--coral));z-index:200;transition:width .1s linear}
+a{color:var(--teal-d);text-decoration:none}
+a:hover{color:var(--coral)}
+h1,h2,h3{font-family:Poppins,sans-serif;color:var(--ink);letter-spacing:-.01em}
+.accent{color:var(--coral)}
+.wrap{max-width:1200px;margin:0 auto;padding:0 28px}
+
+/* ---------- Top welcome strip ---------- */
+.topbar{background:var(--navy);color:#cdd8e4;font-size:13.5px}
+.topbar .wrap{display:flex;justify-content:space-between;align-items:center;height:42px;gap:18px}
+.topbar b{color:#fff;font-weight:600}
+.topbar .right{display:flex;gap:18px;align-items:center}
+.topbar a{color:#cdd8e4}.topbar a:hover{color:var(--teal)}
+
+/* ---------- Nav ---------- */
+nav.bar{background:var(--navy-2);position:sticky;top:0;z-index:120;box-shadow:0 2px 20px rgba(0,0,0,.25)}
+nav.bar .wrap{display:flex;align-items:center;height:68px;gap:26px}
+.logo{font-family:Poppins;font-weight:800;font-size:22px;color:#fff;letter-spacing:.02em;cursor:pointer;text-decoration:none}
+a.logo:hover{color:var(--teal)}
+.lessonnav{display:flex;gap:14px;align-items:stretch;margin:60px 0 0;flex-wrap:wrap}
+.lessonnav .ln{flex:1;min-width:200px;display:flex;flex-direction:column;gap:3px;border:1px solid var(--line);border-radius:14px;padding:16px 18px;color:var(--muted);transition:.15s;background:#fff}
+.lessonnav .ln:hover{border-color:var(--teal);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.lessonnav .ln .dir{font-size:13px;font-weight:600;color:var(--teal-d)}
+.lessonnav .ln b{color:var(--ink);font-family:Poppins;font-size:15px}
+.lessonnav .ln.next{text-align:right}
+.lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
+.lessonnav .ln.home b{color:var(--teal-d)}
+.logo .dot{color:var(--teal)}
+.navlinks{display:flex;gap:24px;margin-left:8px}
+.navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
+.navlinks a:hover{color:var(--teal)}
+.nav-cta{margin-left:auto;display:flex;gap:12px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:9px;border:none;cursor:pointer;font-family:Inter;font-weight:600;border-radius:999px;transition:.18s;font-size:15px;text-decoration:none}
+.btn-primary{background:var(--teal);color:#04231c;padding:12px 22px}
+.btn-primary:hover{background:var(--teal-d);color:#fff;transform:translateY(-1px)}
+.btn-outline{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.35);padding:10px 20px}
+.btn-outline:hover{border-color:var(--teal);color:var(--teal)}
+.btn-coral{background:var(--coral);color:#fff;padding:12px 22px}
+.btn-coral:hover{background:var(--coral-d);color:#fff;transform:translateY(-1px)}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;background:radial-gradient(120% 120% at 80% 0%,var(--navy-3),var(--navy) 60%);color:#eaf1f8;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.25;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.blob{position:absolute;border-radius:50%;filter:blur(8px);opacity:.5;z-index:0}
+.blob.t{width:230px;height:230px;background:rgba(24,196,160,.30);top:-60px;right:8%}
+.blob.c{width:160px;height:160px;background:rgba(242,77,99,.28);bottom:-40px;left:42%}
+.squiggle{position:absolute;z-index:1;opacity:.85}
+.hero .wrap{position:relative;z-index:2;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;padding:70px 28px 90px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--teal);font-weight:600;font-size:14px;letter-spacing:.03em;text-transform:uppercase;margin-bottom:18px}
+.hero h1{font-size:54px;line-height:1.08;font-weight:800;margin:0 0 20px;color:#fff}
+.hero .lead{font-size:18px;color:#b9c6d6;max-width:34em;margin:0 0 30px}
+.hero-actions{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:30px}
+.play{display:inline-flex;align-items:center;gap:12px;color:#fff;font-weight:600}
+.play .circ{width:52px;height:52px;border-radius:50%;background:var(--coral);display:grid;place-items:center;box-shadow:0 8px 22px rgba(242,77,99,.45);font-size:16px;animation:pulse 2.4s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(242,77,99,.45)}70%{box-shadow:0 0 0 16px rgba(242,77,99,0)}100%{box-shadow:0 0 0 0 rgba(242,77,99,0)}}
+.chips{display:flex;gap:10px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:#dce6f0;padding:8px 14px;border-radius:999px;font-size:13.5px;font-weight:500}
+.chip b{color:#fff}
+/* hero card */
+.hero-card{position:relative;background:#fff;color:var(--ink);border-radius:22px;padding:26px;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.hero-card .ring{position:absolute;top:-26px;right:-18px;width:96px;height:96px;background:#fff;border-radius:50%;box-shadow:var(--shadow);display:grid;place-items:center}
+.hero-card .ring svg{transform:rotate(-90deg)}
+.hero-card .ring .lab{position:absolute;font-family:Poppins;font-weight:700;font-size:18px;color:var(--teal-d)}
+.hero-card h3{margin:4px 0 14px;font-size:19px}
+.hero-card ul{list-style:none;margin:0 0 18px;padding:0}
+.hero-card li{display:flex;gap:11px;align-items:flex-start;padding:9px 0;border-bottom:1px dashed var(--line);font-size:14.5px;color:#36424f}
+.hero-card li:last-child{border-bottom:none}
+.hero-card li .ic{font-size:17px;line-height:1.4}
+.float-badge{position:absolute;left:18px;bottom:-26px;background:#fff;border-radius:14px;box-shadow:var(--shadow);padding:12px 16px;display:flex;gap:10px;align-items:center;font-size:13px;font-weight:600;color:var(--ink)}
+.float-badge .n{font-family:Poppins;font-weight:800;color:var(--coral);font-size:20px}
+
+/* ---------- Content layout ---------- */
+.layout{display:grid;grid-template-columns:268px minmax(0,1fr);gap:46px;max-width:1200px;margin:0 auto;padding:0 28px}
+aside{position:sticky;top:84px;align-self:start;height:calc(100vh - 100px);overflow-y:auto;padding:26px 0}
+.toc-card{background:var(--soft);border:1px solid var(--line);border-radius:18px;padding:18px}
+.toc-close{display:none;position:absolute;top:-6px;right:-4px;width:36px;height:36px;border:none;background:var(--navy-2);color:#fff;border-radius:50%;font-size:22px;line-height:1;cursor:pointer}
+.toc-close:hover{background:var(--coral)}
+.toc-title{font-family:Poppins;font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--teal-d);margin:0 0 10px;font-weight:700}
+.toc ul{list-style:none;margin:0;padding:0}
+.toc a{display:block;color:var(--muted);font-size:14px;padding:6px 12px;border-radius:8px;border-left:2px solid transparent;line-height:1.4}
+.toc a:hover{color:var(--ink);background:#fff}
+.toc a.active{color:var(--teal-d);background:#fff;border-left-color:var(--teal);font-weight:600}
+.toc .toc li li a{padding-left:24px;font-size:13px}
+.toc a.toc-capstone{color:var(--coral);font-weight:600}
+main{padding:54px 0 120px;min-width:0}
+article{max-width:var(--max)}
+
+/* typography */
+article h2{font-size:30px;margin:56px 0 16px;font-weight:700;position:relative}
+article h2::before{content:"\2726";color:var(--teal);font-size:18px;margin-right:10px;vertical-align:2px}
+article h3{font-size:21px;margin:34px 0 10px;font-weight:600}
+article h2+h3{margin-top:18px}
+article p,article li{font-size:16.5px}
+article ul,article ol{padding-left:24px}
+article li{margin:7px 0}
+article strong{font-weight:700;color:#0f1b28}
+hr{border:none;height:1px;background:var(--line);margin:42px 0}
+
+/* tables */
+table{border-collapse:separate;border-spacing:0;width:100%;margin:24px 0;font-size:15px;border:1px solid var(--line);border-radius:14px;overflow:hidden;display:block;overflow-x:auto}
+th,td{padding:12px 15px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--navy-2);color:#eaf1f8;font-family:Poppins;font-weight:600;font-size:14px}
+tr:last-child td{border-bottom:none}
+tbody tr:nth-child(even){background:var(--soft)}
+
+/* inline + block code */
+code{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.86em;background:var(--teal-soft);color:#0c6a55;padding:.13em .42em;border-radius:6px}
+.codehilite,pre{position:relative;background:var(--code-bg);border-radius:14px;margin:22px 0;overflow:hidden;box-shadow:var(--shadow-sm)}
+.codehilite pre{margin:0;border-radius:0;box-shadow:none;background:transparent}
+.codehilite pre,pre>code{display:block;padding:42px 18px 18px;overflow-x:auto}
+.codehilite code,pre code{background:none;color:#dfe6ee;padding:0;font-size:13.5px;line-height:1.7}
+.code-bar{position:absolute;top:0;left:0;right:0;height:34px;display:flex;align-items:center;gap:7px;padding:0 15px;background:rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.07)}
+.code-bar .dot{width:11px;height:11px;border-radius:50%}
+.dot.r{background:#ff5f57}.dot.y{background:#febc2e}.dot.g{background:#28c840}
+.copy-btn{position:absolute;top:5px;right:9px;z-index:3;background:rgba(255,255,255,.08);color:#dfe6ee;border:1px solid rgba(255,255,255,.14);border-radius:8px;font-size:12px;padding:4px 11px;cursor:pointer;font-family:Inter;transition:.15s}
+.copy-btn:hover{background:var(--teal);border-color:var(--teal);color:#04231c}
+.copy-btn.done{background:var(--teal);color:#04231c;border-color:var(--teal)}
+
+/* callouts */
+blockquote{margin:24px 0;padding:16px 20px;border-radius:14px;background:var(--soft);border:1px solid var(--line);border-left:5px solid var(--teal)}
+blockquote p{margin:7px 0}blockquote p:first-child{margin-top:0}blockquote p:last-child{margin-bottom:0}
+blockquote.cl-key{background:var(--k-bg);border-left-color:var(--k);border-color:transparent}
+blockquote.cl-tip{background:var(--tip-bg);border-left-color:var(--tip);border-color:transparent}
+blockquote.cl-ok{background:var(--ok-bg);border-left-color:var(--ok);border-color:transparent}
+blockquote.cl-no{background:var(--no-bg);border-left-color:var(--no);border-color:transparent}
+blockquote.cl-goal{background:var(--goal-bg);border-left-color:var(--goal);border-color:transparent}
+
+/* capstone banner */
+h2.capstone-h{background:linear-gradient(115deg,var(--navy),var(--navy-3));color:#fff;border-radius:20px;padding:30px 28px 26px;margin-top:64px;box-shadow:0 20px 50px rgba(10,26,47,.3);overflow:hidden;position:relative}
+h2.capstone-h::before{content:"\1F6E0\FE0F  HANDS-ON PROJECT";display:block;font-family:Poppins;font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--teal);margin:0 0 8px}
+h2.capstone-h::after{content:"";position:absolute;width:150px;height:150px;border-radius:50%;background:rgba(24,196,160,.25);filter:blur(10px);top:-50px;right:-30px}
+
+/* check-off */
+.checkable{list-style:none;padding-left:0}
+.checkable li{position:relative;padding-left:36px;cursor:pointer;margin:9px 0}
+.checkable li::before{content:"";position:absolute;left:0;top:3px;width:22px;height:22px;border:2px solid var(--teal);border-radius:7px;background:#fff;transition:.15s}
+.checkable li.checked::before{background:var(--teal);border-color:var(--teal)}
+.checkable li.checked::after{content:"\2713";position:absolute;left:5px;top:1px;color:#fff;font-weight:800;font-size:15px}
+.checkable li.checked{color:var(--muted)}
+
+/* footer */
+footer.site{background:var(--navy);color:#aebccb;margin-top:90px}
+footer.site .wrap{padding:46px 28px;display:flex;justify-content:space-between;gap:26px;flex-wrap:wrap;align-items:center}
+footer.site .logo{font-size:20px}
+footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
+
+#menuBtn{display:none}
+@media(max-width:920px){
+  .topbar{display:none}
+  .nav-cta{display:none}
+  .float-badge{display:none}
+  nav.bar .wrap{gap:14px;height:60px}
+  .wrap{padding:0 20px}
+  .logo{font-size:18px;white-space:nowrap}
+  .hero .wrap{grid-template-columns:1fr;gap:30px;padding:42px 20px 56px}
+  .hero h1{font-size:33px}
+  .hero .lead{font-size:16.5px}
+  .hero-actions{gap:14px}
+  .hero-actions .btn-primary{flex:1;justify-content:center}
+  .layout{grid-template-columns:1fr;gap:0}
+  aside{position:fixed;top:0;left:0;width:84vw;max-width:320px;height:100vh;background:#fff;z-index:130;transform:translateX(-100%);transition:.25s;box-shadow:var(--shadow);padding:24px}
+  aside.open{transform:none}
+  #menuBtn{display:inline-flex}
+  .toc-close{display:block}
+  .navlinks{display:none}
+  main{padding:34px 0 80px}
+  body{font-size:16px}
+  article h2{font-size:25px}
+  h2.capstone-h{padding:24px 20px}
+}
+@media(max-width:420px){
+  .hero h1{font-size:29px}
+  .hero-actions{flex-direction:column;align-items:stretch}
+  .hero-actions .play{justify-content:center}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<div class="topbar"><div class="wrap">
+  <div>&#10024; Welcome to <b>Self-Paced CS50x</b> &middot; a self-paced course</div>
+  <div class="right"><span>CS50x 2026 · Harvard University · David J. Malan</span></div>
+</div></div>
+
+<nav class="bar"><div class="wrap">
+  <button class="btn btn-outline" id="menuBtn" style="padding:8px 14px">&#9776;</button>
+  <a class="logo" href="..\index.html">Self-Paced CS50x<span class="dot">.</span></a>
+  <div class="navlinks">
+    <a href="..\index.html">All lessons</a>
+    <a href="#overview">Overview</a>
+    <a href="#capstone">Capstone</a>
+  </div>
+  <div class="nav-cta">
+    <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
+  </div>
+</div></nav>
+
+<header class="hero">
+  <span class="blob t"></span><span class="blob c"></span>
+  <svg class="squiggle" style="top:120px;left:46%;" width="90" height="26" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#18c4a0" stroke-width="4" stroke-linecap="round"/></svg>
+  <svg class="squiggle" style="bottom:60px;right:40%;" width="70" height="22" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#f24d63" stroke-width="4" stroke-linecap="round"/></svg>
+  <div class="wrap" id="overview">
+    <div>
+      <span class="eyebrow">&#10022; Module 4 · Lesson 13</span>
+      <h1>Thinking in Running Time: Big <span class="accent">O</span></h1>
+      <p class="lead">Running time measures how the number of steps an algorithm needs grows as its input grows (not how many seconds a clock shows), and Big O notation is the shorthand computer scientists use to say, at a glance, whether an algorithm scales gracefully (like repeatedly cutting a problem in half) or badly (like checking every item one at a time).</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
+        <a class="play" href="https://www.youtube.com/watch?v=6Svu_ae5ebk" target="_blank" rel="noopener"><span class="circ">&#9654;</span> Watch the talk</a>
+      </div>
+      <div class="chips">
+        <span class="chip">&#127908; <b>David J. Malan</b></span>
+        <span class="chip">&#9201; <b>45 minutes</b></span>
+        <span class="chip">&#128296; <b>Hands-on capstone</b></span>
+      </div>
+    </div>
+    <div style="position:relative">
+      <div class="hero-card">
+        <div class="ring">
+          <svg width="74" height="74"><circle cx="37" cy="37" r="31" stroke="#eef2f5" stroke-width="7" fill="none"/><circle cx="37" cy="37" r="31" stroke="#18c4a0" stroke-width="7" fill="none" stroke-linecap="round" stroke-dasharray="195" stroke-dashoffset="40"/></svg>
+          <span class="lab">&#10022;</span>
+        </div>
+        <h3>What you&#39;ll get</h3>
+        <ul>
+          <li><span class="ic">&#9989;</span><span>Plain-language teaching with every term defined</span></li>
+          <li><span class="ic">&#128221;</span><span>Code snippets pulled from the talk</span></li>
+          <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
+          <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
+        </ul>
+        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <aside id="sidebar"><div class="toc-card">
+    <button class="toc-close" id="tocClose" aria-label="Close menu">&times;</button>
+    <p class="toc-title">On this page</p>
+    <div class="toc">
+<ul>
+<li><a href="#in-one-sentence">In one sentence</a></li>
+<li><a href="#first-principles-companion">First-principles companion</a></li>
+<li><a href="#a-few-plain-language-basics-first">A few plain-language basics first</a></li>
+<li><a href="#why-this-lesson-matters">Why this lesson matters</a></li>
+<li><a href="#learning-objectives">Learning objectives</a></li>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#part-1-an-algorithm-is-a-recipe-and-today-we-start-grading-the-recipe">Part 1: An algorithm is a recipe, and today we start grading the recipe</a></li>
+<li><a href="#part-2-three-ways-to-take-attendance">Part 2: Three ways to take attendance</a><ul>
+<li><a href="#algorithm-1-count-by-1s">Algorithm 1: count by 1s</a></li>
+<li><a href="#algorithm-2-count-by-2s">Algorithm 2: count by 2s</a></li>
+<li><a href="#algorithm-3-pairwise-divide-and-conquer">Algorithm 3: pairwise divide and conquer</a></li>
+</ul>
+</li>
+<li><a href="#part-3-reading-a-running-time-graph-and-giving-it-a-name">Part 3: Reading a running-time graph, and giving it a name</a></li>
+<li><a href="#key-takeaways">Key takeaways</a></li>
+<li><a href="#common-pitfalls">Common pitfalls</a></li>
+<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: The Running-Time Lab</a><ul>
+<li><a href="#what-you-will-build">What you will build</a></li>
+<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
+<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
+<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
+</ul>
+</li>
+<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
+<li><a href="#exercise-1-name-the-family-foundational">Exercise 1: Name the family (foundational)</a></li>
+<li><a href="#exercise-2-predict-before-you-compute-intermediate">Exercise 2: Predict before you compute (intermediate)</a></li>
+<li><a href="#exercise-3-why-the-constant-doesnt-matter-advanced">Exercise 3: Why the constant doesn't matter (advanced)</a></li>
+</ul>
+</li>
+<li><a href="#cheat-sheet">Cheat sheet</a></li>
+<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
+</ul>
+</div>
+
+  </div></aside>
+  <main id="start">
+    <article>
+      <hr />
+<h2 id="in-one-sentence">In one sentence</h2>
+<p>Running time measures how the <em>number of steps</em> an algorithm needs grows as its input grows (not how many seconds a clock shows), and Big O notation is the shorthand computer scientists use to say, at a glance, whether an algorithm scales gracefully (like repeatedly cutting a problem in half) or badly (like checking every item one at a time).</p>
+<blockquote>
+<p>🎯 <strong>Where this lesson is heading.</strong> It builds to a hands-on <strong>Capstone Project</strong> called <em>The Running-Time Lab</em>, where you count real steps for a brute-force strategy and a halving strategy across lists of 16, 64, and 256 items, tabulate the results, and sketch the growth curves yourself. Everything before the Capstone teaches the ideas you will use there. If you want to see the finish line first, jump to the <strong>"Capstone Project"</strong> section, then come back.</p>
+</blockquote>
+<h2 id="first-principles-companion">First-principles companion</h2>
+<blockquote>
+<p>💡 <strong>The durable idea behind this lesson.</strong> CS50's slides and examples will keep changing, but the notation itself is nearly fifty years old. For the timeless, tool-agnostic version:</p>
+<ul>
+<li><strong><a href="https://dl.acm.org/doi/10.1145/1008328.1008329">Donald Knuth, "Big Omicron and Big Omega and Big Theta," <em>ACM SIGACT News</em>, 8(2), 1976</a>.</strong> This short paper is where computer science standardized exactly the three symbols this module uses: O for upper bound, Ω (Omega) for lower bound, Θ (Theta) for "both bounds match," borrowing notation mathematicians had used since the 1890s. The tools you'll measure with this course (C programs, timers, counters) are new; the vocabulary for describing what they measure is not.</li>
+</ul>
+</blockquote>
+<h2 id="a-few-plain-language-basics-first">A few plain-language basics first</h2>
+<p>This lesson uses some everyday terms. Here they are in plain words:</p>
+<ul>
+<li><strong>Algorithm:</strong> a step-by-step recipe for solving a problem (first defined in Module 1 · Lesson 3). Today's twist: we stop asking only "does it work?" and start asking "how well does it work as the problem grows?"</li>
+<li><strong>Running time:</strong> how the <em>amount of work</em> an algorithm does (usually counted in steps, not seconds) changes as the size of its input changes.</li>
+<li><strong>Problem size (n):</strong> the standard letter computer scientists use for "how many things you're working with": people in a room, entries in a list, rows in a database table.</li>
+<li><strong>Brute force:</strong> solving a problem the plainest way possible, by trying or checking things one at a time, with no cleverness about skipping ahead.</li>
+<li><strong>Divide and conquer:</strong> repeatedly splitting a problem into smaller pieces (often in half) and solving the smaller pieces instead of the whole thing at once.</li>
+<li><strong>Big O notation:</strong> the shorthand for describing how an algorithm's running time grows as n grows, written <code>O(...)</code>, focused on the worst case and on the single fastest-growing term.</li>
+<li><strong>Linear growth, written O(n):</strong> running time that grows in direct proportion to n: double the input, and the work roughly doubles too.</li>
+<li><strong>Logarithmic growth, written O(log n):</strong> running time that grows very slowly, because the problem is repeatedly cut in half: doubling n adds only about one more step.</li>
+</ul>
+<p>You do not need to memorise these. Each is explained again the first time it matters.</p>
+<h2 id="why-this-lesson-matters">Why this lesson matters</h2>
+<p>In Module 1 · Lesson 3 you watched a phone book get searched three different ways, and saw an informal picture of one search staying fast no matter how big the book got. Today's talk gives that picture a name. Malan opens the lecture by reminding everyone what an algorithm even is:</p>
+<blockquote>
+<p>"An algorithm is just step by step instructions for solving some problem." (David Malan)</p>
+</blockquote>
+<p>Correctness (does it get the right answer at all) was Module 1's concern. From here on, this module's concern is the other half of "good design": does it stay fast as the problem gets big? That question turns out to matter far beyond a classroom demo. By the end of this course you'll ship a database-backed web app as your final project, and the single biggest difference between a page that loads instantly and one that crawls is almost always this exact idea: a slow query versus a fast one is this lesson, just running at the scale of a database table instead of a room full of people.</p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<p>By the end of this lesson you will be able to:</p>
+<ol>
+<li>Explain, in plain language, what "running time" means and why computer scientists count steps instead of seconds.</li>
+<li>Describe the three human algorithms from the attendance demo (counting by 1s, counting by 2s, and pairwise halving) and say which growth family each one belongs to.</li>
+<li>Read a size-vs-time graph and identify which curve is linear and which is logarithmic.</li>
+<li>Use Big O notation to name an algorithm's growth rate, and explain why a "divide by 2" doesn't change which family it's in.</li>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li><strong>Module 1 · Lesson 3: Your First Algorithms</strong>: this lesson reuses that lesson's phone book example and its informal n-vs-log n graph directly, so you should already be comfortable with the words <em>algorithm</em>, <em>linear search</em>, and <em>binary search</em>.</li>
+<li>No coding tools required for the main capstone path (pen and paper are enough). A working cs50.dev codespace (set up in <strong>Module 0: Pre-flight</strong>) is only needed for the optional stretch milestone.</li>
+</ul>
+<hr />
+<h2 id="part-1-an-algorithm-is-a-recipe-and-today-we-start-grading-the-recipe">Part 1: An algorithm is a recipe, and today we start grading the recipe</h2>
+<p>CS50's Lecture 3 opens with a callback to Week 0, and then a promise about where the course goes next:</p>
+<blockquote>
+<p>"An algorithm is just step by step instructions for solving some problem." (David Malan)</p>
+</blockquote>
+<p>Nothing about that definition has changed since Lesson 3. What changes starting today is the question you're allowed to ask about an algorithm. Up to now, "does this recipe get the right answer?" was enough. From here forward, a second question sits right next to it: "how does this recipe behave as the problem gets bigger?" Two recipes can both be perfectly correct and still be worlds apart in practice: one finishes before you notice, the other makes you wait. Today's lecture teaches you to tell the difference on sight, using a live demonstration instead of a slide of equations.</p>
+<blockquote>
+<p>🔑 <strong>Correctness is necessary, not sufficient.</strong> A working algorithm can still be a bad choice if it doesn't scale. This module is about learning to notice that <em>before</em> it costs you.</p>
+</blockquote>
+<h2 id="part-2-three-ways-to-take-attendance">Part 2: Three ways to take attendance</h2>
+<p>To make "how it scales" concrete, the lecture takes attendance in a lecture hall of roughly 141 people (live, on stage), using three different human algorithms.</p>
+<h3 id="algorithm-1-count-by-1s">Algorithm 1: count by 1s</h3>
+<p>The simplest approach: point at each person in turn and recite the count out loud, "1, 2, 3, 4…" all the way to the end. It works, but every single person costs one more spoken step. If the room doubles in size, the counting takes twice as long. This is the human equivalent of <strong>brute force</strong>: no cleverness, just visiting everything once.</p>
+<h3 id="algorithm-2-count-by-2s">Algorithm 2: count by 2s</h3>
+<p>A small optimization, borrowed from a grade-school trick: count off two people at a time, "2, 4, 6, 8…", which is noticeably faster in practice. But look closely at <em>why</em> it's faster: it's still visiting the room from one end to the other, just taking bigger bites. Double the room, and this still takes twice as long as before: it has simply been made faster by a constant factor, not changed into a different kind of algorithm.</p>
+<h3 id="algorithm-3-pairwise-divide-and-conquer">Algorithm 3: pairwise divide and conquer</h3>
+<p>The third algorithm looks nothing like the first two. Everyone in the room stands up holding the number 1 in their head. Then, repeatedly:</p>
+<blockquote>
+<p>"Pair off with someone standing, add their number to yours, and remember the sum." (David Malan)</p>
+</blockquote>
+<p>One person in each pair sits down holding the pair's combined total; the other keeps standing and looks for a new partner still on their feet. Malan names exactly what's repeating:</p>
+<blockquote>
+<p>"So this is a loop." (David Malan)</p>
+</blockquote>
+<p>Each round roughly halves the number of people still standing. Keep looping (pair, add, one sits) and the room's whole population collapses into fewer and fewer numbers, until only a couple of people (and eventually one running total) remain. This is the same trick Lesson 3's phone book used to jump straight to the right page:</p>
+<blockquote>
+<p>"…we were dividing and conquering, tearing half of the problem away, half of the problem away." (David Malan)</p>
+</blockquote>
+<p>The live run landed on 141 people by this method, while a colleague named Kelly, counting the traditional way one person at a time out loud, arrived at a noticeably different total. Malan doesn't pretend the human execution was flawless:</p>
+<blockquote>
+<p>"Presumably that's just because of some bugs in execution of the algorithm, maybe some mental math didn't quite go according to plan." (David Malan)</p>
+</blockquote>
+<p>That aside is worth sitting with: the <em>algorithm</em> (pair off, add, halve, repeat) is sound even when the <em>execution</em> by tired, distracted humans introduces small mistakes. Big O notation, later in this lesson, describes the algorithm's shape, not whether a particular run of it was executed perfectly. Keeping "is the recipe good?" separate from "did I follow the recipe correctly?" is the same distinction Module 3's debugging lesson trained you to make.</p>
+<blockquote>
+<p>💡 <strong>Nuance:</strong> notice that Algorithm 3 needed one extra ingredient Algorithms 1 and 2 didn't: the room had to physically pair up and combine sub-totals. Divide-and-conquer strategies are often faster, but they usually cost you some extra bookkeeping to combine the pieces back together. That trade-off is worth noticing now. You'll meet it again whenever you design any divide-and-conquer algorithm.</p>
+</blockquote>
+<p>Here's what changes as the room gets bigger, in Malan's own framing of the payoff:</p>
+<blockquote>
+<p>"…the amount of time it takes to solve the Attendance problem using that 3rd and final algorithm grows very slowly because it takes a huge number of more people in the room before you even begin to feel the impacts of that growth." (David Malan)</p>
+</blockquote>
+<p>Concretely: if the room doubled from about 141 people to about 282, counting by 1s would take about twice as many spoken steps (141 → 282). Pairwise halving, by contrast, would need only about one extra round of pairing (roughly 8 rounds to whittle 141 people down to one total, versus roughly 9 rounds for 282), because each additional round doubles how many people it can absorb.</p>
+<table>
+<thead>
+<tr>
+<th>Algorithm</th>
+<th>How it works</th>
+<th>Doubling the room (~141 → ~282)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Count by 1s</td>
+<td>Visit each person once</td>
+<td>Steps roughly double: ~141 → ~282</td>
+</tr>
+<tr>
+<td>Count by 2s</td>
+<td>Visit each person once, in bigger bites</td>
+<td>Steps roughly double: ~71 → ~141</td>
+</tr>
+<tr>
+<td>Pairwise halving</td>
+<td>Repeatedly pair, add, and discard half</td>
+<td>Rounds barely grow: ~8 → ~9</td>
+</tr>
+</tbody>
+</table>
+<h2 id="part-3-reading-a-running-time-graph-and-giving-it-a-name">Part 3: Reading a running-time graph, and giving it a name</h2>
+<p>To compare the three algorithms fairly, the lecture draws them as curves on a graph: the size of the problem (n: how many people, or how many pages) along the bottom, and the number of steps needed up the side. This is the exact same shape of picture Lesson 3 used for the phone book, just re-drawn for today's attendance demo, and Malan calls back to it directly:</p>
+<blockquote>
+<p>"We'll think back to week zero when we did the whole phone book example…" (David Malan)</p>
+</blockquote>
+<p>Here is a sketch of that graph, reconstructed from the talk:</p>
+<div class="codehilite"><pre><span></span><code>steps
+needed
+   ^
+   |                                             count by 1s: a straight line (grows as n)
+   |                                          ,-&#39;
+   |                                       ,-&#39;
+   |                                    ,-&#39;           count by 2s: a straight line, half the slope
+   |                                 ,-&#39;          ,-&#39; (grows as n/2 -- still a straight line)
+   |                              ,-&#39;          ,-&#39;
+   |                           ,-&#39;          ,-&#39;
+   |                        ,-&#39;          ,-&#39;
+   |                     ,-&#39;          ,-&#39;
+   |                  ,-&#39;          ,-&#39;   ________________ pairwise halving: nearly flat
+   |               ,-&#39;          ,-&#39;  _-&#39;                 (grows as log2 n)
+   |            ,-&#39;          ,-&#39; _-&#39;
+   |         ,-&#39;          ,-&#39; _-&#39;
+   |______,-&#39;_________,-&#39;_-&#39;____________________________________________________&gt;
+   0                                                                size of the room (n)
+</code></pre></div>
+
+<p>Two of these lines are perfectly straight; only their steepness differs. Malan describes the first one directly:</p>
+<blockquote>
+<p>"…this N number denoting number of people in the room is indeed a straight line. And on the x axis… we have the size of the problem in people and the time to solve in steps…" (David Malan)</p>
+</blockquote>
+<p>Counting by 1s has "a slope of one": one more person costs exactly one more step, forever. Counting by 2s is also a straight line, just a flatter one; it's faster by a fixed multiplier, but it never stops climbing in direct proportion to n. Pairwise halving is the odd one out: it curves, flattening out so much that, as Malan puts it, doubling the room barely moves it.</p>
+<p>Rather than track the exact numbers precisely, computer science uses a broad-strokes shorthand for these shapes:</p>
+<blockquote>
+<p>"…we're going to use what's called big O notation, which literally is like a big O and then some parentheses…" (David Malan)</p>
+</blockquote>
+<p>By that notation: counting by 1s is <strong>O(n)</strong>, "on the order of n steps." Counting by 2s is <strong>O(n/2)</strong>, but here's the twist that trips up almost every beginner:</p>
+<blockquote>
+<p>"…you ignore lower order terms or equivalently you only worry about the dominant term in whatever mathematical expression is in question." (David Malan)</p>
+</blockquote>
+<p>O(n) and O(n/2) are both, for Big O's purposes, considered the <em>same family</em>: linear. The "divide by 2" is a constant (it doesn't change as n grows), so Big O throws it away and keeps only the part that actually shapes the curve as n gets huge. As Malan puts it:</p>
+<blockquote>
+<p>"…computer scientists don't care about lower order terms like divide by 2 or base 2 or anything like that." (David Malan)</p>
+</blockquote>
+<p>Pairwise halving belongs to a different family entirely: <strong>O(log n)</strong>, read "on the order of log n," or "logarithmic." You don't need to be fluent in logarithms to use this: just take on faith that "log₂ of n" means "how many times can you cut n in half before you're down to one?" That's precisely the question the attendance demo's third algorithm answers with its rounds of pairing.</p>
+<blockquote>
+<p>🔑 <strong>The single most important takeaway of this part.</strong> Big O ignores constants and only cares about the <em>shape</em> of the growth. O(n) and O(n/2) both scale badly as n gets huge: they're both "linear." O(log n) scales gracefully, because each doubling of the problem only costs about one more step, not twice as many.</p>
+<p>✅ <strong>What to do about it:</strong> when you're comparing two algorithms, don't ask "which one has a smaller constant?" Ask "which <em>family</em> do they belong to?" A linear algorithm with a small constant will still eventually lose to a logarithmic algorithm as n keeps growing.</p>
+</blockquote>
+<p>Big O has more families than the two you've met today (a constant-time O(1), and faster- or slower-growing ones like O(n log n) and O(n²)), and you'll meet those as later lessons need them (Lesson 15, right in this module, introduces O(n²) sorting). For now, the two shapes on the graph above, a straight line and a flattening curve, are the ones to recognize on sight.</p>
+<hr />
+<h2 id="key-takeaways">Key takeaways</h2>
+<ol>
+<li><strong>An algorithm's correctness and its running time are two separate questions.</strong> A recipe can get the right answer and still be a bad choice if it doesn't scale.</li>
+<li><strong>Counting by 1s and counting by 2s are both O(n).</strong> A constant speed-up (twice as fast) doesn't change which family an algorithm belongs to.</li>
+<li><strong>Pairwise halving is O(log n)</strong>, because each additional round of halving can absorb roughly twice as many items: doubling the problem costs only about one more step.</li>
+<li><strong>Big O deliberately ignores constants and lower-order terms</strong>, keeping only the single fastest-growing term, so the notation stays useful no matter how big n eventually gets.</li>
+<li><strong>A graph of size versus steps is the fastest way to tell two algorithms apart at a glance</strong>: a straight line versus a curve that flattens out.</li>
+</ol>
+<h2 id="common-pitfalls">Common pitfalls</h2>
+<ul>
+<li>❌ <strong>Treating "twice as fast" as "a different Big O family."</strong> Counting by 2s feels much snappier than counting by 1s, but both are O(n): the improvement is a constant, and Big O is built to ignore constants on purpose.</li>
+<li>❌ <strong>Confusing an execution mistake with a bad algorithm.</strong> The attendance demo's pairwise count came out slightly off from the manual count because of human arithmetic slips mid-demo, not because the divide-and-conquer <em>algorithm</em> was flawed. Keep "is the recipe sound?" separate from "did this particular run follow it exactly?"</li>
+<li>❌ <strong>Assuming any "cut it in half" trick is automatically O(log n).</strong> The attendance demo's halving works because addition doesn't care what order you add numbers in: every pair can combine independently. Not every problem allows this; you'll see in later lessons (and in Lesson 14's binary search) that some divide-and-conquer tricks additionally require the data to already be sorted.</li>
+<li>❌ <strong>Reading Big O as an exact step count.</strong> O(n) doesn't mean "exactly n steps": it means "grows in proportion to n, give or take constants." Big O describes a growth trend, not a precise number.</li>
+</ul>
+<hr />
+<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: The Running-Time Lab</h2>
+<blockquote>
+<p>This is the main hands-on project for the lesson. You'll physically count steps for a brute-force strategy and a halving strategy across three problem sizes, so the difference between O(n) and O(log n) shows up as numbers you counted yourself, not just a claim from a lecture.</p>
+</blockquote>
+<h3 id="what-you-will-build">What you will build</h3>
+<p>A small, paper-first experiment (with an optional coded stretch) that produces two things: a table of real step counts, and a hand-sketched growth graph you drew from your own data. The database-backed web app you'll build by the end of this course will run queries against tables of rows: a slow, brute-force query and a fast, indexed one are exactly this experiment, just with database rows standing in for tally marks.</p>
+<ul>
+<li>A tally-mark count for the "count by 1s" strategy at three sizes</li>
+<li>A round-count for the "pairwise halving" strategy at the same three sizes</li>
+<li>A table and a hand-sketched graph comparing the two</li>
+<li>An optional C program that reproduces both counts automatically</li>
+</ul>
+<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
+<table>
+<thead>
+<tr>
+<th>Lesson idea</th>
+<th>Where you use it in The Running-Time Lab</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Counting by 1s (Part 2)</td>
+<td>Milestone 1: tally-mark counting at n = 16, 64, 256</td>
+</tr>
+<tr>
+<td>Pairwise halving (Part 2)</td>
+<td>Milestone 2: round-counting at the same three sizes</td>
+</tr>
+<tr>
+<td>The size-vs-steps graph (Part 3)</td>
+<td>Milestone 4: sketching your own two curves from your own numbers</td>
+</tr>
+<tr>
+<td>Big O ignoring constants (Part 3)</td>
+<td>Milestone 3: seeing that your halving counts barely grow while your linear counts triple</td>
+</tr>
+</tbody>
+</table>
+<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
+<ol>
+<li><strong>Count by 1s, three times.</strong> For n = 16, then n = 64, then n = 256, make one tally mark per item, one at a time, and record the total tally count for each size. (Yes, 256 tally marks is tedious on purpose: that tedium <em>is</em> the O(n) lesson.)</li>
+<li><strong>Count by pairwise halving, three times.</strong> For the same three sizes, simulate the room's pairing-off process on paper without needing physical people or objects: start with n, divide by two (round up if it's odd), write down the result, and repeat until you reach 1. Count how many divisions (rounds) it took for each of n = 16, 64, and 256.</li>
+<li><strong>Tabulate your results.</strong> Build a table with one row per problem size and two columns: "steps counted by 1s" and "rounds counted by halving." Notice how the first column roughly matches n itself, while the second column barely grows at all across the same range.</li>
+<li><strong>Sketch the growth curves.</strong> On a single sheet of graph paper (or a plain sheet with hand-drawn axes), put problem size (16, 64, 256) along the bottom and step count up the side, then plot your two data sets from Milestone 3 as two separate lines. You should see one line climbing steeply and one line staying nearly flat: your own hand-drawn version of the graph in Part 3.</li>
+<li><strong>Stretch: verify it in C.</strong> On cs50.dev, write a short program with a <code>for</code> loop that counts from 0 to n − 1 by 1, incrementing a counter each time, and a second loop that starts at n and repeatedly divides by 2 (integer division, rounding as needed) until it reaches 1, also incrementing a counter each time. Print both counters for n = 16, 64, and 256, and confirm they match the numbers you counted by hand in Milestones 1-2.</li>
+<li><strong>Stretch goals.</strong> Predict, without counting, how many halving rounds you'd need for n = 1,024 and n = 1,000,000, then check your prediction with the C program from Milestone 5 if you built it. Notice how small the increase is compared to how much bigger n became.</li>
+</ol>
+<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
+<ul>
+<li>✅ You have real step counts for both strategies at n = 16, 64, and 256, recorded in a table.</li>
+<li>✅ Your "count by 1s" numbers roughly triple each time n roughly quadruples (16 → 64 → 256), while your "pairwise halving" numbers only climb by a couple of rounds each time.</li>
+<li>✅ You have a hand-sketched graph, built from your own numbers, showing one steep line and one nearly flat curve.</li>
+<li>✅ You can explain, in one or two sentences and without looking anything up, why the halving strategy is O(log n) and the counting strategy is O(n).</li>
+</ul>
+<blockquote>
+<p>💡 <strong>Keep yourself honest:</strong> don't estimate the halving rounds in your head. Actually write down each division (256 → 128 → 64 → …) and count the rows. The whole point of this capstone is replacing "I'm pretty sure logarithms are slow-growing" with a table you produced yourself.</p>
+</blockquote>
+<hr />
+<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
+<blockquote>
+<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
+</blockquote>
+<h3 id="exercise-1-name-the-family-foundational">Exercise 1: Name the family (foundational)</h3>
+<p>For each of the following, say whether it's most likely O(n) or O(log n), and explain why in one sentence: (a) reading every page of a book to find one sentence, (b) repeatedly folding a piece of paper in half until it's too thick to fold again, (c) checking every locker in a hallway one at a time for a lost key.</p>
+<h3 id="exercise-2-predict-before-you-compute-intermediate">Exercise 2: Predict before you compute (intermediate)</h3>
+<p>Without a calculator or computer, predict how many times you'd need to divide 1,000,000 by 2 (rounding as needed) before reaching 1. Write down your reasoning, then verify it by actually doing the divisions on paper. How does the answer compare to your intuition about how "big" a million is?</p>
+<h3 id="exercise-3-why-the-constant-doesnt-matter-advanced">Exercise 3: Why the constant doesn't matter (advanced)</h3>
+<p>Explain, in your own words and without quoting the lesson, why an algorithm that takes exactly n/100 steps is still considered O(n) rather than some faster category, even though it's 100 times quicker than an algorithm that takes n steps. Then explain why that same algorithm, at n/100 steps, is still eventually slower than an O(log n) algorithm once n is large enough, and roughly how large "enough" has to be.</p>
+<hr />
+<h2 id="cheat-sheet">Cheat sheet</h2>
+<div class="codehilite"><pre><span></span><code>ALGORITHM = step-by-step instructions for solving a problem.
+RUNNING TIME = how the number of steps grows as the problem (n) grows.
+
+THREE WAYS TO TAKE ATTENDANCE:
+  count by 1s ............ O(n)       -- one step per person
+  count by 2s ............ O(n/2)     -- still O(n): a constant speed-up, same family
+  pairwise halving ........ O(log n)  -- each round can absorb roughly 2x more people
+
+DOUBLE THE PROBLEM (n -&gt; 2n):
+  O(n) and O(n/2):  steps roughly double
+  O(log n):         only about ONE more round/step needed
+
+BIG O RULES OF THUMB:
+  - Drop constants:      O(n/2)  is the same FAMILY as O(n)
+  - Keep the dominant term only: the fastest-growing part is what matters as n gets huge
+  - Big O usually describes the WORST case, not an exact count
+
+FAMILIES YOU&#39;VE MET SO FAR (steepest to flattest):
+  O(n)       straight line, grows in direct proportion to n
+  O(log n)   curve that flattens fast; doubling n adds ~1 step
+
+MORE FAMILIES COMING LATER: O(1) constant, O(n log n), O(n^2) -- Lesson 15+
+</code></pre></div>
+
+<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
+<ul>
+<li><strong>Earlier, Module 1 · Lesson 3 (Your First Algorithms):</strong> you saw an informal n-vs-log n graph for a phone book, without any formal notation attached to it. This lesson is that same graph, now with a name (Big O) and a vocabulary you can use with anyone else who's studied computer science.</li>
+<li><strong>Next, Module 4 · Lesson 14 (Searching arrays in C):</strong> you'll implement linear search and binary search in real C code, apply Big O to them directly, and meet two new symbols: Ω (Omega, the best case) and Θ (Theta, when best and worst case match).</li>
+<li><strong>Later, Module 4 · Lesson 15 (Sorting, the slow way):</strong> you'll meet a new, worse family, O(n²), and see exactly why it costs so much more than the O(n) and O(log n) you learned today.</li>
+<li><strong>Later, Module 6 (Data structures):</strong> you'll choose which data structure to use for a job largely by comparing their Big O running times: this lesson's vocabulary is the tool you'll use to make that choice.</li>
+<li><strong>Later, Module 8 · Lesson 31 (Indexes):</strong> you'll see how a database index turns a slow, linear table scan into a logarithmic lookup: Big O, at the scale of your own final project's database.</li>
+</ul>
+<hr />
+<p><em>Source: "CS50x 2026 - Lecture 3 - Algorithms" by David J. Malan, Harvard University (CS50x 2026). Quotes are transcribed from the talk; obvious auto-transcription artifacts (e.g., a missing "O" rendered as a stray period in "you pronounce it big[.] of such and such") have been silently corrected for readability while preserving Malan's exact wording and meaning. Diagrams are illustrative reconstructions of the graph shown in the talk.</em></p>
+    </article>
+    <section class="lesson-sync" data-lesson-id="13"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../progress.html">Progress tracker &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="..\module-3-debugging\12-cli-args-and-cipher.html"><span class="dir">&#8592; Previous</span><b>Command-Line Arguments and a First Cipher</b></a><a class="ln home" href="..\index.html"><b>All lessons</b></a><a class="ln next" href="14-searching.html"><span class="dir">Next &#8594;</span><b>Searching Arrays in C</b></a></nav>
+  </main>
+</div>
+
+<footer class="site"><div class="wrap">
+  <a class="logo" href="..\index.html">Self-Paced CS50x<span class="dot">.</span></a>
+  <span class="fnote">An unofficial self-paced companion generated from the CS50x 2026 lecture transcripts. CS50 is created by David J. Malan and Harvard University. Watch the original lectures and do the official problem sets at cs50.harvard.edu/x. Code snippets are illustrative reconstructions.</span>
+</div></footer>
+
+<style>pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.codehilite .hll { background-color: #ffffcc }
+.codehilite { background: #282C34; color: #ABB2BF }
+.codehilite .c { color: #7F848E } /* Comment */
+.codehilite .err { color: #ABB2BF } /* Error */
+.codehilite .esc { color: #ABB2BF } /* Escape */
+.codehilite .g { color: #ABB2BF } /* Generic */
+.codehilite .k { color: #C678DD } /* Keyword */
+.codehilite .l { color: #ABB2BF } /* Literal */
+.codehilite .n { color: #E06C75 } /* Name */
+.codehilite .o { color: #56B6C2 } /* Operator */
+.codehilite .x { color: #ABB2BF } /* Other */
+.codehilite .p { color: #ABB2BF } /* Punctuation */
+.codehilite .ch { color: #7F848E } /* Comment.Hashbang */
+.codehilite .cm { color: #7F848E } /* Comment.Multiline */
+.codehilite .cp { color: #7F848E } /* Comment.Preproc */
+.codehilite .cpf { color: #7F848E } /* Comment.PreprocFile */
+.codehilite .c1 { color: #7F848E } /* Comment.Single */
+.codehilite .cs { color: #7F848E } /* Comment.Special */
+.codehilite .gd { color: #E06C75 } /* Generic.Deleted */
+.codehilite .ge { color: #ABB2BF; font-style: italic } /* Generic.Emph */
+.codehilite .ges { color: #ABB2BF } /* Generic.EmphStrong */
+.codehilite .gr { color: #E06C75 } /* Generic.Error */
+.codehilite .gh { color: #ABB2BF; font-weight: bold } /* Generic.Heading */
+.codehilite .gi { color: #98C379 } /* Generic.Inserted */
+.codehilite .go { color: #E06C75 } /* Generic.Output */
+.codehilite .gp { color: #ABB2BF } /* Generic.Prompt */
+.codehilite .gs { color: #ABB2BF; font-weight: bold } /* Generic.Strong */
+.codehilite .gu { color: #ABB2BF; font-weight: bold } /* Generic.Subheading */
+.codehilite .gt { color: #E06C75 } /* Generic.Traceback */
+.codehilite .kc { color: #E5C07B } /* Keyword.Constant */
+.codehilite .kd { color: #C678DD } /* Keyword.Declaration */
+.codehilite .kn { color: #C678DD } /* Keyword.Namespace */
+.codehilite .kp { color: #C678DD } /* Keyword.Pseudo */
+.codehilite .kr { color: #C678DD } /* Keyword.Reserved */
+.codehilite .kt { color: #E5C07B } /* Keyword.Type */
+.codehilite .ld { color: #ABB2BF } /* Literal.Date */
+.codehilite .m { color: #D19A66 } /* Literal.Number */
+.codehilite .s { color: #98C379 } /* Literal.String */
+.codehilite .na { color: #E06C75 } /* Name.Attribute */
+.codehilite .nb { color: #E5C07B } /* Name.Builtin */
+.codehilite .nc { color: #E5C07B } /* Name.Class */
+.codehilite .no { color: #E06C75 } /* Name.Constant */
+.codehilite .nd { color: #61AFEF } /* Name.Decorator */
+.codehilite .ni { color: #E06C75 } /* Name.Entity */
+.codehilite .ne { color: #E06C75 } /* Name.Exception */
+.codehilite .nf { color: #61AFEF; font-weight: bold } /* Name.Function */
+.codehilite .nl { color: #E06C75 } /* Name.Label */
+.codehilite .nn { color: #E06C75 } /* Name.Namespace */
+.codehilite .nx { color: #E06C75 } /* Name.Other */
+.codehilite .py { color: #E06C75 } /* Name.Property */
+.codehilite .nt { color: #E06C75 } /* Name.Tag */
+.codehilite .nv { color: #E06C75 } /* Name.Variable */
+.codehilite .ow { color: #56B6C2 } /* Operator.Word */
+.codehilite .pm { color: #ABB2BF } /* Punctuation.Marker */
+.codehilite .w { color: #ABB2BF } /* Text.Whitespace */
+.codehilite .mb { color: #D19A66 } /* Literal.Number.Bin */
+.codehilite .mf { color: #D19A66 } /* Literal.Number.Float */
+.codehilite .mh { color: #D19A66 } /* Literal.Number.Hex */
+.codehilite .mi { color: #D19A66 } /* Literal.Number.Integer */
+.codehilite .mo { color: #D19A66 } /* Literal.Number.Oct */
+.codehilite .sa { color: #98C379 } /* Literal.String.Affix */
+.codehilite .sb { color: #98C379 } /* Literal.String.Backtick */
+.codehilite .sc { color: #98C379 } /* Literal.String.Char */
+.codehilite .dl { color: #98C379 } /* Literal.String.Delimiter */
+.codehilite .sd { color: #98C379 } /* Literal.String.Doc */
+.codehilite .s2 { color: #98C379 } /* Literal.String.Double */
+.codehilite .se { color: #98C379 } /* Literal.String.Escape */
+.codehilite .sh { color: #98C379 } /* Literal.String.Heredoc */
+.codehilite .si { color: #98C379 } /* Literal.String.Interpol */
+.codehilite .sx { color: #98C379 } /* Literal.String.Other */
+.codehilite .sr { color: #98C379 } /* Literal.String.Regex */
+.codehilite .s1 { color: #98C379 } /* Literal.String.Single */
+.codehilite .ss { color: #98C379 } /* Literal.String.Symbol */
+.codehilite .bp { color: #E5C07B } /* Name.Builtin.Pseudo */
+.codehilite .fm { color: #56B6C2; font-weight: bold } /* Name.Function.Magic */
+.codehilite .vc { color: #E06C75 } /* Name.Variable.Class */
+.codehilite .vg { color: #E06C75 } /* Name.Variable.Global */
+.codehilite .vi { color: #E06C75 } /* Name.Variable.Instance */
+.codehilite .vm { color: #E06C75 } /* Name.Variable.Magic */
+.codehilite .il { color: #D19A66 } /* Literal.Number.Integer.Long */</style>
+<script>
+// mobile menu
+const sb=document.getElementById('sidebar'),mb=document.getElementById('menuBtn');
+if(mb){mb.onclick=()=>sb.classList.toggle('open');sb.addEventListener('click',e=>{if(e.target.tagName==='A')sb.classList.remove('open')});}
+const tc=document.getElementById('tocClose');if(tc){tc.onclick=()=>sb.classList.remove('open');}
+// progress
+const prog=document.getElementById('progress');
+addEventListener('scroll',()=>{const h=document.body.scrollHeight-innerHeight;prog.style.width=(h>0?scrollY/h*100:0)+'%'});
+// code chrome + copy
+document.querySelectorAll('.codehilite, pre').forEach(block=>{
+  if(block.parentElement.classList.contains('codehilite'))return;
+  const bar=document.createElement('div');bar.className='code-bar';
+  bar.innerHTML='<span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>';
+  block.appendChild(bar);
+  const btn=document.createElement('button');btn.className='copy-btn';btn.textContent='Copy';
+  btn.onclick=()=>{const t=block.querySelector('code')?.innerText||block.innerText;
+    navigator.clipboard.writeText(t.replace(/\nCopy$/,''));btn.textContent='Copied!';btn.classList.add('done');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('done')},1500)};
+  block.appendChild(btn);
+});
+// callouts by leading emoji
+const map={'\u{1F511}':'cl-key','\u{1F4A1}':'cl-tip','✅':'cl-ok','❌':'cl-no','\u{1F3AF}':'cl-goal','\u{1F6E0}':'cl-goal'};
+document.querySelectorAll('blockquote').forEach(q=>{const t=(q.textContent||'').trim();for(const e in map){if(t.startsWith(e)){q.classList.add(map[e]);break}}});
+// check-off
+function makeCheckable(rx){document.querySelectorAll('h2,h3').forEach(h=>{if(!rx.test(h.textContent))return;let el=h.nextElementSibling;
+  while(el&&!/^H[1-3]$/.test(el.tagName)){if(el.tagName==='OL'||el.tagName==='UL'){el.classList.add('checkable');
+    el.querySelectorAll(':scope>li').forEach(li=>{const key='cwc:'+location.pathname+':'+li.textContent.slice(0,60);
+      if(localStorage.getItem(key))li.classList.add('checked');
+      li.addEventListener('click',ev=>{if(ev.target.tagName==='A')return;li.classList.toggle('checked');
+        li.classList.contains('checked')?localStorage.setItem(key,'1'):localStorage.removeItem(key)});});}el=el.nextElementSibling;}});}
+makeCheckable(/learning objectives|milestones/i);
+// scrollspy
+const links=[...document.querySelectorAll('.toc a')];
+const heads=links.map(a=>a.getAttribute('href')).filter(h=>h&&h.startsWith('#')).map(h=>document.getElementById(h.slice(1))).filter(Boolean);
+const spy=()=>{let cur=heads[0]?.id;for(const h of heads){if(h.getBoundingClientRect().top<150)cur=h.id}
+  links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur))};
+addEventListener('scroll',spy);spy();
+</script>
+<script type="module" src="../assets/sync.js"></script></body>
+</html>

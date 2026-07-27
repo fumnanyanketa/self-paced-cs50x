@@ -1,0 +1,813 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 7 · Lesson 26: Loops, Functions, and Exceptions | Self-Paced CS50x</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0a1a2f; --navy-2:#0f243d; --navy-3:#15314f;
+  --teal:#18c4a0; --teal-d:#0fa385; --teal-soft:#e4f8f2;
+  --coral:#f24d63; --coral-d:#d83a50; --coral-soft:#feecee;
+  --ink:#152230; --muted:#5f6c7b; --line:#e9eef2; --bg:#ffffff;
+  --soft:#f4fbf9; --card:#ffffff; --code-bg:#21252b; --max:780px;
+  --k:#2f8fb3; --k-bg:#e8f4f9; --tip:#c4881f; --tip-bg:#fdf4e3; --ok:#1f9d6b; --ok-bg:#e6f6ef;
+  --no:#e0533f; --no-bg:#fdecea; --goal:#7b54c9; --goal-bg:#f1ebfb;
+  --shadow:0 10px 30px rgba(13,30,52,.08); --shadow-sm:0 4px 14px rgba(13,30,52,.07);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.72;font-size:17px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+#progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--teal),var(--coral));z-index:200;transition:width .1s linear}
+a{color:var(--teal-d);text-decoration:none}
+a:hover{color:var(--coral)}
+h1,h2,h3{font-family:Poppins,sans-serif;color:var(--ink);letter-spacing:-.01em}
+.accent{color:var(--coral)}
+.wrap{max-width:1200px;margin:0 auto;padding:0 28px}
+
+/* ---------- Top welcome strip ---------- */
+.topbar{background:var(--navy);color:#cdd8e4;font-size:13.5px}
+.topbar .wrap{display:flex;justify-content:space-between;align-items:center;height:42px;gap:18px}
+.topbar b{color:#fff;font-weight:600}
+.topbar .right{display:flex;gap:18px;align-items:center}
+.topbar a{color:#cdd8e4}.topbar a:hover{color:var(--teal)}
+
+/* ---------- Nav ---------- */
+nav.bar{background:var(--navy-2);position:sticky;top:0;z-index:120;box-shadow:0 2px 20px rgba(0,0,0,.25)}
+nav.bar .wrap{display:flex;align-items:center;height:68px;gap:26px}
+.logo{font-family:Poppins;font-weight:800;font-size:22px;color:#fff;letter-spacing:.02em;cursor:pointer;text-decoration:none}
+a.logo:hover{color:var(--teal)}
+.lessonnav{display:flex;gap:14px;align-items:stretch;margin:60px 0 0;flex-wrap:wrap}
+.lessonnav .ln{flex:1;min-width:200px;display:flex;flex-direction:column;gap:3px;border:1px solid var(--line);border-radius:14px;padding:16px 18px;color:var(--muted);transition:.15s;background:#fff}
+.lessonnav .ln:hover{border-color:var(--teal);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.lessonnav .ln .dir{font-size:13px;font-weight:600;color:var(--teal-d)}
+.lessonnav .ln b{color:var(--ink);font-family:Poppins;font-size:15px}
+.lessonnav .ln.next{text-align:right}
+.lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
+.lessonnav .ln.home b{color:var(--teal-d)}
+.logo .dot{color:var(--teal)}
+.navlinks{display:flex;gap:24px;margin-left:8px}
+.navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
+.navlinks a:hover{color:var(--teal)}
+.nav-cta{margin-left:auto;display:flex;gap:12px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:9px;border:none;cursor:pointer;font-family:Inter;font-weight:600;border-radius:999px;transition:.18s;font-size:15px;text-decoration:none}
+.btn-primary{background:var(--teal);color:#04231c;padding:12px 22px}
+.btn-primary:hover{background:var(--teal-d);color:#fff;transform:translateY(-1px)}
+.btn-outline{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.35);padding:10px 20px}
+.btn-outline:hover{border-color:var(--teal);color:var(--teal)}
+.btn-coral{background:var(--coral);color:#fff;padding:12px 22px}
+.btn-coral:hover{background:var(--coral-d);color:#fff;transform:translateY(-1px)}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;background:radial-gradient(120% 120% at 80% 0%,var(--navy-3),var(--navy) 60%);color:#eaf1f8;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.25;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.blob{position:absolute;border-radius:50%;filter:blur(8px);opacity:.5;z-index:0}
+.blob.t{width:230px;height:230px;background:rgba(24,196,160,.30);top:-60px;right:8%}
+.blob.c{width:160px;height:160px;background:rgba(242,77,99,.28);bottom:-40px;left:42%}
+.squiggle{position:absolute;z-index:1;opacity:.85}
+.hero .wrap{position:relative;z-index:2;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;padding:70px 28px 90px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--teal);font-weight:600;font-size:14px;letter-spacing:.03em;text-transform:uppercase;margin-bottom:18px}
+.hero h1{font-size:54px;line-height:1.08;font-weight:800;margin:0 0 20px;color:#fff}
+.hero .lead{font-size:18px;color:#b9c6d6;max-width:34em;margin:0 0 30px}
+.hero-actions{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:30px}
+.play{display:inline-flex;align-items:center;gap:12px;color:#fff;font-weight:600}
+.play .circ{width:52px;height:52px;border-radius:50%;background:var(--coral);display:grid;place-items:center;box-shadow:0 8px 22px rgba(242,77,99,.45);font-size:16px;animation:pulse 2.4s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(242,77,99,.45)}70%{box-shadow:0 0 0 16px rgba(242,77,99,0)}100%{box-shadow:0 0 0 0 rgba(242,77,99,0)}}
+.chips{display:flex;gap:10px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:#dce6f0;padding:8px 14px;border-radius:999px;font-size:13.5px;font-weight:500}
+.chip b{color:#fff}
+/* hero card */
+.hero-card{position:relative;background:#fff;color:var(--ink);border-radius:22px;padding:26px;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.hero-card .ring{position:absolute;top:-26px;right:-18px;width:96px;height:96px;background:#fff;border-radius:50%;box-shadow:var(--shadow);display:grid;place-items:center}
+.hero-card .ring svg{transform:rotate(-90deg)}
+.hero-card .ring .lab{position:absolute;font-family:Poppins;font-weight:700;font-size:18px;color:var(--teal-d)}
+.hero-card h3{margin:4px 0 14px;font-size:19px}
+.hero-card ul{list-style:none;margin:0 0 18px;padding:0}
+.hero-card li{display:flex;gap:11px;align-items:flex-start;padding:9px 0;border-bottom:1px dashed var(--line);font-size:14.5px;color:#36424f}
+.hero-card li:last-child{border-bottom:none}
+.hero-card li .ic{font-size:17px;line-height:1.4}
+.float-badge{position:absolute;left:18px;bottom:-26px;background:#fff;border-radius:14px;box-shadow:var(--shadow);padding:12px 16px;display:flex;gap:10px;align-items:center;font-size:13px;font-weight:600;color:var(--ink)}
+.float-badge .n{font-family:Poppins;font-weight:800;color:var(--coral);font-size:20px}
+
+/* ---------- Content layout ---------- */
+.layout{display:grid;grid-template-columns:268px minmax(0,1fr);gap:46px;max-width:1200px;margin:0 auto;padding:0 28px}
+aside{position:sticky;top:84px;align-self:start;height:calc(100vh - 100px);overflow-y:auto;padding:26px 0}
+.toc-card{background:var(--soft);border:1px solid var(--line);border-radius:18px;padding:18px}
+.toc-close{display:none;position:absolute;top:-6px;right:-4px;width:36px;height:36px;border:none;background:var(--navy-2);color:#fff;border-radius:50%;font-size:22px;line-height:1;cursor:pointer}
+.toc-close:hover{background:var(--coral)}
+.toc-title{font-family:Poppins;font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--teal-d);margin:0 0 10px;font-weight:700}
+.toc ul{list-style:none;margin:0;padding:0}
+.toc a{display:block;color:var(--muted);font-size:14px;padding:6px 12px;border-radius:8px;border-left:2px solid transparent;line-height:1.4}
+.toc a:hover{color:var(--ink);background:#fff}
+.toc a.active{color:var(--teal-d);background:#fff;border-left-color:var(--teal);font-weight:600}
+.toc .toc li li a{padding-left:24px;font-size:13px}
+.toc a.toc-capstone{color:var(--coral);font-weight:600}
+main{padding:54px 0 120px;min-width:0}
+article{max-width:var(--max)}
+
+/* typography */
+article h2{font-size:30px;margin:56px 0 16px;font-weight:700;position:relative}
+article h2::before{content:"\2726";color:var(--teal);font-size:18px;margin-right:10px;vertical-align:2px}
+article h3{font-size:21px;margin:34px 0 10px;font-weight:600}
+article h2+h3{margin-top:18px}
+article p,article li{font-size:16.5px}
+article ul,article ol{padding-left:24px}
+article li{margin:7px 0}
+article strong{font-weight:700;color:#0f1b28}
+hr{border:none;height:1px;background:var(--line);margin:42px 0}
+
+/* tables */
+table{border-collapse:separate;border-spacing:0;width:100%;margin:24px 0;font-size:15px;border:1px solid var(--line);border-radius:14px;overflow:hidden;display:block;overflow-x:auto}
+th,td{padding:12px 15px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--navy-2);color:#eaf1f8;font-family:Poppins;font-weight:600;font-size:14px}
+tr:last-child td{border-bottom:none}
+tbody tr:nth-child(even){background:var(--soft)}
+
+/* inline + block code */
+code{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.86em;background:var(--teal-soft);color:#0c6a55;padding:.13em .42em;border-radius:6px}
+.codehilite,pre{position:relative;background:var(--code-bg);border-radius:14px;margin:22px 0;overflow:hidden;box-shadow:var(--shadow-sm)}
+.codehilite pre{margin:0;border-radius:0;box-shadow:none;background:transparent}
+.codehilite pre,pre>code{display:block;padding:42px 18px 18px;overflow-x:auto}
+.codehilite code,pre code{background:none;color:#dfe6ee;padding:0;font-size:13.5px;line-height:1.7}
+.code-bar{position:absolute;top:0;left:0;right:0;height:34px;display:flex;align-items:center;gap:7px;padding:0 15px;background:rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.07)}
+.code-bar .dot{width:11px;height:11px;border-radius:50%}
+.dot.r{background:#ff5f57}.dot.y{background:#febc2e}.dot.g{background:#28c840}
+.copy-btn{position:absolute;top:5px;right:9px;z-index:3;background:rgba(255,255,255,.08);color:#dfe6ee;border:1px solid rgba(255,255,255,.14);border-radius:8px;font-size:12px;padding:4px 11px;cursor:pointer;font-family:Inter;transition:.15s}
+.copy-btn:hover{background:var(--teal);border-color:var(--teal);color:#04231c}
+.copy-btn.done{background:var(--teal);color:#04231c;border-color:var(--teal)}
+
+/* callouts */
+blockquote{margin:24px 0;padding:16px 20px;border-radius:14px;background:var(--soft);border:1px solid var(--line);border-left:5px solid var(--teal)}
+blockquote p{margin:7px 0}blockquote p:first-child{margin-top:0}blockquote p:last-child{margin-bottom:0}
+blockquote.cl-key{background:var(--k-bg);border-left-color:var(--k);border-color:transparent}
+blockquote.cl-tip{background:var(--tip-bg);border-left-color:var(--tip);border-color:transparent}
+blockquote.cl-ok{background:var(--ok-bg);border-left-color:var(--ok);border-color:transparent}
+blockquote.cl-no{background:var(--no-bg);border-left-color:var(--no);border-color:transparent}
+blockquote.cl-goal{background:var(--goal-bg);border-left-color:var(--goal);border-color:transparent}
+
+/* capstone banner */
+h2.capstone-h{background:linear-gradient(115deg,var(--navy),var(--navy-3));color:#fff;border-radius:20px;padding:30px 28px 26px;margin-top:64px;box-shadow:0 20px 50px rgba(10,26,47,.3);overflow:hidden;position:relative}
+h2.capstone-h::before{content:"\1F6E0\FE0F  HANDS-ON PROJECT";display:block;font-family:Poppins;font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--teal);margin:0 0 8px}
+h2.capstone-h::after{content:"";position:absolute;width:150px;height:150px;border-radius:50%;background:rgba(24,196,160,.25);filter:blur(10px);top:-50px;right:-30px}
+
+/* check-off */
+.checkable{list-style:none;padding-left:0}
+.checkable li{position:relative;padding-left:36px;cursor:pointer;margin:9px 0}
+.checkable li::before{content:"";position:absolute;left:0;top:3px;width:22px;height:22px;border:2px solid var(--teal);border-radius:7px;background:#fff;transition:.15s}
+.checkable li.checked::before{background:var(--teal);border-color:var(--teal)}
+.checkable li.checked::after{content:"\2713";position:absolute;left:5px;top:1px;color:#fff;font-weight:800;font-size:15px}
+.checkable li.checked{color:var(--muted)}
+
+/* footer */
+footer.site{background:var(--navy);color:#aebccb;margin-top:90px}
+footer.site .wrap{padding:46px 28px;display:flex;justify-content:space-between;gap:26px;flex-wrap:wrap;align-items:center}
+footer.site .logo{font-size:20px}
+footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
+
+#menuBtn{display:none}
+@media(max-width:920px){
+  .topbar{display:none}
+  .nav-cta{display:none}
+  .float-badge{display:none}
+  nav.bar .wrap{gap:14px;height:60px}
+  .wrap{padding:0 20px}
+  .logo{font-size:18px;white-space:nowrap}
+  .hero .wrap{grid-template-columns:1fr;gap:30px;padding:42px 20px 56px}
+  .hero h1{font-size:33px}
+  .hero .lead{font-size:16.5px}
+  .hero-actions{gap:14px}
+  .hero-actions .btn-primary{flex:1;justify-content:center}
+  .layout{grid-template-columns:1fr;gap:0}
+  aside{position:fixed;top:0;left:0;width:84vw;max-width:320px;height:100vh;background:#fff;z-index:130;transform:translateX(-100%);transition:.25s;box-shadow:var(--shadow);padding:24px}
+  aside.open{transform:none}
+  #menuBtn{display:inline-flex}
+  .toc-close{display:block}
+  .navlinks{display:none}
+  main{padding:34px 0 80px}
+  body{font-size:16px}
+  article h2{font-size:25px}
+  h2.capstone-h{padding:24px 20px}
+}
+@media(max-width:420px){
+  .hero h1{font-size:29px}
+  .hero-actions{flex-direction:column;align-items:stretch}
+  .hero-actions .play{justify-content:center}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<div class="topbar"><div class="wrap">
+  <div>&#10024; Welcome to <b>Self-Paced CS50x</b> &middot; a self-paced course</div>
+  <div class="right"><span>CS50x 2026 · Harvard University · David J. Malan</span></div>
+</div></div>
+
+<nav class="bar"><div class="wrap">
+  <button class="btn btn-outline" id="menuBtn" style="padding:8px 14px">&#9776;</button>
+  <a class="logo" href="..\index.html">Self-Paced CS50x<span class="dot">.</span></a>
+  <div class="navlinks">
+    <a href="..\index.html">All lessons</a>
+    <a href="#overview">Overview</a>
+    <a href="#capstone">Capstone</a>
+  </div>
+  <div class="nav-cta">
+    <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
+  </div>
+</div></nav>
+
+<header class="hero">
+  <span class="blob t"></span><span class="blob c"></span>
+  <svg class="squiggle" style="top:120px;left:46%;" width="90" height="26" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#18c4a0" stroke-width="4" stroke-linecap="round"/></svg>
+  <svg class="squiggle" style="bottom:60px;right:40%;" width="70" height="22" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#f24d63" stroke-width="4" stroke-linecap="round"/></svg>
+  <div class="wrap" id="overview">
+    <div>
+      <span class="eyebrow">&#10022; Module 7 · Lesson 26</span>
+      <h1>Loops, Functions, and <span class="accent">Exceptions</span></h1>
+      <p class="lead">This lesson rewrites C&#x27;s loops and functions in Python&#x27;s own words (while, for, and range() instead of three-part for loops, def instead of prototypes, and a main() you call yourself instead of one the language calls for you), and then shows you Python&#x27;s cleaner way to survive bad input: catching an exception with try/except instead of endlessly checking return values.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
+        <a class="play" href="https://www.youtube.com/watch?v=Rl0ludWTLxs" target="_blank" rel="noopener"><span class="circ">&#9654;</span> Watch the talk</a>
+      </div>
+      <div class="chips">
+        <span class="chip">&#127908; <b>David J. Malan</b></span>
+        <span class="chip">&#9201; <b>45-60 minutes</b></span>
+        <span class="chip">&#128296; <b>Hands-on capstone</b></span>
+      </div>
+    </div>
+    <div style="position:relative">
+      <div class="hero-card">
+        <div class="ring">
+          <svg width="74" height="74"><circle cx="37" cy="37" r="31" stroke="#eef2f5" stroke-width="7" fill="none"/><circle cx="37" cy="37" r="31" stroke="#18c4a0" stroke-width="7" fill="none" stroke-linecap="round" stroke-dasharray="195" stroke-dashoffset="40"/></svg>
+          <span class="lab">&#10022;</span>
+        </div>
+        <h3>What you&#39;ll get</h3>
+        <ul>
+          <li><span class="ic">&#9989;</span><span>Plain-language teaching with every term defined</span></li>
+          <li><span class="ic">&#128221;</span><span>Code snippets pulled from the talk</span></li>
+          <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
+          <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
+        </ul>
+        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <aside id="sidebar"><div class="toc-card">
+    <button class="toc-close" id="tocClose" aria-label="Close menu">&times;</button>
+    <p class="toc-title">On this page</p>
+    <div class="toc">
+<ul>
+<li><a href="#in-one-sentence">In one sentence</a></li>
+<li><a href="#first-principles-companion">First-principles companion</a></li>
+<li><a href="#a-few-plain-language-basics-first">A few plain-language basics first</a></li>
+<li><a href="#why-this-lesson-matters">Why this lesson matters</a></li>
+<li><a href="#learning-objectives">Learning objectives</a></li>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#part-1-loops-translated-while-for-range-and-the-underscore">Part 1: Loops, translated (while, for, range(), and the underscore)</a><ul>
+<li><a href="#the-underscore-convention">The underscore convention</a></li>
+<li><a href="#what-happened-to-do-while">What happened to do while?</a></li>
+</ul>
+</li>
+<li><a href="#part-2-custom-functions-def-nameerror-and-the-main-convention">Part 2: Custom functions (def, NameError, and the main() convention)</a><ul>
+<li><a href="#python-will-not-call-main-for-you">Python will not call main() for you</a></li>
+<li><a href="#the-__name__-guard">The __name__ guard</a></li>
+</ul>
+</li>
+<li><a href="#part-3-numeric-issues-revisited-one-solved-one-still-with-us">Part 3: Numeric issues revisited (one solved, one still with us)</a></li>
+<li><a href="#part-4-exceptions-tryexcept-valueerror-and-a-cleaner-way-to-fail">Part 4: Exceptions (try/except, ValueError, and a cleaner way to fail)</a><ul>
+<li><a href="#seeing-the-problem-first">Seeing the problem first</a></li>
+<li><a href="#catching-the-error-instead">Catching the error instead</a></li>
+</ul>
+</li>
+<li><a href="#part-5-putting-it-together-a-function-that-cannot-be-broken">Part 5: Putting it together (a function that cannot be broken)</a></li>
+<li><a href="#key-takeaways">Key takeaways</a></li>
+<li><a href="#common-pitfalls">Common pitfalls</a></li>
+<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: Mario's Pyramid, Rebuilt to Survive Anything</a><ul>
+<li><a href="#what-you-will-build">What you will build</a></li>
+<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
+<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
+<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
+</ul>
+</li>
+<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
+<li><a href="#exercise-1-counting-with-range-and-the-underscore-foundational">Exercise 1: Counting with range() and the underscore (foundational)</a></li>
+<li><a href="#exercise-2-a-reusable-validated-input-function-intermediate">Exercise 2: A reusable validated-input function (intermediate)</a></li>
+<li><a href="#exercise-3-counting-valid-and-invalid-entries-advanced">Exercise 3: Counting valid and invalid entries (advanced)</a></li>
+</ul>
+</li>
+<li><a href="#cheat-sheet">Cheat sheet</a></li>
+<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
+</ul>
+</div>
+
+  </div></aside>
+  <main id="start">
+    <article>
+      <hr />
+<h2 id="in-one-sentence">In one sentence</h2>
+<p>This lesson rewrites C's loops and functions in Python's own words (<code>while</code>, <code>for</code>, and <code>range()</code> instead of three-part <code>for</code> loops, <code>def</code> instead of prototypes, and a <code>main()</code> you call yourself instead of one the language calls for you), and then shows you Python's cleaner way to survive bad input: catching an exception with <code>try</code>/<code>except</code> instead of endlessly checking return values.</p>
+<blockquote>
+<p>🎯 <strong>Where this lesson is heading.</strong> It builds to a hands-on <strong>Capstone Project</strong> where you rebuild Module 2's Mario brick pyramid in Python, this time with a <code>get_height()</code> function that cannot be broken no matter what the user types. Everything before the Capstone teaches the skills you will use there. If you want to see the finish line first, jump to the <strong>"Capstone Project"</strong> section, then come back.</p>
+</blockquote>
+<h2 id="first-principles-companion">First-principles companion</h2>
+<blockquote>
+<p>💡 <strong>The durable idea behind this lesson.</strong> <code>try</code>/<code>except</code> is Python's particular syntax, but the underlying idea (let code signal "something went wrong" as its own distinct event, instead of overloading a function's normal return value to mean both "the answer" and "an error") is much older than Python.</p>
+<ul>
+<li><strong><a href="https://dl.acm.org/doi/10.1145/361227.361230">John B. Goodenough, "Exception Handling: Issues and a Proposed Notation"</a></strong> (<em>Communications of the ACM</em>, 1975). One of the earliest papers to formally argue that a language should let a program raise and catch error conditions separately from its ordinary return values. Python's <code>try</code>/<code>except</code>, Java's <code>try</code>/<code>catch</code>, and C++'s exceptions are all descendants of the idea this paper first laid out.</li>
+</ul>
+</blockquote>
+<h2 id="a-few-plain-language-basics-first">A few plain-language basics first</h2>
+<p>This lesson uses some everyday terms. Here they are in plain words:</p>
+<ul>
+<li><strong>Loop:</strong> an instruction that repeats a block of code again and again, either a fixed number of times or until some condition changes.</li>
+<li><strong><code>range()</code>:</strong> a built-in Python function that produces a sequence of numbers to loop over, like "0, 1, 2". You almost always see it paired with a <code>for</code> loop.</li>
+<li><strong>Function (<code>def</code>):</strong> a named, reusable block of code you write yourself. In Python you create one with the keyword <code>def</code>, short for "define."</li>
+<li><strong><code>NameError</code>:</strong> the error Python raises when your code tries to use a name (a variable or function) that does not exist yet, usually because it is used before it is defined.</li>
+<li><strong>Entry point:</strong> the part of a program that runs first when the file is executed directly. In Python, the convention is a function called <code>main()</code>, protected by the line <code>if __name__ == "__main__":</code>.</li>
+<li><strong>Exception:</strong> a way a program can signal, in the middle of running, that something has gone wrong, separately from whatever value a function would normally return.</li>
+<li><strong><code>ValueError</code>:</strong> the specific exception Python raises when a value is the right type but the wrong content, such as trying to convert the text <code>"cat"</code> into an integer.</li>
+<li><strong>Integer overflow:</strong> what happens when a whole number grows too large for the fixed number of bits set aside to store it (you met this in Module 2 · Lesson 8), so it silently wraps around to a small or negative number instead of an error.</li>
+</ul>
+<p>You do not need to memorise these. Each is explained again the first time it matters.</p>
+<h2 id="why-this-lesson-matters">Why this lesson matters</h2>
+<p>You already know what a loop and a function are. You wrote both in Module 2, wrapped in <code>do while</code> tricks and function prototypes the compiler demanded. Python keeps the underlying ideas completely intact but strips away nearly all of the ceremony: no prototypes, no curly braces, no manually declared return types, and, as you're about to see, one entire category of C bug that simply cannot happen to you anymore. Malan sums up the whole reason exceptions exist this way: <strong>"an exception in Python is a way of handling error conditions without relying on return values alone."</strong> By the end of this lesson you will have written a single function, <code>get_height()</code>, that can survive absolutely any garbage a user throws at it, the same defensive habit every input-handling function in the web app you build at the end of this course will need.</p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<p>By the end of this lesson you will be able to:</p>
+<ol>
+<li>Write <code>while</code> and <code>for</code> loops in Python using <code>range()</code>, and use the underscore (<code>_</code>) convention for a loop variable you are required to name but never actually use.</li>
+<li>Define your own function with <code>def</code>, diagnose a <code>NameError</code> caused by calling a function before it is defined, and structure a Python file with a <code>main()</code> function that you call yourself, guarded by <code>if __name__ == "__main__":</code>.</li>
+<li>Explain which of C's numeric problems persist in Python (floating-point imprecision) and which are solved natively by the language (integer overflow, and the truncation that came from integer division).</li>
+<li>Handle invalid input with <code>try</code>/<code>except</code> and <code>ValueError</code>, and contrast this with the return-value-only error checking C forced on you.</li>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li><strong>Module 7 · Lesson 25 (Python essentials):</strong> <code>print()</code>, <code>input()</code>, F-strings, Python's lack of semicolons and curly braces, and the fact that Python infers a variable's type instead of you declaring it.</li>
+<li><strong>Module 2 · Lesson 7 (Conditionals and loops):</strong> <code>if</code>/<code>else if</code>/<code>else</code>, <code>while</code>, <code>do while</code>, and <code>for</code> loops in C: this lesson translates all of them into Python.</li>
+<li><strong>Module 2 · Lesson 8 (Functions, code quality, and the limits of numbers):</strong> custom functions, prototypes, scope, and the three numeric failure modes (integer overflow, truncation, floating-point imprecision): this lesson revisits every one of them.</li>
+</ul>
+<hr />
+<h2 id="part-1-loops-translated-while-for-range-and-the-underscore">Part 1: Loops, translated (<code>while</code>, <code>for</code>, <code>range()</code>, and the underscore)</h2>
+<p>A <code>while</code> loop in Python looks almost exactly like the C version you already know, just with the type declaration, the semicolons, and the parentheses removed. To make a cat meow three times:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;meow&quot;</span><span class="p">)</span>
+    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+</code></pre></div>
+
+<p>That works, and it is a perfectly reasonable translation of the C version from Lesson 7. But Python's <code>for</code> loop is genuinely different from C's, not just shorter. Malan draws the contrast directly: <strong>"in [for] loops and Python, you don't have the parentheses, you don't have the two semicolons, you don't have the initialization and the Boolean expression and the update. You just say a little more English like for each i in the following list or for each value of I in the following list."</strong> Concretely, that first version can be rewritten as:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;meow&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Typing out a list of numbers gets tedious fast, so Python gives you a built-in function for exactly this job. As Malan explains, <strong>"range is not only a data type in Python but more literally a function that you can call to get a range of values from zero on up."</strong> So the idiomatic version is:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;meow&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p><code>range(3)</code> produces the numbers 0, 1, and 2, one at a time, and it does so lazily, handing them back one at a time instead of building the whole list in memory up front, so <code>range(3_000_000)</code> costs you no more memory than <code>range(3)</code>.</p>
+<blockquote>
+<p>🔑 <strong><code>for x in range(n):</code> is Python's replacement for C's three-part <code>for (int i = 0; i &lt; n; i++)</code>: same repetition, far less syntax.</strong></p>
+</blockquote>
+<h3 id="the-underscore-convention">The underscore convention</h3>
+<p>Notice that in the loop above, <code>i</code> is never actually used inside the loop body: the loop exists purely to repeat "print meow" three times. Python has a convention for exactly this situation: name the loop variable <code>_</code> instead. As Malan puts it, <strong>"an underscore is a valid symbol for a variable name in Python, so it is Pythonic to just use this just to signal to yourself later and to colleagues that, yeah, I'm using a variable because I have to, but it's not one I'm actually going to use elsewhere."</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;meow&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Nothing about this changes how the code runs: it is purely a signal to any future reader (including you) that the loop's counter is irrelevant this time.</p>
+<h3 id="what-happened-to-do-while">What happened to <code>do while</code>?</h3>
+<p>Lesson 7 taught you <code>do while</code> for the specific case of "run this at least once, then decide whether to run it again", the classic shape of a validation prompt. Python has no <code>do while</code> keyword at all. Malan states this plainly: <strong>"Python does not offer a do while loop."</strong> The Pythonic replacement is a deliberate infinite loop, <code>while True:</code>, with a <code>break</code> inside it the moment the input is acceptable:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Height: &quot;</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">break</span>
+</code></pre></div>
+
+<p>This runs the body at least once, exactly like a <code>do while</code> would, and keeps looping until the <code>break</code> fires. You will use this exact pattern, together with the exception handling from Part 4, to build <code>get_height()</code> for this lesson's Capstone.</p>
+<blockquote>
+<p>💡 <strong>A subtlety worth knowing:</strong> Python is noticeably looser about scope here than C was. Assigning <code>n</code> for the first time <em>inside</em> the <code>while True:</code> block still lets you use <code>n</code> after the loop ends, without declaring it above the loop first the way Lesson 8 required in C. As Malan notes, <strong>"the issue of scope that we encountered in C is not as rigorously enforced"</strong> in Python.</p>
+</blockquote>
+<hr />
+<h2 id="part-2-custom-functions-def-nameerror-and-the-main-convention">Part 2: Custom functions (<code>def</code>, <code>NameError</code>, and the <code>main()</code> convention)</h2>
+<p>Defining your own function in Python drops nearly everything C required: no return type, no argument types, and the keyword is simply <code>def</code> ("define") instead of writing out a type signature. Here is the simplest possible version, deliberately written the way a beginner first tries it, with <code>main</code> calling a function that is defined <em>below</em> it:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="n">meow</span><span class="p">()</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">meow</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;meow&quot;</span><span class="p">)</span>
+
+<span class="n">main</span><span class="p">()</span>
+</code></pre></div>
+
+<p>If you instead try to call <code>meow()</code> before its <code>def</code> appears anywhere in the file at all, Python refuses to run. Malan reads the resulting error aloud: <strong>"The name meow is not defined."</strong> This is a <code>NameError</code>, and unlike a C compiler error, it only happens when that specific line actually runs: Python reads and executes top to bottom, and as Malan explains, it will not look ahead to check whether you defined the function somewhere further down: <strong>"meow doesn't exist until line 4. So if you try to use it on line 2 too soon."</strong></p>
+<p>C solved this ordering problem with a <em>prototype</em> (Lesson 8) placed above <code>main</code>. Python has no equivalent syntax. Instead, the fix is simply to define every function before the point in the file where you first call it. That is exactly why the working version above defines <code>meow()</code> before calling it, and it is why the Pythonic convention is to put your own program's logic inside a function named <code>main</code>, defined near the top, with every helper function it calls defined above that point in the file. As Malan puts it, <strong>"the Pythonic way to solve this problem, for better or for worse is to actually put your code in a main function."</strong></p>
+<h3 id="python-will-not-call-main-for-you">Python will not call <code>main()</code> for you</h3>
+<p>There is a catch that trips up almost everyone the first time: unlike C, Java, or C++, Python attaches no special meaning to a function just because you happened to name it <code>main</code>. <strong>"Python has no such special magic."</strong> If you define <code>main()</code> but never call it, your program will run and do nothing at all. You have to call <code>main()</code> yourself, typically as the very last line of the file, <em>after</em> every function it depends on has already been defined.</p>
+<h3 id="the-__name__-guard">The <code>__name__</code> guard</h3>
+<p>Nearly every piece of real-world Python code you will encounter takes this one step further, wrapping the call to <code>main()</code> in a conditional:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="n">meow</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">meow</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;meow&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre></div>
+
+<p>The syntax is admittedly strange the first time you see it, and Malan doesn't pretend otherwise. What it buys you is real: <strong>"This convention of using a conditional before you call main allows you to write more modular code in Python so that some of your files don't actually do anything other than define, define, defined functions that you can then import into other files you write."</strong> In plain terms: this guard means "only run <code>main()</code> if someone executed <em>this</em> file directly, not if someone else imported it to reuse one of its functions." You will not need that flexibility for most of this course's exercises, but it is standard enough that you should recognize it and use it from here on, exactly as shown above.</p>
+<p>Notice, too, that <code>meow(n)</code> now takes an argument. Just like in C, you give a Python function an input by naming it inside the parentheses, but with no type to declare:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">meow</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;meow&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<blockquote>
+<p>✅ <strong>What to do about it:</strong> structure every Python file you write from now on the same way: helper functions first, <code>def main():</code> next, and <code>if __name__ == "__main__": main()</code> as the very last lines.</p>
+</blockquote>
+<hr />
+<h2 id="part-3-numeric-issues-revisited-one-solved-one-still-with-us">Part 3: Numeric issues revisited (one solved, one still with us)</h2>
+<p>Module 2 · Lesson 8 introduced three numeric failure modes in C, all traced back to one root cause: computers store numbers in a finite number of bits. Python inherits that same finite hardware, but the language hides some of the consequences and not others.</p>
+<p><strong>Truncation is gone by default.</strong> In C, dividing two <code>int</code>s with <code>/</code> silently discarded everything after the decimal point. In Python, dividing two integers with <code>/</code> gives you back a proper decimal answer automatically. Malan explains: <strong>"in Python, even when you're manipulating integers, if you divide one by the other and the result logically should actually be a floating point value, that's what in fact you're going to get back and you don't have to jump through the same hoops that we did before to actually force things to float."</strong> The old truncating behavior still exists if you deliberately ask for it, using <code>//</code> instead of <code>/</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span>     <span class="c1"># 0.3333333333333333 -- true division, the default</span>
+<span class="nb">print</span><span class="p">(</span><span class="mi">1</span> <span class="o">//</span> <span class="mi">3</span><span class="p">)</span>    <span class="c1"># 0 -- old-style integer division, only if you ask for it</span>
+</code></pre></div>
+
+<p><strong>Integer overflow is solved natively.</strong> The dollar-doubling bug from Lesson 8, where an <code>int</code> silently wrapped around to a negative number, cannot happen in Python: integers simply grow as large as your computer's memory allows. Malan calls this out directly: <strong>"Python wonderfully nowadays just gives you more and more bits as needed if your integers are getting larger and larger, so this is a wonderful feature and ... we've at least addressed one fundamental limitation we ran into in C and this time the language itself provides us a solution."</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="n">x</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">100</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>   <span class="c1"># 1267650600228229401496703205376 -- no overflow, no wraparound</span>
+</code></pre></div>
+
+<p><strong>Floating-point imprecision is not solved.</strong> This is the one C problem Python cannot make disappear, because the underlying hardware has not changed. Malan is direct about why: <strong>"it's still the case that these computers only have a finite amount of memory. And so even though I'm manipulating clearly floating point values, Python is only allocating, say, 64 bits to those float variables, and so there's only so much precision that's possible."</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="n">z</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">3</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">z</span><span class="si">:</span><span class="s2">.50f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="c1"># 0.33333333333333331482961625624739099293947219848633</span>
+<span class="c1"># still just an approximation -- the extra digits are noise, not more 3s</span>
+</code></pre></div>
+
+<table>
+<thead>
+<tr>
+<th>C problem (Lesson 8)</th>
+<th>Still a problem in Python?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Truncation (<code>int / int</code> drops the decimal)</td>
+<td>No: <code>/</code> does true division by default; <code>//</code> recovers the old behavior on purpose</td>
+</tr>
+<tr>
+<td>Integer overflow (wraps to negative/zero)</td>
+<td>No: Python integers grow as needed, with no fixed ceiling</td>
+</tr>
+<tr>
+<td>Floating-point imprecision (approximated decimals)</td>
+<td>Yes: still finite bits under the hood; unavoidable in any language</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>🔑 <strong>Python fixed the two numeric bugs that came from <em>choosing the wrong tool</em> (using <code>int</code> where you needed a decimal, or running out of bits for a whole number), but it cannot fix the one bug that comes from decimal numbers themselves being infinite and computer memory not being.</strong></p>
+</blockquote>
+<hr />
+<h2 id="part-4-exceptions-tryexcept-valueerror-and-a-cleaner-way-to-fail">Part 4: Exceptions (<code>try</code>/<code>except</code>, <code>ValueError</code>, and a cleaner way to fail)</h2>
+<p>In C, a function had exactly one channel back to the caller: its return value. If something went wrong, the function had to sacrifice one otherwise-legitimate value (<code>NULL</code>, <code>-1</code>, <code>0</code>) to mean "error," and the caller had to remember to check for it every single time. Malan names the problem directly: <strong>"return values were the only way in C that functions could communicate back to the programmer that something went wrong."</strong> He continues with why that is genuinely limiting: if a function is "supposed to return maybe an integer, whether positive, negative, or zero... it's kind of unfortunate sometimes if you have to steal one of those values and say you can't use this value."</p>
+<p>Python offers a different channel entirely: <strong>exceptions</strong>. As Malan defines it, <strong>"an exception in Python is a way of handling error conditions without relying on return values alone."</strong></p>
+<h3 id="seeing-the-problem-first">Seeing the problem first</h3>
+<p>Suppose you ask the user for input and immediately try to convert it to an integer:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">&quot;What&#39;s n? &quot;</span><span class="p">))</span>
+</code></pre></div>
+
+<p>Type a real number and this works fine. Type <code>cat</code>, and Python crashes with a new kind of error. Malan narrates it live: <strong>"Now I'm getting a value error, which is a different type of error"</strong>. Specifically, Python cannot interpret the text <code>"cat"</code> as a whole number at all. This is a <code>ValueError</code>: the value's <em>type</em> (a string) is fine, but its <em>content</em> is not what <code>int()</code> needs.</p>
+<p>One fix, before reaching for exceptions at all, is to check the string yourself first. Python's strings come with a built-in method for exactly this, alongside the string methods you may already have used, like <code>.lower()</code> and <code>.capitalize()</code>. As Malan describes it, strings <strong>"come with not just an upper function, a lower function, aka methods, but also ... a method that tells you whether or not the string itself happens to be numeric"</strong> (<code>.isnumeric()</code>):</p>
+<div class="codehilite"><pre><span></span><code><span class="n">n</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;What&#39;s n? &quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">n</span><span class="o">.</span><span class="n">isnumeric</span><span class="p">():</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;That&#39;s an integer&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;That&#39;s not an integer&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>This works, but it means checking a condition <em>before</em> every risky operation, the same defensive-checking burden C put on you, just moved from return values to string methods.</p>
+<h3 id="catching-the-error-instead">Catching the error instead</h3>
+<p>The alternative is to let the risky code run, and tell Python what to do only if it fails. This is exactly what <code>try</code>/<code>except</code> is for. Malan's own plain-English description of the mechanism is the clearest one available: <strong>"Try to execute these lines of code except if there's an error, then do this other thing instead"</strong>, and, he adds, "therefore you don't have to check any return values."</p>
+<div class="codehilite"><pre><span></span><code><span class="k">try</span><span class="p">:</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">&quot;What&#39;s n? &quot;</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;That&#39;s an integer&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Not an integer&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Type <code>cat</code> here, and the <code>int(...)</code> call raises a <code>ValueError</code> mid-way through the <code>try</code> block. Python immediately abandons the rest of that block (the <code>print("That's an integer")</code> line never runs) and jumps straight to the matching <code>except ValueError:</code> clause instead.</p>
+<p>You do have to name the specific exception you expect, which raises a fair question Malan addresses directly: do you need to anticipate every possible way code can fail? <strong>"In this case, I used a value error. Do I need to define every possible thing that can go wrong? Short answer yes."</strong> There is no catch-all you should reach for reflexively: you name the exceptions you actually expect (<code>ValueError</code> for bad conversions, and others you will meet later, like <code>FileNotFoundError</code>), and add more <code>except</code> clauses as you discover new ways your own code can fail in practice.</p>
+<blockquote>
+<p>✅ <strong>What to do about it:</strong> wherever C forced you to check a return value defensively before trusting it, wrap the risky Python code in <code>try:</code> and name the specific exception you expect in <code>except:</code>. Don't check first and hope; try, and handle failure only if it happens.</p>
+</blockquote>
+<hr />
+<h2 id="part-5-putting-it-together-a-function-that-cannot-be-broken">Part 5: Putting it together (a function that cannot be broken)</h2>
+<p>The whole point of combining <code>def</code>, the <code>main()</code>/<code>__name__</code> convention, <code>while True</code> with <code>break</code>, and <code>try</code>/<code>except</code> is that they stack into one small, extremely durable pattern: a function that keeps demanding valid input, forever, no matter what garbage arrives, and only ever returns a value you can trust.</p>
+<div class="codehilite"><pre><span></span><code>def get_height():
+    while True:                       &lt;- Part 1: no do-while, so loop forever...
+        try:                          &lt;- Part 4: attempt the risky conversion
+            height = int(input(&quot;Height: &quot;))
+            if height &gt; 0:
+                return height          &lt;- ...and only escape with a valid answer
+        except ValueError:            &lt;- Part 4: garbage input? try again silently
+            pass
+
+def main():                            &lt;- Part 2: your program&#39;s real entry point
+    height = get_height()
+    for i in range(height):            &lt;- Part 1: range() drives the pyramid
+        print(&quot;#&quot; * (i + 1))
+
+if __name__ == &quot;__main__&quot;:             &lt;- Part 2: only run if this file is executed directly
+    main()
+</code></pre></div>
+
+<p>Every line of that block is something you already learned in this lesson: <code>while True</code> replaces the missing <code>do while</code>; <code>try</code>/<code>except ValueError</code> replaces C's return-value checking; <code>def</code> and the <code>__name__</code> guard replace prototypes and C's automatic <code>main</code>. This exact shape (a small function that validates its own input and never returns garbage) is what you'll build in the Capstone below, and it's the same shape every input-handling function you write from here on should follow.</p>
+<hr />
+<h2 id="key-takeaways">Key takeaways</h2>
+<ol>
+<li><strong><code>for x in range(n):</code> replaces C's three-part <code>for</code> loop</strong>, and the underscore convention (<code>for _ in range(n):</code>) signals a loop variable you're required to name but never use.</li>
+<li><strong>Python has no <code>do while</code>.</strong> The replacement is a deliberate <code>while True:</code> loop with a <code>break</code> once the input is acceptable.</li>
+<li><strong><code>def</code> defines a function with no type declarations at all</strong>, but Python still executes top to bottom: call a function before its <code>def</code> appears anywhere in the file, and you get a <code>NameError</code>.</li>
+<li><strong>Python never calls <code>main()</code> automatically.</strong> You must define it, then call it yourself, conventionally guarded by <code>if __name__ == "__main__": main()</code>.</li>
+<li><strong>Integer overflow and truncation are solved natively in Python; floating-point imprecision is not</strong>: the first two came from choosing the wrong type, the third comes from finite bits meeting infinite decimals, which no language escapes.</li>
+<li><strong>An exception lets a function signal failure separately from its return value.</strong> <code>try</code>/<code>except ValueError</code> replaces C's return-value-only error checking, and you must name the specific exception(s) you expect to catch.</li>
+</ol>
+<h2 id="common-pitfalls">Common pitfalls</h2>
+<ul>
+<li>❌ Calling a function before its <code>def</code> appears earlier in the file: Python raises <code>NameError: name '...' is not defined</code>. Define every function before the point where you first call it.</li>
+<li>❌ Writing <code>def main():</code> and never calling it: Python attaches no special meaning to the name <code>main</code>; nothing runs until you call <code>main()</code> yourself.</li>
+<li>❌ Converting user input with <code>int(input(...))</code> with no <code>try</code>/<code>except</code> around it: one non-numeric character raises an uncaught <code>ValueError</code> and crashes the whole program.</li>
+<li>❌ Assuming Python solved <em>all</em> of C's numeric problems just because it solved integer overflow: floating-point imprecision is still there, unchanged, because the hardware didn't change.</li>
+<li>❌ Reaching for a C-style loop with a manually incremented counter when <code>for _ in range(n):</code> says exactly the same thing more simply.</li>
+</ul>
+<hr />
+<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: Mario's Pyramid, Rebuilt to Survive Anything</h2>
+<blockquote>
+<p>This is the main hands-on project for the lesson. You'll rebuild Module 2's Mario brick pyramid in Python, but this time, its height comes from a <code>get_height()</code> function that cannot be broken by any input a user could possibly type, structured with <code>main()</code> and the <code>__name__</code> guard. Every route handler you write in the database-backed web app at the end of this course is a <code>def</code>, and every one of them validates its input exactly the way <code>get_height()</code> will here.</p>
+</blockquote>
+<h3 id="what-you-will-build">What you will build</h3>
+<p>On <a href="https://cs50.dev">cs50.dev</a>, a single program, <code>mario.py</code>, that prints a left-aligned pyramid of <code>#</code> bricks whose height comes from the user, validated so thoroughly that no input, however malformed, can crash it.</p>
+<ul>
+<li>A <code>def main():</code> that drives the program and a separate <code>def get_height():</code> that owns all the input validation (Part 2).</li>
+<li>A <code>while True:</code> loop inside <code>get_height()</code> that keeps asking until it gets a usable answer, replacing the <code>do while</code> Python doesn't have (Part 1).</li>
+<li>A <code>try</code>/<code>except ValueError:</code> inside that loop so that letters, symbols, or an empty line are silently rejected instead of crashing the program (Part 4).</li>
+<li>An <code>if height &gt; 0:</code> check so that zero and negative numbers are rejected too, not just non-numeric text.</li>
+<li>A <code>for</code> loop using <code>range()</code> to print each row of the pyramid (Part 1).</li>
+<li>The <code>if __name__ == "__main__":</code> guard around your call to <code>main()</code> (Part 2).</li>
+</ul>
+<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
+<table>
+<thead>
+<tr>
+<th>Lesson idea</th>
+<th>Where you use it in Mario's Pyramid</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>def</code> and function arguments</td>
+<td><code>get_height()</code> is its own function, separate from <code>main()</code></td>
+</tr>
+<tr>
+<td><code>NameError</code> / definition order</td>
+<td><code>get_height()</code> must be defined above the point where <code>main()</code> calls it</td>
+</tr>
+<tr>
+<td><code>while True:</code> replacing <code>do while</code></td>
+<td>The validation loop inside <code>get_height()</code></td>
+</tr>
+<tr>
+<td><code>try</code>/<code>except ValueError</code></td>
+<td>Catching non-numeric input inside <code>get_height()</code></td>
+</tr>
+<tr>
+<td><code>for</code> and <code>range()</code></td>
+<td>Printing each of the pyramid's rows</td>
+</tr>
+<tr>
+<td><code>main()</code> / <code>__name__</code> guard</td>
+<td>The program's overall structure</td>
+</tr>
+</tbody>
+</table>
+<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
+<ol>
+<li><strong>Hardcode the pyramid first.</strong> In a new <code>mario.py</code>, write a <code>for</code> loop using <code>range()</code> that prints a hardcoded pyramid of height 4: row <code>i</code> should contain <code>i + 1</code> hash marks (<code>#</code>, then <code>##</code>, then <code>###</code>, and so on). Run it with <code>python mario.py</code> and confirm the shape before changing anything.</li>
+<li><strong>Wrap it in <code>main()</code>.</strong> Move that loop inside a <code>def main():</code> and call <code>main()</code> at the bottom of the file. Confirm the program still prints the same pyramid.</li>
+<li><strong>Write <code>get_height()</code> on its own, and test it alone.</strong> Above <code>main()</code>, write <code>def get_height():</code> containing a <code>while True:</code> loop that uses <code>input()</code> and <code>int()</code> to ask <code>"Height: "</code>, wrapped in <code>try</code>/<code>except ValueError:</code> so bad input is silently ignored and the loop asks again. For now, have <code>main()</code> just call <code>get_height()</code> and <code>print()</code> the result, so you can confirm it survives garbage input (letters, blank lines, symbols) before wiring it into the pyramid.</li>
+<li><strong>Reject zero and negative heights too.</strong> A <code>ValueError</code> only catches non-numeric text: typing <code>-5</code> or <code>0</code> converts to a valid integer that still shouldn't be allowed. Add an <code>if height &gt; 0: return height</code> check inside the loop so only positive numbers escape it.</li>
+<li><strong>Wire <code>get_height()</code> into the pyramid.</strong> Replace the hardcoded <code>4</code> from Milestone 1 with a call to <code>get_height()</code>, so the pyramid's size now comes entirely from validated user input.</li>
+<li><strong>Add the <code>__name__</code> guard.</strong> Replace your direct call to <code>main()</code> with <code>if __name__ == "__main__": main()</code>.</li>
+<li><strong>Stretch goals.</strong> Refactor the row-printing itself into a third function, <code>def print_row(width):</code>, mirroring the <code>print_row</code> you wrote in C back in Lesson 8's capstone. Or extend the pyramid to the full double-sided version from Module 2's problem set, adding a <code>get_width()</code> function alongside <code>get_height()</code> that validates the same way.</li>
+</ol>
+<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
+<ul>
+<li>✅ Typing letters, symbols, an empty line, <code>0</code>, or a negative number at the height prompt never crashes the program: it always just asks again.</li>
+<li>✅ Typing any positive whole number prints a correctly-sized pyramid, with row <code>i</code> containing <code>i + 1</code> bricks.</li>
+<li>✅ <code>get_height()</code> and <code>main()</code> are separate functions, with <code>get_height()</code> defined above the point where <code>main()</code> calls it.</li>
+<li>✅ The file ends with <code>if __name__ == "__main__": main()</code>, not a bare call to <code>main()</code>.</li>
+</ul>
+<blockquote>
+<p>💡 <strong>Keep yourself honest:</strong> before you call it done, deliberately try to break <code>get_height()</code> with the worst input you can think of: an empty line, a sentence, an emoji. A validation function you haven't tried to break is a validation function you haven't actually tested.</p>
+</blockquote>
+<hr />
+<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
+<blockquote>
+<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
+</blockquote>
+<h3 id="exercise-1-counting-with-range-and-the-underscore-foundational">Exercise 1: Counting with <code>range()</code> and the underscore (foundational)</h3>
+<p>Write a <code>for</code> loop using <code>range()</code> that prints the numbers 1 through 10, one per line (hint: <code>range(1, 11)</code> starts counting from 1 instead of 0). Then, on a separate line below it, write a second loop using the underscore convention that prints your name exactly 5 times, since the loop's counter isn't needed for that one.</p>
+<h3 id="exercise-2-a-reusable-validated-input-function-intermediate">Exercise 2: A reusable validated-input function (intermediate)</h3>
+<p>Write <code>def get_positive_int():</code> that loops forever with <code>try</code>/<code>except ValueError</code> until the user enters a whole number greater than zero, then returns it, the same shape as <code>get_height()</code>, under a different name. Call it from a <code>def main():</code>, guarded by <code>if __name__ == "__main__":</code>, and print the value it returns.</p>
+<h3 id="exercise-3-counting-valid-and-invalid-entries-advanced">Exercise 3: Counting valid and invalid entries (advanced)</h3>
+<p>Write a program with a function <code>def count_entries():</code> that loops forever asking the user to type a number. Before converting anything, check if the user typed the word <code>"done"</code> and, if so, <code>break</code> out of the loop. Otherwise, use <code>try</code>/<code>except ValueError</code> to attempt the conversion: keep a running count of successful conversions and a separate count of rejected ones. When the loop ends, return both counts and print them from <code>main()</code>.</p>
+<hr />
+<h2 id="cheat-sheet">Cheat sheet</h2>
+<div class="codehilite"><pre><span></span><code>LOOPS
+  while cond:            checks BEFORE running (same idea as C)
+  for x in range(n):     Python&#39;s replacement for C&#39;s for (int i = 0; i &lt; n; i++)
+  for _ in range(n):     underscore = &quot;I need a variable here, but I never use it&quot;
+  while True: ... break  Python&#39;s replacement for C&#39;s missing do-while
+
+FUNCTIONS
+  def name(arg):          no return type, no argument types -- Python infers them
+      ...
+      return value        omit if the function has nothing to hand back
+  Call a function only AFTER its def -- calling it too early raises NameError.
+
+ENTRY POINT CONVENTION
+  def main():
+      ...
+  if __name__ == &quot;__main__&quot;:
+      main()               &lt;- Python NEVER calls main() for you; you must call it
+
+NUMERIC ISSUES, REVISITED (root cause: finite bits, always -- Lesson 8)
+  truncation        -&gt; SOLVED: int / int now gives a real decimal (// for old behavior)
+  integer overflow  -&gt; SOLVED: Python ints grow as large as memory allows
+  float imprecision -&gt; STILL HAPPENS: 64-bit floats are still finite, in any language
+
+EXCEPTIONS
+  try:
+      risky_code()
+  except ValueError:      name the SPECIFIC exception you expect
+      handle_it()
+  C: check the return value yourself, every time, or risk a silent bug
+  Python: attempt the code; only handle failure if it actually happens
+</code></pre></div>
+
+<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
+<ul>
+<li><strong>Earlier, Module 2 · Lesson 7 (Conditionals and loops):</strong> <code>while</code> survives almost unchanged; <code>for</code> is genuinely rebuilt around <code>range()</code>; <code>do while</code> disappears entirely, replaced by <code>while True:</code> plus <code>break</code>.</li>
+<li><strong>Earlier, Module 2 · Lesson 8 (Functions, code quality, and the limits of numbers):</strong> <code>def</code> replaces C's typed function declarations and prototypes; scope is enforced more loosely; two of the three numeric bugs from that lesson (integer overflow, truncation) are solved natively, while floating-point imprecision persists unchanged.</li>
+<li><strong>Earlier, Module 7 · Lesson 25 (Python essentials):</strong> this lesson assumed you were already comfortable with <code>print()</code>, <code>input()</code>, F-strings, and Python's lack of semicolons and type declarations.</li>
+<li><strong>Next, Module 7 · Lesson 27 (Lists, dictionaries, and the pip ecosystem):</strong> the <code>for</code> loops and functions from this lesson combine with Python's built-in list and dictionary types, and you'll install your first third-party library with <code>pip</code>.</li>
+<li><strong>Later, Module 11:</strong> every route handler in the database-backed web app you build at the end of this course is a <code>def</code>, and every one of them validates its input with <code>try</code>/<code>except</code> exactly like <code>get_height()</code> did here.</li>
+</ul>
+<hr />
+<p><em>Source: "CS50x 2026 - Lecture 6 - Python" by David J. Malan, Harvard University. Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+    </article>
+    <section class="lesson-sync" data-lesson-id="26"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../progress.html">Progress tracker &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="25-python-essentials.html"><span class="dir">&#8592; Previous</span><b>Python Essentials: Variables, Conditionals, Strings</b></a><a class="ln home" href="..\index.html"><b>All lessons</b></a><a class="ln next" href="27-lists-dicts-pip.html"><span class="dir">Next &#8594;</span><b>Lists, Dictionaries, and the pip Ecosystem</b></a></nav>
+  </main>
+</div>
+
+<footer class="site"><div class="wrap">
+  <a class="logo" href="..\index.html">Self-Paced CS50x<span class="dot">.</span></a>
+  <span class="fnote">An unofficial self-paced companion generated from the CS50x 2026 lecture transcripts. CS50 is created by David J. Malan and Harvard University. Watch the original lectures and do the official problem sets at cs50.harvard.edu/x. Code snippets are illustrative reconstructions.</span>
+</div></footer>
+
+<style>pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.codehilite .hll { background-color: #ffffcc }
+.codehilite { background: #282C34; color: #ABB2BF }
+.codehilite .c { color: #7F848E } /* Comment */
+.codehilite .err { color: #ABB2BF } /* Error */
+.codehilite .esc { color: #ABB2BF } /* Escape */
+.codehilite .g { color: #ABB2BF } /* Generic */
+.codehilite .k { color: #C678DD } /* Keyword */
+.codehilite .l { color: #ABB2BF } /* Literal */
+.codehilite .n { color: #E06C75 } /* Name */
+.codehilite .o { color: #56B6C2 } /* Operator */
+.codehilite .x { color: #ABB2BF } /* Other */
+.codehilite .p { color: #ABB2BF } /* Punctuation */
+.codehilite .ch { color: #7F848E } /* Comment.Hashbang */
+.codehilite .cm { color: #7F848E } /* Comment.Multiline */
+.codehilite .cp { color: #7F848E } /* Comment.Preproc */
+.codehilite .cpf { color: #7F848E } /* Comment.PreprocFile */
+.codehilite .c1 { color: #7F848E } /* Comment.Single */
+.codehilite .cs { color: #7F848E } /* Comment.Special */
+.codehilite .gd { color: #E06C75 } /* Generic.Deleted */
+.codehilite .ge { color: #ABB2BF; font-style: italic } /* Generic.Emph */
+.codehilite .ges { color: #ABB2BF } /* Generic.EmphStrong */
+.codehilite .gr { color: #E06C75 } /* Generic.Error */
+.codehilite .gh { color: #ABB2BF; font-weight: bold } /* Generic.Heading */
+.codehilite .gi { color: #98C379 } /* Generic.Inserted */
+.codehilite .go { color: #E06C75 } /* Generic.Output */
+.codehilite .gp { color: #ABB2BF } /* Generic.Prompt */
+.codehilite .gs { color: #ABB2BF; font-weight: bold } /* Generic.Strong */
+.codehilite .gu { color: #ABB2BF; font-weight: bold } /* Generic.Subheading */
+.codehilite .gt { color: #E06C75 } /* Generic.Traceback */
+.codehilite .kc { color: #E5C07B } /* Keyword.Constant */
+.codehilite .kd { color: #C678DD } /* Keyword.Declaration */
+.codehilite .kn { color: #C678DD } /* Keyword.Namespace */
+.codehilite .kp { color: #C678DD } /* Keyword.Pseudo */
+.codehilite .kr { color: #C678DD } /* Keyword.Reserved */
+.codehilite .kt { color: #E5C07B } /* Keyword.Type */
+.codehilite .ld { color: #ABB2BF } /* Literal.Date */
+.codehilite .m { color: #D19A66 } /* Literal.Number */
+.codehilite .s { color: #98C379 } /* Literal.String */
+.codehilite .na { color: #E06C75 } /* Name.Attribute */
+.codehilite .nb { color: #E5C07B } /* Name.Builtin */
+.codehilite .nc { color: #E5C07B } /* Name.Class */
+.codehilite .no { color: #E06C75 } /* Name.Constant */
+.codehilite .nd { color: #61AFEF } /* Name.Decorator */
+.codehilite .ni { color: #E06C75 } /* Name.Entity */
+.codehilite .ne { color: #E06C75 } /* Name.Exception */
+.codehilite .nf { color: #61AFEF; font-weight: bold } /* Name.Function */
+.codehilite .nl { color: #E06C75 } /* Name.Label */
+.codehilite .nn { color: #E06C75 } /* Name.Namespace */
+.codehilite .nx { color: #E06C75 } /* Name.Other */
+.codehilite .py { color: #E06C75 } /* Name.Property */
+.codehilite .nt { color: #E06C75 } /* Name.Tag */
+.codehilite .nv { color: #E06C75 } /* Name.Variable */
+.codehilite .ow { color: #56B6C2 } /* Operator.Word */
+.codehilite .pm { color: #ABB2BF } /* Punctuation.Marker */
+.codehilite .w { color: #ABB2BF } /* Text.Whitespace */
+.codehilite .mb { color: #D19A66 } /* Literal.Number.Bin */
+.codehilite .mf { color: #D19A66 } /* Literal.Number.Float */
+.codehilite .mh { color: #D19A66 } /* Literal.Number.Hex */
+.codehilite .mi { color: #D19A66 } /* Literal.Number.Integer */
+.codehilite .mo { color: #D19A66 } /* Literal.Number.Oct */
+.codehilite .sa { color: #98C379 } /* Literal.String.Affix */
+.codehilite .sb { color: #98C379 } /* Literal.String.Backtick */
+.codehilite .sc { color: #98C379 } /* Literal.String.Char */
+.codehilite .dl { color: #98C379 } /* Literal.String.Delimiter */
+.codehilite .sd { color: #98C379 } /* Literal.String.Doc */
+.codehilite .s2 { color: #98C379 } /* Literal.String.Double */
+.codehilite .se { color: #98C379 } /* Literal.String.Escape */
+.codehilite .sh { color: #98C379 } /* Literal.String.Heredoc */
+.codehilite .si { color: #98C379 } /* Literal.String.Interpol */
+.codehilite .sx { color: #98C379 } /* Literal.String.Other */
+.codehilite .sr { color: #98C379 } /* Literal.String.Regex */
+.codehilite .s1 { color: #98C379 } /* Literal.String.Single */
+.codehilite .ss { color: #98C379 } /* Literal.String.Symbol */
+.codehilite .bp { color: #E5C07B } /* Name.Builtin.Pseudo */
+.codehilite .fm { color: #56B6C2; font-weight: bold } /* Name.Function.Magic */
+.codehilite .vc { color: #E06C75 } /* Name.Variable.Class */
+.codehilite .vg { color: #E06C75 } /* Name.Variable.Global */
+.codehilite .vi { color: #E06C75 } /* Name.Variable.Instance */
+.codehilite .vm { color: #E06C75 } /* Name.Variable.Magic */
+.codehilite .il { color: #D19A66 } /* Literal.Number.Integer.Long */</style>
+<script>
+// mobile menu
+const sb=document.getElementById('sidebar'),mb=document.getElementById('menuBtn');
+if(mb){mb.onclick=()=>sb.classList.toggle('open');sb.addEventListener('click',e=>{if(e.target.tagName==='A')sb.classList.remove('open')});}
+const tc=document.getElementById('tocClose');if(tc){tc.onclick=()=>sb.classList.remove('open');}
+// progress
+const prog=document.getElementById('progress');
+addEventListener('scroll',()=>{const h=document.body.scrollHeight-innerHeight;prog.style.width=(h>0?scrollY/h*100:0)+'%'});
+// code chrome + copy
+document.querySelectorAll('.codehilite, pre').forEach(block=>{
+  if(block.parentElement.classList.contains('codehilite'))return;
+  const bar=document.createElement('div');bar.className='code-bar';
+  bar.innerHTML='<span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>';
+  block.appendChild(bar);
+  const btn=document.createElement('button');btn.className='copy-btn';btn.textContent='Copy';
+  btn.onclick=()=>{const t=block.querySelector('code')?.innerText||block.innerText;
+    navigator.clipboard.writeText(t.replace(/\nCopy$/,''));btn.textContent='Copied!';btn.classList.add('done');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('done')},1500)};
+  block.appendChild(btn);
+});
+// callouts by leading emoji
+const map={'\u{1F511}':'cl-key','\u{1F4A1}':'cl-tip','✅':'cl-ok','❌':'cl-no','\u{1F3AF}':'cl-goal','\u{1F6E0}':'cl-goal'};
+document.querySelectorAll('blockquote').forEach(q=>{const t=(q.textContent||'').trim();for(const e in map){if(t.startsWith(e)){q.classList.add(map[e]);break}}});
+// check-off
+function makeCheckable(rx){document.querySelectorAll('h2,h3').forEach(h=>{if(!rx.test(h.textContent))return;let el=h.nextElementSibling;
+  while(el&&!/^H[1-3]$/.test(el.tagName)){if(el.tagName==='OL'||el.tagName==='UL'){el.classList.add('checkable');
+    el.querySelectorAll(':scope>li').forEach(li=>{const key='cwc:'+location.pathname+':'+li.textContent.slice(0,60);
+      if(localStorage.getItem(key))li.classList.add('checked');
+      li.addEventListener('click',ev=>{if(ev.target.tagName==='A')return;li.classList.toggle('checked');
+        li.classList.contains('checked')?localStorage.setItem(key,'1'):localStorage.removeItem(key)});});}el=el.nextElementSibling;}});}
+makeCheckable(/learning objectives|milestones/i);
+// scrollspy
+const links=[...document.querySelectorAll('.toc a')];
+const heads=links.map(a=>a.getAttribute('href')).filter(h=>h&&h.startsWith('#')).map(h=>document.getElementById(h.slice(1))).filter(Boolean);
+const spy=()=>{let cur=heads[0]?.id;for(const h of heads){if(h.getBoundingClientRect().top<150)cur=h.id}
+  links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur))};
+addEventListener('scroll',spy);spy();
+</script>
+<script type="module" src="../assets/sync.js"></script></body>
+</html>

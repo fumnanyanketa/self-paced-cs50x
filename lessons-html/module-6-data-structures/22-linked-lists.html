@@ -1,0 +1,924 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 6 · Lesson 22: Linked Lists | Self-Paced CS50x</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0a1a2f; --navy-2:#0f243d; --navy-3:#15314f;
+  --teal:#18c4a0; --teal-d:#0fa385; --teal-soft:#e4f8f2;
+  --coral:#f24d63; --coral-d:#d83a50; --coral-soft:#feecee;
+  --ink:#152230; --muted:#5f6c7b; --line:#e9eef2; --bg:#ffffff;
+  --soft:#f4fbf9; --card:#ffffff; --code-bg:#21252b; --max:780px;
+  --k:#2f8fb3; --k-bg:#e8f4f9; --tip:#c4881f; --tip-bg:#fdf4e3; --ok:#1f9d6b; --ok-bg:#e6f6ef;
+  --no:#e0533f; --no-bg:#fdecea; --goal:#7b54c9; --goal-bg:#f1ebfb;
+  --shadow:0 10px 30px rgba(13,30,52,.08); --shadow-sm:0 4px 14px rgba(13,30,52,.07);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.72;font-size:17px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+#progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--teal),var(--coral));z-index:200;transition:width .1s linear}
+a{color:var(--teal-d);text-decoration:none}
+a:hover{color:var(--coral)}
+h1,h2,h3{font-family:Poppins,sans-serif;color:var(--ink);letter-spacing:-.01em}
+.accent{color:var(--coral)}
+.wrap{max-width:1200px;margin:0 auto;padding:0 28px}
+
+/* ---------- Top welcome strip ---------- */
+.topbar{background:var(--navy);color:#cdd8e4;font-size:13.5px}
+.topbar .wrap{display:flex;justify-content:space-between;align-items:center;height:42px;gap:18px}
+.topbar b{color:#fff;font-weight:600}
+.topbar .right{display:flex;gap:18px;align-items:center}
+.topbar a{color:#cdd8e4}.topbar a:hover{color:var(--teal)}
+
+/* ---------- Nav ---------- */
+nav.bar{background:var(--navy-2);position:sticky;top:0;z-index:120;box-shadow:0 2px 20px rgba(0,0,0,.25)}
+nav.bar .wrap{display:flex;align-items:center;height:68px;gap:26px}
+.logo{font-family:Poppins;font-weight:800;font-size:22px;color:#fff;letter-spacing:.02em;cursor:pointer;text-decoration:none}
+a.logo:hover{color:var(--teal)}
+.lessonnav{display:flex;gap:14px;align-items:stretch;margin:60px 0 0;flex-wrap:wrap}
+.lessonnav .ln{flex:1;min-width:200px;display:flex;flex-direction:column;gap:3px;border:1px solid var(--line);border-radius:14px;padding:16px 18px;color:var(--muted);transition:.15s;background:#fff}
+.lessonnav .ln:hover{border-color:var(--teal);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.lessonnav .ln .dir{font-size:13px;font-weight:600;color:var(--teal-d)}
+.lessonnav .ln b{color:var(--ink);font-family:Poppins;font-size:15px}
+.lessonnav .ln.next{text-align:right}
+.lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
+.lessonnav .ln.home b{color:var(--teal-d)}
+.logo .dot{color:var(--teal)}
+.navlinks{display:flex;gap:24px;margin-left:8px}
+.navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
+.navlinks a:hover{color:var(--teal)}
+.nav-cta{margin-left:auto;display:flex;gap:12px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:9px;border:none;cursor:pointer;font-family:Inter;font-weight:600;border-radius:999px;transition:.18s;font-size:15px;text-decoration:none}
+.btn-primary{background:var(--teal);color:#04231c;padding:12px 22px}
+.btn-primary:hover{background:var(--teal-d);color:#fff;transform:translateY(-1px)}
+.btn-outline{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.35);padding:10px 20px}
+.btn-outline:hover{border-color:var(--teal);color:var(--teal)}
+.btn-coral{background:var(--coral);color:#fff;padding:12px 22px}
+.btn-coral:hover{background:var(--coral-d);color:#fff;transform:translateY(-1px)}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;background:radial-gradient(120% 120% at 80% 0%,var(--navy-3),var(--navy) 60%);color:#eaf1f8;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.25;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.blob{position:absolute;border-radius:50%;filter:blur(8px);opacity:.5;z-index:0}
+.blob.t{width:230px;height:230px;background:rgba(24,196,160,.30);top:-60px;right:8%}
+.blob.c{width:160px;height:160px;background:rgba(242,77,99,.28);bottom:-40px;left:42%}
+.squiggle{position:absolute;z-index:1;opacity:.85}
+.hero .wrap{position:relative;z-index:2;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;padding:70px 28px 90px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--teal);font-weight:600;font-size:14px;letter-spacing:.03em;text-transform:uppercase;margin-bottom:18px}
+.hero h1{font-size:54px;line-height:1.08;font-weight:800;margin:0 0 20px;color:#fff}
+.hero .lead{font-size:18px;color:#b9c6d6;max-width:34em;margin:0 0 30px}
+.hero-actions{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:30px}
+.play{display:inline-flex;align-items:center;gap:12px;color:#fff;font-weight:600}
+.play .circ{width:52px;height:52px;border-radius:50%;background:var(--coral);display:grid;place-items:center;box-shadow:0 8px 22px rgba(242,77,99,.45);font-size:16px;animation:pulse 2.4s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(242,77,99,.45)}70%{box-shadow:0 0 0 16px rgba(242,77,99,0)}100%{box-shadow:0 0 0 0 rgba(242,77,99,0)}}
+.chips{display:flex;gap:10px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:#dce6f0;padding:8px 14px;border-radius:999px;font-size:13.5px;font-weight:500}
+.chip b{color:#fff}
+/* hero card */
+.hero-card{position:relative;background:#fff;color:var(--ink);border-radius:22px;padding:26px;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.hero-card .ring{position:absolute;top:-26px;right:-18px;width:96px;height:96px;background:#fff;border-radius:50%;box-shadow:var(--shadow);display:grid;place-items:center}
+.hero-card .ring svg{transform:rotate(-90deg)}
+.hero-card .ring .lab{position:absolute;font-family:Poppins;font-weight:700;font-size:18px;color:var(--teal-d)}
+.hero-card h3{margin:4px 0 14px;font-size:19px}
+.hero-card ul{list-style:none;margin:0 0 18px;padding:0}
+.hero-card li{display:flex;gap:11px;align-items:flex-start;padding:9px 0;border-bottom:1px dashed var(--line);font-size:14.5px;color:#36424f}
+.hero-card li:last-child{border-bottom:none}
+.hero-card li .ic{font-size:17px;line-height:1.4}
+.float-badge{position:absolute;left:18px;bottom:-26px;background:#fff;border-radius:14px;box-shadow:var(--shadow);padding:12px 16px;display:flex;gap:10px;align-items:center;font-size:13px;font-weight:600;color:var(--ink)}
+.float-badge .n{font-family:Poppins;font-weight:800;color:var(--coral);font-size:20px}
+
+/* ---------- Content layout ---------- */
+.layout{display:grid;grid-template-columns:268px minmax(0,1fr);gap:46px;max-width:1200px;margin:0 auto;padding:0 28px}
+aside{position:sticky;top:84px;align-self:start;height:calc(100vh - 100px);overflow-y:auto;padding:26px 0}
+.toc-card{background:var(--soft);border:1px solid var(--line);border-radius:18px;padding:18px}
+.toc-close{display:none;position:absolute;top:-6px;right:-4px;width:36px;height:36px;border:none;background:var(--navy-2);color:#fff;border-radius:50%;font-size:22px;line-height:1;cursor:pointer}
+.toc-close:hover{background:var(--coral)}
+.toc-title{font-family:Poppins;font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--teal-d);margin:0 0 10px;font-weight:700}
+.toc ul{list-style:none;margin:0;padding:0}
+.toc a{display:block;color:var(--muted);font-size:14px;padding:6px 12px;border-radius:8px;border-left:2px solid transparent;line-height:1.4}
+.toc a:hover{color:var(--ink);background:#fff}
+.toc a.active{color:var(--teal-d);background:#fff;border-left-color:var(--teal);font-weight:600}
+.toc .toc li li a{padding-left:24px;font-size:13px}
+.toc a.toc-capstone{color:var(--coral);font-weight:600}
+main{padding:54px 0 120px;min-width:0}
+article{max-width:var(--max)}
+
+/* typography */
+article h2{font-size:30px;margin:56px 0 16px;font-weight:700;position:relative}
+article h2::before{content:"\2726";color:var(--teal);font-size:18px;margin-right:10px;vertical-align:2px}
+article h3{font-size:21px;margin:34px 0 10px;font-weight:600}
+article h2+h3{margin-top:18px}
+article p,article li{font-size:16.5px}
+article ul,article ol{padding-left:24px}
+article li{margin:7px 0}
+article strong{font-weight:700;color:#0f1b28}
+hr{border:none;height:1px;background:var(--line);margin:42px 0}
+
+/* tables */
+table{border-collapse:separate;border-spacing:0;width:100%;margin:24px 0;font-size:15px;border:1px solid var(--line);border-radius:14px;overflow:hidden;display:block;overflow-x:auto}
+th,td{padding:12px 15px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--navy-2);color:#eaf1f8;font-family:Poppins;font-weight:600;font-size:14px}
+tr:last-child td{border-bottom:none}
+tbody tr:nth-child(even){background:var(--soft)}
+
+/* inline + block code */
+code{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.86em;background:var(--teal-soft);color:#0c6a55;padding:.13em .42em;border-radius:6px}
+.codehilite,pre{position:relative;background:var(--code-bg);border-radius:14px;margin:22px 0;overflow:hidden;box-shadow:var(--shadow-sm)}
+.codehilite pre{margin:0;border-radius:0;box-shadow:none;background:transparent}
+.codehilite pre,pre>code{display:block;padding:42px 18px 18px;overflow-x:auto}
+.codehilite code,pre code{background:none;color:#dfe6ee;padding:0;font-size:13.5px;line-height:1.7}
+.code-bar{position:absolute;top:0;left:0;right:0;height:34px;display:flex;align-items:center;gap:7px;padding:0 15px;background:rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.07)}
+.code-bar .dot{width:11px;height:11px;border-radius:50%}
+.dot.r{background:#ff5f57}.dot.y{background:#febc2e}.dot.g{background:#28c840}
+.copy-btn{position:absolute;top:5px;right:9px;z-index:3;background:rgba(255,255,255,.08);color:#dfe6ee;border:1px solid rgba(255,255,255,.14);border-radius:8px;font-size:12px;padding:4px 11px;cursor:pointer;font-family:Inter;transition:.15s}
+.copy-btn:hover{background:var(--teal);border-color:var(--teal);color:#04231c}
+.copy-btn.done{background:var(--teal);color:#04231c;border-color:var(--teal)}
+
+/* callouts */
+blockquote{margin:24px 0;padding:16px 20px;border-radius:14px;background:var(--soft);border:1px solid var(--line);border-left:5px solid var(--teal)}
+blockquote p{margin:7px 0}blockquote p:first-child{margin-top:0}blockquote p:last-child{margin-bottom:0}
+blockquote.cl-key{background:var(--k-bg);border-left-color:var(--k);border-color:transparent}
+blockquote.cl-tip{background:var(--tip-bg);border-left-color:var(--tip);border-color:transparent}
+blockquote.cl-ok{background:var(--ok-bg);border-left-color:var(--ok);border-color:transparent}
+blockquote.cl-no{background:var(--no-bg);border-left-color:var(--no);border-color:transparent}
+blockquote.cl-goal{background:var(--goal-bg);border-left-color:var(--goal);border-color:transparent}
+
+/* capstone banner */
+h2.capstone-h{background:linear-gradient(115deg,var(--navy),var(--navy-3));color:#fff;border-radius:20px;padding:30px 28px 26px;margin-top:64px;box-shadow:0 20px 50px rgba(10,26,47,.3);overflow:hidden;position:relative}
+h2.capstone-h::before{content:"\1F6E0\FE0F  HANDS-ON PROJECT";display:block;font-family:Poppins;font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--teal);margin:0 0 8px}
+h2.capstone-h::after{content:"";position:absolute;width:150px;height:150px;border-radius:50%;background:rgba(24,196,160,.25);filter:blur(10px);top:-50px;right:-30px}
+
+/* check-off */
+.checkable{list-style:none;padding-left:0}
+.checkable li{position:relative;padding-left:36px;cursor:pointer;margin:9px 0}
+.checkable li::before{content:"";position:absolute;left:0;top:3px;width:22px;height:22px;border:2px solid var(--teal);border-radius:7px;background:#fff;transition:.15s}
+.checkable li.checked::before{background:var(--teal);border-color:var(--teal)}
+.checkable li.checked::after{content:"\2713";position:absolute;left:5px;top:1px;color:#fff;font-weight:800;font-size:15px}
+.checkable li.checked{color:var(--muted)}
+
+/* footer */
+footer.site{background:var(--navy);color:#aebccb;margin-top:90px}
+footer.site .wrap{padding:46px 28px;display:flex;justify-content:space-between;gap:26px;flex-wrap:wrap;align-items:center}
+footer.site .logo{font-size:20px}
+footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
+
+#menuBtn{display:none}
+@media(max-width:920px){
+  .topbar{display:none}
+  .nav-cta{display:none}
+  .float-badge{display:none}
+  nav.bar .wrap{gap:14px;height:60px}
+  .wrap{padding:0 20px}
+  .logo{font-size:18px;white-space:nowrap}
+  .hero .wrap{grid-template-columns:1fr;gap:30px;padding:42px 20px 56px}
+  .hero h1{font-size:33px}
+  .hero .lead{font-size:16.5px}
+  .hero-actions{gap:14px}
+  .hero-actions .btn-primary{flex:1;justify-content:center}
+  .layout{grid-template-columns:1fr;gap:0}
+  aside{position:fixed;top:0;left:0;width:84vw;max-width:320px;height:100vh;background:#fff;z-index:130;transform:translateX(-100%);transition:.25s;box-shadow:var(--shadow);padding:24px}
+  aside.open{transform:none}
+  #menuBtn{display:inline-flex}
+  .toc-close{display:block}
+  .navlinks{display:none}
+  main{padding:34px 0 80px}
+  body{font-size:16px}
+  article h2{font-size:25px}
+  h2.capstone-h{padding:24px 20px}
+}
+@media(max-width:420px){
+  .hero h1{font-size:29px}
+  .hero-actions{flex-direction:column;align-items:stretch}
+  .hero-actions .play{justify-content:center}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<div class="topbar"><div class="wrap">
+  <div>&#10024; Welcome to <b>Self-Paced CS50x</b> &middot; a self-paced course</div>
+  <div class="right"><span>CS50x 2026 · Harvard University · David J. Malan</span></div>
+</div></div>
+
+<nav class="bar"><div class="wrap">
+  <button class="btn btn-outline" id="menuBtn" style="padding:8px 14px">&#9776;</button>
+  <a class="logo" href="..\index.html">Self-Paced CS50x<span class="dot">.</span></a>
+  <div class="navlinks">
+    <a href="..\index.html">All lessons</a>
+    <a href="#overview">Overview</a>
+    <a href="#capstone">Capstone</a>
+  </div>
+  <div class="nav-cta">
+    <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
+  </div>
+</div></nav>
+
+<header class="hero">
+  <span class="blob t"></span><span class="blob c"></span>
+  <svg class="squiggle" style="top:120px;left:46%;" width="90" height="26" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#18c4a0" stroke-width="4" stroke-linecap="round"/></svg>
+  <svg class="squiggle" style="bottom:60px;right:40%;" width="70" height="22" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#f24d63" stroke-width="4" stroke-linecap="round"/></svg>
+  <div class="wrap" id="overview">
+    <div>
+      <span class="eyebrow">&#10022; Module 6 · Lesson 22</span>
+      <h1>Linked <span class="accent">Lists</span></h1>
+      <p class="lead">A linked list stores each value next to a pointer to the next value instead of packing values back-to-back like an array, so adding a brand-new first node costs the same tiny, constant amount of work no matter how long the list already is: the trade is that searching, deleting, or reaching the end of that same list now costs one step per node, and nothing frees itself automatically, so you must walk the whole list and free every node yourself.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
+        <a class="play" href="https://www.youtube.com/watch?v=PmAI76OGE_E" target="_blank" rel="noopener"><span class="circ">&#9654;</span> Watch the talk</a>
+      </div>
+      <div class="chips">
+        <span class="chip">&#127908; <b>David J. Malan</b></span>
+        <span class="chip">&#9201; <b>60 minutes</b></span>
+        <span class="chip">&#128296; <b>Hands-on capstone</b></span>
+      </div>
+    </div>
+    <div style="position:relative">
+      <div class="hero-card">
+        <div class="ring">
+          <svg width="74" height="74"><circle cx="37" cy="37" r="31" stroke="#eef2f5" stroke-width="7" fill="none"/><circle cx="37" cy="37" r="31" stroke="#18c4a0" stroke-width="7" fill="none" stroke-linecap="round" stroke-dasharray="195" stroke-dashoffset="40"/></svg>
+          <span class="lab">&#10022;</span>
+        </div>
+        <h3>What you&#39;ll get</h3>
+        <ul>
+          <li><span class="ic">&#9989;</span><span>Plain-language teaching with every term defined</span></li>
+          <li><span class="ic">&#128221;</span><span>Code snippets pulled from the talk</span></li>
+          <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
+          <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
+        </ul>
+        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <aside id="sidebar"><div class="toc-card">
+    <button class="toc-close" id="tocClose" aria-label="Close menu">&times;</button>
+    <p class="toc-title">On this page</p>
+    <div class="toc">
+<ul>
+<li><a href="#in-one-sentence">In one sentence</a></li>
+<li><a href="#first-principles-companion">First-principles companion</a></li>
+<li><a href="#a-few-plain-language-basics-first">A few plain-language basics first</a></li>
+<li><a href="#why-this-lesson-matters">Why this lesson matters</a></li>
+<li><a href="#learning-objectives">Learning objectives</a></li>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#part-1-a-self-referential-struct-and-the-arrow-that-finally-looks-like-one">Part 1: A self-referential struct, and the arrow that finally looks like one</a></li>
+<li><a href="#part-2-building-a-list-by-prepending-the-pointer-picture-step-by-step">Part 2: Building a list by prepending (the pointer picture, step by step)</a></li>
+<li><a href="#part-3-traversing-the-list-a-while-loop-and-the-equivalent-for-loop">Part 3: Traversing the list (a while loop, and the equivalent for loop)</a></li>
+<li><a href="#part-4-running-time-why-prepend-is-free-but-almost-everything-else-isnt">Part 4: Running time (why prepend is free but almost everything else isn't)</a></li>
+<li><a href="#part-5-sorted-insertion-four-cases-and-why-order-comes-out-right-this-time">Part 5: Sorted insertion (four cases, and why order comes out right this time)</a></li>
+<li><a href="#part-6-freeing-the-list-the-unload-function">Part 6: Freeing the list (the unload function)</a></li>
+<li><a href="#key-takeaways">Key takeaways</a></li>
+<li><a href="#common-pitfalls">Common pitfalls</a></li>
+<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: numbers.c (Prepend It, Sort It, Free It Clean)</a><ul>
+<li><a href="#what-you-will-build">What you will build</a></li>
+<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
+<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
+<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
+</ul>
+</li>
+<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
+<li><a href="#exercise-1-prepend-five-hardcoded-numbers-foundational">Exercise 1: Prepend five hardcoded numbers (foundational)</a></li>
+<li><a href="#exercise-2-write-and-time-trace-a-search-function-intermediate">Exercise 2: Write and time-trace a search function (intermediate)</a></li>
+<li><a href="#exercise-3-delete-a-node-from-the-middle-advanced">Exercise 3: Delete a node from the middle (advanced)</a></li>
+</ul>
+</li>
+<li><a href="#cheat-sheet">Cheat sheet</a></li>
+<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
+</ul>
+</div>
+
+  </div></aside>
+  <main id="start">
+    <article>
+      <hr />
+<h2 id="in-one-sentence">In one sentence</h2>
+<p>A linked list stores each value next to a pointer to the next value instead of packing values back-to-back like an array, so adding a brand-new first node costs the same tiny, constant amount of work no matter how long the list already is: the trade is that searching, deleting, or reaching the end of that same list now costs one step per node, and nothing frees itself automatically, so you must walk the whole list and free every node yourself.</p>
+<blockquote>
+<p>🎯 <strong>Where this lesson is heading.</strong> It builds to a hands-on <strong>Capstone Project</strong> where you build a linked list of numbers on cs50.dev by prepending, print it, upgrade it to keep itself sorted as you insert, and then prove with Valgrind that you freed every single node. Everything before the Capstone teaches the skills you will use there. If you want to see the finish line first, jump to the <strong>"Capstone Project"</strong> section, then come back.</p>
+</blockquote>
+<h2 id="first-principles-companion">First-principles companion</h2>
+<blockquote>
+<p>💡 <strong>The durable idea behind this lesson.</strong> Malan's live-coded C is specific to 2026, but a "node containing a value and a pointer to the next node" is decades-old computer science, not a C quirk.</p>
+<ul>
+<li><strong><a href="https://www-cs-faculty.stanford.edu/~knuth/taocp.html"><em>The Art of Computer Programming, Volume 1: Fundamental Algorithms</em></a> by Donald Knuth (1968), Section 2.2.3, "Linked Allocation."</strong> This is the classic, language-agnostic treatment of exactly the structure this lesson builds (values scattered anywhere in memory, stitched into an ordered chain purely by pointers), decades before any modern language shipped it as a built-in list type.</li>
+</ul>
+</blockquote>
+<h2 id="a-few-plain-language-basics-first">A few plain-language basics first</h2>
+<p>This lesson uses some everyday terms. Here they are in plain words:</p>
+<ul>
+<li><strong>Pointer:</strong> a variable that stores a memory address ("where" some other value lives) rather than storing the value itself. (You met this in Module 5.)</li>
+<li><strong>Struct (structure):</strong> a custom data type you define yourself that bundles several related values together under one name, declared with the <code>struct</code> keyword.</li>
+<li><strong>Self-referential structure:</strong> a struct that has, as one of its own fields, a pointer to another struct of that exact same type. This is the one new trick this lesson adds to <code>struct</code>.</li>
+<li><strong>Node:</strong> a generic name for one "box" in a linked list. Each node holds a piece of data you actually care about (like a number) plus a pointer to the next node.</li>
+<li><strong>Arrow operator (<code>-&gt;</code>):</strong> shorthand in C for "follow this pointer, then reach inside the struct it points to." <code>n-&gt;number</code> means exactly the same thing as <code>(*n).number</code>, just easier to type and read.</li>
+<li><strong>Metadata:</strong> data whose job is to help you keep track of other data, rather than being the data you actually care about.</li>
+<li><strong>Traverse:</strong> to visit every node in a data structure one at a time, by following its pointers from the first node to the last.</li>
+<li><strong>Big O (running time):</strong> shorthand for how the number of steps an operation takes grows as the amount of data, <code>n</code>, grows. <code>O(1)</code> means "constant: the same number of steps no matter how big the structure is"; <code>O(n)</code> means "grows in direct proportion to the size of the structure."</li>
+</ul>
+<p>You do not need to memorise these. Each is explained again the first time it matters.</p>
+<h2 id="why-this-lesson-matters">Why this lesson matters</h2>
+<p><strong>Module 6 · Lesson 21</strong> left you with a working but unsatisfying answer to arrays' fixed-size problem: <code>realloc</code> a bigger block, and the standard library quietly copies everything over for you. That works, but Malan is upfront about what it costs at scale: copying isn't free, and for a 3-million-element array, it's a lot of wasted motion just to make room for one more value. This lesson asks a different question: what if you never had to move anything you already stored? Malan frames the whole idea around a single, load-bearing distinction:</p>
+<blockquote>
+<p>"So data is value or values you care about. Metadata is data that helps you maintain the data you care about." (David Malan)</p>
+</blockquote>
+<p>A linked list spends a little extra memory (metadata, in the form of one pointer per value) so that every new value can be dropped in wherever there happens to be room, with the pointers doing the work of keeping everything in the right order. Nothing ever needs to be copied to make space. That flexibility isn't free, though, and quantifying exactly what it costs you in running time is the back half of this lesson.</p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<p>By the end of this lesson you will be able to:</p>
+<ol>
+<li>Define a self-referential <code>struct node</code> with a value field and a <code>next</code> pointer, and explain why the struct needs an internal tag name (<code>struct node</code> inside itself) to even compile.</li>
+<li>Build a linked list from nothing by prepending nodes one at a time, and draw the pointer picture after each step, including the exact order of pointer updates that avoids orphaning the rest of the list.</li>
+<li>Traverse and print every value in a linked list with a <code>while</code> loop, and rewrite the same logic as an equivalent <code>for</code> loop using a temporary pointer.</li>
+<li>State the Big O running time of prepending, appending, searching, and deleting in a singly linked list, and explain in your own words why each one is what it is.</li>
+<li>Walk through the four cases of inserting into a sorted linked list (empty list, belongs first, belongs last, belongs in the middle) and identify which case a given insertion falls into.</li>
+<li>Write an <code>unload</code> function that frees every node in a list, one at a time, and explain why calling <code>free</code> on the list variable alone would not work.</li>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li><strong>Module 6 · Lesson 21: Stacks, Queues, and Resizable Arrays</strong>: this lesson picks up exactly where that one left off: you've felt the pain of copying a whole array just to grow it, and now you'll solve growth a completely different way.</li>
+<li><strong>Module 5 · Lessons 18-19 (pointers, and <code>malloc</code>/<code>free</code>)</strong>: including Lesson 19, "<code>malloc</code>, free, and hunting memory bugs." You should already be comfortable with what a pointer stores, dereferencing with <code>*</code>, calling <code>malloc</code>, checking its result for <code>NULL</code>, and calling <code>free</code>. This lesson uses all of that on nearly every line of code.</li>
+</ul>
+<hr />
+<h2 id="part-1-a-self-referential-struct-and-the-arrow-that-finally-looks-like-one">Part 1: A self-referential struct, and the arrow that finally looks like one</h2>
+<p>An array's whole appeal is that its values sit back-to-back in memory, so you can jump anywhere with simple arithmetic. Its whole limitation is that exact same fact: the values <em>have</em> to be contiguous, which is why growing one means finding a bigger contiguous block and copying everything into it. Malan poses the obvious alternative:</p>
+<blockquote>
+<p>"What if we sort of try to preempt that kind of pain and try to just build up a list by linking it together no matter where the values actually are in memory?" (David Malan)</p>
+</blockquote>
+<p>Suppose the number <code>1</code> ends up at address <code>0x123</code>, but the next value you store, <code>2</code>, happens to land at some unrelated address, <code>0x456</code>, because that's just where the computer had room. You can't use pointer arithmetic to hop from one to the other: they aren't a fixed number of bytes apart. So instead of relying on position, store the <em>address of the next value</em> right alongside each value. That's the whole idea:</p>
+<blockquote>
+<p>"Data is value or values you care about. Metadata is data that helps you maintain the data you care about." (David Malan)</p>
+</blockquote>
+<p>Each value you care about (say, <code>1</code>) gets a neighbor in memory: a pointer to wherever the <em>next</em> value lives. Follow that pointer, and you've found the next value, and its own pointer tells you where the one after that lives, and so on, until you hit a pointer that's <code>NULL</code>, which marks the end. Malan gives this two-field package a name:</p>
+<blockquote>
+<p>"That's going to be a term of art we start using: a node. It's just a generic structure that contains data and metadata, usually like the number you care about and a pointer to the next such node." (David Malan)</p>
+</blockquote>
+<p>In C, a <strong>node</strong> is a <code>struct</code> with two fields: the value, and a pointer to the next node of the <em>same type</em>. That second part, a struct containing a pointer to its own type, is called a <strong>self-referential structure</strong>, and it needs one small piece of new syntax to compile:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">node</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">number</span><span class="p">;</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">node</span><span class="w"> </span><span class="o">*</span><span class="n">next</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">node</span><span class="p">;</span>
+</code></pre></div>
+
+<p>Two things here are new, and both matter:</p>
+<ul>
+<li><strong><code>struct node *next;</code></strong>, not just <code>node *next;</code>. Malan explains why: "The compiler reads your code top to bottom, left to right." At the point the compiler reaches the <code>next</code> field, the <code>typedef</code>'d name <code>node</code> doesn't exist <em>yet</em>: it's only finished being defined once the closing <code>}</code> and its trailing <code>node;</code> are reached, several lines later. But <code>struct node</code> is a valid, in-progress name for the struct the very moment you write <code>struct node { ... }</code>, before the <code>typedef</code> finishes. So inside the struct's own body, you always refer to yourself as <code>struct node *</code>, never as the shorter <code>typedef</code> name.</li>
+<li><strong>The tag name <code>node</code> right after <code>struct</code></strong>: this is what makes <code>struct node</code> a legal thing to write on the very next line, even though the <code>typedef</code> alias <code>node</code> isn't ready yet.</li>
+</ul>
+<p>That solves defining a node. Getting <em>inside</em> one you already have a pointer to needs new syntax too. You already know two operators for going inside a struct: the dot (<code>.</code>) for a plain struct variable, and dereferencing with <code>*</code> for a pointer. Combining them, <code>(*n).number</code>, works, but it's clumsy to type and read. So C gives you a shortcut:</p>
+<blockquote>
+<p>"Wonderfully today we're going to see that you can actually in some cases combine the dot and the asterisk into a single operator with two characters that literally looks like an arrow." (David Malan)</p>
+</blockquote>
+<p><code>n-&gt;number</code> means exactly <code>(*n).number</code>: follow the pointer <code>n</code>, then reach inside for the <code>number</code> field. <code>n-&gt;next</code> means the same for the <code>next</code> field. This is the <strong>arrow operator</strong>, and from here on it's how you'll do essentially everything with nodes.</p>
+<blockquote>
+<p>🔑 <strong>The single most important takeaway of this part.</strong> A node is just a struct with a value and a pointer to the next node of its own type. The <code>struct node *next;</code> line (not <code>node *next;</code>) exists purely because the compiler hasn't finished reading the <code>typedef</code> yet when it reaches that line, and <code>n-&gt;field</code> is shorthand for "follow the pointer <code>n</code>, then reach inside."</p>
+</blockquote>
+<hr />
+<h2 id="part-2-building-a-list-by-prepending-the-pointer-picture-step-by-step">Part 2: Building a list by prepending (the pointer picture, step by step)</h2>
+<p>With the struct defined, an empty linked list needs exactly one variable: a single pointer that will hold the address of the first node, whenever one exists. If there are no nodes yet, that pointer is <code>NULL</code>.</p>
+<div class="codehilite"><pre><span></span><code>list
+ |
+ v
+NULL
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="n">node</span><span class="w"> </span><span class="o">*</span><span class="n">list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+</code></pre></div>
+
+<p>Now suppose the user types in <code>1</code>, <code>2</code>, and <code>3</code>, one at a time, and each one gets added to the <em>front</em> of the list, a strategy called <strong>prepending</strong>. For each number, the recipe is the same four steps:</p>
+<ol>
+<li><code>malloc</code> enough memory for one whole node, and check the result isn't <code>NULL</code>.</li>
+<li>Store the user's number in the new node's <code>number</code> field.</li>
+<li>Stitch the new node onto the existing list.</li>
+<li>Update <code>list</code> to point at this new node.</li>
+</ol>
+<p>Here's the code for one pass through that recipe:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">node</span><span class="w"> </span><span class="o">*</span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">node</span><span class="p">));</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">n</span><span class="o">-&gt;</span><span class="n">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">number</span><span class="p">;</span>
+<span class="n">n</span><span class="o">-&gt;</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="p">;</span>
+<span class="n">list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
+</code></pre></div>
+
+<p>Walk through it in pictures. First, <code>n</code> points at a freshly <code>malloc</code>'d, still-garbage chunk of memory:</p>
+<div class="codehilite"><pre><span></span><code>list --&gt; NULL
+
+n --&gt; [ number: ? | next: ? ]     (garbage values, nothing assigned yet)
+</code></pre></div>
+
+<p>After <code>n-&gt;number = number;</code> (say the user typed <code>1</code>) and, defensively, <code>n-&gt;next = NULL;</code>:</p>
+<div class="codehilite"><pre><span></span><code>list --&gt; NULL
+
+n --&gt; [ number: 1 | next: NULL ]
+</code></pre></div>
+
+<p>Now for the two lines that actually attach this node to the list. Here is the exact wrong order, so you can see <em>why</em> order matters:</p>
+<div class="codehilite"><pre><span></span><code>WRONG ORDER:  list = n;  then  n-&gt;next = list;
+
+list --&gt; [ number: 1 | next: --+
+                                |
+                                v
+n --&gt; [ number: 1 | next: -----+     &lt;-- n-&gt;next now points at ITSELF. Disaster.
+</code></pre></div>
+
+<p>That specific example is degenerate (there's only one node), so the real danger shows up on the <em>second</em> insertion, once <code>list</code> already points somewhere. Suppose <code>list</code> currently points at the node holding <code>1</code>, and you're prepending <code>2</code>:</p>
+<div class="codehilite"><pre><span></span><code>BEFORE:  list --&gt; [ 1 | next: NULL ]
+
+n --&gt; [ 2 | next: NULL ]      (just malloc&#39;d, not yet linked to anything)
+</code></pre></div>
+
+<p>If you carelessly do <code>list = n;</code> <strong>first</strong>:</p>
+<div class="codehilite"><pre><span></span><code>list --&gt; [ 2 | next: NULL ]
+
+        [ 1 | next: NULL ]     &lt;-- ORPHANED. Nothing in your program points here anymore.
+                                   This is a memory leak, permanently, until the program quits.
+</code></pre></div>
+
+<p>Malan catches himself making exactly this mistake live, and names it precisely:</p>
+<blockquote>
+<p>"I have orphaned the first node because now nothing in my code is actually pointing at it. I've got a duplication (two pointers pointing at this chunk of memory) so this thing... we have lost track of it in code, which means that is the definition of a memory leak." (David Malan)</p>
+</blockquote>
+<p>The fix is to do the two lines in the <strong>opposite order</strong>: point the new node at the old list <em>before</em> you move <code>list</code> to point at the new node:</p>
+<div class="codehilite"><pre><span></span><code>STEP A:  n-&gt;next = list;
+
+n --&gt; [ 2 | next: ---+
+                       |
+                       v
+list ---------------&gt; [ 1 | next: NULL ]
+
+STEP B:  list = n;
+
+list --&gt; [ 2 | next: ---&gt; [ 1 | next: NULL ] ]
+</code></pre></div>
+
+<p>Nothing was lost: <code>list</code> now points at the new node, and the new node's <code>next</code> still points at everything that came before. Malan's own metaphor for this is worth keeping:</p>
+<blockquote>
+<p>"The metaphor I often think of is like around Christmas time... when people would stitch popcorn together... You're trying to stitch together these nodes or popcorn kernels, if you will, such that one can lead you to the next, can lead you to the next, but you can never let go of part of that strand." (David Malan)</p>
+</blockquote>
+<p>Repeat the recipe for <code>3</code>, and the full list (after inserting <code>1</code>, then <code>2</code>, then <code>3</code>, always at the front) looks like this:</p>
+<div class="codehilite"><pre><span></span><code>list --&gt; [ 3 ] --&gt; [ 2 ] --&gt; [ 1 ] --&gt; NULL
+</code></pre></div>
+
+<p>Notice the order: it's the <strong>reverse</strong> of the order you typed the numbers in, because every new value jumps straight to the front. That's a direct, visible consequence of prepending, not a bug, and it's exactly the wrinkle Part 5 will fix.</p>
+<blockquote>
+<p>✅ <strong>What to do about it:</strong> whenever you prepend, always set the new node's <code>next</code> to point at the current list <em>before</em> you move <code>list</code> to point at the new node. Reverse that order even once, and you permanently orphan everything the list used to hold.</p>
+</blockquote>
+<hr />
+<h2 id="part-3-traversing-the-list-a-while-loop-and-the-equivalent-for-loop">Part 3: Traversing the list (a <code>while</code> loop, and the equivalent <code>for</code> loop)</h2>
+<p>Building the list is only useful if you can read it back out. To do that without disturbing <code>list</code> itself (you still need it to find the list again later), use a second, throwaway pointer that walks along the chain:</p>
+<div class="codehilite"><pre><span></span><code>list --&gt; [ 3 ] --&gt; [ 2 ] --&gt; [ 1 ] --&gt; NULL
+
+ptr = list;   (ptr now points at the same first node as list, without touching list)
+</code></pre></div>
+
+<p>The traversal logic in plain language: look at wherever <code>ptr</code> currently points, print its number, then move <code>ptr</code> to whatever <em>that</em> node's <code>next</code> field says. Repeat until <code>ptr</code> becomes <code>NULL</code>.</p>
+<div class="codehilite"><pre><span></span><code><span class="n">node</span><span class="w"> </span><span class="o">*</span><span class="n">ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="p">;</span>
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">ptr</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%i</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ptr</span><span class="o">-&gt;</span><span class="n">number</span><span class="p">);</span>
+<span class="w">    </span><span class="n">ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ptr</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Step by step, in pictures:</p>
+<div class="codehilite"><pre><span></span><code>ptr --&gt; [ 3 ] --&gt; [ 2 ] --&gt; [ 1 ] --&gt; NULL      print 3;  ptr = ptr-&gt;next;
+         ptr --&gt; [ 2 ] --&gt; [ 1 ] --&gt; NULL       print 2;  ptr = ptr-&gt;next;
+                  ptr --&gt; [ 1 ] --&gt; NULL        print 1;  ptr = ptr-&gt;next;
+                           ptr --&gt; NULL         loop condition fails; stop.
+</code></pre></div>
+
+<p>This prints <code>3</code>, <code>2</code>, <code>1</code>, reversed from input order, exactly as Part 2 predicted.</p>
+<p>Everything a <code>while</code> loop can do here, a <code>for</code> loop can do too, just packed onto one line. Malan shows the equivalent version:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">node</span><span class="w"> </span><span class="o">*</span><span class="n">ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="p">;</span><span class="w"> </span><span class="n">ptr</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w"> </span><span class="n">ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ptr</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%i</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ptr</span><span class="o">-&gt;</span><span class="n">number</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>The three parts of the <code>for</code> line map directly onto the <code>while</code> version: "start <code>ptr</code> at <code>list</code>" is the initializer, "keep going while <code>ptr</code> isn't <code>NULL</code>" is the condition, and "advance to the next node" is the update, it's just the <code>ptr = ptr-&gt;next;</code> line moved into the loop header instead of sitting as the last line inside the braces. Malan's own preference:</p>
+<blockquote>
+<p>"This is a little more elegant, in that you can express a whole lot of logic in one line of the <code>for</code> loop. Frankly, I do think the first version is nonetheless more readable." (David Malan)</p>
+</blockquote>
+<p>Either form is correct; use whichever reads more clearly to you.</p>
+<blockquote>
+<p>🔑 <strong>The single most important takeaway of this part.</strong> Never traverse a list with the <code>list</code> pointer itself: always copy it into a temporary pointer first (<code>ptr</code>), and advance <em>that</em>. The moment you overwrite <code>list</code>, you've lost your only way back to the front of the list.</p>
+</blockquote>
+<hr />
+<h2 id="part-4-running-time-why-prepend-is-free-but-almost-everything-else-isnt">Part 4: Running time (why prepend is free but almost everything else isn't)</h2>
+<p>Now the payoff question: what does all this pointer-stitching actually cost, in Big O terms?</p>
+<p><strong>Prepending is O(1).</strong> Adding a new node to the front touches a small, fixed number of pointers (<code>n-&gt;next = list; list = n;</code>) no matter whether the list has 3 nodes or 3 million. The length of the rest of the list never enters into the work at all.</p>
+<p>Everything else is worse, and the reasons are all the same shape: with no way to jump directly to a position, you have to walk there one node at a time.</p>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Running time</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Prepend</strong> (add to the front, no ordering)</td>
+<td><strong>O(1)</strong></td>
+<td>A fixed number of pointer reassignments: the list's length never matters.</td>
+</tr>
+<tr>
+<td><strong>Append</strong> (add to the back, with no tail pointer)</td>
+<td>O(n)</td>
+<td>You must follow <code>next</code> from the front until you find the node whose <code>next</code> is <code>NULL</code>, then attach there.</td>
+</tr>
+<tr>
+<td><strong>Search</strong> for a value</td>
+<td>O(n)</td>
+<td>Worst case, the value is the very last node, or isn't in the list at all, so you may have to check every node.</td>
+</tr>
+<tr>
+<td><strong>Delete</strong> a value</td>
+<td>O(n)</td>
+<td>Same as search: you must first walk to find it (and, since this is a <em>singly</em> linked list, the node <em>before</em> it too) before you can unlink it.</td>
+</tr>
+</tbody>
+</table>
+<p>Malan's own summary of the trade, once he's walked through search and delete: with arrays, a <strong>sorted</strong> array at least gives you binary search in O(log n): jump to the middle, then the middle of what's left, and so on. A linked list can't do that trick, sorted or not, because you cannot compute the address of "the middle node" the way you can with an array's contiguous arithmetic: you can only get there by walking, one <code>next</code> at a time, from the front. So the dynamism you gained (grow forever, no copying) comes at the cost of the search speed you had with a sorted array.</p>
+<blockquote>
+<p>💡 <strong>A nuance worth sitting with:</strong> "O(1)" for prepend doesn't mean "instant": it means "the <em>same</em> small number of steps regardless of size." That's the entire reason prepending is the cheap operation and everything that requires finding a specific spot is not.</p>
+</blockquote>
+<hr />
+<h2 id="part-5-sorted-insertion-four-cases-and-why-order-comes-out-right-this-time">Part 5: Sorted insertion (four cases, and why order comes out right this time)</h2>
+<p>Prepending is fast, but it leaves values in reverse-insertion order, not sorted order, and a real Contacts app or phone book needs its entries sorted. So instead of always inserting at the front, you now have to figure out, for every new value, exactly <em>where</em> in the list it belongs. Malan breaks the seemingly complicated problem into four separate, much smaller ones:</p>
+<blockquote>
+<p>"You've got scenarios in which you want to insert a new node into an empty list. You want to prepend the new node into the beginning of the list, append it to the end of the list, or somewhere in the middle." (David Malan)</p>
+</blockquote>
+<p><strong>Case 1: the list is empty.</strong> Trivial: just point <code>list</code> at the new node.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">list</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>Case 2: the new value belongs before everything currently in the list.</strong> This is exactly the prepend logic from Part 2: point the new node's <code>next</code> at the current list, then move <code>list</code> to the new node.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="o">-&gt;</span><span class="n">number</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">list</span><span class="o">-&gt;</span><span class="n">number</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">n</span><span class="o">-&gt;</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="p">;</span>
+<span class="w">    </span><span class="n">list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>Case 3: the new value belongs at the end.</strong> Traverse with a pointer until you find a node whose <code>next</code> is <code>NULL</code> (that's the last node), then attach the new node there.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">node</span><span class="w"> </span><span class="o">*</span><span class="n">ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="p">;</span><span class="w"> </span><span class="n">ptr</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w"> </span><span class="n">ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ptr</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ptr</span><span class="o">-&gt;</span><span class="n">next</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">ptr</span><span class="o">-&gt;</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>Case 4: the new value belongs somewhere in the middle.</strong> This is the fiddliest case, because you need <em>two</em> pointers at once: one on the node just before where the new value belongs, and one on the node just after. Suppose the list already holds <code>2 -&gt; 4 -&gt; NULL</code> and you're inserting <code>3</code>:</p>
+<div class="codehilite"><pre><span></span><code>BEFORE:      list --&gt; [ 2 ] --&gt; [ 4 ] --&gt; NULL
+                        ^          ^
+                      trail       ptr
+
+n --&gt; [ 3 | next: NULL ]     (freshly malloc&#39;d)
+
+STEP 1:  n-&gt;next = ptr;        n --&gt; [ 3 ] --&gt; [ 4 ] --&gt; NULL
+
+STEP 2:  trail-&gt;next = n;      list --&gt; [ 2 ] --&gt; [ 3 ] --&gt; [ 4 ] --&gt; NULL
+</code></pre></div>
+
+<p>The order of those two steps matters exactly like it did in Part 2: you must point the <em>new</em> node forward, at <code>ptr</code>, before you point the <em>previous</em> node, <code>trail</code>, at the new node, otherwise you'd overwrite <code>trail-&gt;next</code> before you'd captured where it used to point, and orphan everything after it.</p>
+<p>Running time-wise, this is worse news than plain prepending. Even though cases 1 and 2 are still instant, cases 3 and 4 require traversing to find the right spot first, so <strong>sorted insertion, worst case, is O(n)</strong>, same as search and delete. You traded away the one operation (unsorted prepend) that used to be free, in exchange for the list always coming out in order.</p>
+<blockquote>
+<p>✅ <strong>What to do about it:</strong> before writing any insert code, ask which of the four cases you're in (empty, belongs first, belongs last, or belongs in the middle) and handle each with its own small block of code, in that order, rather than trying to write one clever line that covers all four at once.</p>
+</blockquote>
+<hr />
+<h2 id="part-6-freeing-the-list-the-unload-function">Part 6: Freeing the list (the <code>unload</code> function)</h2>
+<p>A linked list never leaks memory on its own just because you stop using it: you have to explicitly give every single node back. Malan is blunt about why you can't shortcut this:</p>
+<blockquote>
+<p>"It's not quite as simple as just saying free the whole list. Free is not that smart. [Malloc] is not that smart, and even though you have called [malloc] 123 times, you have to really call free. You have to call free 123 times." (David Malan)</p>
+</blockquote>
+<p>In other words: <code>malloc</code> and <code>free</code> have no built-in concept of "linked list." Each call to <code>malloc</code> handed you back the address of one chunk of memory, and <code>free</code> only knows how to release exactly the address you hand it, one chunk at a time. Passing it your <code>list</code> pointer and hoping it "figures out" the rest of the chain does nothing of the sort.</p>
+<p>The tricky part is that once you <code>free</code> a node, you can no longer safely read its <code>next</code> field: that memory isn't yours anymore. So you must save <code>next</code> in a temporary variable <em>before</em> freeing the node it came from:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">node</span><span class="w"> </span><span class="o">*</span><span class="n">ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="p">;</span>
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">ptr</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">node</span><span class="w"> </span><span class="o">*</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ptr</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span><span class="w">   </span><span class="c1">// remember where to go BEFORE destroying this node</span>
+<span class="w">    </span><span class="n">free</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span><span class="w">                </span><span class="c1">// now safe to free this one</span>
+<span class="w">    </span><span class="n">ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">next</span><span class="p">;</span><span class="w">                </span><span class="c1">// move to the node we remembered</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Pictorially, freeing <code>3 -&gt; 2 -&gt; 1 -&gt; NULL</code>:</p>
+<div class="codehilite"><pre><span></span><code>ptr --&gt; [ 3 ] --&gt; [ 2 ] --&gt; [ 1 ] --&gt; NULL
+
+1. next = ptr-&gt;next     (remember [2] before destroying [3])
+2. free(ptr)             (destroy [3])
+3. ptr = next            (move to [2]) ... repeat until ptr == NULL
+</code></pre></div>
+
+<p>This exact pattern (traverse, free, advance) is worth wrapping in its own function, <code>unload</code>, so you can call it once at the end of <code>main</code> (or anywhere else you need to discard a whole list) instead of copying this loop around by hand.</p>
+<blockquote>
+<p>🔑 <strong>The single most important takeaway of this part.</strong> Every <code>malloc</code> needs its own matching <code>free</code>: a linked list has no shortcut for that. Always capture <code>ptr-&gt;next</code> into a temporary variable <em>before</em> you <code>free(ptr)</code>, or you'll be reading memory you no longer own.</p>
+</blockquote>
+<hr />
+<h2 id="key-takeaways">Key takeaways</h2>
+<ol>
+<li><strong>A node is a self-referential struct.</strong> One value field, one <code>struct node *next</code> pointer, and the internal tag name (<code>struct node</code>) exists purely so the struct can name its own type before the <code>typedef</code> finishes.</li>
+<li><strong><code>n-&gt;field</code> is shorthand for <code>(*n).field</code>.</strong> Follow the pointer, then reach inside.</li>
+<li><strong>Prepend order matters.</strong> Always set <code>n-&gt;next = list;</code> <em>before</em> <code>list = n;</code>. Reversing that order orphans the rest of the list, permanently.</li>
+<li><strong>Prepend is O(1); almost everything else is O(n).</strong> Search, delete, append (with no tail pointer), and even sorted insertion (worst case) all require walking the list one node at a time: the price paid for never having to copy the whole structure to grow it.</li>
+<li><strong>Sorted insertion is four small problems, not one big one.</strong> Empty list, belongs first, belongs last, belongs in the middle: handle each separately.</li>
+<li><strong>Nothing frees itself.</strong> <code>malloc</code> and <code>free</code> have no idea what a linked list is; you must traverse and <code>free</code> every node individually, saving <code>next</code> before you free the node it came from.</li>
+</ol>
+<h2 id="common-pitfalls">Common pitfalls</h2>
+<ul>
+<li>❌ Writing <code>list = n;</code> before <code>n-&gt;next = list;</code> when prepending: this orphans every node the list used to hold, instantly and permanently (a memory leak you can't recover from at runtime).</li>
+<li>❌ Traversing with the <code>list</code> pointer itself instead of a temporary <code>ptr</code>: the moment you advance <code>list</code>, you've lost your only way back to the front of the list.</li>
+<li>❌ Forgetting that plain prepending stores values in <em>reverse</em> insertion order: if you need sorted order, you need the four-case sorted insert from Part 5, not plain prepending.</li>
+<li>❌ Calling <code>free(list)</code> once and expecting the whole list to vanish: <code>free</code> only knows about the one address you hand it; every node needs its own call.</li>
+<li>❌ Freeing a node and then reading its <code>next</code> field afterward: always save <code>ptr-&gt;next</code> into a temporary variable <em>before</em> you <code>free(ptr)</code>.</li>
+</ul>
+<hr />
+<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: <code>numbers.c</code> (Prepend It, Sort It, Free It Clean)</h2>
+<blockquote>
+<p>This is the main hands-on project for the lesson. You'll build a linked list of numbers on cs50.dev from scratch, watch it come out backwards on purpose, fix that by upgrading to sorted insertion, and then prove with Valgrind that every single node you allocated also got freed.</p>
+</blockquote>
+<h3 id="what-you-will-build">What you will build</h3>
+<p>A single C program, <code>numbers.c</code>, on cs50.dev that:</p>
+<ul>
+<li>Defines a self-referential <code>struct node</code> (an <code>int</code> plus a <code>next</code> pointer).</li>
+<li>Reads integers from the user one at a time and builds a linked list by <strong>prepending</strong>.</li>
+<li>Prints the list with a <code>while</code> loop, then again with the equivalent <code>for</code> loop.</li>
+<li>Gets upgraded to insert every new number in <strong>sorted order</strong>, using the four cases from Part 5.</li>
+<li>Ends by calling an <code>unload</code> function that frees every node, verified leak-free with Valgrind.</li>
+</ul>
+<p>This is, in miniature, exactly the kind of structure a real database engine or web framework builds and tears down for you invisibly whenever your program later queries and releases rows, the database-backed web app that caps this course. Building it by hand once, here, is what lets you actually understand (and debug) what's happening underneath when that magic occasionally breaks.</p>
+<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
+<table>
+<thead>
+<tr>
+<th>Lesson idea</th>
+<th>Where you use it in <code>numbers.c</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Self-referential <code>struct node</code> and the arrow operator (Part 1)</td>
+<td>Your <code>struct node</code> definition and every <code>n-&gt;field</code> access.</td>
+</tr>
+<tr>
+<td>Prepending, and the correct pointer order (Part 2)</td>
+<td>Your first working version of the program.</td>
+</tr>
+<tr>
+<td>Traversal with <code>while</code> and <code>for</code> (Part 3)</td>
+<td>Your two printing loops.</td>
+</tr>
+<tr>
+<td>Big O of each operation (Part 4)</td>
+<td>A comment above each function stating its running time and why.</td>
+</tr>
+<tr>
+<td>The four cases of sorted insertion (Part 5)</td>
+<td>Your upgraded <code>insert</code> function.</td>
+</tr>
+<tr>
+<td>The <code>unload</code> function (Part 6)</td>
+<td>Your cleanup code at the end of <code>main</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
+<ol>
+<li><strong>Struct and an empty list.</strong> Define your self-referential <code>struct node</code> (remember the internal tag name) and, in <code>main</code>, declare <code>node *list = NULL;</code>. Compile and run it. It should do nothing and crash nothing. That's a working, if boring, milestone.</li>
+<li><strong>Prepend from user input.</strong> In a loop, use <code>get_int</code> to read numbers until the user enters <code>-1</code> as a sentinel value. For each number: <code>malloc</code> a node, check for <code>NULL</code>, set its <code>number</code>, then stitch it onto the front of <code>list</code> in the correct order (<code>n-&gt;next = list;</code> before <code>list = n;</code>).</li>
+<li><strong>Print it two ways.</strong> Print the list with a <code>while</code> loop and a temporary pointer, then comment that version out and print it again with the equivalent <code>for</code> loop. Confirm both print identical output, in reverse order from how you typed the numbers in.</li>
+<li><strong>Annotate the running time.</strong> Add a one-line comment above your prepend loop and above your print loop stating each one's Big O and why (<code>O(1)</code> because it never touches the rest of the list; <code>O(n)</code> because it must visit every node).</li>
+<li><strong>Upgrade to sorted insertion.</strong> Replace your prepend-only logic with the four-case <code>insert</code> function from Part 5 (empty, belongs first, belongs last, belongs in the middle). Feed in the numbers out of order (say, <code>5 1 9 3 -1</code>) and confirm they print out sorted (<code>1 3 5 9</code>) regardless of the order you typed them.</li>
+<li><strong>Write <code>unload</code> and prove zero leaks.</strong> Write <code>void unload(node *list)</code> using the save-<code>next</code>-then-<code>free</code> pattern from Part 6, call it once at the end of <code>main</code>, then compile and run under <code>valgrind ./numbers</code>. Keep fixing your code until Valgrind reports "All heap blocks were freed -- no leaks are possible."</li>
+<li><strong>Stretch goals.</strong> (a) Add a <code>delete(int number)</code> function that removes a single value from anywhere in the list, handling "it's the first node" as its own case (since removing it means updating <code>list</code> itself, not just some node's <code>next</code>). (b) Rewrite the struct as a doubly linked list (add a <code>prev</code> pointer) and note in a comment which of today's four insertion cases actually get simpler as a result.</li>
+</ol>
+<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
+<ul>
+<li>✅ <code>make numbers</code> compiles with no warnings.</li>
+<li>✅ Entering numbers out of order (e.g., <code>5 1 9 3</code>) prints them in sorted order after your Part 5 upgrade.</li>
+<li>✅ <code>valgrind ./numbers</code> reports zero errors and zero leaked bytes after your <code>unload</code> function runs.</li>
+<li>✅ You can point to the exact lines in your <code>insert</code> function that handle each of the four cases, and state out loud why sorted insertion is O(n) even though plain prepending was O(1).</li>
+</ul>
+<blockquote>
+<p>💡 <strong>Keep yourself honest:</strong> run Valgrind after milestone 2, not just at the very end. A leak introduced while you're still prepending is far easier to spot and fix than one buried three milestones later under your sorted-insert logic.</p>
+</blockquote>
+<hr />
+<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
+<blockquote>
+<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
+</blockquote>
+<h3 id="exercise-1-prepend-five-hardcoded-numbers-foundational">Exercise 1: Prepend five hardcoded numbers (foundational)</h3>
+<p>Skip user input entirely. In <code>main</code>, prepend the numbers <code>10, 20, 30, 40, 50</code> (in that order, using hardcoded values instead of <code>get_int</code>) onto a linked list, then print it with a <code>while</code> loop. Confirm the printed order is <code>50, 40, 30, 20, 10</code>, the reverse of how you inserted them, and explain in one sentence why.</p>
+<h3 id="exercise-2-write-and-time-trace-a-search-function-intermediate">Exercise 2: Write and time-trace a <code>search</code> function (intermediate)</h3>
+<p>Write <code>bool search(node *list, int number)</code> that traverses the list and returns <code>true</code> if <code>number</code> is found, <code>false</code> otherwise. Build a 5-node list, then call <code>search</code> for a value you know is in the last node and count, by hand, exactly how many nodes your function visits before it returns. Confirm that number matches your expectation for O(n) worst-case behavior.</p>
+<h3 id="exercise-3-delete-a-node-from-the-middle-advanced">Exercise 3: Delete a node from the middle (advanced)</h3>
+<p>Write <code>node *delete(node *list, int number)</code> that removes the node containing <code>number</code> from anywhere in the list and returns the (possibly updated) <code>list</code> pointer. Handle three cases explicitly: the value is in the first node (you must update <code>list</code> itself), the value is somewhere later (you need a trailing pointer to relink around the node you're removing), and the value isn't in the list at all (return the list unchanged). Don't forget to <code>free</code> the node you remove.</p>
+<hr />
+<h2 id="cheat-sheet">Cheat sheet</h2>
+<div class="codehilite"><pre><span></span><code>SELF-REFERENTIAL STRUCT
+  typedef struct node
+  {
+      int number;
+      struct node *next;   // &quot;struct node&quot;, not &quot;node&quot; -- typedef isn&#39;t finished yet
+  }
+  node;
+
+ARROW OPERATOR
+  n-&gt;number   ==   (*n).number     &quot;follow the pointer, then reach inside&quot;
+
+PREPEND (always in this order!)
+  n-&gt;next = list;   // 1. point the NEW node at the OLD list
+  list = n;         // 2. THEN move list to point at the new node
+  (swap that order and you orphan everything list used to point to)
+
+TRAVERSAL
+  while:  node *ptr = list; while (ptr != NULL) { ...; ptr = ptr-&gt;next; }
+  for:    for (node *ptr = list; ptr != NULL; ptr = ptr-&gt;next) { ... }
+
+RUNNING TIMES (singly linked list)
+  Prepend                        O(1)
+  Append (no tail pointer)       O(n)
+  Search                         O(n)
+  Delete                         O(n)
+  Sorted insert (4 cases)        O(n) worst case (cases 1-2 instant, 3-4 need a traversal)
+  (a sorted ARRAY gets O(log n) search via binary search -- a linked list never can)
+
+SORTED INSERT: 4 CASES
+  1. Empty list        -&gt; list = n;
+  2. Belongs first      -&gt; n-&gt;next = list; list = n;
+  3. Belongs last        -&gt; walk until ptr-&gt;next == NULL, then ptr-&gt;next = n;
+  4. Belongs in middle    -&gt; n-&gt;next = ptr; trail-&gt;next = n;   (in that order)
+
+UNLOAD (free every node)
+  node *ptr = list;
+  while (ptr != NULL)
+  {
+      node *next = ptr-&gt;next;   // save BEFORE freeing
+      free(ptr);
+      ptr = next;
+  }
+</code></pre></div>
+
+<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
+<ul>
+<li><strong>Earlier, Module 6 · Lesson 21:</strong> "Stacks, queues, and resizable arrays" solved arrays' fixed-size problem with <code>realloc</code>-and-copy. This lesson solves the same growth problem a completely different way: one new node at a time, stitched in with a pointer, with nothing ever needing to be copied.</li>
+<li><strong>Earlier, Module 5 · Lessons 18-19:</strong> the pointer fundamentals and <code>malloc</code>/<code>free</code> discipline from those lessons are what every line of code in this lesson actually leans on: a linked list is pointers and dynamic memory, applied deliberately.</li>
+<li><strong>Next, Module 6 · Lesson 23:</strong> "Trees, hash tables, and tries" builds a hash table that is, quite literally, an array whose slots each hold their own linked list, so that when two different keys collide at the same array index, they chain together using exactly the node-and-<code>next</code> structure you built in this lesson.</li>
+<li><strong>Later, the course's north-star project:</strong> the database-backed web app you build at the end of this course will store rows and query results using structures descended from exactly this idea: a linked list is the simplest version of "data plus the pointers that let you find more of it" that you'll ever build by hand.</li>
+</ul>
+<hr />
+<p><em>Source: "CS50x 2026 - Lecture 5 - Data Structures" by David J. Malan, Harvard University (CS50x 2026). Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+    </article>
+    <section class="lesson-sync" data-lesson-id="22"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../progress.html">Progress tracker &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="21-stacks-queues-arrays.html"><span class="dir">&#8592; Previous</span><b>Stacks, Queues, and Resizable Arrays</b></a><a class="ln home" href="..\index.html"><b>All lessons</b></a><a class="ln next" href="23-trees-hash-tables-tries.html"><span class="dir">Next &#8594;</span><b>Trees, Hash Tables, and Tries</b></a></nav>
+  </main>
+</div>
+
+<footer class="site"><div class="wrap">
+  <a class="logo" href="..\index.html">Self-Paced CS50x<span class="dot">.</span></a>
+  <span class="fnote">An unofficial self-paced companion generated from the CS50x 2026 lecture transcripts. CS50 is created by David J. Malan and Harvard University. Watch the original lectures and do the official problem sets at cs50.harvard.edu/x. Code snippets are illustrative reconstructions.</span>
+</div></footer>
+
+<style>pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.codehilite .hll { background-color: #ffffcc }
+.codehilite { background: #282C34; color: #ABB2BF }
+.codehilite .c { color: #7F848E } /* Comment */
+.codehilite .err { color: #ABB2BF } /* Error */
+.codehilite .esc { color: #ABB2BF } /* Escape */
+.codehilite .g { color: #ABB2BF } /* Generic */
+.codehilite .k { color: #C678DD } /* Keyword */
+.codehilite .l { color: #ABB2BF } /* Literal */
+.codehilite .n { color: #E06C75 } /* Name */
+.codehilite .o { color: #56B6C2 } /* Operator */
+.codehilite .x { color: #ABB2BF } /* Other */
+.codehilite .p { color: #ABB2BF } /* Punctuation */
+.codehilite .ch { color: #7F848E } /* Comment.Hashbang */
+.codehilite .cm { color: #7F848E } /* Comment.Multiline */
+.codehilite .cp { color: #7F848E } /* Comment.Preproc */
+.codehilite .cpf { color: #7F848E } /* Comment.PreprocFile */
+.codehilite .c1 { color: #7F848E } /* Comment.Single */
+.codehilite .cs { color: #7F848E } /* Comment.Special */
+.codehilite .gd { color: #E06C75 } /* Generic.Deleted */
+.codehilite .ge { color: #ABB2BF; font-style: italic } /* Generic.Emph */
+.codehilite .ges { color: #ABB2BF } /* Generic.EmphStrong */
+.codehilite .gr { color: #E06C75 } /* Generic.Error */
+.codehilite .gh { color: #ABB2BF; font-weight: bold } /* Generic.Heading */
+.codehilite .gi { color: #98C379 } /* Generic.Inserted */
+.codehilite .go { color: #E06C75 } /* Generic.Output */
+.codehilite .gp { color: #ABB2BF } /* Generic.Prompt */
+.codehilite .gs { color: #ABB2BF; font-weight: bold } /* Generic.Strong */
+.codehilite .gu { color: #ABB2BF; font-weight: bold } /* Generic.Subheading */
+.codehilite .gt { color: #E06C75 } /* Generic.Traceback */
+.codehilite .kc { color: #E5C07B } /* Keyword.Constant */
+.codehilite .kd { color: #C678DD } /* Keyword.Declaration */
+.codehilite .kn { color: #C678DD } /* Keyword.Namespace */
+.codehilite .kp { color: #C678DD } /* Keyword.Pseudo */
+.codehilite .kr { color: #C678DD } /* Keyword.Reserved */
+.codehilite .kt { color: #E5C07B } /* Keyword.Type */
+.codehilite .ld { color: #ABB2BF } /* Literal.Date */
+.codehilite .m { color: #D19A66 } /* Literal.Number */
+.codehilite .s { color: #98C379 } /* Literal.String */
+.codehilite .na { color: #E06C75 } /* Name.Attribute */
+.codehilite .nb { color: #E5C07B } /* Name.Builtin */
+.codehilite .nc { color: #E5C07B } /* Name.Class */
+.codehilite .no { color: #E06C75 } /* Name.Constant */
+.codehilite .nd { color: #61AFEF } /* Name.Decorator */
+.codehilite .ni { color: #E06C75 } /* Name.Entity */
+.codehilite .ne { color: #E06C75 } /* Name.Exception */
+.codehilite .nf { color: #61AFEF; font-weight: bold } /* Name.Function */
+.codehilite .nl { color: #E06C75 } /* Name.Label */
+.codehilite .nn { color: #E06C75 } /* Name.Namespace */
+.codehilite .nx { color: #E06C75 } /* Name.Other */
+.codehilite .py { color: #E06C75 } /* Name.Property */
+.codehilite .nt { color: #E06C75 } /* Name.Tag */
+.codehilite .nv { color: #E06C75 } /* Name.Variable */
+.codehilite .ow { color: #56B6C2 } /* Operator.Word */
+.codehilite .pm { color: #ABB2BF } /* Punctuation.Marker */
+.codehilite .w { color: #ABB2BF } /* Text.Whitespace */
+.codehilite .mb { color: #D19A66 } /* Literal.Number.Bin */
+.codehilite .mf { color: #D19A66 } /* Literal.Number.Float */
+.codehilite .mh { color: #D19A66 } /* Literal.Number.Hex */
+.codehilite .mi { color: #D19A66 } /* Literal.Number.Integer */
+.codehilite .mo { color: #D19A66 } /* Literal.Number.Oct */
+.codehilite .sa { color: #98C379 } /* Literal.String.Affix */
+.codehilite .sb { color: #98C379 } /* Literal.String.Backtick */
+.codehilite .sc { color: #98C379 } /* Literal.String.Char */
+.codehilite .dl { color: #98C379 } /* Literal.String.Delimiter */
+.codehilite .sd { color: #98C379 } /* Literal.String.Doc */
+.codehilite .s2 { color: #98C379 } /* Literal.String.Double */
+.codehilite .se { color: #98C379 } /* Literal.String.Escape */
+.codehilite .sh { color: #98C379 } /* Literal.String.Heredoc */
+.codehilite .si { color: #98C379 } /* Literal.String.Interpol */
+.codehilite .sx { color: #98C379 } /* Literal.String.Other */
+.codehilite .sr { color: #98C379 } /* Literal.String.Regex */
+.codehilite .s1 { color: #98C379 } /* Literal.String.Single */
+.codehilite .ss { color: #98C379 } /* Literal.String.Symbol */
+.codehilite .bp { color: #E5C07B } /* Name.Builtin.Pseudo */
+.codehilite .fm { color: #56B6C2; font-weight: bold } /* Name.Function.Magic */
+.codehilite .vc { color: #E06C75 } /* Name.Variable.Class */
+.codehilite .vg { color: #E06C75 } /* Name.Variable.Global */
+.codehilite .vi { color: #E06C75 } /* Name.Variable.Instance */
+.codehilite .vm { color: #E06C75 } /* Name.Variable.Magic */
+.codehilite .il { color: #D19A66 } /* Literal.Number.Integer.Long */</style>
+<script>
+// mobile menu
+const sb=document.getElementById('sidebar'),mb=document.getElementById('menuBtn');
+if(mb){mb.onclick=()=>sb.classList.toggle('open');sb.addEventListener('click',e=>{if(e.target.tagName==='A')sb.classList.remove('open')});}
+const tc=document.getElementById('tocClose');if(tc){tc.onclick=()=>sb.classList.remove('open');}
+// progress
+const prog=document.getElementById('progress');
+addEventListener('scroll',()=>{const h=document.body.scrollHeight-innerHeight;prog.style.width=(h>0?scrollY/h*100:0)+'%'});
+// code chrome + copy
+document.querySelectorAll('.codehilite, pre').forEach(block=>{
+  if(block.parentElement.classList.contains('codehilite'))return;
+  const bar=document.createElement('div');bar.className='code-bar';
+  bar.innerHTML='<span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>';
+  block.appendChild(bar);
+  const btn=document.createElement('button');btn.className='copy-btn';btn.textContent='Copy';
+  btn.onclick=()=>{const t=block.querySelector('code')?.innerText||block.innerText;
+    navigator.clipboard.writeText(t.replace(/\nCopy$/,''));btn.textContent='Copied!';btn.classList.add('done');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('done')},1500)};
+  block.appendChild(btn);
+});
+// callouts by leading emoji
+const map={'\u{1F511}':'cl-key','\u{1F4A1}':'cl-tip','✅':'cl-ok','❌':'cl-no','\u{1F3AF}':'cl-goal','\u{1F6E0}':'cl-goal'};
+document.querySelectorAll('blockquote').forEach(q=>{const t=(q.textContent||'').trim();for(const e in map){if(t.startsWith(e)){q.classList.add(map[e]);break}}});
+// check-off
+function makeCheckable(rx){document.querySelectorAll('h2,h3').forEach(h=>{if(!rx.test(h.textContent))return;let el=h.nextElementSibling;
+  while(el&&!/^H[1-3]$/.test(el.tagName)){if(el.tagName==='OL'||el.tagName==='UL'){el.classList.add('checkable');
+    el.querySelectorAll(':scope>li').forEach(li=>{const key='cwc:'+location.pathname+':'+li.textContent.slice(0,60);
+      if(localStorage.getItem(key))li.classList.add('checked');
+      li.addEventListener('click',ev=>{if(ev.target.tagName==='A')return;li.classList.toggle('checked');
+        li.classList.contains('checked')?localStorage.setItem(key,'1'):localStorage.removeItem(key)});});}el=el.nextElementSibling;}});}
+makeCheckable(/learning objectives|milestones/i);
+// scrollspy
+const links=[...document.querySelectorAll('.toc a')];
+const heads=links.map(a=>a.getAttribute('href')).filter(h=>h&&h.startsWith('#')).map(h=>document.getElementById(h.slice(1))).filter(Boolean);
+const spy=()=>{let cur=heads[0]?.id;for(const h of heads){if(h.getBoundingClientRect().top<150)cur=h.id}
+  links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur))};
+addEventListener('scroll',spy);spy();
+</script>
+<script type="module" src="../assets/sync.js"></script></body>
+</html>

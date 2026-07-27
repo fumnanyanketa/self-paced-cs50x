@@ -1,0 +1,6 @@
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+# nothing here needs a build step; the site is plain static HTML

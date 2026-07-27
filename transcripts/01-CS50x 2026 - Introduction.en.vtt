@@ -1,0 +1,127 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:00.000 --> 00:00:01.680
+DAVID MALAN: Hello, world.
+
+00:00:01.680 --> 00:00:06.320
+My name is David Malan, and this is
+CS50, Harvard University's introduction
+
+00:00:06.320 --> 00:00:08.660
+to the intellectual
+enterprises of computer science
+
+00:00:08.660 --> 00:00:12.450
+and the art of programming for
+majors and non-majors alike.
+
+00:00:12.450 --> 00:00:15.110
+Indeed, whether you're among
+those less comfortable or more
+
+00:00:15.110 --> 00:00:18.110
+comfortable with technology, this
+course, and computer science more
+
+00:00:18.110 --> 00:00:20.310
+generally, are in fact for you.
+
+00:00:20.310 --> 00:00:24.470
+And it is free via platforms like
+edX, YouTube, Apple TV, Google TV,
+
+00:00:24.470 --> 00:00:26.640
+and CS50's own website.
+
+00:00:26.640 --> 00:00:29.930
+Through this course, you'll learn
+how to think more methodically, more
+
+00:00:29.930 --> 00:00:31.650
+algorithmically, so to speak.
+
+00:00:31.650 --> 00:00:33.680
+You'll learn how to
+communicate succinctly
+
+00:00:33.680 --> 00:00:37.980
+and precisely, and you'll learn how to
+solve problems efficiently with code.
+
+00:00:37.980 --> 00:00:40.250
+Indeed, this course begins
+at the very beginning
+
+00:00:40.250 --> 00:00:43.770
+with a very friendly graphical
+programming language called Scratch,
+
+00:00:43.770 --> 00:00:46.100
+via which you'll write code
+by dragging and dropping
+
+00:00:46.100 --> 00:00:48.140
+puzzle pieces that
+only interlock together
+
+00:00:48.140 --> 00:00:50.250
+if it makes logical sense to do so.
+
+00:00:50.250 --> 00:00:53.970
+We'll then transition to C, a more
+traditional keyboard-based language,
+
+00:00:53.970 --> 00:00:57.630
+via which you'll learn how computers
+work underneath the hood, so to speak.
+
+00:00:57.630 --> 00:00:59.670
+Thereafter, the course
+moves on to Python,
+
+00:00:59.670 --> 00:01:03.350
+a more modern language via which you can
+analyze data, automate processes, build
+
+00:01:03.350 --> 00:01:07.190
+web applications, and more, and SQL,
+via which you can read and write
+
+00:01:07.190 --> 00:01:09.900
+lots and lots of data in databases.
+
+00:01:09.900 --> 00:01:13.670
+Toward course's end, we'll dive
+into HTML, CSS, and JavaScript,
+
+00:01:13.670 --> 00:01:16.920
+languages with which you can create
+web apps and mobile apps alike.
+
+00:01:16.920 --> 00:01:21.320
+And at course's end, you'll design and
+implement your very own final project
+
+00:01:21.320 --> 00:01:22.830
+for the world to see.
+
+00:01:22.830 --> 00:01:25.230
+You will have learned how to program.
+
+00:01:25.230 --> 00:01:27.410
+And if at any point
+you get stuck, there's
+
+00:01:27.410 --> 00:01:32.210
+a whole CS50 community to support you,
+as well as nowadays a virtual rubber
+
+00:01:32.210 --> 00:01:36.840
+duck of whom you can also ask
+questions anytime, thanks to AI.
+
+00:01:36.840 --> 00:01:41.500
+All this and more, this is CS50.
+

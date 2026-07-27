@@ -1,0 +1,994 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 10 · Lesson 37: CSS and JavaScript | Self-Paced CS50x</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0a1a2f; --navy-2:#0f243d; --navy-3:#15314f;
+  --teal:#18c4a0; --teal-d:#0fa385; --teal-soft:#e4f8f2;
+  --coral:#f24d63; --coral-d:#d83a50; --coral-soft:#feecee;
+  --ink:#152230; --muted:#5f6c7b; --line:#e9eef2; --bg:#ffffff;
+  --soft:#f4fbf9; --card:#ffffff; --code-bg:#21252b; --max:780px;
+  --k:#2f8fb3; --k-bg:#e8f4f9; --tip:#c4881f; --tip-bg:#fdf4e3; --ok:#1f9d6b; --ok-bg:#e6f6ef;
+  --no:#e0533f; --no-bg:#fdecea; --goal:#7b54c9; --goal-bg:#f1ebfb;
+  --shadow:0 10px 30px rgba(13,30,52,.08); --shadow-sm:0 4px 14px rgba(13,30,52,.07);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.72;font-size:17px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+#progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--teal),var(--coral));z-index:200;transition:width .1s linear}
+a{color:var(--teal-d);text-decoration:none}
+a:hover{color:var(--coral)}
+h1,h2,h3{font-family:Poppins,sans-serif;color:var(--ink);letter-spacing:-.01em}
+.accent{color:var(--coral)}
+.wrap{max-width:1200px;margin:0 auto;padding:0 28px}
+
+/* ---------- Top welcome strip ---------- */
+.topbar{background:var(--navy);color:#cdd8e4;font-size:13.5px}
+.topbar .wrap{display:flex;justify-content:space-between;align-items:center;height:42px;gap:18px}
+.topbar b{color:#fff;font-weight:600}
+.topbar .right{display:flex;gap:18px;align-items:center}
+.topbar a{color:#cdd8e4}.topbar a:hover{color:var(--teal)}
+
+/* ---------- Nav ---------- */
+nav.bar{background:var(--navy-2);position:sticky;top:0;z-index:120;box-shadow:0 2px 20px rgba(0,0,0,.25)}
+nav.bar .wrap{display:flex;align-items:center;height:68px;gap:26px}
+.logo{font-family:Poppins;font-weight:800;font-size:22px;color:#fff;letter-spacing:.02em;cursor:pointer;text-decoration:none}
+a.logo:hover{color:var(--teal)}
+.lessonnav{display:flex;gap:14px;align-items:stretch;margin:60px 0 0;flex-wrap:wrap}
+.lessonnav .ln{flex:1;min-width:200px;display:flex;flex-direction:column;gap:3px;border:1px solid var(--line);border-radius:14px;padding:16px 18px;color:var(--muted);transition:.15s;background:#fff}
+.lessonnav .ln:hover{border-color:var(--teal);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.lessonnav .ln .dir{font-size:13px;font-weight:600;color:var(--teal-d)}
+.lessonnav .ln b{color:var(--ink);font-family:Poppins;font-size:15px}
+.lessonnav .ln.next{text-align:right}
+.lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
+.lessonnav .ln.home b{color:var(--teal-d)}
+.logo .dot{color:var(--teal)}
+.navlinks{display:flex;gap:24px;margin-left:8px}
+.navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
+.navlinks a:hover{color:var(--teal)}
+.nav-cta{margin-left:auto;display:flex;gap:12px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:9px;border:none;cursor:pointer;font-family:Inter;font-weight:600;border-radius:999px;transition:.18s;font-size:15px;text-decoration:none}
+.btn-primary{background:var(--teal);color:#04231c;padding:12px 22px}
+.btn-primary:hover{background:var(--teal-d);color:#fff;transform:translateY(-1px)}
+.btn-outline{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.35);padding:10px 20px}
+.btn-outline:hover{border-color:var(--teal);color:var(--teal)}
+.btn-coral{background:var(--coral);color:#fff;padding:12px 22px}
+.btn-coral:hover{background:var(--coral-d);color:#fff;transform:translateY(-1px)}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;background:radial-gradient(120% 120% at 80% 0%,var(--navy-3),var(--navy) 60%);color:#eaf1f8;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.25;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.blob{position:absolute;border-radius:50%;filter:blur(8px);opacity:.5;z-index:0}
+.blob.t{width:230px;height:230px;background:rgba(24,196,160,.30);top:-60px;right:8%}
+.blob.c{width:160px;height:160px;background:rgba(242,77,99,.28);bottom:-40px;left:42%}
+.squiggle{position:absolute;z-index:1;opacity:.85}
+.hero .wrap{position:relative;z-index:2;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;padding:70px 28px 90px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--teal);font-weight:600;font-size:14px;letter-spacing:.03em;text-transform:uppercase;margin-bottom:18px}
+.hero h1{font-size:54px;line-height:1.08;font-weight:800;margin:0 0 20px;color:#fff}
+.hero .lead{font-size:18px;color:#b9c6d6;max-width:34em;margin:0 0 30px}
+.hero-actions{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:30px}
+.play{display:inline-flex;align-items:center;gap:12px;color:#fff;font-weight:600}
+.play .circ{width:52px;height:52px;border-radius:50%;background:var(--coral);display:grid;place-items:center;box-shadow:0 8px 22px rgba(242,77,99,.45);font-size:16px;animation:pulse 2.4s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(242,77,99,.45)}70%{box-shadow:0 0 0 16px rgba(242,77,99,0)}100%{box-shadow:0 0 0 0 rgba(242,77,99,0)}}
+.chips{display:flex;gap:10px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:#dce6f0;padding:8px 14px;border-radius:999px;font-size:13.5px;font-weight:500}
+.chip b{color:#fff}
+/* hero card */
+.hero-card{position:relative;background:#fff;color:var(--ink);border-radius:22px;padding:26px;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.hero-card .ring{position:absolute;top:-26px;right:-18px;width:96px;height:96px;background:#fff;border-radius:50%;box-shadow:var(--shadow);display:grid;place-items:center}
+.hero-card .ring svg{transform:rotate(-90deg)}
+.hero-card .ring .lab{position:absolute;font-family:Poppins;font-weight:700;font-size:18px;color:var(--teal-d)}
+.hero-card h3{margin:4px 0 14px;font-size:19px}
+.hero-card ul{list-style:none;margin:0 0 18px;padding:0}
+.hero-card li{display:flex;gap:11px;align-items:flex-start;padding:9px 0;border-bottom:1px dashed var(--line);font-size:14.5px;color:#36424f}
+.hero-card li:last-child{border-bottom:none}
+.hero-card li .ic{font-size:17px;line-height:1.4}
+.float-badge{position:absolute;left:18px;bottom:-26px;background:#fff;border-radius:14px;box-shadow:var(--shadow);padding:12px 16px;display:flex;gap:10px;align-items:center;font-size:13px;font-weight:600;color:var(--ink)}
+.float-badge .n{font-family:Poppins;font-weight:800;color:var(--coral);font-size:20px}
+
+/* ---------- Content layout ---------- */
+.layout{display:grid;grid-template-columns:268px minmax(0,1fr);gap:46px;max-width:1200px;margin:0 auto;padding:0 28px}
+aside{position:sticky;top:84px;align-self:start;height:calc(100vh - 100px);overflow-y:auto;padding:26px 0}
+.toc-card{background:var(--soft);border:1px solid var(--line);border-radius:18px;padding:18px}
+.toc-close{display:none;position:absolute;top:-6px;right:-4px;width:36px;height:36px;border:none;background:var(--navy-2);color:#fff;border-radius:50%;font-size:22px;line-height:1;cursor:pointer}
+.toc-close:hover{background:var(--coral)}
+.toc-title{font-family:Poppins;font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--teal-d);margin:0 0 10px;font-weight:700}
+.toc ul{list-style:none;margin:0;padding:0}
+.toc a{display:block;color:var(--muted);font-size:14px;padding:6px 12px;border-radius:8px;border-left:2px solid transparent;line-height:1.4}
+.toc a:hover{color:var(--ink);background:#fff}
+.toc a.active{color:var(--teal-d);background:#fff;border-left-color:var(--teal);font-weight:600}
+.toc .toc li li a{padding-left:24px;font-size:13px}
+.toc a.toc-capstone{color:var(--coral);font-weight:600}
+main{padding:54px 0 120px;min-width:0}
+article{max-width:var(--max)}
+
+/* typography */
+article h2{font-size:30px;margin:56px 0 16px;font-weight:700;position:relative}
+article h2::before{content:"\2726";color:var(--teal);font-size:18px;margin-right:10px;vertical-align:2px}
+article h3{font-size:21px;margin:34px 0 10px;font-weight:600}
+article h2+h3{margin-top:18px}
+article p,article li{font-size:16.5px}
+article ul,article ol{padding-left:24px}
+article li{margin:7px 0}
+article strong{font-weight:700;color:#0f1b28}
+hr{border:none;height:1px;background:var(--line);margin:42px 0}
+
+/* tables */
+table{border-collapse:separate;border-spacing:0;width:100%;margin:24px 0;font-size:15px;border:1px solid var(--line);border-radius:14px;overflow:hidden;display:block;overflow-x:auto}
+th,td{padding:12px 15px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--navy-2);color:#eaf1f8;font-family:Poppins;font-weight:600;font-size:14px}
+tr:last-child td{border-bottom:none}
+tbody tr:nth-child(even){background:var(--soft)}
+
+/* inline + block code */
+code{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.86em;background:var(--teal-soft);color:#0c6a55;padding:.13em .42em;border-radius:6px}
+.codehilite,pre{position:relative;background:var(--code-bg);border-radius:14px;margin:22px 0;overflow:hidden;box-shadow:var(--shadow-sm)}
+.codehilite pre{margin:0;border-radius:0;box-shadow:none;background:transparent}
+.codehilite pre,pre>code{display:block;padding:42px 18px 18px;overflow-x:auto}
+.codehilite code,pre code{background:none;color:#dfe6ee;padding:0;font-size:13.5px;line-height:1.7}
+.code-bar{position:absolute;top:0;left:0;right:0;height:34px;display:flex;align-items:center;gap:7px;padding:0 15px;background:rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.07)}
+.code-bar .dot{width:11px;height:11px;border-radius:50%}
+.dot.r{background:#ff5f57}.dot.y{background:#febc2e}.dot.g{background:#28c840}
+.copy-btn{position:absolute;top:5px;right:9px;z-index:3;background:rgba(255,255,255,.08);color:#dfe6ee;border:1px solid rgba(255,255,255,.14);border-radius:8px;font-size:12px;padding:4px 11px;cursor:pointer;font-family:Inter;transition:.15s}
+.copy-btn:hover{background:var(--teal);border-color:var(--teal);color:#04231c}
+.copy-btn.done{background:var(--teal);color:#04231c;border-color:var(--teal)}
+
+/* callouts */
+blockquote{margin:24px 0;padding:16px 20px;border-radius:14px;background:var(--soft);border:1px solid var(--line);border-left:5px solid var(--teal)}
+blockquote p{margin:7px 0}blockquote p:first-child{margin-top:0}blockquote p:last-child{margin-bottom:0}
+blockquote.cl-key{background:var(--k-bg);border-left-color:var(--k);border-color:transparent}
+blockquote.cl-tip{background:var(--tip-bg);border-left-color:var(--tip);border-color:transparent}
+blockquote.cl-ok{background:var(--ok-bg);border-left-color:var(--ok);border-color:transparent}
+blockquote.cl-no{background:var(--no-bg);border-left-color:var(--no);border-color:transparent}
+blockquote.cl-goal{background:var(--goal-bg);border-left-color:var(--goal);border-color:transparent}
+
+/* capstone banner */
+h2.capstone-h{background:linear-gradient(115deg,var(--navy),var(--navy-3));color:#fff;border-radius:20px;padding:30px 28px 26px;margin-top:64px;box-shadow:0 20px 50px rgba(10,26,47,.3);overflow:hidden;position:relative}
+h2.capstone-h::before{content:"\1F6E0\FE0F  HANDS-ON PROJECT";display:block;font-family:Poppins;font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--teal);margin:0 0 8px}
+h2.capstone-h::after{content:"";position:absolute;width:150px;height:150px;border-radius:50%;background:rgba(24,196,160,.25);filter:blur(10px);top:-50px;right:-30px}
+
+/* check-off */
+.checkable{list-style:none;padding-left:0}
+.checkable li{position:relative;padding-left:36px;cursor:pointer;margin:9px 0}
+.checkable li::before{content:"";position:absolute;left:0;top:3px;width:22px;height:22px;border:2px solid var(--teal);border-radius:7px;background:#fff;transition:.15s}
+.checkable li.checked::before{background:var(--teal);border-color:var(--teal)}
+.checkable li.checked::after{content:"\2713";position:absolute;left:5px;top:1px;color:#fff;font-weight:800;font-size:15px}
+.checkable li.checked{color:var(--muted)}
+
+/* footer */
+footer.site{background:var(--navy);color:#aebccb;margin-top:90px}
+footer.site .wrap{padding:46px 28px;display:flex;justify-content:space-between;gap:26px;flex-wrap:wrap;align-items:center}
+footer.site .logo{font-size:20px}
+footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
+
+#menuBtn{display:none}
+@media(max-width:920px){
+  .topbar{display:none}
+  .nav-cta{display:none}
+  .float-badge{display:none}
+  nav.bar .wrap{gap:14px;height:60px}
+  .wrap{padding:0 20px}
+  .logo{font-size:18px;white-space:nowrap}
+  .hero .wrap{grid-template-columns:1fr;gap:30px;padding:42px 20px 56px}
+  .hero h1{font-size:33px}
+  .hero .lead{font-size:16.5px}
+  .hero-actions{gap:14px}
+  .hero-actions .btn-primary{flex:1;justify-content:center}
+  .layout{grid-template-columns:1fr;gap:0}
+  aside{position:fixed;top:0;left:0;width:84vw;max-width:320px;height:100vh;background:#fff;z-index:130;transform:translateX(-100%);transition:.25s;box-shadow:var(--shadow);padding:24px}
+  aside.open{transform:none}
+  #menuBtn{display:inline-flex}
+  .toc-close{display:block}
+  .navlinks{display:none}
+  main{padding:34px 0 80px}
+  body{font-size:16px}
+  article h2{font-size:25px}
+  h2.capstone-h{padding:24px 20px}
+}
+@media(max-width:420px){
+  .hero h1{font-size:29px}
+  .hero-actions{flex-direction:column;align-items:stretch}
+  .hero-actions .play{justify-content:center}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<div class="topbar"><div class="wrap">
+  <div>&#10024; Welcome to <b>Self-Paced CS50x</b> &middot; a self-paced course</div>
+  <div class="right"><span>CS50x 2026 · Harvard University · David J. Malan</span></div>
+</div></div>
+
+<nav class="bar"><div class="wrap">
+  <button class="btn btn-outline" id="menuBtn" style="padding:8px 14px">&#9776;</button>
+  <a class="logo" href="..\index.html">Self-Paced CS50x<span class="dot">.</span></a>
+  <div class="navlinks">
+    <a href="..\index.html">All lessons</a>
+    <a href="#overview">Overview</a>
+    <a href="#capstone">Capstone</a>
+  </div>
+  <div class="nav-cta">
+    <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
+  </div>
+</div></nav>
+
+<header class="hero">
+  <span class="blob t"></span><span class="blob c"></span>
+  <svg class="squiggle" style="top:120px;left:46%;" width="90" height="26" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#18c4a0" stroke-width="4" stroke-linecap="round"/></svg>
+  <svg class="squiggle" style="bottom:60px;right:40%;" width="70" height="22" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#f24d63" stroke-width="4" stroke-linecap="round"/></svg>
+  <div class="wrap" id="overview">
+    <div>
+      <span class="eyebrow">&#10022; Module 10 · Lesson 37</span>
+      <h1>CSS and <span class="accent">JavaScript</span></h1>
+      <p class="lead">You&#x27;ll take the plain HTML page you already wrote and give it a personality, first with your own CSS selectors and one hover effect, then with Bootstrap&#x27;s ready-made styles pulled in from a CDN, and then bring it to life with a few lines of JavaScript that reach into the page&#x27;s DOM and change what the user sees the instant they click, with no reload.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
+        <a class="play" href="https://www.youtube.com/watch?v=yYst7puZXjw" target="_blank" rel="noopener"><span class="circ">&#9654;</span> Watch the talk</a>
+      </div>
+      <div class="chips">
+        <span class="chip">&#127908; <b>David J. Malan</b></span>
+        <span class="chip">&#9201; <b>60 minutes</b></span>
+        <span class="chip">&#128296; <b>Hands-on capstone</b></span>
+      </div>
+    </div>
+    <div style="position:relative">
+      <div class="hero-card">
+        <div class="ring">
+          <svg width="74" height="74"><circle cx="37" cy="37" r="31" stroke="#eef2f5" stroke-width="7" fill="none"/><circle cx="37" cy="37" r="31" stroke="#18c4a0" stroke-width="7" fill="none" stroke-linecap="round" stroke-dasharray="195" stroke-dashoffset="40"/></svg>
+          <span class="lab">&#10022;</span>
+        </div>
+        <h3>What you&#39;ll get</h3>
+        <ul>
+          <li><span class="ic">&#9989;</span><span>Plain-language teaching with every term defined</span></li>
+          <li><span class="ic">&#128221;</span><span>Code snippets pulled from the talk</span></li>
+          <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
+          <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
+        </ul>
+        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <aside id="sidebar"><div class="toc-card">
+    <button class="toc-close" id="tocClose" aria-label="Close menu">&times;</button>
+    <p class="toc-title">On this page</p>
+    <div class="toc">
+<ul>
+<li><a href="#in-one-sentence">In one sentence</a></li>
+<li><a href="#first-principles-companion">First-principles companion</a></li>
+<li><a href="#a-few-plain-language-basics-first">A few plain-language basics first</a></li>
+<li><a href="#why-this-lesson-matters">Why this lesson matters</a></li>
+<li><a href="#learning-objectives">Learning objectives</a></li>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#part-1-from-inline-styles-to-the-style-tag-and-the-cascade">Part 1: From inline styles to the style tag (and the cascade)</a><ul>
+<li><a href="#the-style-attribute-csss-first-clumsiest-home">The style attribute: CSS's first, clumsiest home</a></li>
+<li><a href="#the-cascade-say-it-once-on-the-parent">The cascade: say it once, on the parent</a></li>
+<li><a href="#factoring-it-out-the-style-tag">Factoring it out: the style tag</a></li>
+</ul>
+</li>
+<li><a href="#part-2-selectors-semantic-tags-entities-and-bootstrap">Part 2: Selectors, semantic tags, entities, and Bootstrap</a><ul>
+<li><a href="#type-selectors-arent-reusable-enough">Type selectors aren't reusable enough</a></li>
+<li><a href="#semantic-tags-hints-for-machines-not-just-humans">Semantic tags: hints for machines, not just humans</a></li>
+<li><a href="#html-entities-characters-html-cant-type-directly">HTML entities: characters HTML can't type directly</a></li>
+<li><a href="#hover-a-selector-for-a-state-not-a-tag">:hover: a selector for a state, not a tag</a></li>
+<li><a href="#bootstrap-someone-elses-css-one-link-away">Bootstrap: someone else's CSS, one link away</a></li>
+</ul>
+</li>
+<li><a href="#part-3-javascript-syntax-you-already-know-wearing-new-punctuation">Part 3: JavaScript (syntax you already know, wearing new punctuation)</a><ul>
+<li><a href="#the-one-real-programming-language-of-the-day">The one real programming language of the day</a></li>
+<li><a href="#the-dom-but-now-you-can-change-it">The DOM, but now you can change it</a></li>
+<li><a href="#three-building-blocks-queryselector-addeventlistener-innerhtml">Three building blocks: querySelector, addEventListener, innerHTML</a></li>
+</ul>
+</li>
+<li><a href="#part-4-the-dom-live-six-demos-that-bring-it-together">Part 4: The DOM, live (six demos that bring it together)</a><ul>
+<li><a href="#1-a-greeting-form">1. A greeting form</a></li>
+<li><a href="#2-color-change-buttons">2. Color-change buttons</a></li>
+<li><a href="#3-the-blink-tag-revived">3. The blink tag, revived</a></li>
+<li><a href="#4-autocomplete-search">4. Autocomplete search</a></li>
+<li><a href="#5-a-bootstrap-navbar">5. A Bootstrap navbar</a></li>
+<li><a href="#6-geolocation">6. Geolocation</a></li>
+</ul>
+</li>
+<li><a href="#key-takeaways">Key takeaways</a></li>
+<li><a href="#common-pitfalls">Common pitfalls</a></li>
+<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: Give Your Home Page a Personality</a><ul>
+<li><a href="#what-you-will-build">What you will build</a></li>
+<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
+<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
+</ul>
+</li>
+<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
+<li><a href="#exercise-1-john-harvards-page-twice-foundational">Exercise 1: John Harvard's page, twice (foundational)</a></li>
+<li><a href="#exercise-2-three-button-mood-ring-intermediate">Exercise 2: Three-button mood ring (intermediate)</a></li>
+<li><a href="#exercise-3-tiny-autocomplete-advanced">Exercise 3: Tiny autocomplete (advanced)</a></li>
+</ul>
+</li>
+<li><a href="#cheat-sheet">Cheat sheet</a></li>
+<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
+</ul>
+</div>
+
+  </div></aside>
+  <main id="start">
+    <article>
+      <hr />
+<h2 id="in-one-sentence">In one sentence</h2>
+<p>You'll take the plain HTML page you already wrote and give it a personality, first with your own CSS selectors and one hover effect, then with Bootstrap's ready-made styles pulled in from a CDN, and then bring it to life with a few lines of JavaScript that reach into the page's DOM and change what the user sees the instant they click, with no reload.</p>
+<blockquote>
+<p>🎯 <strong>Where this lesson is heading.</strong> It builds to a hands-on <strong>Capstone Project</strong> where you restyle your Lesson 36 home page three times over: your own CSS, then Bootstrap, then one JavaScript button that changes the page's colors live. Everything before the Capstone teaches the skills you will use there. If you want to see the finish line first, jump to the <strong>"Capstone Project"</strong> section, then come back.</p>
+</blockquote>
+<h2 id="first-principles-companion">First-principles companion</h2>
+<blockquote>
+<p>💡 <strong>The durable idea behind this lesson.</strong> CSS frameworks like Bootstrap will be replaced by newer ones, and browsers will keep adding features, but the rules for what a selector or a property or a method like <code>addEventListener</code> actually means are written down in places that outlive any one framework.</p>
+<ul>
+<li><strong><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">MDN Web Docs: CSS</a></strong> and <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">MDN Web Docs: JavaScript</a></strong>, maintained by the Mozilla Foundation and the broader web standards community. This is the reference every working developer reaches for: plain-language, example-driven explanations of exactly what a selector, a property, or a method does.</li>
+<li><strong><a href="https://tc39.es/ecma262/">The ECMAScript Language Specification</a></strong>, maintained by Ecma International's TC39 committee. This is the formal specification that every JavaScript engine (Chrome's V8, Firefox's SpiderMonkey, and the rest) is built to satisfy: the rulebook behind the <code>let</code>, <code>for</code>, and <code>function</code> syntax you're about to see.</li>
+</ul>
+</blockquote>
+<h2 id="a-few-plain-language-basics-first">A few plain-language basics first</h2>
+<p>This lesson uses some everyday terms. Here they are in plain words:</p>
+<ul>
+<li><strong>CSS (Cascading Style Sheets):</strong> the language that controls how an HTML page <em>looks</em>: colors, sizes, spacing, layout, as opposed to HTML, which only controls what content exists.</li>
+<li><strong>Selector:</strong> the part of a CSS rule that says <em>which</em> HTML elements the rule applies to: by tag name, by class, or by a unique ID.</li>
+<li><strong>Class and ID:</strong> two ways to label an HTML element so CSS (or JavaScript) can find it. A class (written <code>.name</code> in CSS) can be reused on many elements at once; an ID (written <code>#name</code>) is meant for exactly one element on the page.</li>
+<li><strong>Cascade:</strong> the "C" in CSS: a style property set on a parent element automatically flows down to everything nested inside it, unless a more specific rule overrides it.</li>
+<li><strong>DOM (Document Object Model):</strong> the tree-shaped structure the browser builds in memory from your HTML. You met this in Lesson 36. CSS paints the nodes of that tree; JavaScript is what can add, remove, or change them while the page is running.</li>
+<li><strong>Event:</strong> something that happens on a page that code can listen for and react to: a click, a key going up, a form being submitted.</li>
+<li><strong>Method:</strong> a function that belongs to a specific object, called with a dot, like <code>document.querySelector(...)</code>: the same dot notation you've already used for structs in C and objects in Python.</li>
+<li><strong>CDN (Content Delivery Network):</strong> a server run by someone else that hosts a popular file (like Bootstrap's CSS) so you can link to their copy instead of writing or hosting it yourself.</li>
+</ul>
+<p>You do not need to memorise these. Each is explained again the first time it matters.</p>
+<h2 id="why-this-lesson-matters">Why this lesson matters</h2>
+<p>Lesson 36 gave you the skeleton of a page: tags, attributes, the tree the browser builds. Today you give that skeleton a surface, and then a nervous system. Malan draws the line between the two new languages of the day like this:</p>
+<blockquote>
+<p>"CSS is like the skin, the aesthetics thereof, the final mile that actually allows you to control the positioning of things more precisely, the colors, the font sizes, all of the aesthetics." (David Malan)</p>
+</blockquote>
+<p>Nothing here starts from zero. The hex color codes from Lesson 17 (<code>#FF0000</code>) are exactly the values you'll type into a CSS <code>color</code> property, and the dot notation you used for C structs and Python objects is the same dot notation behind <code>document.querySelector(...)</code>. And it points forward too: every page your Module 11 Flask application serves will load this same CSS and this same JavaScript, unchanged, so this lesson is, quite literally, the entire look and feel of the database-backed web app you finish this course with.</p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<p>By the end of this lesson you will be able to:</p>
+<ol>
+<li>Apply an inline <code>style</code> attribute, then refactor repeated styles into a single <code>&lt;style&gt;</code> tag using type, class, and ID selectors.</li>
+<li>Explain the "cascade" in CSS, how a property set on a parent flows down to its children, and use it to remove repetition.</li>
+<li>Use the semantic tags <code>header</code>, <code>main</code>, and <code>footer</code>, add an HTML entity, and add a <code>:hover</code> rule that changes an element on mouseover.</li>
+<li>Load a CSS framework (Bootstrap) from a CDN with one <code>&lt;link&gt;</code> tag and apply its classes without writing new CSS.</li>
+<li>Read a short JavaScript snippet and explain how its variables, conditionals, and loops compare to the equivalent C or Python code.</li>
+<li>Use <code>document.querySelector()</code>, <code>addEventListener()</code>, and <code>innerHTML</code> (or <code>.style</code>) together to find a DOM node, listen for a user event, and change the page live.</li>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li><strong>Module 10 · Lesson 36: Building pages with HTML</strong>: you'll be styling and scripting the exact <code>home.html</code> you built there, and you already know the DOM tree that CSS and JavaScript both operate on.</li>
+<li><strong>Module 5 · Lesson 17: Pixels, hex, and addresses</strong>: you already know hex color codes like <code>#FF0000</code>; today they show up again as CSS values.</li>
+<li><strong>Module 2 · Lesson 07: Conditionals and loops</strong> (or your general comfort with C or Python): this lesson compares JavaScript's syntax directly against what you already know.</li>
+<li>A cs50.dev (GitHub Codespaces) account with <code>http-server</code>, from Lesson 36.</li>
+</ul>
+<hr />
+<h2 id="part-1-from-inline-styles-to-the-style-tag-and-the-cascade">Part 1: From inline styles to the style tag (and the cascade)</h2>
+<h3 id="the-style-attribute-csss-first-clumsiest-home">The style attribute: CSS's first, clumsiest home</h3>
+<p>The simplest way to stylize one HTML element is to add a <code>style</code> attribute directly on its tag, with semicolon-separated <code>key: value</code> pairs. CSS calls these <strong>properties</strong>, the same key-value idea as HTML attributes, just with a colon instead of an equals sign:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;font-size: large; text-align: center;&quot;</span><span class="p">&gt;</span>John Harvard<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">div</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;font-size: medium; text-align: center;&quot;</span><span class="p">&gt;</span>Welcome to my home page.<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">div</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;font-size: small; text-align: center;&quot;</span><span class="p">&gt;</span>Copyright <span class="ni">&amp;#169;</span> John Harvard<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div>
+
+<p>This works, but it repeats <code>text-align: center</code> on every single line, the kind of duplication that should bother you by now from every earlier module.</p>
+<h3 id="the-cascade-say-it-once-on-the-parent">The cascade: say it once, on the parent</h3>
+<p>CSS's full name is <em>cascading</em> style sheets, and the cascade is exactly the fix for that duplication:</p>
+<blockquote>
+<p>"If you want one property or key value pair to sort of cascade down on all of the other tags inside of that one, you can do that." (David Malan)</p>
+</blockquote>
+<p>Move the shared property up to the parent element (<code>body</code>, in this case) and every child inherits it automatically:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">body</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;text-align: center;&quot;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;font-size: large;&quot;</span><span class="p">&gt;</span>John Harvard<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;font-size: medium;&quot;</span><span class="p">&gt;</span>Welcome to my home page.<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;font-size: small;&quot;</span><span class="p">&gt;</span>Copyright <span class="ni">&amp;#169;</span> John Harvard<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+</code></pre></div>
+
+<p><code>text-align: center</code> is now written exactly once, and it still applies to all three <code>div</code>s, because they are <code>body</code>'s children in the DOM tree from Lesson 36.</p>
+<h3 id="factoring-it-out-the-style-tag">Factoring it out: the style tag</h3>
+<p>Repeating <code>style="..."</code> on every tag is still clutter: it mixes your content (the data) with its presentation (the CSS) in the same line. CSS lets you factor all of it into one <code>&lt;style&gt;</code> tag in <code>&lt;head&gt;</code>, using <strong>selectors</strong> to say which elements each rule applies to:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
+<span class="w">        </span><span class="nt">body</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">text-align</span><span class="p">:</span><span class="w"> </span><span class="kc">center</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="nt">header</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="kc">large</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="nt">main</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="kc">medium</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="nt">footer</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="kc">small</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">header</span><span class="p">&gt;</span>John Harvard<span class="p">&lt;/</span><span class="nt">header</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">main</span><span class="p">&gt;</span>Welcome to my home page.<span class="p">&lt;/</span><span class="nt">main</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">footer</span><span class="p">&gt;</span>Copyright <span class="ni">&amp;#169;</span> John Harvard<span class="p">&lt;/</span><span class="nt">footer</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+</code></pre></div>
+
+<p>Nothing looks different in the browser, but the HTML is now just content, and the <code>&lt;style&gt;</code> block is entirely presentation. <code>body</code>, <code>header</code>, <code>main</code>, and <code>footer</code> here are <strong>type selectors</strong>: a rule that names a tag applies to every element with that tag.</p>
+<blockquote>
+<p>🔑 <strong>The single most important takeaway of this part.</strong> CSS properties are just key-value pairs, exactly like HTML attributes with different punctuation. The cascade means you almost never have to repeat a property on every element: set it once, on a shared parent or a shared selector, and let it flow down the tree.</p>
+</blockquote>
+<hr />
+<h2 id="part-2-selectors-semantic-tags-entities-and-bootstrap">Part 2: Selectors, semantic tags, entities, and Bootstrap</h2>
+<h3 id="type-selectors-arent-reusable-enough">Type selectors aren't reusable enough</h3>
+<p>Tying <code>font-size: large</code> to the <code>header</code> tag works, but only because you happen to have one <code>header</code>. If you wanted "large and centered" for some other, unrelated element too, a type selector can't help: it's tied to the tag name. CSS offers two more ways to select elements for exactly this reason:</p>
+<blockquote>
+<p>"These properties can be applied to different selections of HTML type selectors, class selectors, ID selector, attribute selector." (David Malan)</p>
+</blockquote>
+<p>A <strong>class</strong> (prefixed with <code>.</code> in CSS, written as <code>class="..."</code> in HTML) is a label you can put on <em>any number</em> of elements to reuse the same properties:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">.</span><span class="nc">centered</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">text-align</span><span class="p">:</span><span class="w"> </span><span class="kc">center</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">large</span><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="kc">large</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">medium</span><span class="w">   </span><span class="p">{</span><span class="w"> </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="kc">medium</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">.</span><span class="nc">small</span><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="kc">small</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">body</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;centered&quot;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">header</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;large&quot;</span><span class="p">&gt;</span>John Harvard<span class="p">&lt;/</span><span class="nt">header</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">main</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;medium&quot;</span><span class="p">&gt;</span>Welcome to my home page.<span class="p">&lt;/</span><span class="nt">main</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">footer</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;small&quot;</span><span class="p">&gt;</span>Copyright <span class="ni">&amp;#169;</span> John Harvard<span class="p">&lt;/</span><span class="nt">footer</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+</code></pre></div>
+
+<p>An <strong>ID</strong> (prefixed with <code>#</code> in CSS, written as <code>id="..."</code> in HTML) is meant for exactly <em>one</em> unique element, the same uniqueness convention you'll rely on in Part 3 when JavaScript needs to find one specific node.</p>
+<h3 id="semantic-tags-hints-for-machines-not-just-humans">Semantic tags: hints for machines, not just humans</h3>
+<p>Notice the example above already stopped using generic <code>&lt;div&gt;</code>s in favor of <code>&lt;header&gt;</code>, <code>&lt;main&gt;</code>, and <code>&lt;footer&gt;</code>. These carry no different <em>visual</em> behavior on their own, but they carry meaning:</p>
+<blockquote>
+<p>"There are literally tags like header which allows me to define the header of the page, main, which allows me to define the main part of the page, and then even footer, which allows me to define that too." (David Malan)</p>
+</blockquote>
+<p>Search engines crawling a public page read these tags as hints about what matters most, the <strong>semantic web</strong>, in Malan's words: giving machines, not just people, a better sense of what they're looking at.</p>
+<h3 id="html-entities-characters-html-cant-type-directly">HTML entities: characters HTML can't type directly</h3>
+<p>A copyright symbol isn't on most keyboards, and some characters (like <code>&lt;</code>) are reserved by HTML's own syntax. HTML solves this with <strong>entities</strong>, a short, punctuated code the browser converts into a specific character:</p>
+<blockquote>
+<p>"HTML also has what are called entities." (David Malan)</p>
+</blockquote>
+<p><code>&amp;#169;</code> renders as ©. The syntax is always an ampersand, a code, and a semicolon, the same trick that lets you write a literal <code>&lt;</code> as <code>&amp;lt;</code> when you need HTML syntax to appear as plain text instead of being interpreted.</p>
+<h3 id="hover-a-selector-for-a-state-not-a-tag">:hover: a selector for a state, not a tag</h3>
+<p>CSS also has <strong>pseudo-selectors</strong>: selectors that target a temporary <em>state</em> an element can be in, rather than its tag, class, or ID. The most common is <code>:hover</code>:</p>
+<blockquote>
+<p>"I can have these pseudo selectors whereby I say the name of the tag, then a keyword like hover, which browsers know to recognize, and when I hover over an anchor, what I want to do is change the text decoration to underline temporarily." (David Malan)</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code><span class="nt">a</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="mh">#FF0000</span><span class="p">;</span>
+<span class="w">    </span><span class="k">text-decoration</span><span class="p">:</span><span class="w"> </span><span class="kc">none</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">a</span><span class="p">:</span><span class="nd">hover</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">text-decoration</span><span class="p">:</span><span class="w"> </span><span class="kc">underline</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Notice <code>#FF0000</code>, the exact hex color format from Lesson 17, now doing double duty as a CSS value. And <code>#harvard</code> here would be an ID selector, not a hex color, even though both use <code>#</code>: CSS tells them apart entirely from context (inside a <code>color</code> property, it's hex; as a bare selector, it's an ID).</p>
+<h3 id="bootstrap-someone-elses-css-one-link-away">Bootstrap: someone else's CSS, one link away</h3>
+<p>Writing every property by hand doesn't scale, which is why <strong>frameworks</strong> exist, pre-written CSS (and often JavaScript) that you adopt by reading its documentation instead of authoring your own:</p>
+<blockquote>
+<p>"One of the most popular frameworks out there nowadays and among the simplest and best documented is one called Bootstrap, which is a set of CSS classes and other features that you can use because it's open source in your own code." (David Malan)</p>
+</blockquote>
+<p>You load it from a CDN, a server someone else runs specifically to host popular files like this:</p>
+<blockquote>
+<p>"It's referencing a third party website, JSD Deliver, which is a CDN content delivery network, which is to say a server that just serves up content for other people to use." (David Malan)</p>
+</blockquote>
+<p>(That "JSD Deliver" is jsDelivr, a real, widely-used CDN: the transcript's ear for a spoken URL, not a typo you need to reproduce.)</p>
+<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">link</span>
+    <span class="na">href</span><span class="o">=</span><span class="s">&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css&quot;</span>
+    <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span><span class="p">&gt;</span>
+</code></pre></div>
+
+<p>Then a class does the rest, no new CSS required:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">table</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;table table-striped&quot;</span><span class="p">&gt;</span>
+    ...
+<span class="p">&lt;/</span><span class="nt">table</span><span class="p">&gt;</span>
+</code></pre></div>
+
+<p>Two lines changed the whole look of a plain table into neatly striped rows, exactly as documented on Bootstrap's own site.</p>
+<blockquote>
+<p>✅ <strong>What to do about it:</strong> before writing a CSS rule by hand, check whether Bootstrap already has a class that does it: read the docs, copy the class name, and save yourself the property-by-property work.</p>
+</blockquote>
+<hr />
+<h2 id="part-3-javascript-syntax-you-already-know-wearing-new-punctuation">Part 3: JavaScript (syntax you already know, wearing new punctuation)</h2>
+<h3 id="the-one-real-programming-language-of-the-day">The one real programming language of the day</h3>
+<p>HTML describes a tree; CSS paints it. JavaScript is different: an actual programming language, with variables, conditionals, and loops, that runs inside the browser after being downloaded like everything else:</p>
+<blockquote>
+<p>"Most every website you use is made from not only HTML and CSS, but if it's in any way interactive, odds are it's using JavaScript, a programming language that is very commonly used client side, whereby humans write the code on the server, but then your browser, as before, downloads it to the client and then it runs in your own Mac, your PC or your phone." (David Malan)</p>
+</blockquote>
+<p>Because you already know Scratch's blocks, Python, and C, JavaScript's syntax needs almost no new teaching, just a translation table:</p>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Scratch</th>
+<th>Python</th>
+<th>C</th>
+<th>JavaScript</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Declare a variable</td>
+<td><code>set counter to 0</code></td>
+<td><code>counter = 0</code></td>
+<td><code>int counter = 0;</code></td>
+<td><code>let counter = 0;</code></td>
+</tr>
+<tr>
+<td>Increment</td>
+<td><code>change counter by 1</code></td>
+<td><code>counter += 1</code></td>
+<td><code>counter++;</code></td>
+<td><code>counter++;</code></td>
+</tr>
+<tr>
+<td>Conditional</td>
+<td><code>if &lt;...&gt; then</code></td>
+<td><code>if condition:</code></td>
+<td><code>if (condition) { }</code></td>
+<td><code>if (condition) { }</code></td>
+</tr>
+<tr>
+<td>Loop 3 times</td>
+<td><code>repeat 3</code></td>
+<td><code>for _ in range(3):</code></td>
+<td><code>for (int i = 0; i &lt; 3; i++) { }</code></td>
+<td><code>for (let i = 0; i &lt; 3; i++) { }</code></td>
+</tr>
+<tr>
+<td>Loop forever</td>
+<td><code>forever</code></td>
+<td><code>while True:</code></td>
+<td><code>while (true) { }</code></td>
+<td><code>while (true) { }</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>let</code> replaces a type name (<code>int</code>, <code>char *</code>) because JavaScript variables don't declare a type up front. Curly braces are back (unlike Python's indentation), and semicolons are conventionally expected (unlike C, where they're required, but similar enough that you should just keep using them).</p>
+<h3 id="the-dom-but-now-you-can-change-it">The DOM, but now you can change it</h3>
+<p>Lesson 36 introduced the DOM, the tree the browser builds from your HTML. JavaScript is what turns that tree from a one-time snapshot into something you can edit while the page is running:</p>
+<blockquote>
+<p>"What you have most powerfully though is the ability in memory to mutate this tree in real time." (David Malan)</p>
+</blockquote>
+<p>Think of your email inbox: a table row per message. Without JavaScript, seeing new mail means reloading the whole page, a whole new tree, downloaded from scratch. With JavaScript, code can add a single new table-row node to the existing tree the moment new mail arrives, leaving everything else untouched.</p>
+<h3 id="three-building-blocks-queryselector-addeventlistener-innerhtml">Three building blocks: querySelector, addEventListener, innerHTML</h3>
+<p>Nearly everything interactive on the web reduces to three pieces working together.</p>
+<p><strong><code>document.querySelector(...)</code></strong> finds a node in the tree, using the exact same selector syntax as CSS, a tag name, a <code>.class</code>, or a <code>#id</code>:</p>
+<blockquote>
+<p>"Query selector is a fancy name for a function that lets me select specific elements of the page using CSS selector." (David Malan)</p>
+</blockquote>
+<p><strong><code>addEventListener(...)</code></strong> tells a node to wait for something to happen, then run a function when it does:</p>
+<blockquote>
+<p>"Add event listener is a function or method that you can call on any element that just tells it to listen subsequently for this event, and when that event is heard, submit in this case, call the following anonymous function, otherwise known as a lambda function." (David Malan)</p>
+</blockquote>
+<p>This is the same idea as Scratch's "when green flag clicked", an <strong>event</strong> (a click, a key going up, a form submission) triggers code, instead of code just running top to bottom once.</p>
+<p><strong><code>innerHTML</code></strong> (to rewrite what's <em>inside</em> a node) and <strong><code>.style</code></strong> (to rewrite one of its CSS properties) are how your code actually changes something once it's found the right node and heard the right event.</p>
+<p>One naming quirk trips up everyone the first time: CSS properties with a hyphen, like <code>background-color</code>, become camelCase in JavaScript:</p>
+<blockquote>
+<p>"Anything with hyphens in CSS is changed to Camelcase in JavaScript." (David Malan)</p>
+</blockquote>
+<p>So <code>background-color</code> in a <code>&lt;style&gt;</code> tag is <code>element.style.backgroundColor</code> in JavaScript: a hyphen would be read as subtraction, which is why the language can't use it in a property name.</p>
+<blockquote>
+<p>🔑 <strong>The single most important takeaway of this part.</strong> Every interactive feature on the web is some version of the same three-step pattern: find a node with <code>querySelector</code>, listen for an event with <code>addEventListener</code>, and change the node (its style, or its <code>innerHTML</code>) inside the function that runs.</p>
+</blockquote>
+<hr />
+<h2 id="part-4-the-dom-live-six-demos-that-bring-it-together">Part 4: The DOM, live (six demos that bring it together)</h2>
+<div class="codehilite"><pre><span></span><code>   HTML (Lesson 36)  --&gt;  builds the DOM tree, once, on load
+   CSS  (Parts 1-2)  --&gt;  paints each node: color, size, layout
+   JS   (Part 3)     --&gt;  listens for events, edits the tree, live
+
+        event (click / keyup / submit)
+              |
+              v
+     document.querySelector(&#39;#thing&#39;)   -- finds the node
+              |
+              v
+     node.style.backgroundColor = &#39;red&#39;    -- repaint (CSS via JS)
+     node.innerHTML = &#39;&lt;li&gt;word&lt;/li&gt;&#39;      -- rebuild (new child nodes)
+</code></pre></div>
+
+<h3 id="1-a-greeting-form">1. A greeting form</h3>
+<p>Malan starts with a form, a text input, and a submit button, then wires it up three different ways to make the same point. The first attempt uses an <code>onsubmit</code> attribute directly on the <code>&lt;form&gt;</code> tag, calling a <code>greet()</code> function defined in a <code>&lt;script&gt;</code> in <code>&lt;head&gt;</code>. The refactored version moves the logic into an <code>addEventListener</code> call instead, placed at the very end of <code>&lt;body&gt;</code> (or guarded by a <code>DOMContentLoaded</code> listener), to make sure the form already exists by the time the code runs:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">form</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;name&quot;</span> <span class="na">placeholder</span><span class="o">=</span><span class="s">&quot;Name&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text&quot;</span> <span class="na">autocomplete</span><span class="o">=</span><span class="s">&quot;off&quot;</span> <span class="na">autofocus</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;submit&quot;</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="w">        </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;submit&#39;</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kd">const</span><span class="w"> </span><span class="nx">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;#name&#39;</span><span class="p">).</span><span class="nx">value</span><span class="p">;</span>
+<span class="w">            </span><span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;Hello, &#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">name</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+<span class="w">        </span><span class="p">});</span>
+<span class="w">    </span><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+</code></pre></div>
+
+<p><code>return false</code> stops the browser from actually submitting the form to a server: without it, the alert would flash and then the page would try to navigate away.</p>
+<h3 id="2-color-change-buttons">2. Color-change buttons</h3>
+<p>Three buttons, each with a unique <code>id</code>, each wired to change the whole page's background:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">button</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;red&quot;</span><span class="p">&gt;</span>R<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">button</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;green&quot;</span><span class="p">&gt;</span>G<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">button</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;blue&quot;</span><span class="p">&gt;</span>B<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">);</span>
+<span class="w">    </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;#red&#39;</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">body</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">backgroundColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;red&#39;</span><span class="p">;</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="w">    </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;#green&#39;</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">body</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">backgroundColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;green&#39;</span><span class="p">;</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="w">    </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;#blue&#39;</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">body</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">backgroundColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;blue&#39;</span><span class="p">;</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</code></pre></div>
+
+<p>Notice <code>backgroundColor</code>, not <code>background-color</code>, the camelCase rule from Part 3 in action.</p>
+<h3 id="3-the-blink-tag-revived">3. The blink tag, revived</h3>
+<p>HTML used to have an actual <code>&lt;blink&gt;</code> tag; it was ugly enough that it was removed from the language entirely, one of the rare tags to be deprecated outright. Malan brings the effect back with JavaScript instead:</p>
+<blockquote>
+<p>"This is what the blink tag used to do back in the day. Now this version is implemented instead in JavaScript code." (David Malan)</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>hello, world<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="w">        </span><span class="nb">window</span><span class="p">.</span><span class="nx">setInterval</span><span class="p">(</span><span class="nx">blink</span><span class="p">,</span><span class="w"> </span><span class="mf">500</span><span class="p">);</span>
+<span class="w">        </span><span class="kd">function</span><span class="w"> </span><span class="nx">blink</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kd">const</span><span class="w"> </span><span class="nx">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">);</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">body</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">visibility</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">&#39;hidden&#39;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nx">body</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">visibility</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;visible&#39;</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nx">body</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">visibility</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;hidden&#39;</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+</code></pre></div>
+
+<p><code>window.setInterval(blink, 500)</code> calls the <code>blink</code> function every 500 milliseconds, forever. One more naming quirk to note along the way:</p>
+<blockquote>
+<p>"You would think that the opposite of visible would be invisible, but in CSS the opposite of visible is hidden. Just have to memorize stupid things like that." (David Malan)</p>
+</blockquote>
+<h3 id="4-autocomplete-search">4. Autocomplete search</h3>
+<p>Backed by a large JavaScript array of words (<code>large.js</code>, built from Problem Set 5's dictionary), a <code>keyup</code> listener filters that array on every keystroke and rewrites an empty <code>&lt;ul&gt;</code> with matching results:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;q&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text&quot;</span> <span class="na">placeholder</span><span class="o">=</span><span class="s">&quot;Query&quot;</span> <span class="na">autocomplete</span><span class="o">=</span><span class="s">&quot;off&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">ul</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;results&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;large.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="w">    </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;#q&#39;</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;keyup&#39;</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">const</span><span class="w"> </span><span class="nx">input</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;#q&#39;</span><span class="p">);</span>
+<span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="nx">html</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">input</span><span class="p">.</span><span class="nx">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">const</span><span class="w"> </span><span class="nx">word</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="nx">WORDS</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">word</span><span class="p">.</span><span class="nx">startsWith</span><span class="p">(</span><span class="nx">input</span><span class="p">.</span><span class="nx">value</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="nx">html</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s1">&#39;&lt;li&gt;&#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">word</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">&#39;&lt;/li&gt;&#39;</span><span class="p">;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;#results&#39;</span><span class="p">).</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">html</span><span class="p">;</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</code></pre></div>
+
+<p>This is exactly the pattern behind every search box you've ever typed into:</p>
+<blockquote>
+<p>"Someone wrote JavaScript that's listening for keyU or the like, and then dynamically populating an unordered list or in this case a much prettier list of the matching results." (David Malan)</p>
+</blockquote>
+<h3 id="5-a-bootstrap-navbar">5. A Bootstrap navbar</h3>
+<p>Bootstrap isn't only CSS classes: it ships its own JavaScript too, for things like a responsive navigation bar that collapses into a "hamburger" icon on narrow screens:</p>
+<blockquote>
+<p>"It's listening for clicks on this hamburger menu and revealing the menu options that way." (David Malan)</p>
+</blockquote>
+<p>You get this by copying Bootstrap's documented navbar markup and including both their CSS <code>&lt;link&gt;</code> and their JavaScript <code>&lt;script&gt;</code>, no hand-written JavaScript of your own required.</p>
+<h3 id="6-geolocation">6. Geolocation</h3>
+<p>One more built-in browser feature, exposed as a JavaScript object called <code>navigator</code>:</p>
+<blockquote>
+<p>"There exists another global variable in JavaScript in browsers called Navigator, which has a property called an object called geolocation which has a function called get current position that takes an argument which is just an anonymous function, which means call this code when you're ready to know the coordinates because it might take a while to figure out your GPS coordinates." (David Malan)</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="w">    </span><span class="nx">navigator</span><span class="p">.</span><span class="nx">geolocation</span><span class="p">.</span><span class="nx">getCurrentPosition</span><span class="p">(</span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">position</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span>
+<span class="w">            </span><span class="nx">position</span><span class="p">.</span><span class="nx">coords</span><span class="p">.</span><span class="nx">latitude</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">&#39;, &#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">position</span><span class="p">.</span><span class="nx">coords</span><span class="p">.</span><span class="nx">longitude</span><span class="p">;</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</code></pre></div>
+
+<p>The browser asks the visitor's permission first (for privacy), then hands your callback function the coordinates once they're known, the same building block behind every map or delivery app asking "can this site use your location?"</p>
+<hr />
+<h2 id="key-takeaways">Key takeaways</h2>
+<ol>
+<li><strong>CSS is skin, not skeleton.</strong> Properties are key-value pairs, exactly like HTML attributes, applied to elements through selectors.</li>
+<li><strong>Inline style → <code>&lt;style&gt;</code> tag → external <code>.css</code> file is a one-way street of "factoring out."</strong> Each step separates content (HTML) from presentation (CSS) a little further.</li>
+<li><strong>The cascade is the "C" in CSS.</strong> A property set on a parent, or via a type selector, flows down to every descendant unless something more specific overrides it.</li>
+<li><strong>Three selector types cover most needs.</strong> Type (a tag name), class (<code>.name</code>, reusable across many elements), and ID (<code>#name</code>, unique to one), the same lookup JavaScript's <code>querySelector</code> uses.</li>
+<li><strong>A framework is just someone else's classes, loaded from a CDN.</strong> Bootstrap changes your page's whole look with one <code>&lt;link&gt;</code> and a couple of class names, no new CSS required.</li>
+<li><strong>JavaScript is the one real programming language of the three.</strong> Same variables, conditionals, and loops as C, with <code>let</code> instead of a type and no semicolons required (but keep using them).</li>
+<li><strong>Everything interactive reduces to one pattern.</strong> Find a node with <code>querySelector</code>, listen for an event with <code>addEventListener</code>, and change it: a <code>.style</code> property or its <code>innerHTML</code>.</li>
+</ol>
+<h2 id="common-pitfalls">Common pitfalls</h2>
+<ul>
+<li>❌ Forgetting to reload the page after editing CSS or JavaScript: the browser is still showing the last downloaded copy, not your saved file.</li>
+<li>❌ Writing a CSS property with a hyphen (<code>background-color</code>) inside JavaScript exactly as written. JavaScript needs the camelCase form (<code>backgroundColor</code>); the hyphenated version silently does nothing.</li>
+<li>❌ Placing a <code>&lt;script&gt;</code> tag in <code>&lt;head&gt;</code> that tries to <code>querySelector</code> an element defined later in <code>&lt;body&gt;</code>: that element doesn't exist yet, so the selector returns nothing. Put the script at the end of <code>&lt;body&gt;</code>, or guard it with a <code>DOMContentLoaded</code> listener.</li>
+<li>❌ Giving two elements the same <code>id</code>. IDs are supposed to be unique; JavaScript's <code>querySelector('#name')</code> will quietly return only the first match, changing the wrong element (or nothing at all) and leaving you confused about why.</li>
+<li>❌ Assuming Bootstrap replaces the need to understand plain CSS. Bootstrap is just someone else's classes; when its default look isn't quite right, you still need type, class, and ID selectors to override it.</li>
+<li>❌ Confusing a class (reusable, <code>.name</code>) with an ID (unique, <code>#name</code>), using one where you meant the other is a common reason a selector matches nothing, or matches too much.</li>
+</ul>
+<hr />
+<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: Give Your Home Page a Personality</h2>
+<blockquote>
+<p>This is the main hands-on project for the lesson. You'll restyle the exact <code>home.html</code> you built in Lesson 36 three times over, your own CSS, then Bootstrap, then one JavaScript button, proving to yourself that you can control both the look and the behavior of a page you already know how to build.</p>
+</blockquote>
+<h3 id="what-you-will-build">What you will build</h3>
+<p>The same single file, <code>home.html</code>, still served locally with <code>http-server</code> on port 8080. By the end it will contain: a <code>&lt;style&gt;</code> tag using a type, a class, and an ID selector; one <code>:hover</code> effect; a swapped-in Bootstrap CDN link with at least one Bootstrap class applied; and one JavaScript button that changes the page's colors on click, with no reload.</p>
+<table>
+<thead>
+<tr>
+<th>Lesson idea</th>
+<th>Where you use it in this Capstone</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Inline style → style tag (Part 1)</td>
+<td>Refactoring your home page's look into one <code>&lt;style&gt;</code> block in <code>&lt;head&gt;</code>.</td>
+</tr>
+<tr>
+<td>Cascade (Part 1)</td>
+<td>Setting one property once, on <code>body</code> or <code>main</code>, instead of repeating it.</td>
+</tr>
+<tr>
+<td>Type / class / ID selectors (Part 2)</td>
+<td>Styling all paragraphs at once, a reusable class, and one unique element.</td>
+</tr>
+<tr>
+<td>Semantic tags + entities (Part 2)</td>
+<td>Wrapping your page in <code>header</code>/<code>main</code>/<code>footer</code> and adding a real copyright entity.</td>
+</tr>
+<tr>
+<td><code>:hover</code> (Part 2)</td>
+<td>Making a link or button visibly react when the mouse moves over it.</td>
+</tr>
+<tr>
+<td>Bootstrap via CDN (Part 2)</td>
+<td>Swapping your hand-written CSS for Bootstrap's classes with one <code>&lt;link&gt;</code> tag.</td>
+</tr>
+<tr>
+<td><code>querySelector</code> + <code>addEventListener</code> + <code>.style</code> (Part 3-4)</td>
+<td>The button that changes your page's colors without reloading.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
+<ol>
+<li><strong>Reopen your home page.</strong> On cs50.dev, open the <code>home.html</code> you built in Lesson 36 (or start a fresh copy with the same skeleton) and confirm <code>http-server</code> still serves it on port 8080.</li>
+<li><strong>Write your own <code>&lt;style&gt;</code> tag.</strong> In <code>&lt;head&gt;</code>, add a <code>&lt;style&gt;</code> block with at least one type selector (e.g. <code>body { }</code>), one reusable class applied to two or more elements (e.g. <code>.highlight { }</code>), and one ID selector for a single unique element (e.g. <code>#name { }</code>).</li>
+<li><strong>Add semantic structure.</strong> Wrap your existing sections in <code>&lt;header&gt;</code>, <code>&lt;main&gt;</code>, and <code>&lt;footer&gt;</code> instead of generic <code>&lt;div&gt;</code>s, and add a real HTML entity: a copyright symbol (<code>&amp;#169;</code>) in your footer is a good fit.</li>
+<li><strong>Add one <code>:hover</code> effect.</strong> Pick a link or button and give it a rule like <code>a:hover { text-decoration: underline; }</code> so it visibly reacts the moment the mouse moves over it.</li>
+<li><strong>Swap in Bootstrap.</strong> Add Bootstrap's CDN <code>&lt;link&gt;</code> to <code>&lt;head&gt;</code>, then apply at least one real Bootstrap class (<code>table table-striped</code> on a table, or <code>btn btn-primary</code> on a button) and confirm the look changes with no new CSS of your own.</li>
+<li><strong>Add one JavaScript behavior.</strong> Add a button (or reuse three, for red/green/blue) with a unique <code>id</code>, then write a <code>&lt;script&gt;</code> that uses <code>document.querySelector()</code> to find it, <code>addEventListener('click', ...)</code> to listen for a click, and <code>.style.backgroundColor = '...'</code> to change the page's color live.</li>
+<li><strong>Reload and verify everything.</strong> Confirm every change (CSS and JavaScript alike) actually shows up after a manual reload. Trust what the browser shows you right now, not what you remember writing.</li>
+<li><strong>Stretch goals.</strong> Add a second and third color button; recreate the blink effect on one small element using <code>window.setInterval</code> and toggling <code>style.visibility</code>; or wire up a tiny autocomplete over an array of 10 words you choose, using <code>keyup</code> and <code>innerHTML</code>.</li>
+</ol>
+<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
+<ul>
+<li>✅ Your home page has a <code>&lt;style&gt;</code> tag with at least one type selector, one class selector (used on two or more elements), and one ID selector.</li>
+<li>✅ At least one element visibly changes when you hover your mouse over it.</li>
+<li>✅ Your page loads Bootstrap from a CDN <code>&lt;link&gt;</code>, and at least one Bootstrap class is visibly changing something (compare it against removing the class).</li>
+<li>✅ Clicking your button changes the page's background or text color immediately, with no page reload, using <code>querySelector</code> + <code>addEventListener</code>.</li>
+<li>✅ You reloaded the page after your very last edit and it behaves exactly as you expect.</li>
+</ul>
+<blockquote>
+<p>💡 <strong>Keep yourself honest:</strong> open developer tools' Elements panel and confirm the CSS you expect is actually attached to the node you clicked, the same trick Malan uses throughout the lecture to debug his own examples live, on his own page, in real time.</p>
+</blockquote>
+<hr />
+<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
+<blockquote>
+<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
+</blockquote>
+<h3 id="exercise-1-john-harvards-page-twice-foundational">Exercise 1: John Harvard's page, twice (foundational)</h3>
+<p>Build a three-section page (a name, a welcome line, and a copyright line) exactly as Malan does it live: first stylize each section with an inline <code>style</code> attribute (different <code>font-size</code> per section, <code>text-align: center</code> on all three), confirm it in the browser, then refactor into one <code>&lt;style&gt;</code> tag in <code>&lt;head&gt;</code> using <code>header</code>/<code>main</code>/<code>footer</code> type selectors, and move <code>text-align: center</code> up to <code>body</code> so it's written exactly once, thanks to the cascade.</p>
+<h3 id="exercise-2-three-button-mood-ring-intermediate">Exercise 2: Three-button mood ring (intermediate)</h3>
+<p>Build <code>background.html</code> from scratch: three buttons labeled R, G, and B, each with a unique <code>id</code>, plus a <code>&lt;script&gt;</code> that uses <code>querySelector</code> and <code>addEventListener('click', ...)</code> on each button to set <code>document.querySelector('body').style.backgroundColor</code>. Add a fourth button that resets the color back to white.</p>
+<h3 id="exercise-3-tiny-autocomplete-advanced">Exercise 3: Tiny autocomplete (advanced)</h3>
+<p>Write a JavaScript array of 10 words you choose, a text <code>&lt;input&gt;</code>, and an empty <code>&lt;ul&gt;</code>. On the <code>keyup</code> event, loop over your array with <code>for (const word of words)</code>, check whether each word starts with the current input value using <code>.startsWith()</code>, and rewrite the <code>&lt;ul&gt;</code>'s <code>innerHTML</code> with one <code>&lt;li&gt;</code> per match, the same technique behind the search-box autocomplete you use every day.</p>
+<hr />
+<h2 id="cheat-sheet">Cheat sheet</h2>
+<div class="codehilite"><pre><span></span><code>CSS: THREE PLACES TO WRITE IT
+  inline    &lt;p style=&quot;color: red;&quot;&gt;...&lt;/p&gt;            -- one element, one-off
+  internal  &lt;style&gt; p { color: red; } &lt;/style&gt;         -- in &lt;head&gt;, whole page
+  external  &lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot;&gt;   -- separate file, reusable
+
+SELECTORS
+  type      body { }        -- every &lt;body&gt; element
+  class     .name { }       -- every element with class=&quot;name&quot; (reusable)
+  ID        #name { }       -- the one element with id=&quot;name&quot; (unique)
+  pseudo    a:hover { }     -- a state, not a tag -- fires on mouseover
+
+CASCADE
+  set a property on a parent (or use a type selector) and it flows down to
+  every child unless a more specific rule overrides it
+
+SEMANTIC TAGS + ENTITIES
+  &lt;header&gt; &lt;main&gt; &lt;footer&gt;          -- hints for humans and search engines
+  &amp;#169;                             -- HTML entity for the copyright symbol (c)
+
+BOOTSTRAP VIA CDN
+  &lt;link href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css&quot;
+        rel=&quot;stylesheet&quot;&gt;
+  &lt;table class=&quot;table table-striped&quot;&gt;   -- someone else&#39;s CSS, one class away
+
+JS SYNTAX VS C / PYTHON
+  let x = 0;                 -- variable, no type
+  x++;                       -- same as C, not Python
+  if (x &gt; 0) { }             -- curly braces, not indentation
+  for (let i = 0; i &lt; 3; i++) { }
+  while (true) { }
+  background-color  (CSS)  -&gt;  backgroundColor  (JS)   -- hyphen becomes camelCase
+
+DOM IN THREE PIECES
+  document.querySelector(&#39;#id&#39;)       -- find a node
+  node.addEventListener(&#39;click&#39;, fn)  -- listen for an event (click, keyup, submit...)
+  node.innerHTML = &#39;&lt;li&gt;...&lt;/li&gt;&#39;     -- rewrite what&#39;s inside a node
+  node.style.backgroundColor = &#39;red&#39;  -- rewrite a CSS property live
+
+THE ONE RULE THAT MATTERS MOST
+  Everything interactive on the web is: listen for an event, find a node,
+  change it. That&#39;s the whole trick behind buttons, autocomplete, and navbars.
+</code></pre></div>
+
+<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
+<ul>
+<li><strong>Earlier, Module 10 · Lesson 36 (Building pages with HTML):</strong> gave you the plain skeleton, and the exact DOM tree this lesson's CSS paints and JavaScript now reaches into and edits live.</li>
+<li><strong>Earlier callback, Module 5 · Lesson 17 (Pixels, hex, and addresses):</strong> the hex color codes you met there (<code>#FF0000</code>) are exactly the values CSS's <code>color</code> and <code>background-color</code> properties accept.</li>
+<li><strong>Earlier callback, Module 2 (C) and Module 1 · Lesson 4 (Programming in Scratch):</strong> JavaScript's <code>let</code>, <code>if</code>, and <code>for</code> are the same ideas as C's syntax and Scratch's blocks, just with different punctuation.</li>
+<li><strong>Next, Module 11 · Lesson 38 (Flask fundamentals: routes and templates):</strong> a Python server starts generating the HTML you've been writing by hand, but it will still load exactly this CSS and this JavaScript, unchanged.</li>
+<li><strong>North star:</strong> the style tag, the Bootstrap swap, and the color-change button you build today are, quite literally, the entire look and feel of the database-backed web app you'll finish this course with.</li>
+</ul>
+<hr />
+<p><em>Source: "CS50x 2026 - Lecture 8 - HTML, CSS, JavaScript" by David J. Malan, Harvard University (CS50x 2026). Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+    </article>
+    <section class="lesson-sync" data-lesson-id="37"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../progress.html">Progress tracker &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="36-html.html"><span class="dir">&#8592; Previous</span><b>Building Pages with HTML</b></a><a class="ln home" href="..\index.html"><b>All lessons</b></a><a class="ln next" href="..\module-11-flask\38-flask-fundamentals.html"><span class="dir">Next &#8594;</span><b>Flask Fundamentals: Routes and Templates</b></a></nav>
+  </main>
+</div>
+
+<footer class="site"><div class="wrap">
+  <a class="logo" href="..\index.html">Self-Paced CS50x<span class="dot">.</span></a>
+  <span class="fnote">An unofficial self-paced companion generated from the CS50x 2026 lecture transcripts. CS50 is created by David J. Malan and Harvard University. Watch the original lectures and do the official problem sets at cs50.harvard.edu/x. Code snippets are illustrative reconstructions.</span>
+</div></footer>
+
+<style>pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.codehilite .hll { background-color: #ffffcc }
+.codehilite { background: #282C34; color: #ABB2BF }
+.codehilite .c { color: #7F848E } /* Comment */
+.codehilite .err { color: #ABB2BF } /* Error */
+.codehilite .esc { color: #ABB2BF } /* Escape */
+.codehilite .g { color: #ABB2BF } /* Generic */
+.codehilite .k { color: #C678DD } /* Keyword */
+.codehilite .l { color: #ABB2BF } /* Literal */
+.codehilite .n { color: #E06C75 } /* Name */
+.codehilite .o { color: #56B6C2 } /* Operator */
+.codehilite .x { color: #ABB2BF } /* Other */
+.codehilite .p { color: #ABB2BF } /* Punctuation */
+.codehilite .ch { color: #7F848E } /* Comment.Hashbang */
+.codehilite .cm { color: #7F848E } /* Comment.Multiline */
+.codehilite .cp { color: #7F848E } /* Comment.Preproc */
+.codehilite .cpf { color: #7F848E } /* Comment.PreprocFile */
+.codehilite .c1 { color: #7F848E } /* Comment.Single */
+.codehilite .cs { color: #7F848E } /* Comment.Special */
+.codehilite .gd { color: #E06C75 } /* Generic.Deleted */
+.codehilite .ge { color: #ABB2BF; font-style: italic } /* Generic.Emph */
+.codehilite .ges { color: #ABB2BF } /* Generic.EmphStrong */
+.codehilite .gr { color: #E06C75 } /* Generic.Error */
+.codehilite .gh { color: #ABB2BF; font-weight: bold } /* Generic.Heading */
+.codehilite .gi { color: #98C379 } /* Generic.Inserted */
+.codehilite .go { color: #E06C75 } /* Generic.Output */
+.codehilite .gp { color: #ABB2BF } /* Generic.Prompt */
+.codehilite .gs { color: #ABB2BF; font-weight: bold } /* Generic.Strong */
+.codehilite .gu { color: #ABB2BF; font-weight: bold } /* Generic.Subheading */
+.codehilite .gt { color: #E06C75 } /* Generic.Traceback */
+.codehilite .kc { color: #E5C07B } /* Keyword.Constant */
+.codehilite .kd { color: #C678DD } /* Keyword.Declaration */
+.codehilite .kn { color: #C678DD } /* Keyword.Namespace */
+.codehilite .kp { color: #C678DD } /* Keyword.Pseudo */
+.codehilite .kr { color: #C678DD } /* Keyword.Reserved */
+.codehilite .kt { color: #E5C07B } /* Keyword.Type */
+.codehilite .ld { color: #ABB2BF } /* Literal.Date */
+.codehilite .m { color: #D19A66 } /* Literal.Number */
+.codehilite .s { color: #98C379 } /* Literal.String */
+.codehilite .na { color: #E06C75 } /* Name.Attribute */
+.codehilite .nb { color: #E5C07B } /* Name.Builtin */
+.codehilite .nc { color: #E5C07B } /* Name.Class */
+.codehilite .no { color: #E06C75 } /* Name.Constant */
+.codehilite .nd { color: #61AFEF } /* Name.Decorator */
+.codehilite .ni { color: #E06C75 } /* Name.Entity */
+.codehilite .ne { color: #E06C75 } /* Name.Exception */
+.codehilite .nf { color: #61AFEF; font-weight: bold } /* Name.Function */
+.codehilite .nl { color: #E06C75 } /* Name.Label */
+.codehilite .nn { color: #E06C75 } /* Name.Namespace */
+.codehilite .nx { color: #E06C75 } /* Name.Other */
+.codehilite .py { color: #E06C75 } /* Name.Property */
+.codehilite .nt { color: #E06C75 } /* Name.Tag */
+.codehilite .nv { color: #E06C75 } /* Name.Variable */
+.codehilite .ow { color: #56B6C2 } /* Operator.Word */
+.codehilite .pm { color: #ABB2BF } /* Punctuation.Marker */
+.codehilite .w { color: #ABB2BF } /* Text.Whitespace */
+.codehilite .mb { color: #D19A66 } /* Literal.Number.Bin */
+.codehilite .mf { color: #D19A66 } /* Literal.Number.Float */
+.codehilite .mh { color: #D19A66 } /* Literal.Number.Hex */
+.codehilite .mi { color: #D19A66 } /* Literal.Number.Integer */
+.codehilite .mo { color: #D19A66 } /* Literal.Number.Oct */
+.codehilite .sa { color: #98C379 } /* Literal.String.Affix */
+.codehilite .sb { color: #98C379 } /* Literal.String.Backtick */
+.codehilite .sc { color: #98C379 } /* Literal.String.Char */
+.codehilite .dl { color: #98C379 } /* Literal.String.Delimiter */
+.codehilite .sd { color: #98C379 } /* Literal.String.Doc */
+.codehilite .s2 { color: #98C379 } /* Literal.String.Double */
+.codehilite .se { color: #98C379 } /* Literal.String.Escape */
+.codehilite .sh { color: #98C379 } /* Literal.String.Heredoc */
+.codehilite .si { color: #98C379 } /* Literal.String.Interpol */
+.codehilite .sx { color: #98C379 } /* Literal.String.Other */
+.codehilite .sr { color: #98C379 } /* Literal.String.Regex */
+.codehilite .s1 { color: #98C379 } /* Literal.String.Single */
+.codehilite .ss { color: #98C379 } /* Literal.String.Symbol */
+.codehilite .bp { color: #E5C07B } /* Name.Builtin.Pseudo */
+.codehilite .fm { color: #56B6C2; font-weight: bold } /* Name.Function.Magic */
+.codehilite .vc { color: #E06C75 } /* Name.Variable.Class */
+.codehilite .vg { color: #E06C75 } /* Name.Variable.Global */
+.codehilite .vi { color: #E06C75 } /* Name.Variable.Instance */
+.codehilite .vm { color: #E06C75 } /* Name.Variable.Magic */
+.codehilite .il { color: #D19A66 } /* Literal.Number.Integer.Long */</style>
+<script>
+// mobile menu
+const sb=document.getElementById('sidebar'),mb=document.getElementById('menuBtn');
+if(mb){mb.onclick=()=>sb.classList.toggle('open');sb.addEventListener('click',e=>{if(e.target.tagName==='A')sb.classList.remove('open')});}
+const tc=document.getElementById('tocClose');if(tc){tc.onclick=()=>sb.classList.remove('open');}
+// progress
+const prog=document.getElementById('progress');
+addEventListener('scroll',()=>{const h=document.body.scrollHeight-innerHeight;prog.style.width=(h>0?scrollY/h*100:0)+'%'});
+// code chrome + copy
+document.querySelectorAll('.codehilite, pre').forEach(block=>{
+  if(block.parentElement.classList.contains('codehilite'))return;
+  const bar=document.createElement('div');bar.className='code-bar';
+  bar.innerHTML='<span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>';
+  block.appendChild(bar);
+  const btn=document.createElement('button');btn.className='copy-btn';btn.textContent='Copy';
+  btn.onclick=()=>{const t=block.querySelector('code')?.innerText||block.innerText;
+    navigator.clipboard.writeText(t.replace(/\nCopy$/,''));btn.textContent='Copied!';btn.classList.add('done');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('done')},1500)};
+  block.appendChild(btn);
+});
+// callouts by leading emoji
+const map={'\u{1F511}':'cl-key','\u{1F4A1}':'cl-tip','✅':'cl-ok','❌':'cl-no','\u{1F3AF}':'cl-goal','\u{1F6E0}':'cl-goal'};
+document.querySelectorAll('blockquote').forEach(q=>{const t=(q.textContent||'').trim();for(const e in map){if(t.startsWith(e)){q.classList.add(map[e]);break}}});
+// check-off
+function makeCheckable(rx){document.querySelectorAll('h2,h3').forEach(h=>{if(!rx.test(h.textContent))return;let el=h.nextElementSibling;
+  while(el&&!/^H[1-3]$/.test(el.tagName)){if(el.tagName==='OL'||el.tagName==='UL'){el.classList.add('checkable');
+    el.querySelectorAll(':scope>li').forEach(li=>{const key='cwc:'+location.pathname+':'+li.textContent.slice(0,60);
+      if(localStorage.getItem(key))li.classList.add('checked');
+      li.addEventListener('click',ev=>{if(ev.target.tagName==='A')return;li.classList.toggle('checked');
+        li.classList.contains('checked')?localStorage.setItem(key,'1'):localStorage.removeItem(key)});});}el=el.nextElementSibling;}});}
+makeCheckable(/learning objectives|milestones/i);
+// scrollspy
+const links=[...document.querySelectorAll('.toc a')];
+const heads=links.map(a=>a.getAttribute('href')).filter(h=>h&&h.startsWith('#')).map(h=>document.getElementById(h.slice(1))).filter(Boolean);
+const spy=()=>{let cur=heads[0]?.id;for(const h of heads){if(h.getBoundingClientRect().top<150)cur=h.id}
+  links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur))};
+addEventListener('scroll',spy);spy();
+</script>
+<script type="module" src="../assets/sync.js"></script></body>
+</html>

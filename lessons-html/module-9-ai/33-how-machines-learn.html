@@ -1,0 +1,865 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 9 · Lesson 33: How Machines Learn | Self-Paced CS50x</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0a1a2f; --navy-2:#0f243d; --navy-3:#15314f;
+  --teal:#18c4a0; --teal-d:#0fa385; --teal-soft:#e4f8f2;
+  --coral:#f24d63; --coral-d:#d83a50; --coral-soft:#feecee;
+  --ink:#152230; --muted:#5f6c7b; --line:#e9eef2; --bg:#ffffff;
+  --soft:#f4fbf9; --card:#ffffff; --code-bg:#21252b; --max:780px;
+  --k:#2f8fb3; --k-bg:#e8f4f9; --tip:#c4881f; --tip-bg:#fdf4e3; --ok:#1f9d6b; --ok-bg:#e6f6ef;
+  --no:#e0533f; --no-bg:#fdecea; --goal:#7b54c9; --goal-bg:#f1ebfb;
+  --shadow:0 10px 30px rgba(13,30,52,.08); --shadow-sm:0 4px 14px rgba(13,30,52,.07);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.72;font-size:17px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+#progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--teal),var(--coral));z-index:200;transition:width .1s linear}
+a{color:var(--teal-d);text-decoration:none}
+a:hover{color:var(--coral)}
+h1,h2,h3{font-family:Poppins,sans-serif;color:var(--ink);letter-spacing:-.01em}
+.accent{color:var(--coral)}
+.wrap{max-width:1200px;margin:0 auto;padding:0 28px}
+
+/* ---------- Top welcome strip ---------- */
+.topbar{background:var(--navy);color:#cdd8e4;font-size:13.5px}
+.topbar .wrap{display:flex;justify-content:space-between;align-items:center;height:42px;gap:18px}
+.topbar b{color:#fff;font-weight:600}
+.topbar .right{display:flex;gap:18px;align-items:center}
+.topbar a{color:#cdd8e4}.topbar a:hover{color:var(--teal)}
+
+/* ---------- Nav ---------- */
+nav.bar{background:var(--navy-2);position:sticky;top:0;z-index:120;box-shadow:0 2px 20px rgba(0,0,0,.25)}
+nav.bar .wrap{display:flex;align-items:center;height:68px;gap:26px}
+.logo{font-family:Poppins;font-weight:800;font-size:22px;color:#fff;letter-spacing:.02em;cursor:pointer;text-decoration:none}
+a.logo:hover{color:var(--teal)}
+.lessonnav{display:flex;gap:14px;align-items:stretch;margin:60px 0 0;flex-wrap:wrap}
+.lessonnav .ln{flex:1;min-width:200px;display:flex;flex-direction:column;gap:3px;border:1px solid var(--line);border-radius:14px;padding:16px 18px;color:var(--muted);transition:.15s;background:#fff}
+.lessonnav .ln:hover{border-color:var(--teal);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.lessonnav .ln .dir{font-size:13px;font-weight:600;color:var(--teal-d)}
+.lessonnav .ln b{color:var(--ink);font-family:Poppins;font-size:15px}
+.lessonnav .ln.next{text-align:right}
+.lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
+.lessonnav .ln.home b{color:var(--teal-d)}
+.logo .dot{color:var(--teal)}
+.navlinks{display:flex;gap:24px;margin-left:8px}
+.navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
+.navlinks a:hover{color:var(--teal)}
+.nav-cta{margin-left:auto;display:flex;gap:12px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:9px;border:none;cursor:pointer;font-family:Inter;font-weight:600;border-radius:999px;transition:.18s;font-size:15px;text-decoration:none}
+.btn-primary{background:var(--teal);color:#04231c;padding:12px 22px}
+.btn-primary:hover{background:var(--teal-d);color:#fff;transform:translateY(-1px)}
+.btn-outline{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.35);padding:10px 20px}
+.btn-outline:hover{border-color:var(--teal);color:var(--teal)}
+.btn-coral{background:var(--coral);color:#fff;padding:12px 22px}
+.btn-coral:hover{background:var(--coral-d);color:#fff;transform:translateY(-1px)}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;background:radial-gradient(120% 120% at 80% 0%,var(--navy-3),var(--navy) 60%);color:#eaf1f8;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.25;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.blob{position:absolute;border-radius:50%;filter:blur(8px);opacity:.5;z-index:0}
+.blob.t{width:230px;height:230px;background:rgba(24,196,160,.30);top:-60px;right:8%}
+.blob.c{width:160px;height:160px;background:rgba(242,77,99,.28);bottom:-40px;left:42%}
+.squiggle{position:absolute;z-index:1;opacity:.85}
+.hero .wrap{position:relative;z-index:2;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;padding:70px 28px 90px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--teal);font-weight:600;font-size:14px;letter-spacing:.03em;text-transform:uppercase;margin-bottom:18px}
+.hero h1{font-size:54px;line-height:1.08;font-weight:800;margin:0 0 20px;color:#fff}
+.hero .lead{font-size:18px;color:#b9c6d6;max-width:34em;margin:0 0 30px}
+.hero-actions{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:30px}
+.play{display:inline-flex;align-items:center;gap:12px;color:#fff;font-weight:600}
+.play .circ{width:52px;height:52px;border-radius:50%;background:var(--coral);display:grid;place-items:center;box-shadow:0 8px 22px rgba(242,77,99,.45);font-size:16px;animation:pulse 2.4s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(242,77,99,.45)}70%{box-shadow:0 0 0 16px rgba(242,77,99,0)}100%{box-shadow:0 0 0 0 rgba(242,77,99,0)}}
+.chips{display:flex;gap:10px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:#dce6f0;padding:8px 14px;border-radius:999px;font-size:13.5px;font-weight:500}
+.chip b{color:#fff}
+/* hero card */
+.hero-card{position:relative;background:#fff;color:var(--ink);border-radius:22px;padding:26px;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.hero-card .ring{position:absolute;top:-26px;right:-18px;width:96px;height:96px;background:#fff;border-radius:50%;box-shadow:var(--shadow);display:grid;place-items:center}
+.hero-card .ring svg{transform:rotate(-90deg)}
+.hero-card .ring .lab{position:absolute;font-family:Poppins;font-weight:700;font-size:18px;color:var(--teal-d)}
+.hero-card h3{margin:4px 0 14px;font-size:19px}
+.hero-card ul{list-style:none;margin:0 0 18px;padding:0}
+.hero-card li{display:flex;gap:11px;align-items:flex-start;padding:9px 0;border-bottom:1px dashed var(--line);font-size:14.5px;color:#36424f}
+.hero-card li:last-child{border-bottom:none}
+.hero-card li .ic{font-size:17px;line-height:1.4}
+.float-badge{position:absolute;left:18px;bottom:-26px;background:#fff;border-radius:14px;box-shadow:var(--shadow);padding:12px 16px;display:flex;gap:10px;align-items:center;font-size:13px;font-weight:600;color:var(--ink)}
+.float-badge .n{font-family:Poppins;font-weight:800;color:var(--coral);font-size:20px}
+
+/* ---------- Content layout ---------- */
+.layout{display:grid;grid-template-columns:268px minmax(0,1fr);gap:46px;max-width:1200px;margin:0 auto;padding:0 28px}
+aside{position:sticky;top:84px;align-self:start;height:calc(100vh - 100px);overflow-y:auto;padding:26px 0}
+.toc-card{background:var(--soft);border:1px solid var(--line);border-radius:18px;padding:18px}
+.toc-close{display:none;position:absolute;top:-6px;right:-4px;width:36px;height:36px;border:none;background:var(--navy-2);color:#fff;border-radius:50%;font-size:22px;line-height:1;cursor:pointer}
+.toc-close:hover{background:var(--coral)}
+.toc-title{font-family:Poppins;font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--teal-d);margin:0 0 10px;font-weight:700}
+.toc ul{list-style:none;margin:0;padding:0}
+.toc a{display:block;color:var(--muted);font-size:14px;padding:6px 12px;border-radius:8px;border-left:2px solid transparent;line-height:1.4}
+.toc a:hover{color:var(--ink);background:#fff}
+.toc a.active{color:var(--teal-d);background:#fff;border-left-color:var(--teal);font-weight:600}
+.toc .toc li li a{padding-left:24px;font-size:13px}
+.toc a.toc-capstone{color:var(--coral);font-weight:600}
+main{padding:54px 0 120px;min-width:0}
+article{max-width:var(--max)}
+
+/* typography */
+article h2{font-size:30px;margin:56px 0 16px;font-weight:700;position:relative}
+article h2::before{content:"\2726";color:var(--teal);font-size:18px;margin-right:10px;vertical-align:2px}
+article h3{font-size:21px;margin:34px 0 10px;font-weight:600}
+article h2+h3{margin-top:18px}
+article p,article li{font-size:16.5px}
+article ul,article ol{padding-left:24px}
+article li{margin:7px 0}
+article strong{font-weight:700;color:#0f1b28}
+hr{border:none;height:1px;background:var(--line);margin:42px 0}
+
+/* tables */
+table{border-collapse:separate;border-spacing:0;width:100%;margin:24px 0;font-size:15px;border:1px solid var(--line);border-radius:14px;overflow:hidden;display:block;overflow-x:auto}
+th,td{padding:12px 15px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--navy-2);color:#eaf1f8;font-family:Poppins;font-weight:600;font-size:14px}
+tr:last-child td{border-bottom:none}
+tbody tr:nth-child(even){background:var(--soft)}
+
+/* inline + block code */
+code{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.86em;background:var(--teal-soft);color:#0c6a55;padding:.13em .42em;border-radius:6px}
+.codehilite,pre{position:relative;background:var(--code-bg);border-radius:14px;margin:22px 0;overflow:hidden;box-shadow:var(--shadow-sm)}
+.codehilite pre{margin:0;border-radius:0;box-shadow:none;background:transparent}
+.codehilite pre,pre>code{display:block;padding:42px 18px 18px;overflow-x:auto}
+.codehilite code,pre code{background:none;color:#dfe6ee;padding:0;font-size:13.5px;line-height:1.7}
+.code-bar{position:absolute;top:0;left:0;right:0;height:34px;display:flex;align-items:center;gap:7px;padding:0 15px;background:rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.07)}
+.code-bar .dot{width:11px;height:11px;border-radius:50%}
+.dot.r{background:#ff5f57}.dot.y{background:#febc2e}.dot.g{background:#28c840}
+.copy-btn{position:absolute;top:5px;right:9px;z-index:3;background:rgba(255,255,255,.08);color:#dfe6ee;border:1px solid rgba(255,255,255,.14);border-radius:8px;font-size:12px;padding:4px 11px;cursor:pointer;font-family:Inter;transition:.15s}
+.copy-btn:hover{background:var(--teal);border-color:var(--teal);color:#04231c}
+.copy-btn.done{background:var(--teal);color:#04231c;border-color:var(--teal)}
+
+/* callouts */
+blockquote{margin:24px 0;padding:16px 20px;border-radius:14px;background:var(--soft);border:1px solid var(--line);border-left:5px solid var(--teal)}
+blockquote p{margin:7px 0}blockquote p:first-child{margin-top:0}blockquote p:last-child{margin-bottom:0}
+blockquote.cl-key{background:var(--k-bg);border-left-color:var(--k);border-color:transparent}
+blockquote.cl-tip{background:var(--tip-bg);border-left-color:var(--tip);border-color:transparent}
+blockquote.cl-ok{background:var(--ok-bg);border-left-color:var(--ok);border-color:transparent}
+blockquote.cl-no{background:var(--no-bg);border-left-color:var(--no);border-color:transparent}
+blockquote.cl-goal{background:var(--goal-bg);border-left-color:var(--goal);border-color:transparent}
+
+/* capstone banner */
+h2.capstone-h{background:linear-gradient(115deg,var(--navy),var(--navy-3));color:#fff;border-radius:20px;padding:30px 28px 26px;margin-top:64px;box-shadow:0 20px 50px rgba(10,26,47,.3);overflow:hidden;position:relative}
+h2.capstone-h::before{content:"\1F6E0\FE0F  HANDS-ON PROJECT";display:block;font-family:Poppins;font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--teal);margin:0 0 8px}
+h2.capstone-h::after{content:"";position:absolute;width:150px;height:150px;border-radius:50%;background:rgba(24,196,160,.25);filter:blur(10px);top:-50px;right:-30px}
+
+/* check-off */
+.checkable{list-style:none;padding-left:0}
+.checkable li{position:relative;padding-left:36px;cursor:pointer;margin:9px 0}
+.checkable li::before{content:"";position:absolute;left:0;top:3px;width:22px;height:22px;border:2px solid var(--teal);border-radius:7px;background:#fff;transition:.15s}
+.checkable li.checked::before{background:var(--teal);border-color:var(--teal)}
+.checkable li.checked::after{content:"\2713";position:absolute;left:5px;top:1px;color:#fff;font-weight:800;font-size:15px}
+.checkable li.checked{color:var(--muted)}
+
+/* footer */
+footer.site{background:var(--navy);color:#aebccb;margin-top:90px}
+footer.site .wrap{padding:46px 28px;display:flex;justify-content:space-between;gap:26px;flex-wrap:wrap;align-items:center}
+footer.site .logo{font-size:20px}
+footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
+
+#menuBtn{display:none}
+@media(max-width:920px){
+  .topbar{display:none}
+  .nav-cta{display:none}
+  .float-badge{display:none}
+  nav.bar .wrap{gap:14px;height:60px}
+  .wrap{padding:0 20px}
+  .logo{font-size:18px;white-space:nowrap}
+  .hero .wrap{grid-template-columns:1fr;gap:30px;padding:42px 20px 56px}
+  .hero h1{font-size:33px}
+  .hero .lead{font-size:16.5px}
+  .hero-actions{gap:14px}
+  .hero-actions .btn-primary{flex:1;justify-content:center}
+  .layout{grid-template-columns:1fr;gap:0}
+  aside{position:fixed;top:0;left:0;width:84vw;max-width:320px;height:100vh;background:#fff;z-index:130;transform:translateX(-100%);transition:.25s;box-shadow:var(--shadow);padding:24px}
+  aside.open{transform:none}
+  #menuBtn{display:inline-flex}
+  .toc-close{display:block}
+  .navlinks{display:none}
+  main{padding:34px 0 80px}
+  body{font-size:16px}
+  article h2{font-size:25px}
+  h2.capstone-h{padding:24px 20px}
+}
+@media(max-width:420px){
+  .hero h1{font-size:29px}
+  .hero-actions{flex-direction:column;align-items:stretch}
+  .hero-actions .play{justify-content:center}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<div class="topbar"><div class="wrap">
+  <div>&#10024; Welcome to <b>Self-Paced CS50x</b> &middot; a self-paced course</div>
+  <div class="right"><span>CS50x 2026 · Harvard University · David J. Malan</span></div>
+</div></div>
+
+<nav class="bar"><div class="wrap">
+  <button class="btn btn-outline" id="menuBtn" style="padding:8px 14px">&#9776;</button>
+  <a class="logo" href="..\index.html">Self-Paced CS50x<span class="dot">.</span></a>
+  <div class="navlinks">
+    <a href="..\index.html">All lessons</a>
+    <a href="#overview">Overview</a>
+    <a href="#capstone">Capstone</a>
+  </div>
+  <div class="nav-cta">
+    <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
+  </div>
+</div></nav>
+
+<header class="hero">
+  <span class="blob t"></span><span class="blob c"></span>
+  <svg class="squiggle" style="top:120px;left:46%;" width="90" height="26" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#18c4a0" stroke-width="4" stroke-linecap="round"/></svg>
+  <svg class="squiggle" style="bottom:60px;right:40%;" width="70" height="22" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#f24d63" stroke-width="4" stroke-linecap="round"/></svg>
+  <div class="wrap" id="overview">
+    <div>
+      <span class="eyebrow">&#10022; Module 9 · Lesson 33</span>
+      <h1>How Machines <span class="accent">Learn</span></h1>
+      <p class="lead">Every &quot;invisible&quot; AI feature you already rely on (a spam filter, a movie recommendation, a video-game opponent) is running one of just a few underlying ideas: a decision tree of yes/no questions, a scored game tree searched by an algorithm called minimax, or, once the tree of possible choices gets too enormous to search by hand (as in chess or Go), a system trained by reward and punishment or by pattern-matching on huge amounts of data instead. Once you can tell which one is running, you can predict exactly where and why it will get something wrong.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
+        <a class="play" href="https://www.youtube.com/watch?v=-9bo8HlSxwQ" target="_blank" rel="noopener"><span class="circ">&#9654;</span> Watch the talk</a>
+      </div>
+      <div class="chips">
+        <span class="chip">&#127908; <b>David J. Malan</b></span>
+        <span class="chip">&#9201; <b>60 minutes</b></span>
+        <span class="chip">&#128296; <b>Hands-on capstone</b></span>
+      </div>
+    </div>
+    <div style="position:relative">
+      <div class="hero-card">
+        <div class="ring">
+          <svg width="74" height="74"><circle cx="37" cy="37" r="31" stroke="#eef2f5" stroke-width="7" fill="none"/><circle cx="37" cy="37" r="31" stroke="#18c4a0" stroke-width="7" fill="none" stroke-linecap="round" stroke-dasharray="195" stroke-dashoffset="40"/></svg>
+          <span class="lab">&#10022;</span>
+        </div>
+        <h3>What you&#39;ll get</h3>
+        <ul>
+          <li><span class="ic">&#9989;</span><span>Plain-language teaching with every term defined</span></li>
+          <li><span class="ic">&#128221;</span><span>Code snippets pulled from the talk</span></li>
+          <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
+          <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
+        </ul>
+        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <aside id="sidebar"><div class="toc-card">
+    <button class="toc-close" id="tocClose" aria-label="Close menu">&times;</button>
+    <p class="toc-title">On this page</p>
+    <div class="toc">
+<ul>
+<li><a href="#in-one-sentence">In one sentence</a></li>
+<li><a href="#first-principles-companion">First-principles companion</a></li>
+<li><a href="#a-few-plain-language-basics-first">A few plain-language basics first</a></li>
+<li><a href="#why-this-lesson-matters">Why this lesson matters</a></li>
+<li><a href="#learning-objectives">Learning objectives</a></li>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#part-1-the-ai-you-already-use-every-day">Part 1: The AI you already use, every day</a></li>
+<li><a href="#part-2-decision-trees-an-ifelse-chain-you-can-draw">Part 2: Decision trees (an if/else chain you can draw)</a></li>
+<li><a href="#part-3-tic-tac-toe-and-minimax-scoring-a-game-to-solve-it">Part 3: Tic-tac-toe and minimax (scoring a game to solve it)</a><ul>
+<li><a href="#working-backward-from-the-end-of-the-game">Working backward from the end of the game</a></li>
+</ul>
+</li>
+<li><a href="#part-4-the-combinatorial-explosion-why-brute-force-breaks">Part 4: The combinatorial explosion (why brute force breaks)</a></li>
+<li><a href="#part-5-reinforcement-learning-reward-punishment-and-epsilon">Part 5: Reinforcement learning (reward, punishment, and epsilon)</a><ul>
+<li><a href="#explore-vs-exploit-and-the-epsilon-variable">Explore vs. exploit, and the epsilon variable</a></li>
+</ul>
+</li>
+<li><a href="#part-6-from-rules-to-learning-supervised-learning-deep-learning-and-neural-networks">Part 6: From rules to learning (supervised learning, deep learning, and neural networks)</a><ul>
+<li><a href="#a-tiny-neural-network-solving-a-real-problem">A tiny neural network, solving a real problem</a></li>
+</ul>
+</li>
+<li><a href="#part-7-inside-an-llm-embeddings-attention-gpt-and-why-ai-hallucinates">Part 7: Inside an LLM (embeddings, attention, GPT, and why AI hallucinates)</a></li>
+<li><a href="#key-takeaways">Key takeaways</a></li>
+<li><a href="#common-pitfalls">Common pitfalls</a></li>
+<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: Solve It Like a Machine</a><ul>
+<li><a href="#what-you-will-build">What you will build</a></li>
+<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
+<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
+<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
+</ul>
+</li>
+<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
+<li><a href="#exercise-1-score-three-boards-foundational">Exercise 1: Score three boards (foundational)</a></li>
+<li><a href="#exercise-2-explore-a-tiny-maze-intermediate">Exercise 2: Explore a tiny maze (intermediate)</a></li>
+<li><a href="#exercise-3-hand-fit-a-bluered-classifier-advanced">Exercise 3: Hand-fit a blue/red classifier (advanced)</a></li>
+</ul>
+</li>
+<li><a href="#cheat-sheet">Cheat sheet</a></li>
+<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
+</ul>
+</div>
+
+  </div></aside>
+  <main id="start">
+    <article>
+      <hr />
+<h2 id="in-one-sentence">In one sentence</h2>
+<p>Every "invisible" AI feature you already rely on (a spam filter, a movie recommendation, a video-game opponent) is running one of just a few underlying ideas: a <strong>decision tree</strong> of yes/no questions, a <strong>scored game tree</strong> searched by an algorithm called minimax, or, once the tree of possible choices gets too enormous to search by hand (as in chess or Go), a system trained by reward and punishment or by pattern-matching on huge amounts of data instead. Once you can tell which one is running, you can predict exactly where and why it will get something wrong.</p>
+<blockquote>
+<p>🎯 <strong>Where this lesson is heading.</strong> It builds to a hands-on <strong>Capstone Project</strong> where you hand-draw a complete minimax game tree for a tic-tac-toe endgame and mathematically prove the best move, write a paddle's decision tree as real Python code, and (as a stretch) run your own 20-round explore-vs-exploit experiment with dice. Everything before the Capstone teaches the skills you will use there. If you want to see the finish line first, jump to the <strong>"Capstone Project"</strong> section, then come back.</p>
+</blockquote>
+<h2 id="first-principles-companion">First-principles companion</h2>
+<blockquote>
+<p>💡 <strong>The durable idea behind this lesson.</strong> The demos are new; the mathematics underneath them is not.</p>
+<ul>
+<li><strong><a href="https://www.pi.infn.it/~carosi/chess/shannon.pdf">Claude Shannon, "Programming a Computer for Playing Chess," <em>Philosophical Magazine</em>, 1950</a>.</strong> The paper that first proposed scoring a finished game position with a number and searching backward through a tree of future moves to decide the best one right now: exactly the minimax idea this lesson's tic-tac-toe example builds by hand.</li>
+<li><strong><a href="https://mitpress.mit.edu/9780262039246/reinforcement-learning/">Richard S. Sutton and Andrew G. Barto, <em>Reinforcement Learning: An Introduction</em>, MIT Press.</a></strong> The standard textbook account of learning through reward and punishment, including the exploration-vs-exploitation trade-off (and the epsilon-greedy strategy) that this lesson's pancake robot and maze demonstrate informally.</li>
+<li><strong><a href="https://home.csulb.edu/~cwallis/382/readings/482/mccolloch.logical.calculus.pdf">Warren McCulloch and Walter Pitts, "A Logical Calculus of the Ideas Immanent in Nervous Activity," <em>Bulletin of Mathematical Biophysics</em>, 1943.</a></strong> The original proposal that a simple mathematical model of a neuron, wired together with others into a network, could compute anything: the seed of the neural networks and large language models in Part 6 and Part 7.</li>
+</ul>
+</blockquote>
+<h2 id="a-few-plain-language-basics-first">A few plain-language basics first</h2>
+<p>This lesson uses some everyday-sounding terms in a specific way. Here they are in plain words:</p>
+<ul>
+<li><strong>Decision tree:</strong> a flowchart of yes/no questions that leads, step by step, to one final action. It's a fork in the road, the same idea as <code>if</code>/<code>else</code>, just drawn as branches instead of code.</li>
+<li><strong>Minimax:</strong> an algorithm for two-player games where one player tries to make the game's final score as high as possible and the other tries to make it as low as possible, by looking ahead through every possible sequence of remaining moves before choosing.</li>
+<li><strong>Combinatorial explosion:</strong> what happens when the number of possible choices multiplies at every single step, so the total number of possibilities becomes too enormous to check one by one, even for a fast computer.</li>
+<li><strong>Machine learning:</strong> writing code that learns how to solve a problem from examples of data, instead of a human writing out every rule by hand in advance.</li>
+<li><strong>Reinforcement learning:</strong> a way of training an AI (or an animal, or a robot) where it tries actions, gets rewarded for good outcomes and penalized for bad ones, and gradually learns which actions pay off, without anyone telling it the "right" answer directly.</li>
+<li><strong>Exploration vs. exploitation (epsilon):</strong> the trade-off between trying something new for a chance at an even better outcome ("explore") and just doing what has already worked ("exploit"). Epsilon is the probability, on any given turn, of choosing to explore instead of exploit.</li>
+<li><strong>Neural network:</strong> a web of simple mathematical units ("neurons") connected by numeric weights, tuned automatically on huge amounts of training data until it can predict a useful output from a given input.</li>
+<li><strong>Hallucination:</strong> a confident-sounding answer from an AI language model that is, in fact, wrong: not a rare software bug, but a predictable side effect of how these models generate text.</li>
+</ul>
+<p>You do not need to memorise these. Each is explained again the first time it matters below.</p>
+<h2 id="why-this-lesson-matters">Why this lesson matters</h2>
+<p>Lesson 32 ended by promising to go "underneath prompts and APIs entirely, to the decision trees, reinforcement learning, and neural networks that make any of this (the duck, Copilot, the AI-vs-reality game) possible in the first place." This lesson keeps that promise. Malan draws a sharp line between the world of simple rules and the world of learned patterns: describing why brute-force approaches stop working on hard problems, he says plainly, <strong>"you instead need to write code that doesn't solve the problem directly but in some sense indirectly... this is what we mean nowadays by machine learning."</strong></p>
+<p>You've already met the "simple rules" half of this lesson without knowing it. Lesson 7's <code>if</code>/<code>else if</code>/<code>else</code> chain is, quite literally, a decision tree. Lesson 13's Big O notation is the vocabulary for exactly the kind of runaway growth that makes chess and Go too big to brute-force. And Lesson 16's recursion ("call yourself, but with a smaller version of the problem") is precisely how minimax scores a board: by scoring the boards that follow from it. This lesson takes all three of those tools and points them at a genuinely new problem: what do you do once a game (or a sentence, or a recommendation) has <em>too many</em> possibilities to just check them all?</p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<p>By the end of this lesson you will be able to:</p>
+<ol>
+<li>Name at least four everyday "invisible AI" features (spam filters, handwriting recognition, recommendation engines, voice assistants) and explain, in plain language, why none of them run on one giant hardcoded <code>if</code>/<code>else</code>.</li>
+<li>Draw a decision tree for a paddle game (Pong or Breakout) and translate it directly into real Python <code>if</code>/<code>elif</code>/<code>else</code> code.</li>
+<li>Score a finished tic-tac-toe board as <code>-1</code>, <code>0</code>, or <code>1</code>, and hand-trace minimax across a full game tree to identify the objectively optimal move from a near-endgame position.</li>
+<li>Explain combinatorial explosion using real numbers (255,168 total tic-tac-toe games; roughly 85 billion chess openings; roughly 266 quintillion Go openings) and why it makes exhaustive search impossible for anything much bigger than tic-tac-toe.</li>
+<li>Describe how reinforcement learning trains an agent through reward and punishment, and explain the explore-vs-exploit trade-off using the epsilon variable.</li>
+<li>Explain, at a beginner level, how neural networks, deep learning, and large language models like GPT work, and explain why hallucinations happen.</li>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li><strong>Module 9 · Lesson 32 (Using AI well: prompts and copilots):</strong> the immediately preceding lesson. Nothing from it is required line by line, but its closing promise, to look "underneath" prompts and APIs, is exactly what this lesson delivers.</li>
+<li><strong>Module 2 · Lesson 7 (Conditionals and loops):</strong> you'll reuse <code>if</code>/<code>elif</code>/<code>else</code> directly to turn a decision tree into real Python code.</li>
+<li><strong>Module 4 · Lesson 13 (Thinking in running time: Big O):</strong> combinatorial explosion is Big O's growth-rate warning, at war-story scale: the same "how does this scale?" question, just applied to a game tree instead of a loop.</li>
+<li><strong>Module 4 · Lesson 16 (Recursion and merge sort):</strong> minimax is a recursive algorithm; the base-case/recursive-case habit of mind from that lesson transfers directly.</li>
+</ul>
+<hr />
+<h2 id="part-1-the-ai-you-already-use-every-day">Part 1: The AI you already use, every day</h2>
+<p>Before touching a single algorithm, Malan grounds the whole lesson in features you already trust without thinking about it. Start with spam:</p>
+<blockquote>
+<p>"There's not some human at Microsoft or Google sort of manually labeling the messages as they come in, deciding spam or not spam. They're figuring out, using code and nowadays using AI, that looks like spam, and therefore I'm going to put it in the spam folder, which is probably correct 99% of the time, but indeed there's potentially a failure rate." (David Malan)</p>
+</blockquote>
+<p>Handwriting recognition works the same way: no company knows <em>your</em> handwriting in particular, but having trained on enough other people's handwriting, it can recognize yours with high probability anyway. Streaming recommendations are next:</p>
+<blockquote>
+<p>"There's no <code>if</code>, <code>if</code>, <code>if</code> construct for every movie or TV show in their database. It's sort of figuring out much more organically, dynamically, what you and I might like." (David Malan)</p>
+</blockquote>
+<p>And voice assistants close the list:</p>
+<blockquote>
+<p>"There's no massive <code>if else if</code> that has all possible questions in the world just waiting for you or me to ask it." (David Malan)</p>
+</blockquote>
+<p>Every one of these features quietly rules out the tool you already know best (a giant, hand-written chain of <code>if</code>/<code>else</code> statements) because no human could ever write enough branches to cover every email, every handwriting style, every taste in movies, or every possible question. Something else has to be running. The rest of this lesson is that "something else."</p>
+<blockquote>
+<p>🔑 <strong>None of these everyday AI features are one giant hardcoded rulebook.</strong> They are all, in one way or another, systems that found patterns in data instead of being told the rules directly. Keeping that distinction in mind is what lets you spot, later in this lesson, exactly which kind of system is running underneath any AI feature you meet.</p>
+</blockquote>
+<hr />
+<h2 id="part-2-decision-trees-an-ifelse-chain-you-can-draw">Part 2: Decision trees (an if/else chain you can draw)</h2>
+<p>Not every game needs pattern-matching, though. Malan rewinds to Pong and its successor, Breakout (one paddle, one ball, bounce the ball off bricks for points), and points out that a human's instinct about where to move the paddle can be written down as a precise, always-correct recipe:</p>
+<blockquote>
+<p>"Decision trees are a concept from economics, strategic thinking, computer science as well. That's one way of solving this problem in such a way that you will always play this game well if you just follow this algorithm." (David Malan)</p>
+</blockquote>
+<p>For Breakout, the whole recipe is three yes/no questions:</p>
+<div class="codehilite"><pre><span></span><code>                Is the ball to the left of the paddle?
+               /                                       \
+             yes                                        no
+              |                                          |
+      Move paddle LEFT              Is the ball to the right of the paddle?
+                                    /                                      \
+                                  yes                                      no
+                                   |                                        |
+                          Move paddle RIGHT                     Don&#39;t move the paddle
+</code></pre></div>
+
+<p>Malan is explicit that this tree maps one-to-one onto code: no cleverness, no training data, just three questions asked in a loop, in this cleaned-up form of the pseudocode read aloud in the talk:</p>
+<blockquote>
+<p>"While the game is ongoing: if the ball's to the left of the paddle, then move the paddle left; else if the ball's to the right of the paddle, move the paddle right; else, don't move the paddle." (David Malan)</p>
+</blockquote>
+<p>That is exactly Lesson 7's <code>if</code>/<code>elif</code>/<code>else</code> chain, just drawn as branches before it's written as code:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">while</span> <span class="n">game_is_ongoing</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">ball_x</span> <span class="o">&lt;</span> <span class="n">paddle_x</span><span class="p">:</span>
+        <span class="n">move_paddle</span><span class="p">(</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">ball_x</span> <span class="o">&gt;</span> <span class="n">paddle_x</span><span class="p">:</span>
+        <span class="n">move_paddle</span><span class="p">(</span><span class="s2">&quot;right&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">pass</span>  <span class="c1"># the ball is already directly above the paddle, so don&#39;t move</span>
+</code></pre></div>
+
+<p>Nothing here learns anything. Given the ball's position and the paddle's position, this code plays Breakout's paddle <em>perfectly</em>, every single time, forever. Whenever you can write down the full list of questions a problem needs answered, and there aren't too many of them, a decision tree is not a lesser cousin of "real AI": it's the right tool, full stop.</p>
+<blockquote>
+<p>🔑 <strong>A decision tree is just <code>if</code>/<code>else</code>, drawn as a tree.</strong> If you can enumerate the questions and there's a small, fixed number of them, you don't need machine learning at all.</p>
+</blockquote>
+<hr />
+<h2 id="part-3-tic-tac-toe-and-minimax-scoring-a-game-to-solve-it">Part 3: Tic-tac-toe and minimax (scoring a game to solve it)</h2>
+<p>Tic-tac-toe looks almost as simple as Breakout (get three in a row, horizontally, vertically, or diagonally), but Malan makes a bold claim about it:</p>
+<blockquote>
+<p>"If back in childhood or more recently you've ever lost a game of tic-tac-toe, like, you're just bad at tic-tac-toe, because logically there's no reason you should ever lose a game of tic-tac-toe if you're playing optimally. At worst you should force a tie, but at best you should win the game." (David Malan)</p>
+</blockquote>
+<p>The algorithm that guarantees this is called <strong>minimax</strong>, and the trick is to strip the fun out of the game entirely by turning it into arithmetic. Malan proposes a single, consistent scoring rule for any finished board:</p>
+<blockquote>
+<p>"Anytime O wins, the score of the game is -1. Anytime X wins, the score of the game is a positive one. And anytime nobody wins, the score is 0." (David Malan)</p>
+</blockquote>
+<p>Once every finished board has a number, the two players get opposite goals: <strong>X tries to maximize the score</strong> (push it toward <code>+1</code>), and <strong>O tries to minimize it</strong> (push it toward <code>-1</code>). As a sanity check, a board where X has already completed three in a row down the middle scores <code>1</code>; a board where nobody has won yet scores <code>0</code>.</p>
+<h3 id="working-backward-from-the-end-of-the-game">Working backward from the end of the game</h3>
+<p>The genuinely useful trick is applying this to boards that <em>aren't</em> finished yet, by looking ahead to how the game <em>will</em> end if both players keep playing well. Malan walks through a position with only two squares left, O's turn, where O can play either of two open squares:</p>
+<div class="codehilite"><pre><span></span><code>Current board: O to move, 2 squares empty (top-left, bottom-middle)
+
+                        O&#39;s choices
+              /                              \
+     O plays top-left                O plays bottom-middle
+              |                                |
+     X plays bottom-middle              X plays top-left
+     (X completes 3-in-a-row)      (no one completes 3-in-a-row)
+              |                                |
+        board value = 1                  board value = 0
+          (X wins)                          (a tie)
+
+O is MINIMIZING -&gt; compares the two outcomes {1, 0} -&gt; picks the LOWER one
+O plays bottom-middle, forcing a tie (value 0) instead of letting X win (value 1)
+</code></pre></div>
+
+<p>Malan narrates the logic directly: <strong>"O more mathematically and logically can decide: do I want an endpoint of 1 or an endpoint of 0? Well, 0 is probably the better option because that's less than 1, and thus it's the minimal possibility."</strong> Nobody has to guess or trust an instinct: the value of <em>this</em> board is fully determined by the values of the boards it can turn into.</p>
+<p>That's the whole algorithm, stated as code Malan describes on screen: <strong>"If the player is X, for each possible move, calculate the score for the board at that point in time, and then choose the move with the highest score... else if the player is O, essentially do the same thing but choose the minimal possible score."</strong></p>
+<div class="codehilite"><pre><span></span><code>function best_move(board, player):
+    if player == &quot;X&quot;:                 # X is maximizing
+        for each legal move:
+            compute the resulting board&#39;s value      # via recursion
+        play the move with the HIGHEST resulting value
+    else:                              # O is minimizing
+        for each legal move:
+            compute the resulting board&#39;s value
+        play the move with the LOWEST resulting value
+</code></pre></div>
+
+<p>Notice that "compute the resulting board's value" for a board that <em>isn't</em> finished means running this exact same process again, one level deeper: this is Lesson 16's recursion, applied to a game tree instead of a sorted list. To know a board's value, you need the values of every board it could turn into, all the way down to boards where the game is actually over.</p>
+<blockquote>
+<p>🔑 <strong>Minimax doesn't guess: it exhaustively proves the answer.</strong> Every finished board gets a real number (<code>-1</code>, <code>0</code>, or <code>1</code>); every unfinished board's value is computed from the values of every board that follows from it, all the way down.</p>
+</blockquote>
+<hr />
+<h2 id="part-4-the-combinatorial-explosion-why-brute-force-breaks">Part 4: The combinatorial explosion (why brute force breaks)</h2>
+<p>Minimax feels almost like cheating for a 2-square-left position, because there's only one branch to check. But Malan is honest about what happens as more squares open up:</p>
+<blockquote>
+<p>"The catch is that the decision tree gets a lot bigger the more and more moves that are left. It gets sort of bigger and bushier, in that it's essentially doubling in size." (David Malan)</p>
+</blockquote>
+<p>Even tic-tac-toe, small as it looks, has a surprisingly large total tree: <strong>"How many ways are there to play tic-tac-toe though? Well, 255,168."</strong> That's still small enough that a computer (or, with real patience, a determined human) can walk the whole tree and solve the game perfectly every time, which is exactly why the code sketch in Part 3 works so well for tic-tac-toe.</p>
+<p>Chess and Go are a different story entirely. Counting only the first four moves each player makes (not the whole game, just the <em>opening</em>), Malan reports the totals: <strong>"it turns out 85 billion just to get the game started"</strong> for chess, and, for Go, <strong>"266 quintillion possibilities."</strong> His own reaction: <strong>"this is where we sort of as humans, and even with our modern PCs and Macs and phones, kind of have to throw up our hands, because I don't have this many bits of memory in my computer. I don't have this many hours in my life left to actually crunch all of those numbers."</strong></p>
+<table>
+<thead>
+<tr>
+<th>Game</th>
+<th>Total possibilities counted</th>
+<th>Can you brute-force it?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tic-tac-toe (full game)</td>
+<td>255,168</td>
+<td>Yes, small enough for a computer (or a patient human) to walk the entire tree</td>
+</tr>
+<tr>
+<td>Chess (first 4 moves only)</td>
+<td>~85 billion</td>
+<td>No, and that's just the <em>opening</em></td>
+</tr>
+<tr>
+<td>Go (first 4 moves only)</td>
+<td>~266 quintillion</td>
+<td>Absolutely not</td>
+</tr>
+</tbody>
+</table>
+<p>This is Lesson 13's Big O lesson, at a much larger scale. Lesson 13 showed you the difference between an algorithm that grows linearly (<code>O(n)</code>) and one that grows logarithmically (<code>O(log n)</code>). A game tree that "essentially doubles in size" with every move left is growing <em>combinatorially</em>, far faster than either of those families, and no amount of extra memory or a faster CPU rescues you from a curve that steep for long.</p>
+<p>That's the exact gap machine learning exists to close. As Malan puts it, once brute force is off the table:</p>
+<blockquote>
+<p>"You instead need to write code that doesn't solve the problem directly but in some sense indirectly. You write code so that the computer figures out how to win... In other words, you train it... this is what we mean nowadays by machine learning: writing code via which machines learn how to solve problems generally by being trained on massive amounts of data, and then, in new problems, looking for patterns via which they can apply those past training data to the problem at hand." (David Malan)</p>
+<p>✅ <strong>What to do about it:</strong> whenever a problem's tree of possibilities is small and fully known (tic-tac-toe, Breakout's paddle), exhaustive search or a decision tree is the right, simplest tool. The moment the count of possibilities explodes past what any computer could enumerate, that's your signal that you need a system that learns from examples instead of one that checks every possibility.</p>
+</blockquote>
+<hr />
+<h2 id="part-5-reinforcement-learning-reward-punishment-and-epsilon">Part 5: Reinforcement learning (reward, punishment, and epsilon)</h2>
+<p><strong>Reinforcement learning</strong> is the machine-learning technique Malan reaches for first, because, as he notes, humans already use it constantly, on each other. He shows a lab recording of a researcher teaching a robot arm to flip a pancake:</p>
+<blockquote>
+<p>"Here's the key detail with reinforcement learning: behind the scenes, the human is probably rewarding the robot when it does a good job, like, better and better it flips, the more it's rewarded, as by hitting a key and giving it a point... or conversely, every time the robot screws up and drops the pancake on the floor, sort of a proverbial slap on the wrist, a punishment, so that it does less of that behavior the next time." (David Malan)</p>
+</blockquote>
+<p>After roughly 50 trials of this reward-and-punishment loop, the robot reliably flips the pancake, not because anyone programmed the physics of a flip, but because good attempts were reinforced and bad ones were not.</p>
+<h3 id="explore-vs-exploit-and-the-epsilon-variable">Explore vs. exploit, and the epsilon variable</h3>
+<p>Malan then turns to a maze: a player (a yellow dot) needs to reach an exit (a green dot) while avoiding lava pits, moving only up, down, left, or right, with no map. Bumping a lava pit is a punishment (remember: don't do that); reaching the exit is a reward (remember: do more of that). Given enough tries, the player eventually stumbles onto <em>a</em> working path and can always repeat it. But Malan asks the obvious follow-up:</p>
+<blockquote>
+<p>"Is this the best way to play? Am I as good at Super Mario Brothers as I might think? ... I've moved many more times than I need to." (David Malan)</p>
+</blockquote>
+<p>A player that only ever repeats its first working path never discovers a shorter one: the same habit, Malan admits, as always ordering the same good dish at a restaurant instead of risking something that might be even better. This tension has a name:</p>
+<blockquote>
+<p>"There's this principle of exploring versus exploiting when it comes to using artificial intelligence to solve problems... what if I just sprinkle in a little bit of randomness along the way? And maybe 10% of the time, as represented by this <strong>epsilon</strong> variable, I, as the computer in the story, generate a random number between 0 and 1, and if it's less than that, which is going to happen 10% of the time, I'm going to make a random move instead of one that I know will get me closer to the exit. Otherwise I'll indeed make the move with the highest value." (David Malan)</p>
+</blockquote>
+<p>That's the whole mechanism: on every decision, generate a random number; if it's less than epsilon, <strong>explore</strong> (try something new); otherwise, <strong>exploit</strong> (do whatever has worked best so far). Set epsilon too low, and the agent never finds a better path than the first one it stumbled on. Set it too high, and it wastes too many turns trying random things instead of using what it already knows works.</p>
+<p>Applied to an AI actually playing Breakout, this loop produces something Malan calls "a little creepy":</p>
+<blockquote>
+<p>"If you let it play long enough... you might find a certain trick to the game. Turns out if you're smart enough to break through that top row, you can let the game just play itself for you and maximize your score without even touching the ball, something that I do find a little creepy, that I just figured out how to do that without being told. But it's just a logical continuation of rewarding it for good behavior and punishing it for bad behavior." (David Malan)</p>
+</blockquote>
+<p>No one programmed that trick. Reward-and-punishment, repeated enough times with a bit of exploration mixed in, discovered it on its own.</p>
+<blockquote>
+<p>🔑 <strong>Reinforcement learning trades a known recipe for trial, reward, and punishment.</strong> Epsilon is the one number that decides how much of the agent's behavior is "try something new" versus "do what already worked", and getting that balance wrong is the difference between a mediocre, well-worn path and the best solution available.</p>
+</blockquote>
+<hr />
+<h2 id="part-6-from-rules-to-learning-supervised-learning-deep-learning-and-neural-networks">Part 6: From rules to learning (supervised learning, deep learning, and neural networks)</h2>
+<p>Reinforcement learning solves problems with no obvious "right answer" to imitate: nobody hands the maze-solver a labeled list of correct moves. But some of Part 1's examples, like spam, actually do have a human supplying the right answer, at least at first:</p>
+<blockquote>
+<p>"There's specifically a category of learning that's supervised, and we've been using this for years. And in fact, our first example of spam early on was certainly supervised... maybe once a day I hit the keyboard shortcut in Gmail to say, 'ah, this is spam, you should have caught this', and that is training Google's algorithm further." (David Malan)</p>
+</blockquote>
+<p>That's <strong>supervised learning</strong>: a human labels examples (spam or not spam), and the system learns to imitate those labels on new, unseen email. The catch, Malan points out immediately, is that it doesn't scale:</p>
+<blockquote>
+<p>"The catch is that labeling data in that way manually just doesn't scale very well... it's just not realistic for humans to label millions of pieces of data, billions of pieces of data." (David Malan)</p>
+</blockquote>
+<p>That limitation is exactly what pushes the field toward <strong>deep learning</strong>, training systems that find their own patterns in raw, unlabeled data, using <strong>neural networks</strong>, loosely inspired by neurons in the brain: simple units, drawn as circles, connected by lines ("edges") that carry a signal from one to the next.</p>
+<h3 id="a-tiny-neural-network-solving-a-real-problem">A tiny neural network, solving a real problem</h3>
+<p>Malan builds the smallest possible example: a two-dimensional grid of dots, each either blue or red, with no rule given for which color goes where. A tiny network with just three neurons (one for the X-coordinate, one for the Y-coordinate, and one for the output) has to <em>discover</em> the rule from examples alone:</p>
+<div class="codehilite"><pre><span></span><code>      x  (X-coordinate) ---\
+                             \
+                              o----&gt; output: predict &quot;blue&quot; or &quot;red&quot;
+                             /
+      y  (Y-coordinate) ---/
+</code></pre></div>
+
+<p>Given only a couple of dots, the best the network can do is guess a rough dividing line; given more dots, that line can be adjusted, angled, even curved, to fit the data better. Mathematically, this whole network reduces to finding three numbers, called <strong>parameters</strong> (or <strong>weights</strong>): <strong>"an A, a B, and a C,"</strong> plugged into the formula <code>A·x + B·y + C</code>. Malan gives the rule for turning that formula into a prediction: <strong>"if that value mathematically gives me a number greater than 0, predict it's going to be blue; otherwise predict it's going to be red."</strong></p>
+<p>Real neural networks scale this same idea up enormously: not three neurons, but billions, each edge carrying its own numeric weight, tuned automatically by training on vast amounts of data. And that scale comes at a cost of transparency:</p>
+<blockquote>
+<p>"Even though there'd be millions, billions of numbers going on there, I can't tell you what this neuron represents or why this edge has this weight. It's because of the massive amount of training data: that's just how the math works out." (David Malan)</p>
+</blockquote>
+<p>That is the honest, slightly uncomfortable truth about deep learning: nobody, not even the people who built the network, can point to one neuron and say exactly what it means. The network works because the training data, in aggregate, pushed billions of numbers into a configuration that happens to predict well, not because a human designed each piece.</p>
+<blockquote>
+<p>✅ <strong>What to do about it:</strong> when labeled data is scarce or too expensive to gather at scale, that's the signal to reach for deep learning instead of supervised learning, but expect to trade away the ability to explain <em>why</em> any single decision came out the way it did.</p>
+</blockquote>
+<hr />
+<h2 id="part-7-inside-an-llm-embeddings-attention-gpt-and-why-ai-hallucinates">Part 7: Inside an LLM (embeddings, attention, GPT, and why AI hallucinates)</h2>
+<p>The same neural-network idea, scaled up to enormous size and trained on text instead of colored dots, is what powers <strong>large language models</strong> (LLMs) like the GPT behind CS50's duck. GPT itself stands for "generative pre-trained transformer", a mouthful, but Malan is quick to note the familiar half: <strong>"there's the GPT in ChatGPT."</strong></p>
+<p>Before an LLM can reason about words, it needs a way to represent them as numbers. Malan uses a deliberately hard example (a paragraph about Massachusetts, ending on the (unstated) word "Boston") to show why this used to be difficult: the key words ("Massachusetts," "capital") are far apart in the sentence, and the same idea gets referred to with different words ("Massachusetts," then just "the state"), so an AI needs some way to notice that those far-apart words are actually connected. The fix has two parts. First, every word gets converted into a list of numbers, called an <strong>embedding</strong>:</p>
+<blockquote>
+<p>"The word Massachusetts, if you encode it in a certain way, is going to be represented with an array or vector of numbers, floating point values, so many so that the word Massachusetts, in one model, would use 1,536 floating point numbers to represent Massachusetts, essentially, in an N-dimensional space." (David Malan)</p>
+</blockquote>
+<p>Second, the model computes <strong>attention</strong>, a measure of how strongly each word in a sentence relates to every other word:</p>
+<blockquote>
+<p>"Attention is calculated based on all of that data, whereby... the thicker lines imply more of a relationship between those two words. So Massachusetts and state is inferred as having a thicker line, a higher attention from one word to the other, whereas 'our' and 'and' and 'the's have thinner lines, because they're just not as much signal to the AI as to what the answer to this question is." (David Malan)</p>
+</blockquote>
+<p>Embeddings plus attention are what let a model connect "the state's capital" all the way back to "Massachusetts," even though many other words sit in between. With that context assembled, Malan describes what the model is actually doing, in the end, with brutal simplicity:</p>
+<blockquote>
+<p>"All these LLMs, large language models, are just statistical models, like, what is the highest probability word that it should spit out at the end of this paragraph, based on all of the Reddit posts and Google search results and encyclopedias and Wikipedias that it's found and trained on online." (David Malan)</p>
+</blockquote>
+<p>Almost always, that highest-probability word is correct: for the Massachusetts example, "Boston." But "highest probability" is not the same thing as "guaranteed true," and that gap has a name:</p>
+<blockquote>
+<p>"Even CS50's own duck is fallible, even though we've written lots of code to try to put downward pressure on those mistakes, and those mistakes are what we'll call <strong>hallucinations</strong>, where the AI just makes something up, perhaps because some crazy human on the internet made something up and it was interpreted as authoritative, or just by bad luck, because of a bit of that exploration... the AI sort of veered this way... and spit out an answer that, in fact, is not correct." (David Malan)</p>
+</blockquote>
+<p>That's the whole mechanism behind a hallucination: it isn't a bug in the ordinary sense of broken code. It's the entirely predictable result of a system that always outputs its single most probable next word: a system that, occasionally, has been trained on bad information, or simply lands on a less likely (and wrong) word instead of the right one. Knowing that is exactly what makes Lesson 32's advice (read AI output critically, don't accept it on faith) make sense at a mechanical level, not just as a warning.</p>
+<p>Malan closes the lecture on a fittingly imperfect note: a recitation of Shel Silverstein's poem "The Homework Machine," about a machine that answers any homework problem "in ten seconds' time," only for the child in the poem to ask it a simple addition problem and get back a nonsense answer: <strong>"9 plus 4, and the answer is 33?"</strong>, a decades-old joke about a machine that answers instantly and confidently, and is still sometimes wrong.</p>
+<blockquote>
+<p>🔑 <strong>A hallucination is a structural property of "predict the most likely next word," not a rare glitch.</strong> The same statistical machinery that makes an LLM useful almost all of the time is exactly what occasionally makes it confidently wrong.</p>
+</blockquote>
+<hr />
+<h2 id="key-takeaways">Key takeaways</h2>
+<ol>
+<li><strong>Most everyday "smart" features are not hardcoded rulebooks.</strong> Spam filters, handwriting recognition, recommendations, and voice assistants all replace an impossibly long <code>if</code>/<code>else</code> chain with patterns learned from data.</li>
+<li><strong>A decision tree is just <code>if</code>/<code>else</code>, drawn as a tree.</strong> Pong and Breakout's paddles can play perfectly with three yes/no questions, no learning required.</li>
+<li><strong>Minimax scores a finished game (<code>-1</code>/<code>0</code>/<code>1</code>) and works backward.</strong> X maximizes, O minimizes, and every unfinished board's value comes from recursively scoring the boards that follow it, exactly like Lesson 16's recursion.</li>
+<li><strong>Combinatorial explosion (255,168 tic-tac-toe games; ~85 billion chess openings; ~266 quintillion Go openings) is Big O's warning at war-story scale.</strong> Once a game tree "doubles in size" with every move, brute force stops being an option no matter how fast your computer is.</li>
+<li><strong>Reinforcement learning replaces exhaustive search with reward and punishment</strong>, and epsilon controls the balance between exploiting a known-good path and exploring for a possibly better one.</li>
+<li><strong>Neural networks tune millions or billions of numeric parameters from training data</strong>, rather than being hand-programmed rule by rule, which is powerful, and also why nobody can fully explain any single decision they make.</li>
+<li><strong>Hallucinations are a structural side effect of predicting the statistically likely next word</strong>, not a rare bug: the exact mechanism behind Lesson 32's warning to always read AI output critically.</li>
+</ol>
+<h2 id="common-pitfalls">Common pitfalls</h2>
+<ul>
+<li>❌ Assuming every "smart" feature must be a neural network. Many everyday features (a game paddle, a simple rule engine) are just decision trees: check whether the questions can be fully enumerated before reaching for machine learning.</li>
+<li>❌ Thinking minimax "peeks ahead a little." It doesn't estimate: it walks the <em>entire</em> remaining game tree and scores every possible ending, which is exactly why it stops being practical once the tree explodes (Part 4).</li>
+<li>❌ Treating "explore sometimes" as a vague vibe instead of an actual mechanism. Epsilon is a concrete probability, checked with an actual random-number comparison on every single decision, not an occasional mood.</li>
+<li>❌ Treating a hallucination as a rare bug you can fully eliminate. It's a structural property of predicting the most probable next word, not a lookup error, which is why even a well-engineered system like CS50's duck remains fallible.</li>
+</ul>
+<hr />
+<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: Solve It Like a Machine</h2>
+<blockquote>
+<p>This is the main hands-on project for the lesson. No accounts, tools, or spending required: just paper, a pencil, two six-sided dice, and (for the stretch) a way to generate a number from 1 to 10. You'll prove, by hand, that minimax genuinely solves tic-tac-toe; write a real decision tree as real code; and, if you want to go further, watch the explore-vs-exploit trade-off change your own score across 20 rounds.</p>
+</blockquote>
+<h3 id="what-you-will-build">What you will build</h3>
+<p>Three small, independent artifacts:</p>
+<ol>
+<li><strong>A fully hand-drawn minimax tree</strong> for a specific tic-tac-toe endgame with three empty squares, with every leaf scored and every intermediate value backed up correctly, proving which move is objectively best.</li>
+<li><strong>A real Python file</strong>, <code>paddle.py</code>, implementing the Breakout paddle's decision tree from Part 2 as runnable <code>if</code>/<code>elif</code>/<code>else</code> code.</li>
+<li><strong>(Stretch)</strong> A hand-run, 20-round explore-vs-exploit experiment comparing total scores across three different epsilon values.</li>
+</ol>
+<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
+<table>
+<thead>
+<tr>
+<th>Lesson idea</th>
+<th>Where you use it in the Capstone</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Scoring a board -1/0/1 (Part 3)</td>
+<td>Milestone 1: scoring every leaf of your hand-drawn tree</td>
+</tr>
+<tr>
+<td>Minimax recurses (Part 3, Lesson 16)</td>
+<td>Milestone 1: backing values up from leaves to the root</td>
+</tr>
+<tr>
+<td>Decision trees are if/else (Part 2, Lesson 7)</td>
+<td>Milestone 2: the paddle's tree becomes real Python</td>
+</tr>
+<tr>
+<td>Epsilon and explore vs. exploit (Part 5)</td>
+<td>Milestone 3 (stretch): comparing epsilon = 0, 0.1, and 0.5</td>
+</tr>
+</tbody>
+</table>
+<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
+<ol>
+<li><strong>Hand-draw the full minimax tree and prove the optimal move.</strong> Use this exact board (numbering cells 1-9, left to right, top to bottom, like a phone dial), with <strong>X to move</strong> and three empty squares remaining at 4, 6, and 8:</li>
+</ol>
+<p>```text
+    O | O | X</p>
+<hr />
+<div class="codehilite"><pre><span></span><code>  | X |
+</code></pre></div>
+
+<hr />
+<div class="codehilite"><pre><span></span><code>O |   | X
+</code></pre></div>
+
+<p>```</p>
+<p>(Cell 1 = O, 2 = O, 3 = X, 4 = empty, 5 = X, 6 = empty, 7 = O, 8 = empty, 9 = X.) On paper, draw all three of X's opening options (playing 4, 6, or 8) as the top level of a tree. For each option that doesn't immediately end the game, draw O's possible replies below it, and keep going until every branch ends in a finished board. Score every finished (leaf) board <code>-1</code> (O wins), <code>0</code> (tie), or <code>1</code> (X wins). Then back the values up the tree: at every level where it's <strong>X's</strong> turn, the value is the <strong>maximum</strong> of the branches below it; at every level where it's <strong>O's</strong> turn, the value is the <strong>minimum</strong>. Write down, in one sentence, which of X's three opening moves is objectively optimal and why: you should be able to point to a real, immediate three-in-a-row as part of your proof.
+2. <strong>Turn the paddle's decision tree into real code.</strong> In a new file <code>paddle.py</code>, write a function <code>move_paddle(ball_x, paddle_x)</code> that returns the string <code>"left"</code>, <code>"right"</code>, or <code>"stay"</code>, using the exact three-question tree from Part 2 (is the ball left of the paddle? is it right of the paddle? otherwise, stay). Test it by hand with at least five different <code>(ball_x, paddle_x)</code> pairs you choose yourself, including a case where they're equal, and confirm each returns the answer you'd expect.
+3. <strong>Stretch goal: run a 20-round explore-vs-exploit experiment.</strong> Using two six-sided dice, secretly assign one die a "win" threshold of 1-4 (about 67%) and the other a threshold of 1-3 (about 50%): write these two thresholds on a slip of paper, fold it, and don't look again until Step 6. Call them Machine A and Machine B, but don't tell yourself which threshold belongs to which; you're only allowed to learn each machine's win rate by actually "playing" it. For each of three separate 20-round runs (one for epsilon = 0, one for epsilon = 0.1, one for epsilon = 0.5): each round, generate a number from 1-10 (roll two dice and take one, or use any random-number source); if that number is less than or equal to epsilon × 10, <strong>explore</strong> (play whichever machine you have less data on so far); otherwise <strong>exploit</strong> (play whichever machine currently has the better observed win rate from your own tally, picking randomly on a tie). Roll the corresponding die once to see if that round wins or loses, and update your running win/play tally for that machine. After 20 rounds, record the total wins out of 20 for that epsilon value, then repeat for the other two epsilon values. Finally, unfold your paper and compare your total wins across epsilon = 0, 0.1, and 0.5.</p>
+<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
+<ul>
+<li>✅ Your hand-drawn tree for Milestone 1 shows all three of X's opening moves, every reply beneath each non-terminal one, and a score on every leaf.</li>
+<li>✅ You correctly identify that <strong>playing cell 6</strong> is X's optimal move (it completes column 3 (cells 3, 6, 9) for an immediate win, value <code>+1</code>), while playing 4 only forces a tie (value <code>0</code>) and playing 8 lets O force a win (value <code>-1</code>) if O replies optimally.</li>
+<li>✅ <code>paddle.py</code> returns <code>"left"</code>, <code>"right"</code>, or <code>"stay"</code> correctly for every one of your five hand-picked test cases.</li>
+<li>✅ (Stretch) You have three real total-win counts, one per epsilon value, and can say in one sentence whether a higher epsilon helped or hurt your score over just 20 rounds.</li>
+</ul>
+<blockquote>
+<p>💡 <strong>Keep yourself honest:</strong> for Milestone 1, don't skip drawing a branch just because it "looks worse": minimax's whole proof rests on actually scoring every option, not on trusting your gut about which one wins. That discipline (check every branch, don't assume) is the same rigor you'll want later when you can't just eyeball whether a database query or an AI-suggested fix is correct.</p>
+</blockquote>
+<hr />
+<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
+<blockquote>
+<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
+</blockquote>
+<h3 id="exercise-1-score-three-boards-foundational">Exercise 1: Score three boards (foundational)</h3>
+<p>Score each of these three <em>finished</em> tic-tac-toe boards as <code>-1</code>, <code>0</code>, or <code>1</code>, using the scoring rule from Part 3 (X wins = <code>1</code>, O wins = <code>-1</code>, nobody wins = <code>0</code>): (a) <code>X X X / O O _ / _ _ _</code>, (b) <code>X O X / O X O / O X O</code>, (c) <code>O O O / X X _ / X _ _</code>. For each, name which line (row, column, or diagonal) determines the score.</p>
+<h3 id="exercise-2-explore-a-tiny-maze-intermediate">Exercise 2: Explore a tiny maze (intermediate)</h3>
+<p>On paper, draw a 4×4 grid. Mark one cell "start," one cell "exit," and two other cells "lava." First, trace a path from start to exit using only "always move toward the exit, avoiding lava" (pure exploitation): count how many moves it takes. Then trace a second path where, at exactly one random step along the way, you deliberately move in a different direction than the exploit rule would pick (simulating one exploration step) before returning to exploiting. Compare the two path lengths and write one sentence about whether the detour ever paid off.</p>
+<h3 id="exercise-3-hand-fit-a-bluered-classifier-advanced">Exercise 3: Hand-fit a blue/red classifier (advanced)</h3>
+<p>Here are five points on a grid, each labeled blue or red: <code>(1, 1) blue</code>, <code>(2, 3) blue</code>, <code>(1, 4) blue</code>, <code>(4, 1) red</code>, <code>(5, 2) red</code>. Using the formula from Part 6 (<code>A·x + B·y + C</code>, predicting blue if the result is greater than 0 and red otherwise), pick your own whole-number values for <code>A</code>, <code>B</code>, and <code>C</code> and check, by computing the formula for all five points, whether your line correctly separates every blue point from every red point. If it doesn't, adjust one parameter and try again.</p>
+<hr />
+<h2 id="cheat-sheet">Cheat sheet</h2>
+<div class="codehilite"><pre><span></span><code>INVISIBLE AI, EVERYDAY EXAMPLES
+  Spam filters, handwriting recognition, recommendations, voice assistants
+  -&gt; none of them run on one giant hardcoded if/else
+
+DECISION TREE  =  if/else, drawn as a tree
+  Small, fixed number of questions -&gt; no learning needed (Pong, Breakout paddle)
+
+MINIMAX (tic-tac-toe)
+  Score every FINISHED board:  O wins = -1   tie = 0   X wins = +1
+  X&#39;s turn  -&gt; take the MAXIMUM of the options below
+  O&#39;s turn  -&gt; take the MINIMUM of the options below
+  Recursive: a board&#39;s value = the values of every board that follows it
+
+COMBINATORIAL EXPLOSION
+  Tic-tac-toe (whole game): 255,168 possibilities        -- brute-forceable
+  Chess (first 4 moves only): ~85 billion possibilities   -- not brute-forceable
+  Go (first 4 moves only): ~266 quintillion possibilities -- nowhere close
+
+REINFORCEMENT LEARNING
+  Try an action -&gt; reward (do more of that) or punishment (do less of that)
+  EPSILON = probability of exploring (trying something new) instead of
+            exploiting (doing what already worked best)
+  epsilon too low  -&gt; stuck with the first okay solution found
+  epsilon too high -&gt; wastes turns on things that don&#39;t pay off
+
+SUPERVISED -&gt; DEEP LEARNING
+  Supervised: humans label the data (you marking email as spam)
+  Deep learning: no human labels each example -- a neural network finds
+  its own patterns instead, because labeling doesn&#39;t scale to billions of items
+
+NEURAL NETWORK, SMALLEST VERSION
+  inputs (x, y) -&gt; one output neuron
+  formula:  A*x + B*y + C
+  if result &gt; 0: predict blue   else: predict red
+  real networks: billions of these &quot;weights,&quot; tuned by training data,
+  impossible for a human to interpret one at a time
+
+LLMs (GPT, Claude, Gemini, CS50&#39;s duck)
+  word -&gt; embedding (a long list of numbers, e.g. 1,536 per word)
+  attention -&gt; how strongly each word relates to every other word
+  output -&gt; the single highest-probability next word, over and over
+  HALLUCINATION = a confident, wrong answer -- a structural side effect
+  of &quot;predict the likely next word,&quot; not a rare bug
+</code></pre></div>
+
+<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
+<ul>
+<li><strong>Earlier, Module 2 · Lesson 7 (Conditionals and loops):</strong> the <code>if</code>/<code>else if</code>/<code>else</code> chain from that lesson is exactly what a decision tree becomes once you write it as code (Part 2). This lesson just draws it as branches first.</li>
+<li><strong>Earlier, Module 4 · Lesson 13 (Thinking in running time: Big O):</strong> combinatorial explosion (Part 4) is that lesson's "how does this scale?" question, at a scale (255,168 to 266 quintillion) that makes the difference between O(n) and O(log n) look tame by comparison.</li>
+<li><strong>Earlier, Module 4 · Lesson 16 (Recursion and merge sort):</strong> minimax (Part 3) recurses exactly the way merge sort does: a board's value depends on the values of smaller sub-problems (the boards that follow it), all the way down to a base case.</li>
+<li><strong>Earlier, Module 9 · Lesson 32 (Using AI well):</strong> this lesson delivers on that lesson's closing promise, going underneath the prompts and APIs to the decision trees, reinforcement learning, and neural networks that make the duck, Copilot, and every other AI tool possible.</li>
+<li><strong>Next, Module 10 · Lesson 34 (How the internet works):</strong> a different topic: the course moves from AI to networking. Nothing from this lesson is required there.</li>
+<li><strong>Later, your final project:</strong> you won't hand-code minimax or a neural network into your database-backed web app, but the habit of mapping a decision to explicit, enumerable branches <em>before</em> writing a line of code (Part 2) is exactly how you'll design server-side logic like access checks and form validation when you get there.</li>
+</ul>
+<hr />
+<p><em>Source: "CS50x 2026 - Artificial Intelligence" by David J. Malan, Harvard University. Quotes are transcribed from the talk; obvious auto-transcription artifacts (stray words, garbled game names, and misheard phrasing) have been silently corrected for readability while preserving Malan's exact wording and meaning wherever possible. The closing poem, "The Homework Machine," is the copyrighted work of Shel Silverstein (from </em>A Light in the Attic<em>, 1981) and is only briefly excerpted here; seek out the full poem directly if you'd like to read it. Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+    </article>
+    <section class="lesson-sync" data-lesson-id="33"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../progress.html">Progress tracker &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="32-using-ai-well.html"><span class="dir">&#8592; Previous</span><b>Using AI Well: Prompts and Copilots</b></a><a class="ln home" href="..\index.html"><b>All lessons</b></a><a class="ln next" href="..\module-10-web\34-how-the-internet-works.html"><span class="dir">Next &#8594;</span><b>How the Internet Works</b></a></nav>
+  </main>
+</div>
+
+<footer class="site"><div class="wrap">
+  <a class="logo" href="..\index.html">Self-Paced CS50x<span class="dot">.</span></a>
+  <span class="fnote">An unofficial self-paced companion generated from the CS50x 2026 lecture transcripts. CS50 is created by David J. Malan and Harvard University. Watch the original lectures and do the official problem sets at cs50.harvard.edu/x. Code snippets are illustrative reconstructions.</span>
+</div></footer>
+
+<style>pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.codehilite .hll { background-color: #ffffcc }
+.codehilite { background: #282C34; color: #ABB2BF }
+.codehilite .c { color: #7F848E } /* Comment */
+.codehilite .err { color: #ABB2BF } /* Error */
+.codehilite .esc { color: #ABB2BF } /* Escape */
+.codehilite .g { color: #ABB2BF } /* Generic */
+.codehilite .k { color: #C678DD } /* Keyword */
+.codehilite .l { color: #ABB2BF } /* Literal */
+.codehilite .n { color: #E06C75 } /* Name */
+.codehilite .o { color: #56B6C2 } /* Operator */
+.codehilite .x { color: #ABB2BF } /* Other */
+.codehilite .p { color: #ABB2BF } /* Punctuation */
+.codehilite .ch { color: #7F848E } /* Comment.Hashbang */
+.codehilite .cm { color: #7F848E } /* Comment.Multiline */
+.codehilite .cp { color: #7F848E } /* Comment.Preproc */
+.codehilite .cpf { color: #7F848E } /* Comment.PreprocFile */
+.codehilite .c1 { color: #7F848E } /* Comment.Single */
+.codehilite .cs { color: #7F848E } /* Comment.Special */
+.codehilite .gd { color: #E06C75 } /* Generic.Deleted */
+.codehilite .ge { color: #ABB2BF; font-style: italic } /* Generic.Emph */
+.codehilite .ges { color: #ABB2BF } /* Generic.EmphStrong */
+.codehilite .gr { color: #E06C75 } /* Generic.Error */
+.codehilite .gh { color: #ABB2BF; font-weight: bold } /* Generic.Heading */
+.codehilite .gi { color: #98C379 } /* Generic.Inserted */
+.codehilite .go { color: #E06C75 } /* Generic.Output */
+.codehilite .gp { color: #ABB2BF } /* Generic.Prompt */
+.codehilite .gs { color: #ABB2BF; font-weight: bold } /* Generic.Strong */
+.codehilite .gu { color: #ABB2BF; font-weight: bold } /* Generic.Subheading */
+.codehilite .gt { color: #E06C75 } /* Generic.Traceback */
+.codehilite .kc { color: #E5C07B } /* Keyword.Constant */
+.codehilite .kd { color: #C678DD } /* Keyword.Declaration */
+.codehilite .kn { color: #C678DD } /* Keyword.Namespace */
+.codehilite .kp { color: #C678DD } /* Keyword.Pseudo */
+.codehilite .kr { color: #C678DD } /* Keyword.Reserved */
+.codehilite .kt { color: #E5C07B } /* Keyword.Type */
+.codehilite .ld { color: #ABB2BF } /* Literal.Date */
+.codehilite .m { color: #D19A66 } /* Literal.Number */
+.codehilite .s { color: #98C379 } /* Literal.String */
+.codehilite .na { color: #E06C75 } /* Name.Attribute */
+.codehilite .nb { color: #E5C07B } /* Name.Builtin */
+.codehilite .nc { color: #E5C07B } /* Name.Class */
+.codehilite .no { color: #E06C75 } /* Name.Constant */
+.codehilite .nd { color: #61AFEF } /* Name.Decorator */
+.codehilite .ni { color: #E06C75 } /* Name.Entity */
+.codehilite .ne { color: #E06C75 } /* Name.Exception */
+.codehilite .nf { color: #61AFEF; font-weight: bold } /* Name.Function */
+.codehilite .nl { color: #E06C75 } /* Name.Label */
+.codehilite .nn { color: #E06C75 } /* Name.Namespace */
+.codehilite .nx { color: #E06C75 } /* Name.Other */
+.codehilite .py { color: #E06C75 } /* Name.Property */
+.codehilite .nt { color: #E06C75 } /* Name.Tag */
+.codehilite .nv { color: #E06C75 } /* Name.Variable */
+.codehilite .ow { color: #56B6C2 } /* Operator.Word */
+.codehilite .pm { color: #ABB2BF } /* Punctuation.Marker */
+.codehilite .w { color: #ABB2BF } /* Text.Whitespace */
+.codehilite .mb { color: #D19A66 } /* Literal.Number.Bin */
+.codehilite .mf { color: #D19A66 } /* Literal.Number.Float */
+.codehilite .mh { color: #D19A66 } /* Literal.Number.Hex */
+.codehilite .mi { color: #D19A66 } /* Literal.Number.Integer */
+.codehilite .mo { color: #D19A66 } /* Literal.Number.Oct */
+.codehilite .sa { color: #98C379 } /* Literal.String.Affix */
+.codehilite .sb { color: #98C379 } /* Literal.String.Backtick */
+.codehilite .sc { color: #98C379 } /* Literal.String.Char */
+.codehilite .dl { color: #98C379 } /* Literal.String.Delimiter */
+.codehilite .sd { color: #98C379 } /* Literal.String.Doc */
+.codehilite .s2 { color: #98C379 } /* Literal.String.Double */
+.codehilite .se { color: #98C379 } /* Literal.String.Escape */
+.codehilite .sh { color: #98C379 } /* Literal.String.Heredoc */
+.codehilite .si { color: #98C379 } /* Literal.String.Interpol */
+.codehilite .sx { color: #98C379 } /* Literal.String.Other */
+.codehilite .sr { color: #98C379 } /* Literal.String.Regex */
+.codehilite .s1 { color: #98C379 } /* Literal.String.Single */
+.codehilite .ss { color: #98C379 } /* Literal.String.Symbol */
+.codehilite .bp { color: #E5C07B } /* Name.Builtin.Pseudo */
+.codehilite .fm { color: #56B6C2; font-weight: bold } /* Name.Function.Magic */
+.codehilite .vc { color: #E06C75 } /* Name.Variable.Class */
+.codehilite .vg { color: #E06C75 } /* Name.Variable.Global */
+.codehilite .vi { color: #E06C75 } /* Name.Variable.Instance */
+.codehilite .vm { color: #E06C75 } /* Name.Variable.Magic */
+.codehilite .il { color: #D19A66 } /* Literal.Number.Integer.Long */</style>
+<script>
+// mobile menu
+const sb=document.getElementById('sidebar'),mb=document.getElementById('menuBtn');
+if(mb){mb.onclick=()=>sb.classList.toggle('open');sb.addEventListener('click',e=>{if(e.target.tagName==='A')sb.classList.remove('open')});}
+const tc=document.getElementById('tocClose');if(tc){tc.onclick=()=>sb.classList.remove('open');}
+// progress
+const prog=document.getElementById('progress');
+addEventListener('scroll',()=>{const h=document.body.scrollHeight-innerHeight;prog.style.width=(h>0?scrollY/h*100:0)+'%'});
+// code chrome + copy
+document.querySelectorAll('.codehilite, pre').forEach(block=>{
+  if(block.parentElement.classList.contains('codehilite'))return;
+  const bar=document.createElement('div');bar.className='code-bar';
+  bar.innerHTML='<span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>';
+  block.appendChild(bar);
+  const btn=document.createElement('button');btn.className='copy-btn';btn.textContent='Copy';
+  btn.onclick=()=>{const t=block.querySelector('code')?.innerText||block.innerText;
+    navigator.clipboard.writeText(t.replace(/\nCopy$/,''));btn.textContent='Copied!';btn.classList.add('done');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('done')},1500)};
+  block.appendChild(btn);
+});
+// callouts by leading emoji
+const map={'\u{1F511}':'cl-key','\u{1F4A1}':'cl-tip','✅':'cl-ok','❌':'cl-no','\u{1F3AF}':'cl-goal','\u{1F6E0}':'cl-goal'};
+document.querySelectorAll('blockquote').forEach(q=>{const t=(q.textContent||'').trim();for(const e in map){if(t.startsWith(e)){q.classList.add(map[e]);break}}});
+// check-off
+function makeCheckable(rx){document.querySelectorAll('h2,h3').forEach(h=>{if(!rx.test(h.textContent))return;let el=h.nextElementSibling;
+  while(el&&!/^H[1-3]$/.test(el.tagName)){if(el.tagName==='OL'||el.tagName==='UL'){el.classList.add('checkable');
+    el.querySelectorAll(':scope>li').forEach(li=>{const key='cwc:'+location.pathname+':'+li.textContent.slice(0,60);
+      if(localStorage.getItem(key))li.classList.add('checked');
+      li.addEventListener('click',ev=>{if(ev.target.tagName==='A')return;li.classList.toggle('checked');
+        li.classList.contains('checked')?localStorage.setItem(key,'1'):localStorage.removeItem(key)});});}el=el.nextElementSibling;}});}
+makeCheckable(/learning objectives|milestones/i);
+// scrollspy
+const links=[...document.querySelectorAll('.toc a')];
+const heads=links.map(a=>a.getAttribute('href')).filter(h=>h&&h.startsWith('#')).map(h=>document.getElementById(h.slice(1))).filter(Boolean);
+const spy=()=>{let cur=heads[0]?.id;for(const h of heads){if(h.getBoundingClientRect().top<150)cur=h.id}
+  links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur))};
+addEventListener('scroll',spy);spy();
+</script>
+<script type="module" src="../assets/sync.js"></script></body>
+</html>

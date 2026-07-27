@@ -1,0 +1,733 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 1 · Lesson 1: Welcome to CS50: Computers, Thinking, and a Live AI Chatbot | Self-Paced CS50x</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0a1a2f; --navy-2:#0f243d; --navy-3:#15314f;
+  --teal:#18c4a0; --teal-d:#0fa385; --teal-soft:#e4f8f2;
+  --coral:#f24d63; --coral-d:#d83a50; --coral-soft:#feecee;
+  --ink:#152230; --muted:#5f6c7b; --line:#e9eef2; --bg:#ffffff;
+  --soft:#f4fbf9; --card:#ffffff; --code-bg:#21252b; --max:780px;
+  --k:#2f8fb3; --k-bg:#e8f4f9; --tip:#c4881f; --tip-bg:#fdf4e3; --ok:#1f9d6b; --ok-bg:#e6f6ef;
+  --no:#e0533f; --no-bg:#fdecea; --goal:#7b54c9; --goal-bg:#f1ebfb;
+  --shadow:0 10px 30px rgba(13,30,52,.08); --shadow-sm:0 4px 14px rgba(13,30,52,.07);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.72;font-size:17px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+#progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--teal),var(--coral));z-index:200;transition:width .1s linear}
+a{color:var(--teal-d);text-decoration:none}
+a:hover{color:var(--coral)}
+h1,h2,h3{font-family:Poppins,sans-serif;color:var(--ink);letter-spacing:-.01em}
+.accent{color:var(--coral)}
+.wrap{max-width:1200px;margin:0 auto;padding:0 28px}
+
+/* ---------- Top welcome strip ---------- */
+.topbar{background:var(--navy);color:#cdd8e4;font-size:13.5px}
+.topbar .wrap{display:flex;justify-content:space-between;align-items:center;height:42px;gap:18px}
+.topbar b{color:#fff;font-weight:600}
+.topbar .right{display:flex;gap:18px;align-items:center}
+.topbar a{color:#cdd8e4}.topbar a:hover{color:var(--teal)}
+
+/* ---------- Nav ---------- */
+nav.bar{background:var(--navy-2);position:sticky;top:0;z-index:120;box-shadow:0 2px 20px rgba(0,0,0,.25)}
+nav.bar .wrap{display:flex;align-items:center;height:68px;gap:26px}
+.logo{font-family:Poppins;font-weight:800;font-size:22px;color:#fff;letter-spacing:.02em;cursor:pointer;text-decoration:none}
+a.logo:hover{color:var(--teal)}
+.lessonnav{display:flex;gap:14px;align-items:stretch;margin:60px 0 0;flex-wrap:wrap}
+.lessonnav .ln{flex:1;min-width:200px;display:flex;flex-direction:column;gap:3px;border:1px solid var(--line);border-radius:14px;padding:16px 18px;color:var(--muted);transition:.15s;background:#fff}
+.lessonnav .ln:hover{border-color:var(--teal);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.lessonnav .ln .dir{font-size:13px;font-weight:600;color:var(--teal-d)}
+.lessonnav .ln b{color:var(--ink);font-family:Poppins;font-size:15px}
+.lessonnav .ln.next{text-align:right}
+.lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
+.lessonnav .ln.home b{color:var(--teal-d)}
+.logo .dot{color:var(--teal)}
+.navlinks{display:flex;gap:24px;margin-left:8px}
+.navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
+.navlinks a:hover{color:var(--teal)}
+.nav-cta{margin-left:auto;display:flex;gap:12px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:9px;border:none;cursor:pointer;font-family:Inter;font-weight:600;border-radius:999px;transition:.18s;font-size:15px;text-decoration:none}
+.btn-primary{background:var(--teal);color:#04231c;padding:12px 22px}
+.btn-primary:hover{background:var(--teal-d);color:#fff;transform:translateY(-1px)}
+.btn-outline{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.35);padding:10px 20px}
+.btn-outline:hover{border-color:var(--teal);color:var(--teal)}
+.btn-coral{background:var(--coral);color:#fff;padding:12px 22px}
+.btn-coral:hover{background:var(--coral-d);color:#fff;transform:translateY(-1px)}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;background:radial-gradient(120% 120% at 80% 0%,var(--navy-3),var(--navy) 60%);color:#eaf1f8;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.25;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.blob{position:absolute;border-radius:50%;filter:blur(8px);opacity:.5;z-index:0}
+.blob.t{width:230px;height:230px;background:rgba(24,196,160,.30);top:-60px;right:8%}
+.blob.c{width:160px;height:160px;background:rgba(242,77,99,.28);bottom:-40px;left:42%}
+.squiggle{position:absolute;z-index:1;opacity:.85}
+.hero .wrap{position:relative;z-index:2;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;padding:70px 28px 90px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--teal);font-weight:600;font-size:14px;letter-spacing:.03em;text-transform:uppercase;margin-bottom:18px}
+.hero h1{font-size:54px;line-height:1.08;font-weight:800;margin:0 0 20px;color:#fff}
+.hero .lead{font-size:18px;color:#b9c6d6;max-width:34em;margin:0 0 30px}
+.hero-actions{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:30px}
+.play{display:inline-flex;align-items:center;gap:12px;color:#fff;font-weight:600}
+.play .circ{width:52px;height:52px;border-radius:50%;background:var(--coral);display:grid;place-items:center;box-shadow:0 8px 22px rgba(242,77,99,.45);font-size:16px;animation:pulse 2.4s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(242,77,99,.45)}70%{box-shadow:0 0 0 16px rgba(242,77,99,0)}100%{box-shadow:0 0 0 0 rgba(242,77,99,0)}}
+.chips{display:flex;gap:10px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:#dce6f0;padding:8px 14px;border-radius:999px;font-size:13.5px;font-weight:500}
+.chip b{color:#fff}
+/* hero card */
+.hero-card{position:relative;background:#fff;color:var(--ink);border-radius:22px;padding:26px;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.hero-card .ring{position:absolute;top:-26px;right:-18px;width:96px;height:96px;background:#fff;border-radius:50%;box-shadow:var(--shadow);display:grid;place-items:center}
+.hero-card .ring svg{transform:rotate(-90deg)}
+.hero-card .ring .lab{position:absolute;font-family:Poppins;font-weight:700;font-size:18px;color:var(--teal-d)}
+.hero-card h3{margin:4px 0 14px;font-size:19px}
+.hero-card ul{list-style:none;margin:0 0 18px;padding:0}
+.hero-card li{display:flex;gap:11px;align-items:flex-start;padding:9px 0;border-bottom:1px dashed var(--line);font-size:14.5px;color:#36424f}
+.hero-card li:last-child{border-bottom:none}
+.hero-card li .ic{font-size:17px;line-height:1.4}
+.float-badge{position:absolute;left:18px;bottom:-26px;background:#fff;border-radius:14px;box-shadow:var(--shadow);padding:12px 16px;display:flex;gap:10px;align-items:center;font-size:13px;font-weight:600;color:var(--ink)}
+.float-badge .n{font-family:Poppins;font-weight:800;color:var(--coral);font-size:20px}
+
+/* ---------- Content layout ---------- */
+.layout{display:grid;grid-template-columns:268px minmax(0,1fr);gap:46px;max-width:1200px;margin:0 auto;padding:0 28px}
+aside{position:sticky;top:84px;align-self:start;height:calc(100vh - 100px);overflow-y:auto;padding:26px 0}
+.toc-card{background:var(--soft);border:1px solid var(--line);border-radius:18px;padding:18px}
+.toc-close{display:none;position:absolute;top:-6px;right:-4px;width:36px;height:36px;border:none;background:var(--navy-2);color:#fff;border-radius:50%;font-size:22px;line-height:1;cursor:pointer}
+.toc-close:hover{background:var(--coral)}
+.toc-title{font-family:Poppins;font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--teal-d);margin:0 0 10px;font-weight:700}
+.toc ul{list-style:none;margin:0;padding:0}
+.toc a{display:block;color:var(--muted);font-size:14px;padding:6px 12px;border-radius:8px;border-left:2px solid transparent;line-height:1.4}
+.toc a:hover{color:var(--ink);background:#fff}
+.toc a.active{color:var(--teal-d);background:#fff;border-left-color:var(--teal);font-weight:600}
+.toc .toc li li a{padding-left:24px;font-size:13px}
+.toc a.toc-capstone{color:var(--coral);font-weight:600}
+main{padding:54px 0 120px;min-width:0}
+article{max-width:var(--max)}
+
+/* typography */
+article h2{font-size:30px;margin:56px 0 16px;font-weight:700;position:relative}
+article h2::before{content:"\2726";color:var(--teal);font-size:18px;margin-right:10px;vertical-align:2px}
+article h3{font-size:21px;margin:34px 0 10px;font-weight:600}
+article h2+h3{margin-top:18px}
+article p,article li{font-size:16.5px}
+article ul,article ol{padding-left:24px}
+article li{margin:7px 0}
+article strong{font-weight:700;color:#0f1b28}
+hr{border:none;height:1px;background:var(--line);margin:42px 0}
+
+/* tables */
+table{border-collapse:separate;border-spacing:0;width:100%;margin:24px 0;font-size:15px;border:1px solid var(--line);border-radius:14px;overflow:hidden;display:block;overflow-x:auto}
+th,td{padding:12px 15px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:var(--navy-2);color:#eaf1f8;font-family:Poppins;font-weight:600;font-size:14px}
+tr:last-child td{border-bottom:none}
+tbody tr:nth-child(even){background:var(--soft)}
+
+/* inline + block code */
+code{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.86em;background:var(--teal-soft);color:#0c6a55;padding:.13em .42em;border-radius:6px}
+.codehilite,pre{position:relative;background:var(--code-bg);border-radius:14px;margin:22px 0;overflow:hidden;box-shadow:var(--shadow-sm)}
+.codehilite pre{margin:0;border-radius:0;box-shadow:none;background:transparent}
+.codehilite pre,pre>code{display:block;padding:42px 18px 18px;overflow-x:auto}
+.codehilite code,pre code{background:none;color:#dfe6ee;padding:0;font-size:13.5px;line-height:1.7}
+.code-bar{position:absolute;top:0;left:0;right:0;height:34px;display:flex;align-items:center;gap:7px;padding:0 15px;background:rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.07)}
+.code-bar .dot{width:11px;height:11px;border-radius:50%}
+.dot.r{background:#ff5f57}.dot.y{background:#febc2e}.dot.g{background:#28c840}
+.copy-btn{position:absolute;top:5px;right:9px;z-index:3;background:rgba(255,255,255,.08);color:#dfe6ee;border:1px solid rgba(255,255,255,.14);border-radius:8px;font-size:12px;padding:4px 11px;cursor:pointer;font-family:Inter;transition:.15s}
+.copy-btn:hover{background:var(--teal);border-color:var(--teal);color:#04231c}
+.copy-btn.done{background:var(--teal);color:#04231c;border-color:var(--teal)}
+
+/* callouts */
+blockquote{margin:24px 0;padding:16px 20px;border-radius:14px;background:var(--soft);border:1px solid var(--line);border-left:5px solid var(--teal)}
+blockquote p{margin:7px 0}blockquote p:first-child{margin-top:0}blockquote p:last-child{margin-bottom:0}
+blockquote.cl-key{background:var(--k-bg);border-left-color:var(--k);border-color:transparent}
+blockquote.cl-tip{background:var(--tip-bg);border-left-color:var(--tip);border-color:transparent}
+blockquote.cl-ok{background:var(--ok-bg);border-left-color:var(--ok);border-color:transparent}
+blockquote.cl-no{background:var(--no-bg);border-left-color:var(--no);border-color:transparent}
+blockquote.cl-goal{background:var(--goal-bg);border-left-color:var(--goal);border-color:transparent}
+
+/* capstone banner */
+h2.capstone-h{background:linear-gradient(115deg,var(--navy),var(--navy-3));color:#fff;border-radius:20px;padding:30px 28px 26px;margin-top:64px;box-shadow:0 20px 50px rgba(10,26,47,.3);overflow:hidden;position:relative}
+h2.capstone-h::before{content:"\1F6E0\FE0F  HANDS-ON PROJECT";display:block;font-family:Poppins;font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--teal);margin:0 0 8px}
+h2.capstone-h::after{content:"";position:absolute;width:150px;height:150px;border-radius:50%;background:rgba(24,196,160,.25);filter:blur(10px);top:-50px;right:-30px}
+
+/* check-off */
+.checkable{list-style:none;padding-left:0}
+.checkable li{position:relative;padding-left:36px;cursor:pointer;margin:9px 0}
+.checkable li::before{content:"";position:absolute;left:0;top:3px;width:22px;height:22px;border:2px solid var(--teal);border-radius:7px;background:#fff;transition:.15s}
+.checkable li.checked::before{background:var(--teal);border-color:var(--teal)}
+.checkable li.checked::after{content:"\2713";position:absolute;left:5px;top:1px;color:#fff;font-weight:800;font-size:15px}
+.checkable li.checked{color:var(--muted)}
+
+/* footer */
+footer.site{background:var(--navy);color:#aebccb;margin-top:90px}
+footer.site .wrap{padding:46px 28px;display:flex;justify-content:space-between;gap:26px;flex-wrap:wrap;align-items:center}
+footer.site .logo{font-size:20px}
+footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
+
+#menuBtn{display:none}
+@media(max-width:920px){
+  .topbar{display:none}
+  .nav-cta{display:none}
+  .float-badge{display:none}
+  nav.bar .wrap{gap:14px;height:60px}
+  .wrap{padding:0 20px}
+  .logo{font-size:18px;white-space:nowrap}
+  .hero .wrap{grid-template-columns:1fr;gap:30px;padding:42px 20px 56px}
+  .hero h1{font-size:33px}
+  .hero .lead{font-size:16.5px}
+  .hero-actions{gap:14px}
+  .hero-actions .btn-primary{flex:1;justify-content:center}
+  .layout{grid-template-columns:1fr;gap:0}
+  aside{position:fixed;top:0;left:0;width:84vw;max-width:320px;height:100vh;background:#fff;z-index:130;transform:translateX(-100%);transition:.25s;box-shadow:var(--shadow);padding:24px}
+  aside.open{transform:none}
+  #menuBtn{display:inline-flex}
+  .toc-close{display:block}
+  .navlinks{display:none}
+  main{padding:34px 0 80px}
+  body{font-size:16px}
+  article h2{font-size:25px}
+  h2.capstone-h{padding:24px 20px}
+}
+@media(max-width:420px){
+  .hero h1{font-size:29px}
+  .hero-actions{flex-direction:column;align-items:stretch}
+  .hero-actions .play{justify-content:center}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+
+<div class="topbar"><div class="wrap">
+  <div>&#10024; Welcome to <b>Self-Paced CS50x</b> &middot; a self-paced course</div>
+  <div class="right"><span>CS50x 2026 · Harvard University · David J. Malan</span></div>
+</div></div>
+
+<nav class="bar"><div class="wrap">
+  <button class="btn btn-outline" id="menuBtn" style="padding:8px 14px">&#9776;</button>
+  <a class="logo" href="..\index.html">Self-Paced CS50x<span class="dot">.</span></a>
+  <div class="navlinks">
+    <a href="..\index.html">All lessons</a>
+    <a href="#overview">Overview</a>
+    <a href="#capstone">Capstone</a>
+  </div>
+  <div class="nav-cta">
+    <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
+  </div>
+</div></nav>
+
+<header class="hero">
+  <span class="blob t"></span><span class="blob c"></span>
+  <svg class="squiggle" style="top:120px;left:46%;" width="90" height="26" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#18c4a0" stroke-width="4" stroke-linecap="round"/></svg>
+  <svg class="squiggle" style="bottom:60px;right:40%;" width="70" height="22" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#f24d63" stroke-width="4" stroke-linecap="round"/></svg>
+  <div class="wrap" id="overview">
+    <div>
+      <span class="eyebrow">&#10022; Module 1 · Lesson 1</span>
+      <h1>Welcome to CS50: Computers, Thinking, and a Live AI <span class="accent">Chatbot</span></h1>
+      <p class="lead">Programming is nothing more mysterious than taking an input, running it through a step-by-step algorithm, and producing an output, and you can prove that to yourself right now by watching a real AI chatbot get built in about ten lines of Python, then completely change its personality the moment one extra sentence, called a system prompt, gets added.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
+        <a class="play" href="https://www.youtube.com/watch?v=UuIEbpQms8o" target="_blank" rel="noopener"><span class="circ">&#9654;</span> Watch the talk</a>
+      </div>
+      <div class="chips">
+        <span class="chip">&#127908; <b>David J. Malan</b></span>
+        <span class="chip">&#9201; <b>45-60 minutes</b></span>
+        <span class="chip">&#128296; <b>Hands-on capstone</b></span>
+      </div>
+    </div>
+    <div style="position:relative">
+      <div class="hero-card">
+        <div class="ring">
+          <svg width="74" height="74"><circle cx="37" cy="37" r="31" stroke="#eef2f5" stroke-width="7" fill="none"/><circle cx="37" cy="37" r="31" stroke="#18c4a0" stroke-width="7" fill="none" stroke-linecap="round" stroke-dasharray="195" stroke-dashoffset="40"/></svg>
+          <span class="lab">&#10022;</span>
+        </div>
+        <h3>What you&#39;ll get</h3>
+        <ul>
+          <li><span class="ic">&#9989;</span><span>Plain-language teaching with every term defined</span></li>
+          <li><span class="ic">&#128221;</span><span>Code snippets pulled from the talk</span></li>
+          <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
+          <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
+        </ul>
+        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <aside id="sidebar"><div class="toc-card">
+    <button class="toc-close" id="tocClose" aria-label="Close menu">&times;</button>
+    <p class="toc-title">On this page</p>
+    <div class="toc">
+<ul>
+<li><a href="#in-one-sentence">In one sentence</a></li>
+<li><a href="#first-principles-companion">First-principles companion</a></li>
+<li><a href="#a-few-plain-language-basics-first">A few plain-language basics first</a></li>
+<li><a href="#why-this-lesson-matters">Why this lesson matters</a></li>
+<li><a href="#learning-objectives">Learning objectives</a></li>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#part-1-why-cs50-doesnt-actually-teach-you-to-program">Part 1: Why CS50 doesn't actually teach you to program</a><ul>
+<li><a href="#the-frame-that-runs-through-the-whole-course">The frame that runs through the whole course</a></li>
+</ul>
+</li>
+<li><a href="#part-2-what-a-program-actually-is-input-algorithm-output">Part 2: What a program actually is: input, algorithm, output</a></li>
+<li><a href="#part-3-watching-a-chatbot-get-built-in-about-ten-lines">Part 3: Watching a chatbot get built in about ten lines</a></li>
+<li><a href="#part-4-system-prompt-vs-user-prompt-giving-the-ai-a-personality">Part 4: System prompt vs. user prompt: giving the AI a personality</a></li>
+<li><a href="#part-5-how-the-pieces-combine">Part 5: How the pieces combine</a></li>
+<li><a href="#key-takeaways">Key takeaways</a></li>
+<li><a href="#common-pitfalls">Common pitfalls</a></li>
+<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: Give an AI a Persona With a System Prompt</a><ul>
+<li><a href="#what-you-will-build">What you will build</a></li>
+<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
+<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
+<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
+</ul>
+</li>
+<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
+<li><a href="#exercise-1-spot-the-input-algorithm-output-foundational">Exercise 1: Spot the input, algorithm, output (foundational)</a></li>
+<li><a href="#exercise-2-narrate-the-chatbot-script-intermediate">Exercise 2: Narrate the chatbot script (intermediate)</a></li>
+<li><a href="#exercise-3-predict-then-test-advanced">Exercise 3: Predict, then test (advanced)</a></li>
+</ul>
+</li>
+<li><a href="#cheat-sheet">Cheat sheet</a></li>
+<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
+</ul>
+</div>
+
+  </div></aside>
+  <main id="start">
+    <article>
+      <hr />
+<h2 id="in-one-sentence">In one sentence</h2>
+<p>Programming is nothing more mysterious than taking an <strong>input</strong>, running it through a step-by-step <strong>algorithm</strong>, and producing an <strong>output</strong>, and you can prove that to yourself right now by watching a real AI chatbot get built in about ten lines of Python, then completely change its personality the moment one extra sentence, called a <strong>system prompt</strong>, gets added.</p>
+<blockquote>
+<p>🎯 <strong>Where this lesson is heading.</strong> It builds to a hands-on <strong>Capstone Project</strong> where you write your own system prompt to give a free AI chatbot a persona, then test it live. Everything before the Capstone teaches the ideas you will use there. If you want to see the finish line first, jump to the <strong>"Capstone Project"</strong> section, then come back.</p>
+</blockquote>
+<h2 id="first-principles-companion">First-principles companion</h2>
+<blockquote>
+<p>💡 <strong>The durable idea behind this lesson.</strong> The talk is recent, but the underlying idea is not.</p>
+<ul>
+<li><strong><a href="https://en.wikipedia.org/wiki/How_to_Solve_It">How to Solve It</a></strong> (George Pólya, 1945). Decades before "computational thinking" was a phrase anyone used, the mathematician George Pólya wrote down almost the same loop Malan is teaching here: understand the problem (know your input and your goal), devise a plan (the algorithm), carry it out, and check the result (the output). CS50 applies that loop to computers; Pólya's book is the tool-agnostic original, and it works just as well on a jigsaw puzzle as on a chatbot.</li>
+</ul>
+</blockquote>
+<h2 id="a-few-plain-language-basics-first">A few plain-language basics first</h2>
+<p>This lesson uses some everyday-sounding terms in a specific way. Here they are in plain words:</p>
+<ul>
+<li><strong>Computational thinking:</strong> the habit of breaking any problem, not only a coding problem, down into a clear input, a clear goal (the output), and a step-by-step way to get from one to the other.</li>
+<li><strong>Input and output:</strong> the <em>input</em> is whatever you hand a process to work with (a question, a number, a name); the <em>output</em> is the answer or result it hands back.</li>
+<li><strong>Algorithm:</strong> a finite list of step-by-step instructions for turning an input into an output: a recipe that a person or a computer can follow exactly, with no guesswork.</li>
+<li><strong>Program (or code):</strong> an algorithm written out in a language a computer can actually carry out, such as Python.</li>
+<li><strong>API (application programming interface):</strong> a set of features one piece of software exposes so that other people can write their own programs on top of it, without rebuilding it themselves. Malan builds his chatbot on OpenAI's API instead of inventing an AI from scratch.</li>
+<li><strong>Variable:</strong> a labeled box that stores a value (like <code>prompt</code>) so code can refer to "whatever the human just typed" without knowing in advance what that will be.</li>
+<li><strong>Prompt (user prompt vs. system prompt):</strong> the text you hand an AI model. A <strong>user prompt</strong> is the one-off question a person types in. A <strong>system prompt</strong> is a standing instruction the programmer sets once, that quietly shapes every answer the AI gives afterward.</li>
+<li><strong>Terminal:</strong> a text window where you type commands and see a program's output directly. This is where Malan actually runs his chatbot script.</li>
+</ul>
+<p>You do not need to memorise these. Each is explained again the first time it matters below.</p>
+<h2 id="why-this-lesson-matters">Why this lesson matters</h2>
+<p>"CS 50... has never been about teaching you how to program," Malan tells the room in the opening minutes. "That's actually one of the side effects of taking a class like this, but the overarching goal is to teach you how to think, how to take input and produce correct output and how to master these and other tools." That distinction matters more, not less, now that AI can write code for you. Malan is candid that "you and I as humans have long been the bottleneck," but you still need to know what you're asking for and whether the answer you got back is actually right. His metaphor is worth keeping: even with an AI copilot alongside you, "you'll still be in the driver's seat, so to speak. You'll be the pilot, you'll be the conductor." This lesson is where that promise stops being abstract and becomes something you watch happen, live, in about ten lines of code.</p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<p>By the end of this lesson you will be able to:</p>
+<ol>
+<li>Explain, in your own words, why CS50 teaches thinking rather than syntax, and connect that claim to the input → algorithm → output model of a problem.</li>
+<li>Trace what each line of a small Python chatbot script does, from importing an API to printing the AI's reply.</li>
+<li>Distinguish a <strong>system prompt</strong> from a <strong>user prompt</strong>, and predict how changing each one changes what an AI outputs.</li>
+<li>Write your own system prompt to give an AI chatbot a specific persona, and test it using a free tool.</li>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>None. No prior programming experience is assumed, and no account or tool setup is required to follow this lesson.</li>
+<li>Optional: the Module 0 pre-flight lesson (setup), if you eventually want to run this code yourself in a cs50.dev codespace. It is not needed for today's Capstone, which only needs a free browser-based AI chat.</li>
+</ul>
+<hr />
+<h2 id="part-1-why-cs50-doesnt-actually-teach-you-to-program">Part 1: Why CS50 doesn't actually teach you to program</h2>
+<p>Malan opens the entire course by addressing "the elephant in the room" (AI) head-on, rather than pretending it away. His point is not that AI makes learning to code pointless; it's closer to the opposite. Because AI can now write and debug code for you, the scarce skill isn't typing syntax anymore: it's knowing what you want, and knowing whether what came back is correct. That is exactly what CS50 has always tried to teach.</p>
+<p>He draws a direct comparison to two older technologies that supposedly made a skill obsolete: calculators (didn't erase the need to understand arithmetic) and, in his own words, the "many darn ways in college [to] take derivatives and integrals," where after learning several methods by hand, the real point wasn't the methods themselves but understanding the idea well enough to then lean on a tool. AI and code are the same relationship, one level up.</p>
+<blockquote>
+<p>🔑 <strong>The single most important takeaway of this part:</strong> learning to program is a side effect of this course, not its goal. The actual goal is learning to think in terms of input, algorithm, and output: a skill that keeps paying off no matter which tool (or AI) does the typing.</p>
+</blockquote>
+<h3 id="the-frame-that-runs-through-the-whole-course">The frame that runs through the whole course</h3>
+<p>Malan names the concrete outcome directly: by the end of the course "not only will you be acquainted with languages like Scratch... C and Python and SQL, HTML CSS and JavaScript, you'll be able to teach yourself new things ultimately." Learning several languages, in other words, isn't the point either: it's evidence that you've learned the underlying way of thinking well enough to apply it anywhere.</p>
+<h2 id="part-2-what-a-program-actually-is-input-algorithm-output">Part 2: What a program actually is: input, algorithm, output</h2>
+<p>Strip away the code, the languages, and the AI, and Malan reduces "computer science" to one picture. A <strong>problem</strong>, he says, is "some input, which is like the problem we want to solve, and the output, which is the goal we want the solution there too." In between sits, in his words, "the proverbial black box, the sort of secret sauce" that turns the input into the output. That black box is the <strong>algorithm</strong>: the step-by-step recipe that gets you from what you started with to what you wanted.</p>
+<div class="codehilite"><pre><span></span><code>   INPUT            [ ALGORITHM ]            OUTPUT
+(the problem   ---&gt;   (the step-by-step  ---&gt;  (the goal /
+ you start with)        &quot;secret sauce&quot;)          the answer)
+</code></pre></div>
+
+<p>Every example in this lesson, and in this entire course, is a variation on that one diagram. A chatbot answering a question is this diagram. A phone book search is this diagram. A Scratch cat saying "hello" is this diagram. Computer science, Malan says, is "really just the study of information": how you represent it (input and output) and how you process it (the algorithm).</p>
+<blockquote>
+<p>🔑 <strong>The single most important takeaway of this part:</strong> before you ever write a line of code, you should be able to say, in plain English, what your input is, what your output should be, and roughly what has to happen in between. If you can't say that, you're not ready to code the solution yet, no matter how good your AI copilot is.</p>
+</blockquote>
+<h2 id="part-3-watching-a-chatbot-get-built-in-about-ten-lines">Part 3: Watching a chatbot get built in about ten lines</h2>
+<p>To make all of this concrete, Malan opens Visual Studio Code (VS Code) ("popular, largely open source or free software... used by real world people in industry to write code") and, in the terminal at the bottom of the screen, writes a Python file called <code>chat.py</code>. "So here's how relatively easy it is nowadays to write even your own chatbot using the AI technologies that we already have," he says.</p>
+<p>Rather than building an AI from scratch, he writes his program on top of an <strong>API</strong> ("an application programming interface that someone else provides") from a company called OpenAI. Here is a reconstruction of that first version:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># chat.py - version 1: a hardcoded question</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">()</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">responses</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-5&quot;</span><span class="p">,</span>
+    <span class="nb">input</span><span class="o">=</span><span class="s2">&quot;in one sentence, what is CS50?&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">output_text</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Walking through it in plain English:</p>
+<ul>
+<li><code>from openai import OpenAI</code>: borrow the tools OpenAI has already built, instead of reinventing them.</li>
+<li><code>client = OpenAI()</code>: create what Malan calls "a so-called client," a program of your own that uses OpenAI's software.</li>
+<li><code>response = client.responses.create(...)</code>: ask OpenAI's model for an answer, handing it your <strong>input</strong> (the question) and telling it which <strong>model</strong> ("a statistical model that ultimately drive[s] what the AI's can do") to use.</li>
+<li><code>print(response.output_text)</code>: actually show that answer, because, as Malan puts it, "I want to know what the answer to that question is."</li>
+</ul>
+<p>Running it worked immediately: the reply came back describing CS50 correctly. But there's a catch Malan names outright: "I've implemented my own chatbot that at the moment is hard coded, that is permanently configured to only answer one question for me." Nothing is broken: it's just static. To fix that, he adds one built-in Python function, <code>input()</code>, which pauses the program and waits for a human to type something:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># chat.py - version 2: ask the human for the question</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">()</span>
+
+<span class="n">prompt</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;What would you like to ask? &quot;</span><span class="p">)</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">responses</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-5&quot;</span><span class="p">,</span>
+    <span class="nb">input</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">output_text</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Malan's own reasoning for the change: "Suppose you wanted to write code that actually asks the human what their question is, because very quickly might we want to learn something more than just this one question." The line <code>prompt = input(...)</code> stores whatever the human typed inside a <strong>variable</strong> called <code>prompt</code>: "just like in math," he says, "X, Y or Z." Now the same script can answer <em>any</em> question, not just one that was typed directly into the source code.</p>
+<h2 id="part-4-system-prompt-vs-user-prompt-giving-the-ai-a-personality">Part 4: System prompt vs. user prompt: giving the AI a personality</h2>
+<p>With <code>input()</code> in place, Malan starts experimenting: "in one sentence, what is CS50?", then "in one word, what is CS50?", then, for fun, "in one word, which is better, Harvard or Stanford?" (The AI's careful answer: "Depends.") But he notices a pattern in his own behavior: he keeps re-typing the same style instruction ("in one sentence," "in one word") every single time. His fix is to stop asking the human to repeat that instruction, and instead tell the AI once, permanently:</p>
+<blockquote>
+<p>"If you want the AI to behave in a certain way, why don't we just tell the underlying system to behave in that way."</p>
+</blockquote>
+<p>That standing instruction is a <strong>system prompt</strong>, and to make the distinction obvious, Malan renames his other variable to <strong>user prompt</strong>. Here's the reconstructed script with both:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># chat.py - version 3: a system prompt and a user prompt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">()</span>
+
+<span class="n">user_prompt</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;What would you like to ask? &quot;</span><span class="p">)</span>
+<span class="n">system_prompt</span> <span class="o">=</span> <span class="s2">&quot;Limit your answer to one sentence.&quot;</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">responses</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-5&quot;</span><span class="p">,</span>
+    <span class="nb">input</span><span class="o">=</span><span class="n">user_prompt</span><span class="p">,</span>
+    <span class="n">instructions</span><span class="o">=</span><span class="n">system_prompt</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">output_text</span><span class="p">)</span>
+</code></pre></div>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>User prompt</th>
+<th>System prompt</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Who writes it</td>
+<td>The person using the chatbot, every time</td>
+<td>The programmer, once, in advance</td>
+</tr>
+<tr>
+<td>How often it changes</td>
+<td>Every question</td>
+<td>Rarely: it's the "standing instructions"</td>
+</tr>
+<tr>
+<td>What it controls</td>
+<td><em>What</em> is being asked</td>
+<td><em>How</em> the AI should behave while answering</td>
+</tr>
+<tr>
+<td>In this script</td>
+<td><code>user_prompt</code> (from <code>input()</code>)</td>
+<td><code>system_prompt</code> (a fixed string)</td>
+</tr>
+</tbody>
+</table>
+<p>Then Malan pushes the idea further, live, to make the point unmissable: "you might know that these GPTs nowadays have sort of personalities... Why don't we go into our system prompt here and say something silly like pretend you're a cat." He changes exactly one line (<code>system_prompt = "Pretend you're a cat."</code>), reruns the identical script with the identical question, "What is CS50?", and gets back:</p>
+<blockquote>
+<p>"CS 50 is Harvard University's introductory computer science course teaching programming, algorithms, data structures, and problem solving, and it's available free online meow."</p>
+</blockquote>
+<p>Same model. Same code. Same question. One sentence changed, and the entire personality of the output changed with it.</p>
+<blockquote>
+<p>✅ <strong>What to do about it:</strong> whenever you want an AI to behave consistently a certain way (a tone, a role, a constraint like "answer in one sentence"), put that instruction in the system prompt, once, instead of retyping it into every user prompt.</p>
+<p>💡 <strong>A nuance worth noting:</strong> model names age fast. Malan uses <code>model="gpt-5"</code>, "the latest and greatest version at least as of today," in his words. By the time you read this, a newer model may be current. The <em>pattern</em> (client, user prompt, system prompt) is what's durable; the model name is not.</p>
+</blockquote>
+<h2 id="part-5-how-the-pieces-combine">Part 5: How the pieces combine</h2>
+<p>Zoom back out to Part 2's diagram, and the whole script is just one instance of it, with one addition. Malan calls the visible reply (the printed text) a <strong>side effect</strong>: "something that happens visually on the screen... as a result of you using a function." The system prompt doesn't show up in the output directly; it reshapes the <em>algorithm</em> itself before the input ever gets processed.</p>
+<div class="codehilite"><pre><span></span><code>   INPUT                    ALGORITHM                       OUTPUT
+ user_prompt      ---&gt;   client.responses.create(       ---&gt;  printed
+(&quot;What is CS50?&quot;)          model, input, instructions)         reply
+                                   ^
+                                   |
+                          system_prompt shapes HOW
+                          the algorithm behaves;
+                          it is not typed by the user
+</code></pre></div>
+
+<p>Malan's own summary of what just happened: "with programming you have the ability in like 10 lines of text, not all of which you might understand yet... to build fairly powerful things." He immediately connects this pattern to something CS50 gives every student for free: "in the world of programming, it's kind of a thing to keep a rubber duck literally on your desk... because when you are struggling with some problem, some bug or mistake in your code... you literally are encouraged in programming circles to talk to the rubber duck." Then the payoff: "CS 50, drawing inspiration from this, will give to you a virtual duck in computer form" (at <strong>cs50.ai</strong>) and, in his words, "these are the AIs you can use in CS50 to solve problems and you are encouraged to do so." The exact user-prompt/system-prompt pattern from this lesson is what's running underneath that duck.</p>
+<hr />
+<h2 id="key-takeaways">Key takeaways</h2>
+<ol>
+<li><strong>Programming is input → algorithm → output.</strong> CS50's real goal is that habit of mind, not memorizing syntax: syntax is, in Malan's words, "one of the side effects."</li>
+<li><strong>A working AI chatbot is barely code at all.</strong> An API import, a client, one function call carrying an input, and a <code>print</code> statement is enough for a first working version.</li>
+<li><strong><code>input()</code> is what turns a fixed script into a program.</strong> A hardcoded question isn't broken: it just isn't listening yet.</li>
+<li><strong>A system prompt is a standing instruction; a user prompt is the one-off question.</strong> Same model, same code, different system prompt: completely different behavior, as the "pretend you're a cat" demo shows.</li>
+<li><strong>This same pattern powers CS50's own free AI</strong>, the "duck" at cs50.ai, which you're not just allowed, but explicitly encouraged, to use.</li>
+</ol>
+<h2 id="common-pitfalls">Common pitfalls</h2>
+<ul>
+<li>❌ Treating "learn to code" and "learn to think" as the same goal: Malan explicitly separates them; writing correct syntax is a side effect of the class, not its point.</li>
+<li>❌ Assuming a hardcoded script is "broken" because it always gives the same answer: it's working exactly as written; it just needs <code>input()</code> to become dynamic.</li>
+<li>❌ Mixing up which prompt is which: the <strong>system prompt</strong> is what <em>you</em>, the programmer, set once; the <strong>user prompt</strong> is what a person types each time. Swapping these two up will make your mental model of every future AI feature wrong.</li>
+<li>❌ Waiting until you understand every line before reasoning about what code does: Malan tells the room outright that this is a preview, "not all of which you might understand yet," and that's fine at this stage.</li>
+</ul>
+<hr />
+<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: Give an AI a Persona With a System Prompt</h2>
+<blockquote>
+<p>This is the main hands-on project for the lesson. You'll write a real system prompt, in plain English, and prove to yourself, with real, copy-pasted output, that it changes an AI's behavior. No paid API key required.</p>
+</blockquote>
+<h3 id="what-you-will-build">What you will build</h3>
+<p>A short, written <strong>system prompt</strong> that gives a free AI chatbot a specific, testable persona, tested live against the same fixed question three different ways. You'll build it from these pieces, each mapped to an idea from this lesson:</p>
+<ul>
+<li>A <strong>fixed user prompt</strong>, the one question you won't change.</li>
+<li>A <strong>system prompt</strong> you write yourself, the persona.</li>
+<li>Three real outputs you compare side by side.</li>
+</ul>
+<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
+<table>
+<thead>
+<tr>
+<th>Lesson idea</th>
+<th>Where you use it in the Capstone</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Input → algorithm → output</td>
+<td>You'll label your own test's input, algorithm (the persona instructions), and output</td>
+</tr>
+<tr>
+<td>System prompt vs. user prompt</td>
+<td>The persona you write <em>is</em> a system prompt; your test question is the user prompt</td>
+</tr>
+<tr>
+<td>Variables</td>
+<td>You'll swap system prompts around one fixed user prompt, exactly as Malan swapped <code>system_prompt</code> while <code>prompt</code> stayed the question</td>
+</tr>
+<tr>
+<td>CS50's duck</td>
+<td>You'll use CS50's own free AI (cs50.ai) instead of a paid API key</td>
+</tr>
+</tbody>
+</table>
+<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
+<ol>
+<li><strong>Get access to a free AI chat tool.</strong> Go to <strong>cs50.ai</strong> (also reachable from cs50.dev) and sign in free with a GitHub account: this is the "virtual duck" Malan describes, and it is explicitly fine to use. (No GitHub, or no access? Any free chatbot with a "custom instructions" or "system prompt" field works identically for this exercise: the concept, not the specific tool, is what matters.)</li>
+<li><strong>Pick a fixed user prompt.</strong> Choose one plain question you will ask every time, unchanged: Malan's own example, "In one sentence, what is CS50?", works fine, or pick a question related to your eventual final-project topic.</li>
+<li><strong>Write a plain-language system prompt.</strong> In one or two sentences (no code), write standing instructions for a persona, the way Malan wrote "Pretend you're a cat." For example: "Answer like a patient kindergarten teacher" or "Pretend you're a grumpy 1990s dial-up modem."</li>
+<li><strong>Run the test three times.</strong> Ask your fixed user prompt with: (a) no system prompt at all, (b) Malan's own system prompt, "Limit your answer to one sentence," and (c) your own persona's system prompt. Save all three real answers.</li>
+<li><strong>Label your input, algorithm, and output.</strong> In three short lines, write down: the input (your fixed question), the algorithm (which system prompt was active), and the output (how the wording, tone, or length actually changed).</li>
+</ol>
+<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
+<ul>
+<li>✅ You have three real, copy-pasted answers to the same question, produced under three different system-prompt conditions.</li>
+<li>✅ You can point to the exact sentence you wrote that is your system prompt, and the exact sentence that is your user prompt.</li>
+<li>✅ You can explain, in one sentence, why the output changed even though the underlying AI model never did.</li>
+</ul>
+<blockquote>
+<p>💡 <strong>Keep yourself honest:</strong> don't guess what the AI "should" say: actually run all three versions and paste the real output, even if one answer is a little odd. Malan's own live demo got an imperfect answer ("maybe Harvard or Stanford?" → "Depends") in front of the whole class; testing for real, including the messy results, is the entire point.</p>
+</blockquote>
+<p>This is the same move you'll make for real once you know Python, in Module 9, and it previews the kind of small, testable component your eventual <strong>final project</strong> (a database-backed web app you'll design and ship at the end of this course) might one day need, such as a support chatbot with a defined, consistent voice.</p>
+<hr />
+<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
+<blockquote>
+<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
+</blockquote>
+<h3 id="exercise-1-spot-the-input-algorithm-output-foundational">Exercise 1: Spot the input, algorithm, output (foundational)</h3>
+<p>Pick any everyday task: making toast, looking up a word in a dictionary, choosing what to wear. Write one sentence each for its input, its algorithm (the steps), and its output. This is the exact model Malan draws on the whiteboard, applied somewhere with no code at all.</p>
+<h3 id="exercise-2-narrate-the-chatbot-script-intermediate">Exercise 2: Narrate the chatbot script (intermediate)</h3>
+<p>Without looking back at Part 3-4, write out in plain English, step by step, everything that happens between "a human types a question" and "an answer appears on the screen" in Malan's script, using the words <code>client</code>, <code>user prompt</code>, and <code>system prompt</code> correctly.</p>
+<h3 id="exercise-3-predict-then-test-advanced">Exercise 3: Predict, then test (advanced)</h3>
+<p>Write two more system prompts for the same fixed user prompt you used in the Capstone. Before testing either one, predict in writing how each will change the tone, length, or content of the answer. Then test both at cs50.ai (or your free tool of choice) and check your predictions against the real output.</p>
+<hr />
+<h2 id="cheat-sheet">Cheat sheet</h2>
+<div class="codehilite"><pre><span></span><code>INPUT  ---&gt;  ALGORITHM  ---&gt;  OUTPUT
+(the problem)  (the step-by-step   (the answer /
+                &quot;secret sauce&quot;)     the goal)
+
+CS50&#39;s real goal: teach you to THINK (input -&gt; algorithm -&gt; output),
+not just to memorize syntax. Syntax is a side effect.
+
+A tiny chatbot, line by line:
+  from openai import OpenAI          # borrow someone else&#39;s API
+  client = OpenAI()                  # your program&#39;s connection to it
+  user_prompt = input(&quot;...&quot;)         # ask the HUMAN (a user prompt)
+  system_prompt = &quot;...&quot;              # YOUR standing instructions, set once
+  response = client.responses.create(
+      model=&quot;gpt-5&quot;,
+      input=user_prompt,
+      instructions=system_prompt,
+  )
+  print(response.output_text)        # show the output
+
+USER PROMPT   = the one-off question a person types, every time
+SYSTEM PROMPT = the standing instruction the programmer sets, once
+
+Free, no-API-key way to try this yourself: cs50.ai (sign in with GitHub)
+</code></pre></div>
+
+<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
+<ul>
+<li><strong>Earlier, Module 0 · Pre-flight (setup):</strong> nothing from it is required to understand this lesson: it only assumed a browser. If you did complete it, you already have the cs50.dev codespace where Malan's actual script would run.</li>
+<li><strong>Next, Module 1 · Lesson 2, Bits and binary: how computers represent everything:</strong> this lesson treated "input" and "output" as if they were obviously text. Lesson 2 goes one level deeper and asks how a computer represents that text (or a number, or a color) using nothing but 0s and 1s.</li>
+<li><strong>Later, Module 9 · Artificial intelligence:</strong> revisits this exact chatbot code (the same <code>client</code>, the same system-prompt-vs-user-prompt idea) once you actually know Python and can write and modify it yourself instead of watching Malan type it.</li>
+</ul>
+<hr />
+<p><em>Source: "CS50x 2026 - Lecture 0 - Scratch" by David J. Malan, Harvard University. Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current OpenAI SDK.</em></p>
+    </article>
+    <section class="lesson-sync" data-lesson-id="1"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../progress.html">Progress tracker &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="..\module-0-preflight\00-pre-flight.html"><span class="dir">&#8592; Previous</span><b>Pre-Flight: Your Tools, Accounts, and First Success</b></a><a class="ln home" href="..\index.html"><b>All lessons</b></a><a class="ln next" href="02-bits-and-binary.html"><span class="dir">Next &#8594;</span><b>Bits and Binary: How Computers Represent Everything</b></a></nav>
+  </main>
+</div>
+
+<footer class="site"><div class="wrap">
+  <a class="logo" href="..\index.html">Self-Paced CS50x<span class="dot">.</span></a>
+  <span class="fnote">An unofficial self-paced companion generated from the CS50x 2026 lecture transcripts. CS50 is created by David J. Malan and Harvard University. Watch the original lectures and do the official problem sets at cs50.harvard.edu/x. Code snippets are illustrative reconstructions.</span>
+</div></footer>
+
+<style>pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.codehilite .hll { background-color: #ffffcc }
+.codehilite { background: #282C34; color: #ABB2BF }
+.codehilite .c { color: #7F848E } /* Comment */
+.codehilite .err { color: #ABB2BF } /* Error */
+.codehilite .esc { color: #ABB2BF } /* Escape */
+.codehilite .g { color: #ABB2BF } /* Generic */
+.codehilite .k { color: #C678DD } /* Keyword */
+.codehilite .l { color: #ABB2BF } /* Literal */
+.codehilite .n { color: #E06C75 } /* Name */
+.codehilite .o { color: #56B6C2 } /* Operator */
+.codehilite .x { color: #ABB2BF } /* Other */
+.codehilite .p { color: #ABB2BF } /* Punctuation */
+.codehilite .ch { color: #7F848E } /* Comment.Hashbang */
+.codehilite .cm { color: #7F848E } /* Comment.Multiline */
+.codehilite .cp { color: #7F848E } /* Comment.Preproc */
+.codehilite .cpf { color: #7F848E } /* Comment.PreprocFile */
+.codehilite .c1 { color: #7F848E } /* Comment.Single */
+.codehilite .cs { color: #7F848E } /* Comment.Special */
+.codehilite .gd { color: #E06C75 } /* Generic.Deleted */
+.codehilite .ge { color: #ABB2BF; font-style: italic } /* Generic.Emph */
+.codehilite .ges { color: #ABB2BF } /* Generic.EmphStrong */
+.codehilite .gr { color: #E06C75 } /* Generic.Error */
+.codehilite .gh { color: #ABB2BF; font-weight: bold } /* Generic.Heading */
+.codehilite .gi { color: #98C379 } /* Generic.Inserted */
+.codehilite .go { color: #E06C75 } /* Generic.Output */
+.codehilite .gp { color: #ABB2BF } /* Generic.Prompt */
+.codehilite .gs { color: #ABB2BF; font-weight: bold } /* Generic.Strong */
+.codehilite .gu { color: #ABB2BF; font-weight: bold } /* Generic.Subheading */
+.codehilite .gt { color: #E06C75 } /* Generic.Traceback */
+.codehilite .kc { color: #E5C07B } /* Keyword.Constant */
+.codehilite .kd { color: #C678DD } /* Keyword.Declaration */
+.codehilite .kn { color: #C678DD } /* Keyword.Namespace */
+.codehilite .kp { color: #C678DD } /* Keyword.Pseudo */
+.codehilite .kr { color: #C678DD } /* Keyword.Reserved */
+.codehilite .kt { color: #E5C07B } /* Keyword.Type */
+.codehilite .ld { color: #ABB2BF } /* Literal.Date */
+.codehilite .m { color: #D19A66 } /* Literal.Number */
+.codehilite .s { color: #98C379 } /* Literal.String */
+.codehilite .na { color: #E06C75 } /* Name.Attribute */
+.codehilite .nb { color: #E5C07B } /* Name.Builtin */
+.codehilite .nc { color: #E5C07B } /* Name.Class */
+.codehilite .no { color: #E06C75 } /* Name.Constant */
+.codehilite .nd { color: #61AFEF } /* Name.Decorator */
+.codehilite .ni { color: #E06C75 } /* Name.Entity */
+.codehilite .ne { color: #E06C75 } /* Name.Exception */
+.codehilite .nf { color: #61AFEF; font-weight: bold } /* Name.Function */
+.codehilite .nl { color: #E06C75 } /* Name.Label */
+.codehilite .nn { color: #E06C75 } /* Name.Namespace */
+.codehilite .nx { color: #E06C75 } /* Name.Other */
+.codehilite .py { color: #E06C75 } /* Name.Property */
+.codehilite .nt { color: #E06C75 } /* Name.Tag */
+.codehilite .nv { color: #E06C75 } /* Name.Variable */
+.codehilite .ow { color: #56B6C2 } /* Operator.Word */
+.codehilite .pm { color: #ABB2BF } /* Punctuation.Marker */
+.codehilite .w { color: #ABB2BF } /* Text.Whitespace */
+.codehilite .mb { color: #D19A66 } /* Literal.Number.Bin */
+.codehilite .mf { color: #D19A66 } /* Literal.Number.Float */
+.codehilite .mh { color: #D19A66 } /* Literal.Number.Hex */
+.codehilite .mi { color: #D19A66 } /* Literal.Number.Integer */
+.codehilite .mo { color: #D19A66 } /* Literal.Number.Oct */
+.codehilite .sa { color: #98C379 } /* Literal.String.Affix */
+.codehilite .sb { color: #98C379 } /* Literal.String.Backtick */
+.codehilite .sc { color: #98C379 } /* Literal.String.Char */
+.codehilite .dl { color: #98C379 } /* Literal.String.Delimiter */
+.codehilite .sd { color: #98C379 } /* Literal.String.Doc */
+.codehilite .s2 { color: #98C379 } /* Literal.String.Double */
+.codehilite .se { color: #98C379 } /* Literal.String.Escape */
+.codehilite .sh { color: #98C379 } /* Literal.String.Heredoc */
+.codehilite .si { color: #98C379 } /* Literal.String.Interpol */
+.codehilite .sx { color: #98C379 } /* Literal.String.Other */
+.codehilite .sr { color: #98C379 } /* Literal.String.Regex */
+.codehilite .s1 { color: #98C379 } /* Literal.String.Single */
+.codehilite .ss { color: #98C379 } /* Literal.String.Symbol */
+.codehilite .bp { color: #E5C07B } /* Name.Builtin.Pseudo */
+.codehilite .fm { color: #56B6C2; font-weight: bold } /* Name.Function.Magic */
+.codehilite .vc { color: #E06C75 } /* Name.Variable.Class */
+.codehilite .vg { color: #E06C75 } /* Name.Variable.Global */
+.codehilite .vi { color: #E06C75 } /* Name.Variable.Instance */
+.codehilite .vm { color: #E06C75 } /* Name.Variable.Magic */
+.codehilite .il { color: #D19A66 } /* Literal.Number.Integer.Long */</style>
+<script>
+// mobile menu
+const sb=document.getElementById('sidebar'),mb=document.getElementById('menuBtn');
+if(mb){mb.onclick=()=>sb.classList.toggle('open');sb.addEventListener('click',e=>{if(e.target.tagName==='A')sb.classList.remove('open')});}
+const tc=document.getElementById('tocClose');if(tc){tc.onclick=()=>sb.classList.remove('open');}
+// progress
+const prog=document.getElementById('progress');
+addEventListener('scroll',()=>{const h=document.body.scrollHeight-innerHeight;prog.style.width=(h>0?scrollY/h*100:0)+'%'});
+// code chrome + copy
+document.querySelectorAll('.codehilite, pre').forEach(block=>{
+  if(block.parentElement.classList.contains('codehilite'))return;
+  const bar=document.createElement('div');bar.className='code-bar';
+  bar.innerHTML='<span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>';
+  block.appendChild(bar);
+  const btn=document.createElement('button');btn.className='copy-btn';btn.textContent='Copy';
+  btn.onclick=()=>{const t=block.querySelector('code')?.innerText||block.innerText;
+    navigator.clipboard.writeText(t.replace(/\nCopy$/,''));btn.textContent='Copied!';btn.classList.add('done');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('done')},1500)};
+  block.appendChild(btn);
+});
+// callouts by leading emoji
+const map={'\u{1F511}':'cl-key','\u{1F4A1}':'cl-tip','✅':'cl-ok','❌':'cl-no','\u{1F3AF}':'cl-goal','\u{1F6E0}':'cl-goal'};
+document.querySelectorAll('blockquote').forEach(q=>{const t=(q.textContent||'').trim();for(const e in map){if(t.startsWith(e)){q.classList.add(map[e]);break}}});
+// check-off
+function makeCheckable(rx){document.querySelectorAll('h2,h3').forEach(h=>{if(!rx.test(h.textContent))return;let el=h.nextElementSibling;
+  while(el&&!/^H[1-3]$/.test(el.tagName)){if(el.tagName==='OL'||el.tagName==='UL'){el.classList.add('checkable');
+    el.querySelectorAll(':scope>li').forEach(li=>{const key='cwc:'+location.pathname+':'+li.textContent.slice(0,60);
+      if(localStorage.getItem(key))li.classList.add('checked');
+      li.addEventListener('click',ev=>{if(ev.target.tagName==='A')return;li.classList.toggle('checked');
+        li.classList.contains('checked')?localStorage.setItem(key,'1'):localStorage.removeItem(key)});});}el=el.nextElementSibling;}});}
+makeCheckable(/learning objectives|milestones/i);
+// scrollspy
+const links=[...document.querySelectorAll('.toc a')];
+const heads=links.map(a=>a.getAttribute('href')).filter(h=>h&&h.startsWith('#')).map(h=>document.getElementById(h.slice(1))).filter(Boolean);
+const spy=()=>{let cur=heads[0]?.id;for(const h of heads){if(h.getBoundingClientRect().top<150)cur=h.id}
+  links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur))};
+addEventListener('scroll',spy);spy();
+</script>
+<script type="module" src="../assets/sync.js"></script></body>
+</html>

@@ -24,6 +24,7 @@ function loadLocalPace() { const p = parseInt(localStorage.getItem(LS_PACE) || "
 function saveLocal() { localStorage.setItem(LS_LESSONS, JSON.stringify(state.lessons)); localStorage.setItem(LS_PACE, String(state.pace)); }
 function emit() { listeners.forEach(fn => { try { fn(); } catch (e) {} }); }
 function todayISO() { const d = new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
+function daysBetween(a, b) { return Math.round((new Date(b + "T00:00") - new Date(a + "T00:00")) / 86400000); }
 
 async function pushCloud() {
   if (user && userDocRef && fb) {
@@ -39,6 +40,30 @@ const CourseSync = {
   isDone(n) { return !!state.lessons[String(n)]; },
   dateOf(n) { return state.lessons[String(n)] || ""; },
   onChange(fn) { listeners.add(fn); return () => listeners.delete(fn); },
+  // ---- shared progress stats (single source of truth for the bar + tracker) ----
+  coreTotal() { return (window.COURSE_DATA && window.COURSE_DATA.coreTotal) || 43; },
+  optionalIds() { return (window.COURSE_DATA && window.COURSE_DATA.optionalIds) || [0]; },
+  coreDone() {
+    const opt = new Set(this.optionalIds().map(String));
+    return Object.keys(state.lessons).filter(k => !opt.has(String(k))).length;
+  },
+  streak() {
+    const dates = [...new Set(Object.values(state.lessons))].sort();
+    if (!dates.length) return 0;
+    if (daysBetween(dates[dates.length - 1], todayISO()) > 1) return 0;
+    let s = 1;
+    for (let i = dates.length - 1; i > 0; i--) { if (daysBetween(dates[i - 1], dates[i]) === 1) s++; else break; }
+    return s;
+  },
+  weekCount() {
+    const t = todayISO();
+    return Object.values(state.lessons).filter(d => { const n = daysBetween(d, t); return n >= 0 && n < 7; }).length;
+  },
+  stats() {
+    const total = this.coreTotal();
+    const done = Math.min(this.coreDone(), total);
+    return { done, total, pct: total ? Math.round(done / total * 100) : 0, streak: this.streak(), week: this.weekCount() };
+  },
   toggleLesson(n) { this.setLesson(n, !this.isDone(n)); },
   setLesson(n, done) {
     n = String(n);
@@ -152,6 +177,55 @@ const css = `
 .lesson-sync .ls-track:hover{text-decoration:underline}`;
 const st = document.createElement("style"); st.textContent = css; document.head.appendChild(st);
 
-if (document.readyState !== "loading") wireLessonButtons();
-else document.addEventListener("DOMContentLoaded", wireLessonButtons);
+// ---- persistent course-progress bar on every lesson page ----
+// Always-visible strip fixed to the bottom of the viewport so a learner never
+// has to remember a separate tracker page: their standing is always on screen,
+// and the whole bar links to the home page (which is the full tracker).
+const barCss = `
+#course-progress-bar{position:fixed;left:0;right:0;bottom:0;z-index:150;background:#0a1a2f;border-top:1px solid #1e3a5a;color:#e8eef6;display:flex;align-items:center;gap:14px;padding:9px 16px;font:600 .85rem system-ui,-apple-system,Segoe UI,Roboto,sans-serif;text-decoration:none;box-shadow:0 -6px 20px rgba(0,0,0,.28)}
+#course-progress-bar:hover{background:#0c1f38}
+#course-progress-bar .cpb-label{color:#9fb3c8;font-weight:600;white-space:nowrap}
+#course-progress-bar .cpb-track{flex:1 1 auto;height:8px;background:#16324f;border-radius:999px;overflow:hidden;min-width:70px;max-width:360px}
+#course-progress-bar .cpb-fill{display:block;height:100%;width:0;background:linear-gradient(90deg,#2dd4bf,#34d399);transition:width .4s ease}
+#course-progress-bar .cpb-count{color:#2dd4bf;white-space:nowrap}
+#course-progress-bar .cpb-pct{color:#e8eef6;white-space:nowrap}
+#course-progress-bar .cpb-streak{color:#f5c451;white-space:nowrap}
+#course-progress-bar .cpb-cta{margin-left:auto;color:#9fb3c8;white-space:nowrap}
+#course-progress-bar:hover .cpb-cta{color:#2dd4bf}
+@media(max-width:560px){#course-progress-bar .cpb-label{display:none}#course-progress-bar{gap:10px;padding:8px 12px;font-size:.8rem}}`;
+function injectCourseBar() {
+  const box = document.querySelector("[data-lesson-id]");
+  if (!box) return;                                   // lesson pages only
+  if (document.getElementById("course-progress-bar")) return;
+  const bs = document.createElement("style"); bs.textContent = barCss; document.head.appendChild(bs);
+  const home = box.getAttribute("data-home") || "../index.html";
+  const bar = document.createElement("a");
+  bar.id = "course-progress-bar";
+  bar.href = home;
+  bar.innerHTML =
+    '<span class="cpb-label">Course progress</span>' +
+    '<span class="cpb-track"><span class="cpb-fill"></span></span>' +
+    '<span class="cpb-count"></span>' +
+    '<span class="cpb-pct"></span>' +
+    '<span class="cpb-streak" style="display:none"></span>' +
+    '<span class="cpb-cta">View tracker &#8594;</span>';
+  document.body.appendChild(bar);
+  document.body.style.paddingBottom = "56px";
+  paintCourseBar();
+}
+function paintCourseBar() {
+  const bar = document.getElementById("course-progress-bar");
+  if (!bar) return;
+  const s = CourseSync.stats();
+  bar.querySelector(".cpb-fill").style.width = s.pct + "%";
+  bar.querySelector(".cpb-count").textContent = s.done + "/" + s.total;
+  bar.querySelector(".cpb-pct").textContent = s.pct + "%";
+  const streak = bar.querySelector(".cpb-streak");
+  if (s.streak > 0) { streak.style.display = ""; streak.textContent = "\u{1F525} " + s.streak; }
+  else streak.style.display = "none";
+}
+CourseSync.onChange(paintCourseBar);
+
+if (document.readyState !== "loading") { wireLessonButtons(); injectCourseBar(); }
+else document.addEventListener("DOMContentLoaded", () => { wireLessonButtons(); injectCourseBar(); });
 initFirebase();

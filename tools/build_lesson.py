@@ -474,15 +474,18 @@ def convert(md_path, out_path, cfg=None, home="../index.html", prev=None, nxt=No
             home_fwd = home.replace("\\", "/")
             base = home_fwd.rsplit("/", 1)[0] if "/" in home_fwd else "."
             block = (
-                f'<section class="lesson-sync" data-lesson-id="{num}">'
+                f'<section class="lesson-sync" data-lesson-id="{num}" data-home="{base}/index.html">'
                 '<div class="ls-inner">'
                 '<button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button>'
                 '<span class="ls-status" data-sync-status></span>'
                 '</div>'
-                f'<a class="ls-track" href="{base}/progress.html">Progress tracker &#8594;</a>'
+                f'<a class="ls-track" href="{base}/index.html">Your progress &#8594;</a>'
                 '</section>'
             )
-            script = f'<script type="module" src="{base}/assets/sync.js"></script>'
+            # course-data.js (generated, classic script) must load before the
+            # sync module so window.COURSE_DATA is set when the bar renders.
+            script = (f'<script src="{base}/assets/course-data.js"></script>'
+                      f'<script type="module" src="{base}/assets/sync.js"></script>')
             if '<nav class="lessonnav">' in out:
                 out = out.replace('<nav class="lessonnav">', block + '<nav class="lessonnav">', 1)
             else:

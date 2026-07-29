@@ -106,7 +106,7 @@ h1,h2{{font-family:Poppins,sans-serif;letter-spacing:-.01em}}
 .stats{{display:flex;gap:34px;justify-content:center;flex-wrap:wrap;margin-top:30px}}
 .stat .n{{font-family:Poppins;font-weight:800;font-size:30px;color:#fff}}
 .stat .l{{color:#9fb0c2;font-size:13.5px}}
-main{{padding:100px 0 100px}}
+main.wrap{{padding-top:100px;padding-bottom:100px}}
 .intro{{text-align:center;max-width:40em;margin:0 auto 56px;color:var(--muted)}}
 .modcard{{border:1px solid var(--line);border-radius:20px;padding:26px;margin:22px 0;box-shadow:var(--shadow)}}
 .modhead{{margin-bottom:16px}}
@@ -124,7 +124,7 @@ main{{padding:100px 0 100px}}
 footer{{background:var(--navy);color:#aebccb;text-align:center;padding:40px 26px;font-size:14px}}
 .logo{{font-family:Poppins;font-weight:800;font-size:22px;color:#fff}}
 .logo .d{{color:var(--teal)}}
-@media(max-width:700px){{.hero h1{{font-size:34px}}.hero{{padding:56px 0 64px}}.stats{{gap:22px}}main{{padding:60px 0 64px}}}}
+@media(max-width:700px){{.hero h1{{font-size:34px}}.hero{{padding:56px 0 64px}}.stats{{gap:22px}}main.wrap{{padding-top:60px;padding-bottom:64px}}}}
 </style></head>
 <body>
 <header class="hero"><span class="blob t"></span><span class="blob c"></span>

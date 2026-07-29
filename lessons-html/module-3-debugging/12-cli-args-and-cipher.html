@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 3 · Lesson 12: Command-Line Arguments and a First Cipher | Self-Paced CS50x</title>
+<title>Module 3 · Lesson 12: Command-Line Arguments and a First Cipher (p1/3) | Self-Paced CS50x</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -49,6 +49,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -212,7 +235,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
   <div class="navlinks">
     <a href="../index.html">All lessons</a>
     <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="12-cli-args-and-cipher-3.html#capstone">Capstone</a>
   </div>
   <div class="nav-cta">
     <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
@@ -251,7 +274,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="12-cli-args-and-cipher-3.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -270,32 +293,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <li><a href="#learning-objectives">Learning objectives</a></li>
 <li><a href="#prerequisites">Prerequisites</a></li>
 <li><a href="#part-1-what-main-actually-looks-like-argc-and-argv">Part 1: What main actually looks like (argc and argv)</a></li>
-<li><a href="#part-2-exit-status-telling-the-world-whether-it-worked">Part 2: Exit status (telling the world whether it worked)</a></li>
-<li><a href="#part-3-a-first-cipher-plaintext-ciphertext-and-the-caesar-shift">Part 3: A first cipher (plaintext, ciphertext, and the Caesar shift)</a></li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: Encrypt &amp; Crack (A Caesar Cipher on the Command Line)</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-shift-it-by-hand-foundational">Exercise 1: Shift it by hand (foundational)</a></li>
-<li><a href="#exercise-2-a-single-key-rot13-intermediate">Exercise 2: A single-key ROT13 (intermediate)</a></li>
-<li><a href="#exercise-3-negative-keys-advanced">Exercise 3: Negative keys (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="12-cli-args-and-cipher.html" class="cur" title="Start here">1</a><a href="12-cli-args-and-cipher-2.html" class="" title="Parts 2–3">2</a><a href="12-cli-args-and-cipher-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="12-cli-args-and-cipher-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>You'll learn the real, two-parameter shape of <code>main</code>, use the words typed after your program's own name to make it interactive and to report an honest success-or-failure exit code, then put both skills to work building your first cipher: a program that scrambles a message with a secret shift key you supply on the command line, one that anyone patient enough to try all 26 possibilities could crack in seconds.</p>
 <blockquote>
@@ -433,246 +437,9 @@ shift cipher you'll implement will not. It is nearly 2,100 years old.</p>
 <blockquote>
 <p>🔑 <strong>The single most important takeaway of this part.</strong> <code>argc</code> tells you how many words are safe to read from <code>argv</code>; always check it <em>before</em> you index into <code>argv</code>, not after. <code>argv[0]</code> is always the program's name; real arguments start at <code>argv[1]</code>.</p>
 </blockquote>
-<hr />
-<h2 id="part-2-exit-status-telling-the-world-whether-it-worked">Part 2: Exit status (telling the world whether it worked)</h2>
-<p>Every program you've written has started with <code>int main</code>, not <code>void main</code>, and you've never once written a <code>return</code> statement that mattered, because until now it didn't need to. That <code>int</code> is a promise: <code>main</code> hands a number back when it finishes.</p>
-<blockquote>
-<p>"Technically, the value that [main] returns is going to be called a so-called exit status, which is a numeric status that indicates success or failure." (David Malan)</p>
-</blockquote>
-<p>Numeric codes for "something happened" are everywhere: a confusing Zoom error like <code>1132</code> means nothing to a normal user, and on the web, "you're familiar with this number 404... this generally means file not found." An exit status works the same way, just smaller in scope: it's a message from your program to whatever ran it (the shell, or another program), and by strong convention:</p>
-<blockquote>
-<p>"By convention, a program, a function like main returns 0 on success if all is well." (David Malan)</p>
-</blockquote>
-<p>Any other value signals a specific kind of failure: you decide what each number means, as long as you're consistent. Here's Malan's <code>status.c</code>, which returns different codes depending on whether the user cooperated:</p>
-<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cs50.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
-
-<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="n">argv</span><span class="p">[])</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">argc</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Missing command line argument</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;hello, %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>The exit status isn't printed on screen. It's semi-secret, but the shell will show it to you if you ask right after running the program, with <code>echo $?</code>:</p>
-<div class="codehilite"><pre><span></span><code>$ ./status David
-hello, David
-$ echo $?
-0
-
-$ ./status
-Missing command line argument
-$ echo $?
-1
-</code></pre></div>
-
-<p>This isn't a classroom-only curiosity. It's exactly how CS50's own grading tool works:</p>
-<blockquote>
-<p>"if you've ever wondered how Check 50 knows if your code was correct or not, among the ways we check for that is by checking the semi-secret status code, this exit status." (David Malan)</p>
-<p>✅ <strong>What to do about it:</strong> validate <code>argc</code> first, and <code>return</code> a nonzero status immediately on bad input: before any of the "real" logic of your program runs. Reserve <code>0</code> exclusively for the path where everything actually succeeded.</p>
-</blockquote>
-<hr />
-<h2 id="part-3-a-first-cipher-plaintext-ciphertext-and-the-caesar-shift">Part 3: A first cipher (plaintext, ciphertext, and the Caesar shift)</h2>
-<p>The lecture's closing topic is cryptography: scrambling a message so it's unreadable to anyone who intercepts it, but recoverable by the person it's meant for. Every scheme in this space shares the same shape:</p>
-<div class="codehilite"><pre><span></span><code>plaintext  --[ cipher, run with a shared secret key ]--&gt;  ciphertext
-ciphertext --[ same cipher, key reversed            ]--&gt;  plaintext
-</code></pre></div>
-
-<p><strong>Plaintext</strong> is the human-readable original: "the human readable version in English or any other language." <strong>Ciphertext</strong> is what comes out the other side, and turning one into the other needs more than just an algorithm:</p>
-<blockquote>
-<p>"you can't just give it plain text and run it through an algorithm and get ciphertext because you need to somehow have a secret typically for encryption to work." (David Malan)</p>
-</blockquote>
-<p>The simplest such secret is a <strong>shift key</strong>: pick a number, and slide every letter of the alphabet forward by that many places, wrapping back to <code>A</code> after <code>Z</code>. Shift <code>HIM</code> by a key of 1, and every letter just moves one place later (<code>H</code>→<code>I</code>, <code>I</code>→<code>J</code>, <code>M</code>→<code>N</code>) giving the ciphertext <code>IJN</code>. Decryption reverses the exact same move: subtract the key instead of adding it. This is historically known as the <strong>Caesar cipher</strong>, because it is, quite literally, the scheme Julius Caesar used to write confidential letters, as Suetonius records above.</p>
-<p>A famous specific key is 13, which shifts the alphabet exactly halfway around:</p>
-<blockquote>
-<p>"if you use 13 instead, you wouldn't get IJ, you'd get UV because [U] and V are 13 places away from H and I respectively." (David Malan)</p>
-</blockquote>
-<p>This particular shift has its own name, <strong>ROT13</strong> ("rotate 13"), and a niche but genuine real-world use:</p>
-<blockquote>
-<p>"[ROT13] is an algorithm that's been used for many years online just to sort of avoid spoilers, like Reddit might do this or other websites where they want you to have to do some effort to see what the message says." (David Malan)</p>
-</blockquote>
-<p>Push the key all the way to 26, though, and you get nothing at all, since every letter shifts exactly back onto itself:</p>
-<blockquote>
-<p>"It literally rotates all the way around. A becomes A, B becomes B." (David Malan)</p>
-</blockquote>
-<p>That last observation is really about <em>security</em>, not arithmetic. A Caesar cipher only has 26 possible keys, and one of them (26, or 0) does nothing. That means an eavesdropper doesn't need to be clever, just patient:</p>
-<blockquote>
-<p>"they just try all possibilities (key of 1, key of 2, key of 3 ... 25) and at some point [they'll] see clearly that they guessed the key, which means that cipher is not very secure." (David Malan)</p>
-</blockquote>
-<p>Trying every possible key until one produces readable text is called a <strong>brute-force</strong> attack, and it's exactly the vulnerability that makes the Caesar cipher a teaching tool rather than something you'd trust with an actual secret today: a computer (or even a patient human with a pencil) can try all 25 useful keys in well under a second.</p>
-<p>Malan actually closes the lecture by doing this decryption live, in front of the class, on a message that had been shifted by a key of 1:</p>
-<blockquote>
-<p>"if we rotate all the letters in the opposite direction by subtracting one, [that] will be our final letters for today." (David Malan)</p>
-</blockquote>
-<p>Letter by letter, the ciphertext resolves into plain English, Malan's actual sign-off for the lecture:</p>
-<blockquote>
-<p>"this was CS 50. We'll see you next time." (David Malan)</p>
-</blockquote>
-<p>Notice how the three ideas from this lesson stack into one build: your Capstone's <code>encrypt.c</code> reads its shift key from <code>argv[1]</code> (Part 1), validates <code>argc</code> and returns a proper exit status for bad input (Part 2), and then does exactly this character-by-character shifting arithmetic on a message you type (Part 3).</p>
-<blockquote>
-<p>🔑 <strong>The single most important takeaway of this part.</strong> A cipher's security lives entirely in the secrecy (and the size) of its key space. A Caesar cipher's key space is just 26 numbers, which is small enough to brute-force instantly; real cryptography (later in this course) is built to make that number astronomically larger.</p>
-</blockquote>
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong><code>main</code> has two legal shapes.</strong> <code>int main(void)</code> takes no command-line arguments; <code>int main(int argc, string argv[])</code> takes as many words as the user cares to type after the program's name.</li>
-<li><strong><code>argc</code> counts, <code>argv</code> holds.</strong> <code>argc</code> is the total word count (program name included); <code>argv</code> is the array of those words as text, with <code>argv[0]</code> always the program's own name and real arguments starting at <code>argv[1]</code>.</li>
-<li><strong>Check <code>argc</code> before you touch <code>argv</code>.</strong> Reading <code>argv[1]</code> when it doesn't exist is exactly the kind of bug that doesn't show up until a user runs your program the "wrong" way.</li>
-<li><strong>Exit status is your program's honest signal.</strong> <code>0</code> means success by strong convention; any other number means a specific failure you define, and <code>echo $?</code> (and tools like <code>check50</code>) can read it right back.</li>
-<li><strong>A cipher's strength lives in its key space, not its cleverness.</strong> The Caesar cipher's 26 possible keys make it brute-forceable almost instantly: a limitation this course will spend real time solving properly.</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ Reading <code>argv[1]</code> (or <code>argv[2]</code>, etc.) before checking that <code>argc</code> is large enough: this reads memory that was never given to your program and produces garbage or a crash, not a clean error.</li>
-<li>❌ Forgetting <code>#include &lt;cs50.h&gt;</code> after switching <code>main</code>'s signature to use <code>string argv[]</code>: <code>string</code> is CS50's alias, not a built-in C keyword, and the compiler will say so with "undeclared identifier."</li>
-<li>❌ Returning <code>0</code> out of habit even on the failure path, or forgetting to <code>return</code> at all: an exit status only means something if <code>0</code> is reserved exclusively for real success.</li>
-<li>❌ Assuming a Caesar cipher (or ROT13) hides anything from a determined reader: with only 26 keys to try, brute force cracks it in a fraction of a second.</li>
-<li>❌ Forgetting that C's <code>%</code> (remainder) operator can return a negative number for a negative left-hand side: shifting by a negative key without correcting for this gives array-index-style math that looks wrong until you add 26 back in.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: Encrypt &amp; Crack (A Caesar Cipher on the Command Line)</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. You'll build a real command-line encryption tool, then turn around and attack your own cipher the way an eavesdropper would: by trying every possible key until English falls out.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>Two small programs on cs50.dev. <code>encrypt.c</code> reads a shift key from the command line, reads a plaintext message interactively, and prints the Caesar-shifted ciphertext, returning a proper exit status throughout. Then, without being told the key, you'll crack a ciphertext by brute force: writing a program that tries all 26 possibilities and shows you every candidate so you can spot the real message by eye.</p>
-<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in Encrypt &amp; Crack</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>argc</code> / <code>argv</code> (Part 1)</td>
-<td>Reading the shift key straight from the command line as <code>argv[1]</code>, instead of asking for it with <code>get_int</code>.</td>
-</tr>
-<tr>
-<td>Exit status (Part 2)</td>
-<td><code>return 1</code> with a usage message on bad input; <code>return 0</code> on success; checked with <code>echo $?</code>.</td>
-</tr>
-<tr>
-<td>Caesar shift + brute force (Part 3)</td>
-<td>The character-shifting math inside <code>encrypt.c</code>, and trying all 26 keys automatically instead of being told the answer.</td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>Set up and validate <code>argc</code>.</strong> Create <code>encrypt.c</code> with <code>#include &lt;cs50.h&gt;</code> and <code>#include &lt;stdio.h&gt;</code>, and give <code>main</code> the real signature <code>int main(int argc, string argv[])</code>. Before anything else, check <code>if (argc != 2)</code>, print a usage message, and <code>return 1</code>. Run <code>make encrypt</code> then <code>./encrypt</code> (no key) and confirm you see the usage message; run <code>echo $?</code> and confirm you see <code>1</code>.</li>
-<li><strong>Turn the key into a usable number.</strong> Add <code>#include &lt;stdlib.h&gt;</code> and convert <code>argv[1]</code> with <code>atoi</code>. Reduce it with <code>% 26</code>, and if the result is negative, add 26 back so any integer key (even a negative or oversized one) behaves like a proper Caesar key. Temporarily <code>printf</code> the adjusted key to confirm <code>./encrypt 29</code> and <code>./encrypt 3</code> produce the same key.</li>
-<li><strong>Shift a message and print the ciphertext.</strong> Add <code>#include &lt;ctype.h&gt;</code> and <code>#include &lt;string.h&gt;</code>. Call <code>string plaintext = get_string("plaintext: ");</code>, loop over every character with <code>strlen(plaintext)</code>, and shift uppercase and lowercase letters separately by the key (wrapping with <code>% 26</code>); print every other character (spaces, digits, punctuation) unchanged. Confirm <code>./encrypt 3</code> turns <code>hello</code> into <code>khoor</code>.</li>
-<li><strong>Prove decryption is just encryption with the opposite key, then return 0.</strong> Encrypt a message with some key <code>k</code>, then feed the resulting ciphertext back into <code>./encrypt</code> using key <code>26 - k</code>, and confirm you get your original message back exactly. Make sure the success path ends with <code>return 0;</code>, and confirm with <code>echo $?</code>.</li>
-<li><strong>Crack a secret by brute force: no key given.</strong> Without being told the key, decrypt this intercepted message: <code>VHH BRX LQ PRGXOH 4</code>. Write a short <code>crack.c</code> that loops a candidate <code>key</code> from 0 through 25, decrypts the message with each one, and prints every candidate labeled with its key number, so you can read down the list and spot the one written in plain English by eye.</li>
-<li><strong>Stretch goals.</strong> (a) Make <code>crack.c</code> score each candidate automatically instead of relying on your eyes: for example, counting how many two- and three-letter English words (<code>THE</code>, <code>AND</code>, <code>YOU</code>) appear in each candidate. (b) Handle ciphertext typed in mixed case. (c) Reject a key argument that isn't a valid whole number instead of silently treating it as <code>0</code>.</li>
-</ol>
-<p>Here is a working reference implementation of <code>encrypt.c</code>. Code snippets in this course are illustrative reconstructions, so build your own version step by step rather than copying this directly:</p>
-<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cs50.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;ctype.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string.h&gt;</span>
-
-<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="n">argv</span><span class="p">[])</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">argc</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Usage: ./encrypt key</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="w">    </span><span class="p">}</span>
-
-<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">atoi</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">26</span><span class="p">;</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">key</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="n">key</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">26</span><span class="p">;</span>
-<span class="w">    </span><span class="p">}</span>
-
-<span class="w">    </span><span class="n">string</span><span class="w"> </span><span class="n">plaintext</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_string</span><span class="p">(</span><span class="s">&quot;plaintext: &quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;ciphertext: &quot;</span><span class="p">);</span>
-
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">strlen</span><span class="p">(</span><span class="n">plaintext</span><span class="p">);</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="kt">char</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plaintext</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">isupper</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
-<span class="w">        </span><span class="p">{</span>
-<span class="w">            </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%c&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="sc">&#39;A&#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">26</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="sc">&#39;A&#39;</span><span class="p">);</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">islower</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
-<span class="w">        </span><span class="p">{</span>
-<span class="w">            </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%c&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="sc">&#39;a&#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">26</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="sc">&#39;a&#39;</span><span class="p">);</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="k">else</span>
-<span class="w">        </span><span class="p">{</span>
-<span class="w">            </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%c&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">);</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ <code>./encrypt</code> with no key (or with two keys) prints a usage message and exits with status <code>1</code>, confirmed with <code>echo $?</code>.</li>
-<li>✅ <code>./encrypt 3</code> followed by typing <code>hello</code> prints <code>khoor</code>, and exits with status <code>0</code>.</li>
-<li>✅ Encrypting a message with key <code>k</code>, then encrypting the result with key <code>26 - k</code>, returns your original message.</li>
-<li>✅ Your brute-force <code>crack.c</code> prints all 26 candidates for <code>VHH BRX LQ PRGXOH 4</code>, and you can point to the one key (there's exactly one) that reads as plain English.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> once you've spotted the correct key by eye, don't go back and hardcode it into <code>crack.c</code>. The whole point is that the program tries all 26 keys itself: proving the cipher is breakable by brute force, not that you already knew the answer.</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice
-on one idea. Optional and independent; the Capstone already touches all of
-them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-shift-it-by-hand-foundational">Exercise 1: Shift it by hand (foundational)</h3>
-<p>Without writing any code, Caesar-shift the word <code>COMPUTER</code> by a key of 7, one letter at a time, on paper. Some letters will need to wrap around past <code>Z</code> back to <code>A</code> (for example, <code>T</code> shifted by 7 wraps around). Write out your final ciphertext, then double check a couple of the trickiest wrap-around letters against the alphabet.</p>
-<h3 id="exercise-2-a-single-key-rot13-intermediate">Exercise 2: A single-key ROT13 (intermediate)</h3>
-<p>Write a small standalone program, <code>rot13.c</code>, that always uses a key of exactly 13: no command-line argument needed at all, just <code>get_string</code> and <code>printf</code>. This is a smaller version of <code>encrypt.c</code>'s core loop, useful for getting the character-shifting math right before you also have to handle a variable key from <code>argv</code>.</p>
-<h3 id="exercise-3-negative-keys-advanced">Exercise 3: Negative keys (advanced)</h3>
-<p>Extend your <code>encrypt.c</code> to correctly handle a negative shift key typed at the command line, such as <code>./encrypt -3</code>. Confirm that <code>./encrypt -3</code> on some ciphertext produces the same result as <code>./encrypt 23</code> on that same ciphertext (since shifting back by 3 is the same as shifting forward by 23). This exercises the <code>% 26</code> "add 26 if negative" logic from Capstone Milestone 2 in a case where it's easy to get wrong.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>MAIN&#39;S TWO SIGNATURES
-  int main(void)                     no command-line arguments
-  int main(int argc, string argv[])  argc = word count (name included)
-                                      argv = array of those words, argv[0] = program&#39;s own name
-
-RULE: check argc BEFORE reading argv[1], argv[2], ...
-
-EXIT STATUS
-  return 0;   -&gt; success (the convention)
-  return 1;   -&gt; a specific failure (you define what each nonzero code means)
-  $ echo $?   -&gt; shows the exit status of the last command you ran
-
-CAESAR CIPHER
-  encrypt:  (letter - base + key) % 26 + base       base = &#39;A&#39; or &#39;a&#39;
-  decrypt:  (letter - base - key + 26) % 26 + base   (+26 keeps it non-negative)
-  ROT13  = shift key of 13 (its own inverse: shift twice, you&#39;re back where you started)
-  ROT26  = shift key of 26 = no-op (A -&gt; A, B -&gt; B, ...)
-  key space = 26 possibilities -&gt; brute-forceable near-instantly, hence NOT secure
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 3 · Lesson 11 (Arrays and strings under the hood):</strong> knowing that a string is an array of <code>char</code>s terminated by <code>\0</code> is exactly what makes <code>argv</code> (an array of strings) make sense, and is what your <code>for</code> loop over <code>strlen(plaintext)</code> relies on here.</li>
-<li><strong>Next, Module 4 · Lesson 13 (Thinking in running time: Big O):</strong> trying all 26 keys in <code>crack.c</code> is your first taste of "just try everything": Lesson 13 gives that instinct a name and a way to measure how badly it scales when the number of possibilities isn't a friendly 26.</li>
-<li><strong>Later, Module 8 · Lesson 31 (SQL injection):</strong> the discipline you practiced here (validate <code>argc</code> before you trust <code>argv</code>, never assume user input is safe to use as-is) returns in force when the north-star web app has to defend a real database against malicious input.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 2 - Arrays" by David J. Malan, Harvard University (CS50x 2026). Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK. Quotes are taken verbatim from the lecture's auto-generated transcript; bracketed words like [main], [argc], [argv], [cowsay], [ASCII], and [ROT13] silently correct that transcript's phonetic mis-hearings of these technical terms (e.g., "Ma"/"Maine" for "main," "RC"/"RV" for "argc"/"argv") without altering the substance of what was said.</em></p>
+<hr /><div class="pager bottom"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="12-cli-args-and-cipher.html" class="cur" title="Start here">1</a><a href="12-cli-args-and-cipher-2.html" class="" title="Parts 2–3">2</a><a href="12-cli-args-and-cipher-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="12-cli-args-and-cipher-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="12" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="11-arrays-and-strings.html"><span class="dir">&#8592; Previous</span><b>Arrays and Strings Under the Hood</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="../module-4-algorithms/13-big-o.html"><span class="dir">Next &#8594;</span><b>Thinking in Running Time: Big O</b></a></nav>
+    <div class="ls-marker" data-lesson-id="12" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="11-arrays-and-strings.html"><span class="dir">&#8592; Previous lesson</span><b>Arrays and Strings Under the Hood</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 

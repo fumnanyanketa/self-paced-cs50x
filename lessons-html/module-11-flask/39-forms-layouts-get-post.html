@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 11 · Lesson 39: Forms, Layouts, and GET vs POST | Self-Paced CS50x</title>
+<title>Module 11 · Lesson 39: Forms, Layouts, and GET vs POST (p1/3) | Self-Paced CS50x</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -49,6 +49,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -212,7 +235,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
   <div class="navlinks">
     <a href="../index.html">All lessons</a>
     <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="39-forms-layouts-get-post-3.html#capstone">Capstone</a>
   </div>
   <div class="nav-cta">
     <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
@@ -251,7 +274,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="39-forms-layouts-get-post-3.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -271,34 +294,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <li><a href="#prerequisites">Prerequisites</a></li>
 <li><a href="#part-1-a-second-route-for-the-form-and-the-duplication-it-creates">Part 1: A second route for the form (and the duplication it creates)</a></li>
 <li><a href="#part-2-template-inheritance-one-layouthtml-many-children">Part 2: Template inheritance (one layout.html, many children)</a></li>
-<li><a href="#part-3-get-vs-post-privacy-of-the-query-string-and-merging-the-routes">Part 3: GET vs POST (privacy of the query string, and merging the routes)</a><ul>
-<li><a href="#merging-the-two-routes-into-one">Merging the two routes into one</a></li>
-</ul>
-</li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: Upgrade hello-flask (One Form, Two Verbs, Zero Duplication)</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-a-page-with-no-form-still-extending-layout-foundational">Exercise 1: A page with no form, still extending layout (foundational)</a></li>
-<li><a href="#exercise-2-a-second-field-tracked-through-both-verbs-intermediate">Exercise 2: A second field, tracked through both verbs (intermediate)</a></li>
-<li><a href="#exercise-3-a-second-merged-route-built-from-scratch-advanced">Exercise 3: A second merged route, built from scratch (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="39-forms-layouts-get-post.html" class="cur" title="Start here">1</a><a href="39-forms-layouts-get-post-2.html" class="" title="Part 3">2</a><a href="39-forms-layouts-get-post-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="39-forms-layouts-get-post-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>A form that submits to its own route tends to duplicate the same HTML boilerplate in every template it touches: Jinja's <code>{% extends %}</code> and <code>{% block %}</code> let you write that boilerplate once in a <code>layout.html</code>, and the HTTP method you put on the form's <code>method</code> attribute, <code>GET</code> or <code>POST</code>, decides whether the user's input becomes a visible, bookmarkable part of the URL or stays tucked inside the request where a passerby can't glance over your shoulder and read it.</p>
 <blockquote>
@@ -439,201 +441,9 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 
 <blockquote>
 <p>✅ <strong>What to do about it:</strong> the moment a second template repeats the same <code>&lt;!DOCTYPE html&gt;</code>/<code>&lt;html&gt;</code>/<code>&lt;head&gt;</code> lines as your first one, move that shared HTML into <code>layout.html</code> and have both templates <code>{% extends %}</code> it instead of retyping it.</p>
-</blockquote>
-<h2 id="part-3-get-vs-post-privacy-of-the-query-string-and-merging-the-routes">Part 3: GET vs POST (privacy of the query string, and merging the routes)</h2>
-<p>With duplication solved, the form from Part 1 still has a <code>method="get"</code> on it, meaning its input rides in the query string in full public view. Malan makes the risk concrete:</p>
-<blockquote>
-<p>"if I have like a nosy sibling and they sit down in my browser, they're gonna see like every URL I visited, including whose name was greeted." (David Malan)</p>
-</blockquote>
-<p>A nosy sibling reading someone's name is low stakes. The same mechanism reading a password, a credit-card number, or a search you'd rather keep private is not. <code>GET</code>'s visibility is a feature when you want a page to be linkable or bookmarkable, but a liability the moment the input is sensitive.</p>
-<p>The fix is to switch the form's <code>method</code> to <code>post</code> and change nothing else about the <em>look</em> of the form:</p>
-<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">form</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;/greet&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;post&quot;</span><span class="p">&gt;</span>
-</code></pre></div>
-
-<p>That alone isn't enough, though: try it, and Flask responds with <code>405 Method Not Allowed</code>, because every <code>@app.route</code> defaults to accepting only <code>GET</code>. You have to opt the route into <code>POST</code> explicitly:</p>
-<div class="codehilite"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/greet&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">])</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">greet</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;greet.html&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;world&quot;</span><span class="p">))</span>
-</code></pre></div>
-
-<p>Notice <code>request.args</code> became <code>request.form</code>. Same job (pull out the value the user typed under the key <code>"name"</code>), different HTTP method, and, as Malan admits, a confusing pair of names for it:</p>
-<blockquote>
-<p>"This is completely unintuitive that request.args is get and request.form is post... because they all come from forms, so it's bad naming, admittedly." (David Malan)</p>
-</blockquote>
-<p>Submit the form again, and the URL bar now shows nothing past <code>/greet</code>: no <code>?name=David</code> in sight, no trace in browser history. The data still reached the server; it's just no longer written on the outside of the envelope, as earlier lessons put it.</p>
-<h3 id="merging-the-two-routes-into-one">Merging the two routes into one</h3>
-<p>Now that both routes exist only to serve one form, Malan notices the same annoyance from Part 1 hasn't actually gone away. You still have two routes doing one job:</p>
-<blockquote>
-<p>"Is there a way to get kind of the best of both worlds and combine these two routes into one so that everything related to greeting the user all happens in one place?" (David Malan)</p>
-</blockquote>
-<p>The trick: tell one route to accept <em>both</em> methods, and branch inside the function on which one actually arrived, using <code>request.method</code>:</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">render_template</span><span class="p">,</span> <span class="n">request</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">])</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">():</span>
-    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;greet.html&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;world&quot;</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;index.html&quot;</span><span class="p">)</span>
-</code></pre></div>
-
-<p>The <code>/greet</code> route disappears entirely. Everything lives at <code>/</code> now. The only other change needed: the form's <code>action</code> in <code>index.html</code> has to stop pointing at a route that no longer exists.</p>
-<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">form</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;/&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;post&quot;</span><span class="p">&gt;</span>
-</code></pre></div>
-
-<p><em>(Leaving <code>action</code> off the <code>&lt;form&gt;</code> tag entirely works too: a form with no <code>action</code> submits back to whatever URL it's already on.)</em></p>
-<div class="codehilite"><pre><span></span><code>        GET /            →  request.method == &quot;GET&quot;   →  render index.html (show the form)
-        POST / (name=…)  →  request.method == &quot;POST&quot;  →  render greet.html (show the greeting)
-</code></pre></div>
-
-<p>One route, one URL, two behaviors: decided entirely by which HTTP verb the browser used to get there.</p>
-<p>Finally, it's worth internalizing <em>why</em> this choice matters beyond privacy. GET requests can be triggered just by clicking a link or typing a URL: no confirmation, no button press. That makes GET dangerous for anything that changes data on a server (imagine an email link that silently deletes your account the moment it's clicked). POST requires an actual form submission, which is a meaningfully higher bar:</p>
-<blockquote>
-<p>"post requests are preferred any time there's anything remotely personally identifiable or remotely destructive." (David Malan)</p>
-<p>✅ <strong>What to do about it:</strong> default every form that submits personal data, or changes anything on the server, to <code>method="post"</code>: reach for <code>GET</code> only when the result is meant to be a plain, shareable, side-effect-free page.</p>
-</blockquote>
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong>Two near-identical templates are a duplication bug, not bad luck.</strong> If most of a template's lines are boilerplate shared with another template, factor them into <code>layout.html</code>.</li>
-<li><strong><code>{% extends %}</code> and <code>{% block %}</code> are Jinja's inheritance syntax.</strong> A parent template (<code>layout.html</code>) defines a named hole with <code>{% block name %}{% endblock %}</code>; a child template fills it using <code>{% extends "parent.html" %}</code> and its own <code>{% block name %} ... {% endblock %}</code>.</li>
-<li><strong><code>GET</code> puts input in the URL; <code>POST</code> puts it in the request body.</strong> Only the first is visible in the address bar, browser history, and bookmarks.</li>
-<li><strong><code>request.args</code> reads GET data; <code>request.form</code> reads POST data.</strong> The names don't map intuitively to the verbs: you just have to remember it.</li>
-<li><strong>A route only accepts <code>GET</code> unless you say otherwise.</strong> Add <code>methods=["POST"]</code>, or <code>methods=["GET", "POST"]</code> to support both, or you'll hit a <code>405 Method Not Allowed</code>.</li>
-<li><strong>One route can serve and process the same form.</strong> Branch on <code>request.method</code> inside the function to decide whether to show the form or handle its submission.</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ Forgetting <code>{% endblock %}</code> after <code>{% block body %}</code>: Jinja will raise a template error rather than silently guessing where the block ends.</li>
-<li>❌ Changing a form's <code>method</code> to <code>post</code> but leaving the route's <code>methods</code> at the Flask default (<code>GET</code> only): this produces a <code>405 Method Not Allowed</code>, not a silent failure, so check the terminal running <code>flask run</code> for the real error.</li>
-<li>❌ Reading <code>request.args</code> after switching a form to POST (or vice versa): the data is there, but under the wrong object, so it'll look like the value is simply missing.</li>
-<li>❌ Merging two routes into one but leaving the form's <code>action</code> pointed at the now-deleted route (like <code>/greet</code>): update <code>action</code> to match wherever the merged route actually lives.</li>
-<li>❌ Assuming GET is "safe" because the browser visually tucks the URL away: it's still recorded in full in browser history, server logs, and any bookmark or shared link.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: Upgrade hello-flask (One Form, Two Verbs, Zero Duplication)</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. Starting from the <code>hello-flask</code> app you built in Lesson 38, on cs50.dev, you'll watch the exact same three-act story Malan walked through: factor out duplication with a layout, feel GET's privacy problem for yourself in the URL bar, then fix it and simplify down to one merged route.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>An upgraded <code>hello-flask</code> with:</p>
-<ul>
-<li>A <code>layout.html</code> holding all shared boilerplate, extended by every other template.</li>
-<li>A form that greets the user by name, first working over GET, then over POST.</li>
-<li>A single route on <code>/</code> (no separate <code>/greet</code>) that uses <code>methods=["GET", "POST"]</code> to both show and process that form.</li>
-</ul>
-<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in <code>hello-flask</code></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Duplication across templates (Part 1)</td>
-<td>Milestone 1: noticing it before you fix it.</td>
-</tr>
-<tr>
-<td><code>{% extends %}</code> / <code>{% block %}</code> (Part 2)</td>
-<td>Milestone 1: building <code>layout.html</code>.</td>
-</tr>
-<tr>
-<td>GET and the query string (Part 3)</td>
-<td>Milestones 2-3: submitting the form and watching the URL.</td>
-</tr>
-<tr>
-<td>POST and <code>request.form</code> (Part 3)</td>
-<td>Milestone 4: switching the method and fixing the resulting error.</td>
-</tr>
-<tr>
-<td>Merging routes with <code>methods=["GET", "POST"]</code> (Part 3)</td>
-<td>Milestone 5: collapsing two routes into one.</td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>Build <code>layout.html</code> and convert your existing templates to extend it.</strong> Move the shared <code>&lt;!DOCTYPE html&gt;</code>/<code>&lt;html&gt;</code>/<code>&lt;head&gt;</code>/<code>&lt;body&gt;</code> boilerplate into <code>layout.html</code> with <code>{% block body %}{% endblock %}</code>. Update every existing template to start with <code>{% extends "layout.html" %}</code> and wrap its unique content in <code>{% block body %} ... {% endblock %}</code>. Done when your app looks and behaves exactly as it did before, only the files got shorter.</li>
-<li><strong>Add a GET form.</strong> In <code>index.html</code>, add a <code>&lt;form&gt;</code> with <code>method="get"</code>, an <code>action</code> of <code>/greet</code>, and a text <code>input</code> named <code>name</code>. Done when the form renders and has a working submit button.</li>
-<li><strong>Handle the GET submission and read the query string.</strong> Add a <code>/greet</code> route (default <code>GET</code>) that reads <code>request.args.get("name", "world")</code> and renders a <code>greet.html</code> (which also extends <code>layout.html</code>). Submit the form, then look at the URL bar. Done when you can point to <code>?name=...</code> sitting right there in the address bar after clicking submit.</li>
-<li><strong>Switch to POST.</strong> Change the form's <code>method</code> to <code>post</code>, change the <code>/greet</code> route to <code>methods=["POST"]</code>, and swap <code>request.args</code> for <code>request.form</code>. Submit again. Done when the URL bar shows no query string at all after submitting, even though the greeting still works.</li>
-<li><strong>Merge the two routes into one.</strong> Delete the standalone <code>/greet</code> route. Change your <code>/</code> route to <code>methods=["GET", "POST"]</code>, and inside it, branch on <code>request.method</code> to decide whether to render the form or process it. Update the form's <code>action</code> to match (or remove <code>action</code> entirely). Done when <code>/greet</code> no longer exists anywhere in your code, and the single <code>/</code> route both shows and handles the form.</li>
-<li><strong>Trigger and explain a <code>405</code>.</strong> Temporarily set your merged route's <code>methods</code> back to just <code>["GET"]</code>, submit the form, and read the <code>405 Method Not Allowed</code> in your browser. Then restore <code>["GET", "POST"]</code>. Done when you can explain in one sentence why that error appeared.</li>
-<li><strong>Stretch goals.</strong> Add a second form field (say, a favorite color) and thread it through the same GET-then-POST-then-merge sequence on your own. Or move a shared <code>&lt;meta name="viewport" ...&gt;</code> tag into <code>layout.html</code> so every page benefits from it at once.</li>
-</ol>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ <code>layout.html</code> holds all shared boilerplate; every other template starts with <code>{% extends "layout.html" %}</code> and contains only its own <code>{% block body %}</code>.</li>
-<li>✅ You watched <code>?name=...</code> appear in the URL bar with GET, then disappear with POST, on the same form.</li>
-<li>✅ A single route on <code>/</code> with <code>methods=["GET", "POST"]</code> handles both showing and processing the form: <code>/greet</code> is gone.</li>
-<li>✅ You can explain, in one sentence, why POST is the safer default for anything private or destructive.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> don't just read the URL bar in a screenshot afterward: actually submit the GET version and the POST version yourself, side by side, so the difference is something you saw happen, not something you're taking on faith.</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-a-page-with-no-form-still-extending-layout-foundational">Exercise 1: A page with no form, still extending layout (foundational)</h3>
-<p>Create a plain <code>about.html</code> with a paragraph of text about your app (no form, nothing dynamic) and make it extend <code>layout.html</code> like every other template. Add a route for it. This isolates template inheritance from forms entirely, so you can see it's a general-purpose tool, not something special to forms.</p>
-<h3 id="exercise-2-a-second-field-tracked-through-both-verbs-intermediate">Exercise 2: A second field, tracked through both verbs (intermediate)</h3>
-<p>Add a second text input to your form (for example, a favorite color) alongside <code>name</code>. Get it working over GET first, confirm you see both <code>name=...&amp;color=...</code> in the URL, then switch the whole form to POST and confirm both values still arrive, just no longer visible in the address bar.</p>
-<h3 id="exercise-3-a-second-merged-route-built-from-scratch-advanced">Exercise 3: A second merged route, built from scratch (advanced)</h3>
-<p>Without copying your <code>/</code> route, build an entirely new merged route, say <code>/subscribe</code>, that shows a one-field email signup form on GET and prints a confirmation message on POST, using <code>methods=["GET", "POST"]</code> and a <code>request.method</code> check: the same pattern from Part 3, but written independently to prove you own it.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>TEMPLATE INHERITANCE (Jinja)
-  layout.html (parent):
-    {% block body %}{% endblock %}        &lt;- named hole, filled by children
-
-  child.html:
-    {% extends &quot;layout.html&quot; %}
-    {% block body %}
-      ... only the unique content here ...
-    {% endblock %}
-
-GET vs POST
-  GET   input rides in the URL&#39;s query string   ?name=David
-        visible in address bar, history, bookmarks, shared links
-  POST  input rides in the request body
-        not visible in the URL: safer for private/destructive actions
-
-READING THE DATA
-  request.args.get(&quot;name&quot;, &quot;world&quot;)   &lt;- GET  (query string)
-  request.form.get(&quot;name&quot;, &quot;world&quot;)   &lt;- POST (form body)
-
-ROUTE METHODS
-  @app.route(&quot;/greet&quot;)                        default: GET only
-  @app.route(&quot;/greet&quot;, methods=[&quot;POST&quot;])       POST only
-  @app.route(&quot;/&quot;, methods=[&quot;GET&quot;, &quot;POST&quot;])     both, branch with:
-      if request.method == &quot;POST&quot;: ...
-      else: ...                                (implicitly GET)
-
-COMMON ERROR
-  405 Method Not Allowed   -&gt; the route doesn&#39;t list the method you just used;
-                              add it to methods=[...]
-
-GOLDEN RULE
-  Anything remotely personally identifiable or remotely destructive: use POST.
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 10 · Lesson 35: HTTP and the browser:</strong> GET and POST were first named there as two of HTTP's verbs, seen only from the outside via status codes and headers. Today you chose between them yourself, inside your own code.</li>
-<li><strong>Earlier, Module 10 · Lesson 36: Building pages with HTML:</strong> the <code>&lt;form&gt;</code> element and its <code>method</code>/<code>action</code> attributes were built in plain HTML there, with no server behind them. Today that same form finally talks to a real Flask backend.</li>
-<li><strong>Earlier, Module 11 · Lesson 38: Flask fundamentals: routes and templates:</strong> routes, <code>render_template</code>, and <code>request.args</code> were introduced there for a single page; this lesson put a second page next to it and had to solve the duplication and privacy problems that appear the moment a real app grows past one route.</li>
-<li><strong>Next, Module 11 · Lesson 40: A real app: validation and databases:</strong> the merged POST route you built today is exactly where you'll next add server-side validation and persist submissions to a real database.</li>
-<li><strong>Later, the course capstone:</strong> every user action your final project's database-backed web app ever receives (a login, a purchase, a search, a delete) arrives as one of these two verbs, GET or POST, and today is where you learned to tell them apart and choose deliberately between them.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 9 - Flask" by David J. Malan, Harvard University (CS50x 2026). Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+</blockquote><div class="pager bottom"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="39-forms-layouts-get-post.html" class="cur" title="Start here">1</a><a href="39-forms-layouts-get-post-2.html" class="" title="Part 3">2</a><a href="39-forms-layouts-get-post-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="39-forms-layouts-get-post-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="39" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="38-flask-fundamentals.html"><span class="dir">&#8592; Previous</span><b>Flask Fundamentals: Routes and Templates</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="40-validation-and-databases.html"><span class="dir">Next &#8594;</span><b>A Real App: Validation and Databases</b></a></nav>
+    <div class="ls-marker" data-lesson-id="39" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="38-flask-fundamentals.html"><span class="dir">&#8592; Previous lesson</span><b>Flask Fundamentals: Routes and Templates</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 

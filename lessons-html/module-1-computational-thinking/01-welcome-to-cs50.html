@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 1 · Lesson 1: Welcome to CS50: Computers, Thinking, and a Live AI Chatbot | Self-Paced CS50x</title>
+<title>Module 1 · Lesson 1: Welcome to CS50: Computers, Thinking, and a Live AI Chatbot (p1/3) | Self-Paced CS50x</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -49,6 +49,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -212,7 +235,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
   <div class="navlinks">
     <a href="../index.html">All lessons</a>
     <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="01-welcome-to-cs50-3.html#capstone">Capstone</a>
   </div>
   <div class="nav-cta">
     <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
@@ -251,7 +274,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="01-welcome-to-cs50-3.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -275,32 +298,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 </li>
 <li><a href="#part-2-what-a-program-actually-is-input-algorithm-output">Part 2: What a program actually is: input, algorithm, output</a></li>
 <li><a href="#part-3-watching-a-chatbot-get-built-in-about-ten-lines">Part 3: Watching a chatbot get built in about ten lines</a></li>
-<li><a href="#part-4-system-prompt-vs-user-prompt-giving-the-ai-a-personality">Part 4: System prompt vs. user prompt: giving the AI a personality</a></li>
-<li><a href="#part-5-how-the-pieces-combine">Part 5: How the pieces combine</a></li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: Give an AI a Persona With a System Prompt</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-spot-the-input-algorithm-output-foundational">Exercise 1: Spot the input, algorithm, output (foundational)</a></li>
-<li><a href="#exercise-2-narrate-the-chatbot-script-intermediate">Exercise 2: Narrate the chatbot script (intermediate)</a></li>
-<li><a href="#exercise-3-predict-then-test-advanced">Exercise 3: Predict, then test (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="01-welcome-to-cs50.html" class="cur" title="Start here">1</a><a href="01-welcome-to-cs50-2.html" class="" title="Parts 4–5">2</a><a href="01-welcome-to-cs50-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="01-welcome-to-cs50-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>Programming is nothing more mysterious than taking an <strong>input</strong>, running it through a step-by-step <strong>algorithm</strong>, and producing an <strong>output</strong>, and you can prove that to yourself right now by watching a real AI chatbot get built in about ten lines of Python, then completely change its personality the moment one extra sentence, called a <strong>system prompt</strong>, gets added.</p>
 <blockquote>
@@ -400,204 +404,9 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">output_text</span><span class="p">)</span>
 </code></pre></div>
 
-<p>Malan's own reasoning for the change: "Suppose you wanted to write code that actually asks the human what their question is, because very quickly might we want to learn something more than just this one question." The line <code>prompt = input(...)</code> stores whatever the human typed inside a <strong>variable</strong> called <code>prompt</code>: "just like in math," he says, "X, Y or Z." Now the same script can answer <em>any</em> question, not just one that was typed directly into the source code.</p>
-<h2 id="part-4-system-prompt-vs-user-prompt-giving-the-ai-a-personality">Part 4: System prompt vs. user prompt: giving the AI a personality</h2>
-<p>With <code>input()</code> in place, Malan starts experimenting: "in one sentence, what is CS50?", then "in one word, what is CS50?", then, for fun, "in one word, which is better, Harvard or Stanford?" (The AI's careful answer: "Depends.") But he notices a pattern in his own behavior: he keeps re-typing the same style instruction ("in one sentence," "in one word") every single time. His fix is to stop asking the human to repeat that instruction, and instead tell the AI once, permanently:</p>
-<blockquote>
-<p>"If you want the AI to behave in a certain way, why don't we just tell the underlying system to behave in that way."</p>
-</blockquote>
-<p>That standing instruction is a <strong>system prompt</strong>, and to make the distinction obvious, Malan renames his other variable to <strong>user prompt</strong>. Here's the reconstructed script with both:</p>
-<div class="codehilite"><pre><span></span><code><span class="c1"># chat.py - version 3: a system prompt and a user prompt</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenAI</span>
-
-<span class="n">client</span> <span class="o">=</span> <span class="n">OpenAI</span><span class="p">()</span>
-
-<span class="n">user_prompt</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;What would you like to ask? &quot;</span><span class="p">)</span>
-<span class="n">system_prompt</span> <span class="o">=</span> <span class="s2">&quot;Limit your answer to one sentence.&quot;</span>
-
-<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">responses</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-5&quot;</span><span class="p">,</span>
-    <span class="nb">input</span><span class="o">=</span><span class="n">user_prompt</span><span class="p">,</span>
-    <span class="n">instructions</span><span class="o">=</span><span class="n">system_prompt</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">output_text</span><span class="p">)</span>
-</code></pre></div>
-
-<table>
-<thead>
-<tr>
-<th></th>
-<th>User prompt</th>
-<th>System prompt</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Who writes it</td>
-<td>The person using the chatbot, every time</td>
-<td>The programmer, once, in advance</td>
-</tr>
-<tr>
-<td>How often it changes</td>
-<td>Every question</td>
-<td>Rarely: it's the "standing instructions"</td>
-</tr>
-<tr>
-<td>What it controls</td>
-<td><em>What</em> is being asked</td>
-<td><em>How</em> the AI should behave while answering</td>
-</tr>
-<tr>
-<td>In this script</td>
-<td><code>user_prompt</code> (from <code>input()</code>)</td>
-<td><code>system_prompt</code> (a fixed string)</td>
-</tr>
-</tbody>
-</table>
-<p>Then Malan pushes the idea further, live, to make the point unmissable: "you might know that these GPTs nowadays have sort of personalities... Why don't we go into our system prompt here and say something silly like pretend you're a cat." He changes exactly one line (<code>system_prompt = "Pretend you're a cat."</code>), reruns the identical script with the identical question, "What is CS50?", and gets back:</p>
-<blockquote>
-<p>"CS 50 is Harvard University's introductory computer science course teaching programming, algorithms, data structures, and problem solving, and it's available free online meow."</p>
-</blockquote>
-<p>Same model. Same code. Same question. One sentence changed, and the entire personality of the output changed with it.</p>
-<blockquote>
-<p>✅ <strong>What to do about it:</strong> whenever you want an AI to behave consistently a certain way (a tone, a role, a constraint like "answer in one sentence"), put that instruction in the system prompt, once, instead of retyping it into every user prompt.</p>
-<p>💡 <strong>A nuance worth noting:</strong> model names age fast. Malan uses <code>model="gpt-5"</code>, "the latest and greatest version at least as of today," in his words. By the time you read this, a newer model may be current. The <em>pattern</em> (client, user prompt, system prompt) is what's durable; the model name is not.</p>
-</blockquote>
-<h2 id="part-5-how-the-pieces-combine">Part 5: How the pieces combine</h2>
-<p>Zoom back out to Part 2's diagram, and the whole script is just one instance of it, with one addition. Malan calls the visible reply (the printed text) a <strong>side effect</strong>: "something that happens visually on the screen... as a result of you using a function." The system prompt doesn't show up in the output directly; it reshapes the <em>algorithm</em> itself before the input ever gets processed.</p>
-<div class="codehilite"><pre><span></span><code>   INPUT                    ALGORITHM                       OUTPUT
- user_prompt      ---&gt;   client.responses.create(       ---&gt;  printed
-(&quot;What is CS50?&quot;)          model, input, instructions)         reply
-                                   ^
-                                   |
-                          system_prompt shapes HOW
-                          the algorithm behaves;
-                          it is not typed by the user
-</code></pre></div>
-
-<p>Malan's own summary of what just happened: "with programming you have the ability in like 10 lines of text, not all of which you might understand yet... to build fairly powerful things." He immediately connects this pattern to something CS50 gives every student for free: "in the world of programming, it's kind of a thing to keep a rubber duck literally on your desk... because when you are struggling with some problem, some bug or mistake in your code... you literally are encouraged in programming circles to talk to the rubber duck." Then the payoff: "CS 50, drawing inspiration from this, will give to you a virtual duck in computer form" (at <strong>cs50.ai</strong>) and, in his words, "these are the AIs you can use in CS50 to solve problems and you are encouraged to do so." The exact user-prompt/system-prompt pattern from this lesson is what's running underneath that duck.</p>
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong>Programming is input → algorithm → output.</strong> CS50's real goal is that habit of mind, not memorizing syntax: syntax is, in Malan's words, "one of the side effects."</li>
-<li><strong>A working AI chatbot is barely code at all.</strong> An API import, a client, one function call carrying an input, and a <code>print</code> statement is enough for a first working version.</li>
-<li><strong><code>input()</code> is what turns a fixed script into a program.</strong> A hardcoded question isn't broken: it just isn't listening yet.</li>
-<li><strong>A system prompt is a standing instruction; a user prompt is the one-off question.</strong> Same model, same code, different system prompt: completely different behavior, as the "pretend you're a cat" demo shows.</li>
-<li><strong>This same pattern powers CS50's own free AI</strong>, the "duck" at cs50.ai, which you're not just allowed, but explicitly encouraged, to use.</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ Treating "learn to code" and "learn to think" as the same goal: Malan explicitly separates them; writing correct syntax is a side effect of the class, not its point.</li>
-<li>❌ Assuming a hardcoded script is "broken" because it always gives the same answer: it's working exactly as written; it just needs <code>input()</code> to become dynamic.</li>
-<li>❌ Mixing up which prompt is which: the <strong>system prompt</strong> is what <em>you</em>, the programmer, set once; the <strong>user prompt</strong> is what a person types each time. Swapping these two up will make your mental model of every future AI feature wrong.</li>
-<li>❌ Waiting until you understand every line before reasoning about what code does: Malan tells the room outright that this is a preview, "not all of which you might understand yet," and that's fine at this stage.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: Give an AI a Persona With a System Prompt</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. You'll write a real system prompt, in plain English, and prove to yourself, with real, copy-pasted output, that it changes an AI's behavior. No paid API key required.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>A short, written <strong>system prompt</strong> that gives a free AI chatbot a specific, testable persona, tested live against the same fixed question three different ways. You'll build it from these pieces, each mapped to an idea from this lesson:</p>
-<ul>
-<li>A <strong>fixed user prompt</strong>, the one question you won't change.</li>
-<li>A <strong>system prompt</strong> you write yourself, the persona.</li>
-<li>Three real outputs you compare side by side.</li>
-</ul>
-<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in the Capstone</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Input → algorithm → output</td>
-<td>You'll label your own test's input, algorithm (the persona instructions), and output</td>
-</tr>
-<tr>
-<td>System prompt vs. user prompt</td>
-<td>The persona you write <em>is</em> a system prompt; your test question is the user prompt</td>
-</tr>
-<tr>
-<td>Variables</td>
-<td>You'll swap system prompts around one fixed user prompt, exactly as Malan swapped <code>system_prompt</code> while <code>prompt</code> stayed the question</td>
-</tr>
-<tr>
-<td>CS50's duck</td>
-<td>You'll use CS50's own free AI (cs50.ai) instead of a paid API key</td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>Get access to a free AI chat tool.</strong> Go to <strong>cs50.ai</strong> (also reachable from cs50.dev) and sign in free with a GitHub account: this is the "virtual duck" Malan describes, and it is explicitly fine to use. (No GitHub, or no access? Any free chatbot with a "custom instructions" or "system prompt" field works identically for this exercise: the concept, not the specific tool, is what matters.)</li>
-<li><strong>Pick a fixed user prompt.</strong> Choose one plain question you will ask every time, unchanged: Malan's own example, "In one sentence, what is CS50?", works fine, or pick a question related to your eventual final-project topic.</li>
-<li><strong>Write a plain-language system prompt.</strong> In one or two sentences (no code), write standing instructions for a persona, the way Malan wrote "Pretend you're a cat." For example: "Answer like a patient kindergarten teacher" or "Pretend you're a grumpy 1990s dial-up modem."</li>
-<li><strong>Run the test three times.</strong> Ask your fixed user prompt with: (a) no system prompt at all, (b) Malan's own system prompt, "Limit your answer to one sentence," and (c) your own persona's system prompt. Save all three real answers.</li>
-<li><strong>Label your input, algorithm, and output.</strong> In three short lines, write down: the input (your fixed question), the algorithm (which system prompt was active), and the output (how the wording, tone, or length actually changed).</li>
-</ol>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ You have three real, copy-pasted answers to the same question, produced under three different system-prompt conditions.</li>
-<li>✅ You can point to the exact sentence you wrote that is your system prompt, and the exact sentence that is your user prompt.</li>
-<li>✅ You can explain, in one sentence, why the output changed even though the underlying AI model never did.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> don't guess what the AI "should" say: actually run all three versions and paste the real output, even if one answer is a little odd. Malan's own live demo got an imperfect answer ("maybe Harvard or Stanford?" → "Depends") in front of the whole class; testing for real, including the messy results, is the entire point.</p>
-</blockquote>
-<p>This is the same move you'll make for real once you know Python, in Module 9, and it previews the kind of small, testable component your eventual <strong>final project</strong> (a database-backed web app you'll design and ship at the end of this course) might one day need, such as a support chatbot with a defined, consistent voice.</p>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-spot-the-input-algorithm-output-foundational">Exercise 1: Spot the input, algorithm, output (foundational)</h3>
-<p>Pick any everyday task: making toast, looking up a word in a dictionary, choosing what to wear. Write one sentence each for its input, its algorithm (the steps), and its output. This is the exact model Malan draws on the whiteboard, applied somewhere with no code at all.</p>
-<h3 id="exercise-2-narrate-the-chatbot-script-intermediate">Exercise 2: Narrate the chatbot script (intermediate)</h3>
-<p>Without looking back at Part 3-4, write out in plain English, step by step, everything that happens between "a human types a question" and "an answer appears on the screen" in Malan's script, using the words <code>client</code>, <code>user prompt</code>, and <code>system prompt</code> correctly.</p>
-<h3 id="exercise-3-predict-then-test-advanced">Exercise 3: Predict, then test (advanced)</h3>
-<p>Write two more system prompts for the same fixed user prompt you used in the Capstone. Before testing either one, predict in writing how each will change the tone, length, or content of the answer. Then test both at cs50.ai (or your free tool of choice) and check your predictions against the real output.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>INPUT  ---&gt;  ALGORITHM  ---&gt;  OUTPUT
-(the problem)  (the step-by-step   (the answer /
-                &quot;secret sauce&quot;)     the goal)
-
-CS50&#39;s real goal: teach you to THINK (input -&gt; algorithm -&gt; output),
-not just to memorize syntax. Syntax is a side effect.
-
-A tiny chatbot, line by line:
-  from openai import OpenAI          # borrow someone else&#39;s API
-  client = OpenAI()                  # your program&#39;s connection to it
-  user_prompt = input(&quot;...&quot;)         # ask the HUMAN (a user prompt)
-  system_prompt = &quot;...&quot;              # YOUR standing instructions, set once
-  response = client.responses.create(
-      model=&quot;gpt-5&quot;,
-      input=user_prompt,
-      instructions=system_prompt,
-  )
-  print(response.output_text)        # show the output
-
-USER PROMPT   = the one-off question a person types, every time
-SYSTEM PROMPT = the standing instruction the programmer sets, once
-
-Free, no-API-key way to try this yourself: cs50.ai (sign in with GitHub)
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 0 · Pre-flight (setup):</strong> nothing from it is required to understand this lesson: it only assumed a browser. If you did complete it, you already have the cs50.dev codespace where Malan's actual script would run.</li>
-<li><strong>Next, Module 1 · Lesson 2, Bits and binary: how computers represent everything:</strong> this lesson treated "input" and "output" as if they were obviously text. Lesson 2 goes one level deeper and asks how a computer represents that text (or a number, or a color) using nothing but 0s and 1s.</li>
-<li><strong>Later, Module 9 · Artificial intelligence:</strong> revisits this exact chatbot code (the same <code>client</code>, the same system-prompt-vs-user-prompt idea) once you actually know Python and can write and modify it yourself instead of watching Malan type it.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 0 - Scratch" by David J. Malan, Harvard University. Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current OpenAI SDK.</em></p>
+<p>Malan's own reasoning for the change: "Suppose you wanted to write code that actually asks the human what their question is, because very quickly might we want to learn something more than just this one question." The line <code>prompt = input(...)</code> stores whatever the human typed inside a <strong>variable</strong> called <code>prompt</code>: "just like in math," he says, "X, Y or Z." Now the same script can answer <em>any</em> question, not just one that was typed directly into the source code.</p><div class="pager bottom"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="01-welcome-to-cs50.html" class="cur" title="Start here">1</a><a href="01-welcome-to-cs50-2.html" class="" title="Parts 4–5">2</a><a href="01-welcome-to-cs50-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="01-welcome-to-cs50-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="1" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="../module-0-preflight/00-pre-flight.html"><span class="dir">&#8592; Previous</span><b>Pre-Flight: Your Tools, Accounts, and First Success</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="02-bits-and-binary.html"><span class="dir">Next &#8594;</span><b>Bits and Binary: How Computers Represent Everything</b></a></nav>
+    <div class="ls-marker" data-lesson-id="1" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="../module-0-preflight/00-pre-flight.html"><span class="dir">&#8592; Previous lesson</span><b>Pre-Flight: Your Tools, Accounts, and First Success</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 11 · Lesson 40: A Real App: Validation and Databases | Self-Paced CS50x</title>
+<title>Module 11 · Lesson 40: A Real App: Validation and Databases (p1/4) | Self-Paced CS50x</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -49,6 +49,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -212,7 +235,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
   <div class="navlinks">
     <a href="../index.html">All lessons</a>
     <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="40-validation-and-databases-4.html#capstone">Capstone</a>
   </div>
   <div class="nav-cta">
     <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
@@ -251,7 +274,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="40-validation-and-databases-4.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -273,55 +296,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <li><a href="#the-break-in">The break-in</a></li>
 </ul>
 </li>
-<li><a href="#part-2-server-side-validation-a-global-list-and-a-jinja-loop">Part 2: Server-side validation (a global list and a Jinja loop)</a><ul>
-<li><a href="#from-hardcoded-checks-to-one-global-list">From hardcoded checks to one global list</a></li>
-<li><a href="#letting-the-template-read-the-same-list">Letting the template read the same list</a></li>
-<li><a href="#radio-buttons-and-checkboxes-the-same-loop-a-different-type">Radio buttons and checkboxes: the same loop, a different type</a></li>
-<li><a href="#a-dedicated-error-page">A dedicated error page</a></li>
-</ul>
-</li>
-<li><a href="#part-3-persisting-data-from-a-dictionary-to-sqlite">Part 3: Persisting data (from a dictionary to SQLite)</a><ul>
-<li><a href="#why-a-dictionary-in-memory-isnt-enough">Why a dictionary in memory isn't enough</a></li>
-<li><a href="#wiring-up-cs50s-sql-library">Wiring up CS50's SQL library</a></li>
-<li><a href="#insert-with-placeholders-not-string-building">INSERT with placeholders, not string-building</a></li>
-<li><a href="#select-to-read-it-all-back">SELECT to read it all back</a></li>
-</ul>
-</li>
-<li><a href="#part-4-deleting-rows-safely-hidden-ids-and-a-post-only-route">Part 4: Deleting rows safely (hidden IDs and a POST-only route)</a><ul>
-<li><a href="#why-you-delete-by-id-not-by-name">Why you delete by ID, not by name</a></li>
-<li><a href="#a-hidden-input-carries-the-id-without-displaying-it">A hidden input carries the ID without displaying it</a></li>
-<li><a href="#the-deregister-route">The /deregister route</a></li>
-<li><a href="#why-this-must-never-be-a-get-route">Why this must never be a GET route</a></li>
-</ul>
-</li>
-<li><a href="#part-5-static-files-and-mvc-how-it-all-fits-together">Part 5: Static files and MVC (how it all fits together)</a><ul>
-<li><a href="#serving-a-static-image">Serving a static image</a></li>
-<li><a href="#the-mvc-paradigm-named">The MVC paradigm, named</a></li>
-</ul>
-</li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: Build a Mini Registration App</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-break-your-own-dropdown-foundational">Exercise 1: Break your own dropdown (foundational)</a></li>
-<li><a href="#exercise-2-radio-buttons-to-checkboxes-intermediate">Exercise 2: Radio buttons to checkboxes (intermediate)</a></li>
-<li><a href="#exercise-3-prove-the-placeholder-matters-advanced">Exercise 3: Prove the placeholder matters (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 4 &middot; Start here</span><div class="seg"><a href="40-validation-and-databases.html" class="cur" title="Start here">1</a><a href="40-validation-and-databases-2.html" class="" title="Parts 2–4">2</a><a href="40-validation-and-databases-3.html" class="" title="Part 5">3</a><a href="40-validation-and-databases-4.html" class="" title="Capstone &amp; wrap-up">4</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="40-validation-and-databases-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>You will rebuild Malan's own 1997 paper-registration site as a live Flask app that never trusts what a visitor types: checking every submission against a real list on the server, storing it permanently in a SQLite database with placeholders instead of raw text, and deleting rows only through a button that a stray link can never trigger.</p>
 <blockquote>
@@ -398,389 +379,9 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <p>"The short answer is the short, the takeaway here is do not trust user input ever for reasons we've already seen when we discuss SQL ever more so now that we're dealing with the web, because who knows what users are going to do accidentally, foolishly, or even in Kelly's case here maliciously trying to pass data that we did not expect." (David Malan)</p>
 </blockquote>
 <p>If a client-side dropdown were the <em>only</em> check, nothing stops that fabricated value from reaching your app. The fix is Part 2's subject: check it again, on the server, where the visitor cannot reach in and edit it.</p>
-<hr />
-<h2 id="part-2-server-side-validation-a-global-list-and-a-jinja-loop">Part 2: Server-side validation (a global list and a Jinja loop)</h2>
-<h3 id="from-hardcoded-checks-to-one-global-list">From hardcoded checks to one global list</h3>
-<p>Malan's first instinct is the most literal one: hardcode every valid sport directly into the check.</p>
-<div class="codehilite"><pre><span></span><code><span class="n">sport</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sport&quot;</span><span class="p">)</span>
-<span class="k">if</span> <span class="n">sport</span> <span class="o">!=</span> <span class="s2">&quot;basketball&quot;</span> <span class="ow">and</span> <span class="n">sport</span> <span class="o">!=</span> <span class="s2">&quot;soccer&quot;</span> <span class="ow">and</span> <span class="n">sport</span> <span class="o">!=</span> <span class="s2">&quot;ultimate frisbee&quot;</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;failure.html&quot;</span><span class="p">)</span>
-</code></pre></div>
-
-<p>It works, but he immediately names the problem with it: the same three sport names now have to be typed twice: once in this <code>if</code>, and once again in the HTML <code>&lt;option&gt;</code> tags. Add a fourth sport, and you must remember to update both places. His fix is a <strong>global variable</strong>, a list declared once at the top of <code>app.py</code> that every route (and, soon, every template) can read:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">SPORTS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;basketball&quot;</span><span class="p">,</span> <span class="s2">&quot;soccer&quot;</span><span class="p">,</span> <span class="s2">&quot;ultimate frisbee&quot;</span><span class="p">]</span>
-</code></pre></div>
-
-<p>All-caps naming here is a Python convention, not a language rule. Python has no real constant, but writing a name in capitals is a signal to yourself and anyone reading the code: "treat this as fixed; don't reassign it." With <code>SPORTS</code> defined, the validation check collapses to one clean line:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">sport</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sport&quot;</span><span class="p">)</span>
-<span class="k">if</span> <span class="n">sport</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">SPORTS</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;failure.html&quot;</span><span class="p">)</span>
-</code></pre></div>
-
-<blockquote>
-<p>✅ <strong>What to do about it:</strong> whenever the same list of valid values needs to be checked in Python <em>and</em> rendered in HTML, put it in exactly one place, a single global list, and have both sides read from it.</p>
-</blockquote>
-<h3 id="letting-the-template-read-the-same-list">Letting the template read the same list</h3>
-<p>Because <code>SPORTS</code> is now a single source of truth, the template can generate its own <code>&lt;option&gt;</code> tags instead of having them typed out by hand. Passing <code>sports=SPORTS</code> into <code>render_template</code> makes the list available inside Jinja, which supports a <code>{% for %}</code> loop with almost the same syntax as Python:</p>
-<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">select</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;sport&quot;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">option</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;&quot;</span> <span class="na">selected</span><span class="p">&gt;</span>Sport<span class="p">&lt;/</span><span class="nt">option</span><span class="p">&gt;</span>
-    {% for sport in sports %}
-        <span class="p">&lt;</span><span class="nt">option</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;{{ sport }}&quot;</span><span class="p">&gt;</span>{{ sport }}<span class="p">&lt;/</span><span class="nt">option</span><span class="p">&gt;</span>
-    {% endfor %}
-<span class="p">&lt;/</span><span class="nt">select</span><span class="p">&gt;</span>
-</code></pre></div>
-
-<p>Add a fourth sport to <code>SPORTS</code> in <code>app.py</code>, and the dropdown grows automatically: no template edit required.</p>
-<h3 id="radio-buttons-and-checkboxes-the-same-loop-a-different-type">Radio buttons and checkboxes: the same loop, a different <code>type</code></h3>
-<p>Select menus aren't the only widget for choosing from a fixed list. A <code>{% for %}</code> loop over the same <code>SPORTS</code> list can just as easily generate <strong>radio buttons</strong> (mutually exclusive, because every input shares one <code>name</code>):</p>
-<div class="codehilite"><pre><span></span><code>{% for sport in sports %}
-    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;radio&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;sport&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;{{ sport }}&quot;</span><span class="p">&gt;</span> {{ sport }}
-{% endfor %}
-</code></pre></div>
-
-<p>Later in the lesson, Malan changes a student's ability to register for more than one sport at once by making exactly one edit (swapping <code>radio</code> for <code>checkbox</code>), which turns the mutually-exclusive buttons into independently selectable ones. Reading multiple checked values back on the server, though, needs a different method than the one you've used so far: <code>request.form.get</code> only ever returns one value, so multiple checkboxes sharing a <code>name</code> require <code>request.form.getlist("sport")</code> instead, which returns a Python list. Validating that list means looping over every sport the visitor checked and confirming each one individually is in <code>SPORTS</code>: one invalid box among several should still fail the whole submission.</p>
-<h3 id="a-dedicated-error-page">A dedicated error page</h3>
-<p>A generic "you are not registered" message is technically correct but not helpful. Malan's fix is a dedicated <code>error.html</code> template that a route can pass a specific message into:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">name</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span>
-<span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;error.html&quot;</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s2">&quot;missing name&quot;</span><span class="p">)</span>
-
-<span class="n">sport</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sport&quot;</span><span class="p">)</span>
-<span class="k">if</span> <span class="ow">not</span> <span class="n">sport</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;error.html&quot;</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s2">&quot;missing sport&quot;</span><span class="p">)</span>
-<span class="k">if</span> <span class="n">sport</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">SPORTS</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;error.html&quot;</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s2">&quot;invalid sport&quot;</span><span class="p">)</span>
-</code></pre></div>
-
-<div class="codehilite"><pre><span></span><code>{% block body %}
-    <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Error<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>{{ message }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-{% endblock %}
-</code></pre></div>
-
-<p>Each <code>if</code> checks one specific thing and fails with one specific, human-readable reason ("missing name," "missing sport," "invalid sport") instead of one catch-all failure message for every possible mistake.</p>
-<blockquote>
-<p>🔑 <strong>The single most important takeaway of this part.</strong> Never trust that a dropdown, radio button, or checkbox actually restricts what arrives at the server. Keep the list of valid values in exactly one place (a global list), check every submission against it in Python, and give the visitor a specific reason when it fails.</p>
-</blockquote>
-<hr />
-<h2 id="part-3-persisting-data-from-a-dictionary-to-sqlite">Part 3: Persisting data (from a dictionary to SQLite)</h2>
-<h3 id="why-a-dictionary-in-memory-isnt-enough">Why a dictionary in memory isn't enough</h3>
-<p>Malan's first working version of the registrants list is almost embarrassingly simple: a global Python dictionary.</p>
-<div class="codehilite"><pre><span></span><code><span class="n">REGISTRANTS</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="c1"># later, in the register route:</span>
-<span class="n">REGISTRANTS</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">sport</span>
-</code></pre></div>
-
-<p>It works (reload the <code>/registrants</code> page and everyone who registered is there) right up until the server restarts. Malan demonstrates this live: after tweaking <code>app.py</code>, Flask automatically reloads the file, the module-level code reruns, <code>REGISTRANTS = {}</code> executes again, and every registrant that existed a moment ago is simply gone.</p>
-<blockquote>
-<p>"The catch though is if this server ever goes offline, maybe because it needs to be updated or it crashes or it reboots... Flask server is no longer running, which means that global variable called registrants in all caps is gone. It's like free the memory has been freed." (David Malan)</p>
-</blockquote>
-<p>The fix returns to a tool this course already built in Module 8: a real database, whose whole point is that it survives the process that's reading and writing it.</p>
-<h3 id="wiring-up-cs50s-sql-library">Wiring up CS50's SQL library</h3>
-<p>The setup mirrors what Lesson 31 already covered, now inside a Flask app instead of a standalone script:</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">cs50</span><span class="w"> </span><span class="kn">import</span> <span class="n">SQL</span>
-
-<span class="n">db</span> <span class="o">=</span> <span class="n">SQL</span><span class="p">(</span><span class="s2">&quot;sqlite:///froshims.db&quot;</span><span class="p">)</span>
-</code></pre></div>
-
-<p>The database itself already has a <code>registrants</code> table with three columns: <code>id</code> (an integer primary key), <code>name</code>, and <code>sport</code>, both declared <code>NOT NULL</code> so the database itself refuses a blank submission as a second line of defense.</p>
-<h3 id="insert-with-placeholders-not-string-building"><code>INSERT</code> with placeholders, not string-building</h3>
-<p>With validation already confirming the name and sport are present and the sport is in <code>SPORTS</code>, storing the registration is one line:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;INSERT INTO registrants (name, sport) VALUES (?, ?)&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">sport</span><span class="p">)</span>
-</code></pre></div>
-
-<p>Malan is emphatic about why the values are passed as separate arguments after the query string, rather than built into the string itself with an f-string:</p>
-<blockquote>
-<p>"Here's where you do not want to make yourself vulnerable to SQL injection attacks. No F strings in here, no just plugging students' input in blindly. This is where and why we use these placeholders in both CS 50's library and in many libraries in the real world to specify that I want the library to properly sanitize the user's input and get rid of any scary characters like apostrophes or semicolons or the like." (David Malan)</p>
-</blockquote>
-<p>Each <code>?</code> is a <strong>placeholder</strong>. <code>db.execute</code> fills them in with the extra arguments you pass, escaping anything that could otherwise be misread as SQL syntax: a stray apostrophe in someone's name can't accidentally close a string early, and a malicious semicolon can't start a second, unintended statement. This is the exact SQL injection concern from Module 8, now facing a wide-open internet form instead of a script you control yourself.</p>
-<h3 id="select-to-read-it-all-back"><code>SELECT</code> to read it all back</h3>
-<p>Reading the registrants back out uses the same <code>db.execute</code>, this time with a <code>SELECT</code>:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">registrants</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM registrants&quot;</span><span class="p">)</span>
-</code></pre></div>
-
-<p><code>db.execute</code> on a <code>SELECT</code> returns a <strong>list of dictionaries</strong>: one dictionary per row, each with keys matching the column names. The template loops over that list with the same Jinja <code>{% for %}</code> syntax used for the sport dropdown:</p>
-<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">table</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">thead</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;&lt;</span><span class="nt">th</span><span class="p">&gt;</span>Name<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;&lt;</span><span class="nt">th</span><span class="p">&gt;</span>Sport<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">thead</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">tbody</span><span class="p">&gt;</span>
-        {% for registrant in registrants %}
-            <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
-                <span class="p">&lt;</span><span class="nt">td</span><span class="p">&gt;</span>{{ registrant.name }}<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-                <span class="p">&lt;</span><span class="nt">td</span><span class="p">&gt;</span>{{ registrant.sport }}<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-            <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-        {% endfor %}
-    <span class="p">&lt;/</span><span class="nt">tbody</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">table</span><span class="p">&gt;</span>
-</code></pre></div>
-
-<p>The payoff is immediate and durable: register a few people, kill the Flask server with Control-C, restart it, and reload <code>/registrants</code>. Everyone is still there, because the data lives in <code>froshims.db</code> on disk, not in the process's memory.</p>
-<blockquote>
-<p>"The database is persistent, which was the whole point of using SQL from week 7 onward." (David Malan)</p>
-<p>🔑 <strong>The single most important takeaway of this part.</strong> An in-memory dictionary disappears the instant the server process ends. A SQLite database, written to with <code>db.execute</code> and placeholders, survives restarts. Placeholders are what keep a hostile name or sport from becoming a SQL command instead of a value.</p>
-</blockquote>
-<hr />
-<h2 id="part-4-deleting-rows-safely-hidden-ids-and-a-post-only-route">Part 4: Deleting rows safely (hidden IDs and a POST-only route)</h2>
-<h3 id="why-you-delete-by-id-not-by-name">Why you delete by ID, not by name</h3>
-<p>Two different students can share a name; only the row's <code>id</code>, the primary key from Module 8, uniquely identifies one registration. Malan draws this out by asking what information the browser needs to send back to delete exactly one row, and the answer is the same primary key you've already met:</p>
-<div class="codehilite"><pre><span></span><code>SELECT * FROM registrants;
- id | name  | sport
-----+-------+------------------
-  1 | David | basketball
-  2 | Kelly | soccer
-</code></pre></div>
-
-<p>Deleting "Kelly" by name risks catching a second Kelly later; deleting <code>id = 2</code> never does.</p>
-<h3 id="a-hidden-input-carries-the-id-without-displaying-it">A hidden input carries the ID without displaying it</h3>
-<p>Every row on the registrants page gets its own small form with a hidden field carrying that row's ID, plus a visible delete button:</p>
-<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">form</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;/deregister&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;post&quot;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;hidden&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;id&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;{{ registrant.id }}&quot;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;submit&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;Deregister&quot;</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-</code></pre></div>
-
-<p><code>type="hidden"</code> means the field is submitted exactly like any other input, but never rendered on the page for the visitor to see or edit by hand: the ID travels invisibly, tied to whichever row's button was actually clicked.</p>
-<h3 id="the-deregister-route">The <code>/deregister</code> route</h3>
-<p>On the server, the route pulls that ID out of the POST body and runs a targeted <code>DELETE</code>, using a placeholder exactly as before:</p>
-<div class="codehilite"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/deregister&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">])</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">deregister</span><span class="p">():</span>
-    <span class="nb">id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">id</span><span class="p">:</span>
-        <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;DELETE FROM registrants WHERE id = ?&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;/registrants&quot;</span><span class="p">)</span>
-</code></pre></div>
-
-<h3 id="why-this-must-never-be-a-get-route">Why this must never be a GET route</h3>
-<p>Malan makes the strongest safety point of the lesson here, and it is worth reading in full:</p>
-<blockquote>
-<p>"The catch with using get is that by definition you can visit that resource, that route by just typing in a URL or following a hyperlink. So for instance, if an adversary were to type a URL like slash registrants question mark ID equals... and then send me this URL in an email or send this URL in an email to the proctor who's running the Frosh IMs program. If that Proctor simply clicks naively on this link... Doug gets deregistered just because the proctor followed a link in their email." (David Malan)</p>
-</blockquote>
-<p>He generalizes the rule immediately after:</p>
-<blockquote>
-<p>"In general post requests are preferred any time there's anything remotely personally identifiable or remotely destructive, like actually changing data on the database like this." (David Malan)</p>
-</blockquote>
-<p>A <code>GET</code> request is, by design, anything a browser can trigger just by <em>visiting</em> a URL: typing it, following a link, even an image tag pointed at it. A destructive action reachable by <code>GET</code> can be triggered by an unsuspecting click, an embedded link in an email, or a phishing page, with no button, no confirmation, and no "are you sure?" in between. Restricting <code>/deregister</code> to <code>methods=["POST"]</code> means the only way to trigger it is to actually submit a form, which, practically speaking, means clicking a real button on a real page you control.</p>
-<blockquote>
-<p>❌ <strong>The trap:</strong> any route that changes or deletes data on the server should never be reachable by a plain <code>GET</code>. If clicking a link (or loading a page) alone could trigger it, that link is a loaded gun pointed at your database.</p>
-</blockquote>
-<hr />
-<h2 id="part-5-static-files-and-mvc-how-it-all-fits-together">Part 5: Static files and MVC (how it all fits together)</h2>
-<h3 id="serving-a-static-image">Serving a static image</h3>
-<p>Late in the demo, Malan adds an image to the error page and hits a broken-image icon, because the browser looks for <code>cat.jpeg</code> relative to the page, not relative to <code>app.py</code>. Flask's fix is a naming convention:</p>
-<blockquote>
-<p>"For organizational sake, any images you want to display on a page or any CSS files or JavaScript files that you want to embed in a page, if they're static assets should actually be in a folder called static, and by static that just means unchanging." (David Malan)</p>
-</blockquote>
-<p>Anything placed in a folder literally named <code>static/</code> is served automatically at the URL path <code>/static/&lt;filename&gt;</code>: no route needs to be written for it. The one detail to hold onto: <code>render_template</code> already knows to look in <code>templates/</code> without you ever typing that folder name, but a static asset's path in your HTML must spell out <code>/static/</code> explicitly:</p>
-<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;/static/cat.jpeg&quot;</span> <span class="na">alt</span><span class="o">=</span><span class="s">&quot;grumpy cat&quot;</span><span class="p">&gt;</span>
-</code></pre></div>
-
-<h3 id="the-mvc-paradigm-named">The MVC paradigm, named</h3>
-<p>Stepping back from the code, Malan names the pattern the whole app has followed all lesson:</p>
-<blockquote>
-<p>"The paradigm that we've essentially been implementing is this. If this shape over here represents the human or the user, they keep interacting with what the world generally calls a view... app.ie is technically what the world would call controller logic or business logic... So the views that we're referring to here is like everything in your templates. Those are your views. But there's a third piece of the puzzle... generally called a model... your model is generally your persistent data." (David Malan)</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>Piece</th>
-<th>What it is in this app</th>
-<th>Job</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Model</strong></td>
-<td><code>froshims.db</code> (the SQLite database)</td>
-<td>Stores the data that outlives any single request.</td>
-</tr>
-<tr>
-<td><strong>View</strong></td>
-<td><code>templates/*.html</code> (Jinja templates)</td>
-<td>Everything the visitor actually sees and submits.</td>
-</tr>
-<tr>
-<td><strong>Controller</strong></td>
-<td><code>app.py</code> (Flask routes)</td>
-<td>Decides which view to render, validates input, and reads/writes the model.</td>
-</tr>
-</tbody>
-</table>
-<p>Malan is careful to note the lines blur in practice (templates hold loops and conditionals too), but the mindset is what matters: <strong>M</strong>odel-<strong>V</strong>iew-<strong>C</strong>ontroller, or <strong>MVC</strong>, is the standard way the industry talks about organizing exactly this split. Every Flask app you build from here forward, in this course and beyond, uses this same three-part shape.</p>
-<div class="codehilite"><pre><span></span><code>   visitor&#39;s browser
-          │
-          ▼
-     app.py (Controller)
-   validate → decide what to render
-     │                    │
-     ▼                    ▼
-templates/*.html      froshims.db
-   (View)               (Model)
-  what the user      persistent rows,
-     sees            survives restarts
-</code></pre></div>
-
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong>A select menu, radio group, or checkbox list only restricts what's easy to click, never what actually arrives.</strong> Anyone can edit the submitted value with developer tools.</li>
-<li><strong>"Do not trust user input ever."</strong> Validate every submission on the server, against a single global list (like <code>SPORTS</code>), not just once in a dropdown.</li>
-<li><strong>Jinja's <code>{% for %}</code> loop lets one Python list drive both your validation and your HTML</strong>: add a sport in one place, and the dropdown, the checks, and the template all stay in sync.</li>
-<li><strong>An in-memory dictionary dies with the process; a SQLite database, written through <code>db.execute</code>, survives a restart.</strong></li>
-<li><strong>Placeholders (<code>?</code>) are what keep a user's name or input from being read as SQL code</strong>: never build a query with an f-string using raw user input.</li>
-<li><strong>Delete by primary key (<code>id</code>), never by a field like <code>name</code> that might not be unique</strong>, and pass that ID through a hidden form field.</li>
-<li><strong>Any route that deletes or changes data must be POST-only.</strong> A <code>GET</code>-triggerable delete can be fired by a stray link, an email, or a phishing page, no button required.</li>
-<li><strong>Static assets (images, CSS, JS) live in a <code>static/</code> folder and are referenced as <code>/static/filename</code></strong>, while templates need no folder prefix at all.</li>
-<li><strong>MVC, Model (database), View (templates), Controller (<code>app.py</code>),</strong> is the standard shape of a Flask app, and every lesson in this module has been building toward it.</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ Trusting that because a value came from a <code>&lt;select&gt;</code> or a set of radio buttons, it must be one of the options you offered: it must still be checked in Python against your global list.</li>
-<li>❌ Duplicating the list of valid choices in both <code>app.py</code> and the template by hand, instead of passing one global list into <code>render_template</code> and looping over it with Jinja.</li>
-<li>❌ Building a SQL query with an f-string or string concatenation using raw form input: always use a <code>?</code> placeholder and pass the value as a separate argument to <code>db.execute</code>.</li>
-<li>❌ Storing registrants (or any data you care about) in a plain Python dictionary or list: it evaporates the moment the server restarts or crashes.</li>
-<li>❌ Deleting a row by a non-unique field like <code>name</code>, or worse, making the delete route reachable by <code>GET</code>: both risk deleting the wrong row, or the right row by accident.</li>
-<li>❌ Forgetting that a static image needs the <code>/static/</code> prefix in its <code>src</code>, even though templates never need a <code>/templates/</code> prefix in <code>render_template</code>.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: Build a Mini Registration App</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. You will build, on cs50.dev, a small but complete version of Frosh IMs: a form with a select menu, server-side validation against a Python list, a real SQLite <code>INSERT</code>, a page that lists everyone via <code>SELECT</code>, and a safe, POST-only delete button. This is the reference architecture for the database-backed web app you'll build as this course's capstone.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>A Flask app, <code>app.py</code>, with a <code>templates/</code> folder containing at minimum <code>layout.html</code>, <code>index.html</code> (the form), <code>error.html</code>, and <code>registrants.html</code> (the list with delete buttons), plus a <code>roster.db</code> SQLite database with one table.</p>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in the Capstone</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Select menu with <code>&lt;option&gt;</code>/<code>selected</code> (Part 1)</td>
-<td>The registration form's category dropdown.</td>
-</tr>
-<tr>
-<td>Global list + server-side validation (Part 2)</td>
-<td>Rejecting any submission not in your list, even a hacked one.</td>
-</tr>
-<tr>
-<td>Jinja <code>{% for %}</code> loop (Part 2)</td>
-<td>Generating the dropdown's options from that same list.</td>
-</tr>
-<tr>
-<td><code>db.execute</code>, <code>INSERT</code>, placeholders (Part 3)</td>
-<td>Storing each registration safely.</td>
-</tr>
-<tr>
-<td><code>SELECT</code> + <code>{% for %}</code> over a list of dicts (Part 3)</td>
-<td>The registrants table.</td>
-</tr>
-<tr>
-<td>Hidden <code>id</code> input + POST-only route (Part 4)</td>
-<td>The delete button.</td>
-</tr>
-<tr>
-<td>MVC / static folder (Part 5)</td>
-<td>Explaining your own file layout in one sentence.</td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>Scaffold the app.</strong> On cs50.dev, create <code>app.py</code>, <code>requirements.txt</code> (containing <code>flask</code> and <code>cs50</code>), and a <code>templates/</code> folder with <code>layout.html</code>. Confirm <code>flask run</code> serves a blank page.</li>
-<li><strong>Build the form with a select menu.</strong> In <code>index.html</code>, add a name text input and a <code>&lt;select name="category"&gt;</code> with a blank <code>selected</code> default option plus at least three real options (e.g., categories of your choosing: book genres, sports, whatever fits your theme). Confirm the form renders and, for now, submits anywhere without erroring.</li>
-<li><strong>Add the global list and server-side validation.</strong> In <code>app.py</code>, define <code>CATEGORIES = [...]</code> as a global list matching your options. Add a <code>/register</code> route (<code>methods=["POST"]</code>) that checks the name is present and the category is in <code>CATEGORIES</code>, returning <code>error.html</code> with a specific message for each failure case (missing name, missing category, invalid category). Done when submitting a blank form, and when hand-editing the dropdown in developer tools to submit an invalid value, both correctly fail with the right message.</li>
-<li><strong>Loop the dropdown from the same list.</strong> Pass <code>categories=CATEGORIES</code> into <code>render_template</code> for <code>index.html</code>, and replace your hardcoded <code>&lt;option&gt;</code> tags with a Jinja <code>{% for %}</code> loop over <code>categories</code>. Done when adding a fourth item to <code>CATEGORIES</code> in <code>app.py</code> alone makes it appear in the dropdown with no template edit.</li>
-<li><strong>Create the database and insert on success.</strong> Using <code>sqlite3 roster.db</code>, create a <code>registrants</code> table with <code>id</code> (integer primary key), <code>name</code> (text, not null), and <code>category</code> (text, not null). In <code>app.py</code>, connect with <code>db = SQL("sqlite:///roster.db")</code> and, on successful validation, run <code>db.execute("INSERT INTO registrants (name, category) VALUES (?, ?)", name, category)</code>. Done when you can register someone, then confirm the row exists with <code>sqlite3 roster.db "SELECT * FROM registrants;"</code>.</li>
-<li><strong>List everyone with SELECT.</strong> Add a <code>/registrants</code> route that runs <code>db.execute("SELECT * FROM registrants")</code> and renders <code>registrants.html</code>, looping over the results in a table. Done when the page shows every row, and still shows them after you restart <code>flask run</code>.</li>
-<li><strong>Add a safe delete.</strong> In <code>registrants.html</code>, give each row its own small <code>&lt;form method="post" action="/deregister"&gt;</code> with a hidden <code>id</code> input carrying that row's ID. Add a <code>/deregister</code> route restricted to <code>methods=["POST"]</code> that deletes <code>WHERE id = ?</code> using a placeholder, then redirects back to <code>/registrants</code>. Done when clicking delete removes exactly that row and no other, and visiting <code>/deregister</code> directly in the URL bar (a <code>GET</code>) correctly fails with "Method Not Allowed."</li>
-<li><strong>Stretch goals.</strong> Add a static image (in a <code>static/</code> folder) to your error page; switch the category input from a select menu to checkboxes and support registering for multiple categories at once using <code>request.form.getlist</code>; or write, in your own words, a one-paragraph explanation of which files in your project are the Model, the View, and the Controller.</li>
-</ol>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ Submitting the form with a blank name, a blank category, or a hand-edited invalid category each produces a specific, correct error message, never a server crash.</li>
-<li>✅ A successful registration appears in <code>/registrants</code> immediately, and is still there after you stop and restart <code>flask run</code>.</li>
-<li>✅ Clicking "Deregister" removes exactly the row it was clicked on, verified by checking <code>sqlite3 roster.db "SELECT * FROM registrants;"</code> before and after.</li>
-<li>✅ Typing the <code>/deregister</code> URL directly into the address bar (a <code>GET</code> request) fails with a "Method Not Allowed" error rather than deleting anything.</li>
-<li>✅ You can point to the exact line in your code where a placeholder (<code>?</code>) protects an <code>INSERT</code> or <code>DELETE</code> from SQL injection.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> before moving on, actually try to break your own form the way Kelly broke Malan's: open developer tools, hand-edit the dropdown to add a fake option, and submit it. If your app doesn't catch it, your validation lives only in the browser, not on the server.</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-break-your-own-dropdown-foundational">Exercise 1: Break your own dropdown (foundational)</h3>
-<p>Take any form with a <code>&lt;select&gt;</code> you've built (in this lesson or the Capstone), open developer tools, and add a fake <code>&lt;option&gt;</code> that was never in your list. Submit it. If your app accepts it, add the missing server-side check against your global list; if it already rejects it, write one sentence explaining exactly which line caught it.</p>
-<h3 id="exercise-2-radio-buttons-to-checkboxes-intermediate">Exercise 2: Radio buttons to checkboxes (intermediate)</h3>
-<p>Starting from a single-choice form using radio buttons, convert it to checkboxes so a visitor can select more than one option. Update your route to use <code>request.form.getlist</code> instead of <code>request.form.get</code>, and update your validation to loop over every selected value and reject the whole submission if even one is invalid.</p>
-<h3 id="exercise-3-prove-the-placeholder-matters-advanced">Exercise 3: Prove the placeholder matters (advanced)</h3>
-<p>In a throwaway copy of a project with a SQLite database, temporarily rewrite one <code>INSERT</code> to build its SQL with an f-string instead of a placeholder (for example, inserting a name directly into the query string). Try submitting a name containing a single quote (like <code>O'Brien</code>) and observe what happens. Then revert to the placeholder version and confirm the same input now works correctly: direct, hands-on evidence of what placeholders are actually protecting you from.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>SELECT MENU (HTML)
-  &lt;select name=&quot;category&quot;&gt;
-      &lt;option value=&quot;&quot; selected&gt;Category&lt;/option&gt;
-      &lt;option value=&quot;x&quot;&gt;X&lt;/option&gt;
-  &lt;/select&gt;
-
-SERVER-SIDE VALIDATION (app.py)
-  CATEGORIES = [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;]        global list, single source of truth
-  if value not in CATEGORIES: ...     always re-check on the server
-
-JINJA LOOP (template)
-  {% for item in items %}
-      &lt;option value=&quot;{{ item }}&quot;&gt;{{ item }}&lt;/option&gt;
-  {% endfor %}
-
-RADIO vs CHECKBOX
-  radio    -&gt; same name = mutually exclusive -&gt; request.form.get(name)
-  checkbox -&gt; same name = multi-select       -&gt; request.form.getlist(name)
-
-SQLITE VIA CS50&#39;S LIBRARY
-  from cs50 import SQL
-  db = SQL(&quot;sqlite:///app.db&quot;)
-  db.execute(&quot;INSERT INTO t (a, b) VALUES (?, ?)&quot;, a, b)   -- Create
-  db.execute(&quot;SELECT * FROM t&quot;)                             -- Read (list of dicts)
-  db.execute(&quot;DELETE FROM t WHERE id = ?&quot;, id)               -- Delete
-
-PLACEHOLDERS
-  ALWAYS:  db.execute(&quot;... WHERE id = ?&quot;, id)
-  NEVER:   db.execute(f&quot;... WHERE id = {id}&quot;)   &lt;- SQL injection risk
-
-SAFE DELETE PATTERN
-  &lt;input type=&quot;hidden&quot; name=&quot;id&quot; value=&quot;{{ row.id }}&quot;&gt;
-  @app.route(&quot;/delete&quot;, methods=[&quot;POST&quot;])   &lt;- POST only, never GET
-
-MVC
-  Model      = database (persistent data)
-  View       = templates/ (what the user sees)
-  Controller = app.py (routes, validation, logic)
-
-STATIC FILES
-  static/cat.jpeg  -&gt;  &lt;img src=&quot;/static/cat.jpeg&quot;&gt;   (explicit /static/ prefix)
-  templates/x.html -&gt;  render_template(&quot;x.html&quot;)      (no /templates/ prefix)
-
-THE ONE RULE THAT MATTERS MOST
-  Do not trust user input ever. Validate on the server. Delete only via POST.
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 11 · Lesson 39 (Forms, layouts, and GET vs POST):</strong> gave you a form that could <code>POST</code> to your own route and a <code>layout.html</code> you extend with <code>{% block %}</code>; this lesson is the first time that route actually keeps what it receives.</li>
-<li><strong>Earlier callback, Module 8 · Lessons 29-31:</strong> <code>db.execute</code>, <code>INSERT</code>/<code>SELECT</code>, and placeholders were introduced there against a standalone script; this lesson is where they move inside a live, internet-facing Flask route.</li>
-<li><strong>Earlier callback, Module 3 · Lesson 12 and Module 8 · Lesson 31:</strong> the "never trust input" instinct you built around command-line arguments and SQL strings is exactly the instinct this lesson applies to HTML forms.</li>
-<li><strong>Next, Module 11 · Lesson 41 (Sessions, carts, and APIs):</strong> builds on this same app shape to add logins, per-visitor shopping carts, and JSON APIs, all still resting on the validate-then-persist pattern from this lesson.</li>
-<li><strong>North star:</strong> the form, validation, <code>INSERT</code>/<code>SELECT</code>, and safe delete you build in this Capstone are the exact reference architecture for the database-backed web app you finish this course with.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 9 - Flask" by David J. Malan, Harvard University (CS50x 2026). Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+<hr /><div class="pager bottom"><span class="pcount">Page 1 of 4 &middot; Start here</span><div class="seg"><a href="40-validation-and-databases.html" class="cur" title="Start here">1</a><a href="40-validation-and-databases-2.html" class="" title="Parts 2–4">2</a><a href="40-validation-and-databases-3.html" class="" title="Part 5">3</a><a href="40-validation-and-databases-4.html" class="" title="Capstone &amp; wrap-up">4</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="40-validation-and-databases-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="40" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="39-forms-layouts-get-post.html"><span class="dir">&#8592; Previous</span><b>Forms, Layouts, and GET vs POST</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="41-sessions-carts-apis.html"><span class="dir">Next &#8594;</span><b>Sessions, Carts, and APIs</b></a></nav>
+    <div class="ls-marker" data-lesson-id="40" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="39-forms-layouts-get-post.html"><span class="dir">&#8592; Previous lesson</span><b>Forms, Layouts, and GET vs POST</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 

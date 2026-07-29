@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 6 · Lesson 22: Linked Lists | Self-Paced CS50x</title>
+<title>Module 6 · Lesson 22: Linked Lists (p1/4) | Self-Paced CS50x</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -49,6 +49,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -212,7 +235,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
   <div class="navlinks">
     <a href="../index.html">All lessons</a>
     <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="22-linked-lists-4.html#capstone">Capstone</a>
   </div>
   <div class="nav-cta">
     <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
@@ -251,7 +274,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="22-linked-lists-4.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -270,35 +293,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <li><a href="#learning-objectives">Learning objectives</a></li>
 <li><a href="#prerequisites">Prerequisites</a></li>
 <li><a href="#part-1-a-self-referential-struct-and-the-arrow-that-finally-looks-like-one">Part 1: A self-referential struct, and the arrow that finally looks like one</a></li>
-<li><a href="#part-2-building-a-list-by-prepending-the-pointer-picture-step-by-step">Part 2: Building a list by prepending (the pointer picture, step by step)</a></li>
-<li><a href="#part-3-traversing-the-list-a-while-loop-and-the-equivalent-for-loop">Part 3: Traversing the list (a while loop, and the equivalent for loop)</a></li>
-<li><a href="#part-4-running-time-why-prepend-is-free-but-almost-everything-else-isnt">Part 4: Running time (why prepend is free but almost everything else isn't)</a></li>
-<li><a href="#part-5-sorted-insertion-four-cases-and-why-order-comes-out-right-this-time">Part 5: Sorted insertion (four cases, and why order comes out right this time)</a></li>
-<li><a href="#part-6-freeing-the-list-the-unload-function">Part 6: Freeing the list (the unload function)</a></li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: numbers.c (Prepend It, Sort It, Free It Clean)</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-prepend-five-hardcoded-numbers-foundational">Exercise 1: Prepend five hardcoded numbers (foundational)</a></li>
-<li><a href="#exercise-2-write-and-time-trace-a-search-function-intermediate">Exercise 2: Write and time-trace a search function (intermediate)</a></li>
-<li><a href="#exercise-3-delete-a-node-from-the-middle-advanced">Exercise 3: Delete a node from the middle (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 4 &middot; Start here</span><div class="seg"><a href="22-linked-lists.html" class="cur" title="Start here">1</a><a href="22-linked-lists-2.html" class="" title="Parts 2–5">2</a><a href="22-linked-lists-3.html" class="" title="Part 6">3</a><a href="22-linked-lists-4.html" class="" title="Capstone &amp; wrap-up">4</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="22-linked-lists-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>A linked list stores each value next to a pointer to the next value instead of packing values back-to-back like an array, so adding a brand-new first node costs the same tiny, constant amount of work no matter how long the list already is: the trade is that searching, deleting, or reaching the end of that same list now costs one step per node, and nothing frees itself automatically, so you must walk the whole list and free every node yourself.</p>
 <blockquote>
@@ -381,414 +382,9 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <blockquote>
 <p>🔑 <strong>The single most important takeaway of this part.</strong> A node is just a struct with a value and a pointer to the next node of its own type. The <code>struct node *next;</code> line (not <code>node *next;</code>) exists purely because the compiler hasn't finished reading the <code>typedef</code> yet when it reaches that line, and <code>n-&gt;field</code> is shorthand for "follow the pointer <code>n</code>, then reach inside."</p>
 </blockquote>
-<hr />
-<h2 id="part-2-building-a-list-by-prepending-the-pointer-picture-step-by-step">Part 2: Building a list by prepending (the pointer picture, step by step)</h2>
-<p>With the struct defined, an empty linked list needs exactly one variable: a single pointer that will hold the address of the first node, whenever one exists. If there are no nodes yet, that pointer is <code>NULL</code>.</p>
-<div class="codehilite"><pre><span></span><code>list
- |
- v
-NULL
-</code></pre></div>
-
-<div class="codehilite"><pre><span></span><code><span class="n">node</span><span class="w"> </span><span class="o">*</span><span class="n">list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
-</code></pre></div>
-
-<p>Now suppose the user types in <code>1</code>, <code>2</code>, and <code>3</code>, one at a time, and each one gets added to the <em>front</em> of the list, a strategy called <strong>prepending</strong>. For each number, the recipe is the same four steps:</p>
-<ol>
-<li><code>malloc</code> enough memory for one whole node, and check the result isn't <code>NULL</code>.</li>
-<li>Store the user's number in the new node's <code>number</code> field.</li>
-<li>Stitch the new node onto the existing list.</li>
-<li>Update <code>list</code> to point at this new node.</li>
-</ol>
-<p>Here's the code for one pass through that recipe:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">node</span><span class="w"> </span><span class="o">*</span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">node</span><span class="p">));</span>
-<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="n">n</span><span class="o">-&gt;</span><span class="n">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">number</span><span class="p">;</span>
-<span class="n">n</span><span class="o">-&gt;</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="p">;</span>
-<span class="n">list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
-</code></pre></div>
-
-<p>Walk through it in pictures. First, <code>n</code> points at a freshly <code>malloc</code>'d, still-garbage chunk of memory:</p>
-<div class="codehilite"><pre><span></span><code>list --&gt; NULL
-
-n --&gt; [ number: ? | next: ? ]     (garbage values, nothing assigned yet)
-</code></pre></div>
-
-<p>After <code>n-&gt;number = number;</code> (say the user typed <code>1</code>) and, defensively, <code>n-&gt;next = NULL;</code>:</p>
-<div class="codehilite"><pre><span></span><code>list --&gt; NULL
-
-n --&gt; [ number: 1 | next: NULL ]
-</code></pre></div>
-
-<p>Now for the two lines that actually attach this node to the list. Here is the exact wrong order, so you can see <em>why</em> order matters:</p>
-<div class="codehilite"><pre><span></span><code>WRONG ORDER:  list = n;  then  n-&gt;next = list;
-
-list --&gt; [ number: 1 | next: --+
-                                |
-                                v
-n --&gt; [ number: 1 | next: -----+     &lt;-- n-&gt;next now points at ITSELF. Disaster.
-</code></pre></div>
-
-<p>That specific example is degenerate (there's only one node), so the real danger shows up on the <em>second</em> insertion, once <code>list</code> already points somewhere. Suppose <code>list</code> currently points at the node holding <code>1</code>, and you're prepending <code>2</code>:</p>
-<div class="codehilite"><pre><span></span><code>BEFORE:  list --&gt; [ 1 | next: NULL ]
-
-n --&gt; [ 2 | next: NULL ]      (just malloc&#39;d, not yet linked to anything)
-</code></pre></div>
-
-<p>If you carelessly do <code>list = n;</code> <strong>first</strong>:</p>
-<div class="codehilite"><pre><span></span><code>list --&gt; [ 2 | next: NULL ]
-
-        [ 1 | next: NULL ]     &lt;-- ORPHANED. Nothing in your program points here anymore.
-                                   This is a memory leak, permanently, until the program quits.
-</code></pre></div>
-
-<p>Malan catches himself making exactly this mistake live, and names it precisely:</p>
-<blockquote>
-<p>"I have orphaned the first node because now nothing in my code is actually pointing at it. I've got a duplication (two pointers pointing at this chunk of memory) so this thing... we have lost track of it in code, which means that is the definition of a memory leak." (David Malan)</p>
-</blockquote>
-<p>The fix is to do the two lines in the <strong>opposite order</strong>: point the new node at the old list <em>before</em> you move <code>list</code> to point at the new node:</p>
-<div class="codehilite"><pre><span></span><code>STEP A:  n-&gt;next = list;
-
-n --&gt; [ 2 | next: ---+
-                       |
-                       v
-list ---------------&gt; [ 1 | next: NULL ]
-
-STEP B:  list = n;
-
-list --&gt; [ 2 | next: ---&gt; [ 1 | next: NULL ] ]
-</code></pre></div>
-
-<p>Nothing was lost: <code>list</code> now points at the new node, and the new node's <code>next</code> still points at everything that came before. Malan's own metaphor for this is worth keeping:</p>
-<blockquote>
-<p>"The metaphor I often think of is like around Christmas time... when people would stitch popcorn together... You're trying to stitch together these nodes or popcorn kernels, if you will, such that one can lead you to the next, can lead you to the next, but you can never let go of part of that strand." (David Malan)</p>
-</blockquote>
-<p>Repeat the recipe for <code>3</code>, and the full list (after inserting <code>1</code>, then <code>2</code>, then <code>3</code>, always at the front) looks like this:</p>
-<div class="codehilite"><pre><span></span><code>list --&gt; [ 3 ] --&gt; [ 2 ] --&gt; [ 1 ] --&gt; NULL
-</code></pre></div>
-
-<p>Notice the order: it's the <strong>reverse</strong> of the order you typed the numbers in, because every new value jumps straight to the front. That's a direct, visible consequence of prepending, not a bug, and it's exactly the wrinkle Part 5 will fix.</p>
-<blockquote>
-<p>✅ <strong>What to do about it:</strong> whenever you prepend, always set the new node's <code>next</code> to point at the current list <em>before</em> you move <code>list</code> to point at the new node. Reverse that order even once, and you permanently orphan everything the list used to hold.</p>
-</blockquote>
-<hr />
-<h2 id="part-3-traversing-the-list-a-while-loop-and-the-equivalent-for-loop">Part 3: Traversing the list (a <code>while</code> loop, and the equivalent <code>for</code> loop)</h2>
-<p>Building the list is only useful if you can read it back out. To do that without disturbing <code>list</code> itself (you still need it to find the list again later), use a second, throwaway pointer that walks along the chain:</p>
-<div class="codehilite"><pre><span></span><code>list --&gt; [ 3 ] --&gt; [ 2 ] --&gt; [ 1 ] --&gt; NULL
-
-ptr = list;   (ptr now points at the same first node as list, without touching list)
-</code></pre></div>
-
-<p>The traversal logic in plain language: look at wherever <code>ptr</code> currently points, print its number, then move <code>ptr</code> to whatever <em>that</em> node's <code>next</code> field says. Repeat until <code>ptr</code> becomes <code>NULL</code>.</p>
-<div class="codehilite"><pre><span></span><code><span class="n">node</span><span class="w"> </span><span class="o">*</span><span class="n">ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="p">;</span>
-<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">ptr</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%i</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ptr</span><span class="o">-&gt;</span><span class="n">number</span><span class="p">);</span>
-<span class="w">    </span><span class="n">ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ptr</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>Step by step, in pictures:</p>
-<div class="codehilite"><pre><span></span><code>ptr --&gt; [ 3 ] --&gt; [ 2 ] --&gt; [ 1 ] --&gt; NULL      print 3;  ptr = ptr-&gt;next;
-         ptr --&gt; [ 2 ] --&gt; [ 1 ] --&gt; NULL       print 2;  ptr = ptr-&gt;next;
-                  ptr --&gt; [ 1 ] --&gt; NULL        print 1;  ptr = ptr-&gt;next;
-                           ptr --&gt; NULL         loop condition fails; stop.
-</code></pre></div>
-
-<p>This prints <code>3</code>, <code>2</code>, <code>1</code>, reversed from input order, exactly as Part 2 predicted.</p>
-<p>Everything a <code>while</code> loop can do here, a <code>for</code> loop can do too, just packed onto one line. Malan shows the equivalent version:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">node</span><span class="w"> </span><span class="o">*</span><span class="n">ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="p">;</span><span class="w"> </span><span class="n">ptr</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w"> </span><span class="n">ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ptr</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%i</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ptr</span><span class="o">-&gt;</span><span class="n">number</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>The three parts of the <code>for</code> line map directly onto the <code>while</code> version: "start <code>ptr</code> at <code>list</code>" is the initializer, "keep going while <code>ptr</code> isn't <code>NULL</code>" is the condition, and "advance to the next node" is the update, it's just the <code>ptr = ptr-&gt;next;</code> line moved into the loop header instead of sitting as the last line inside the braces. Malan's own preference:</p>
-<blockquote>
-<p>"This is a little more elegant, in that you can express a whole lot of logic in one line of the <code>for</code> loop. Frankly, I do think the first version is nonetheless more readable." (David Malan)</p>
-</blockquote>
-<p>Either form is correct; use whichever reads more clearly to you.</p>
-<blockquote>
-<p>🔑 <strong>The single most important takeaway of this part.</strong> Never traverse a list with the <code>list</code> pointer itself: always copy it into a temporary pointer first (<code>ptr</code>), and advance <em>that</em>. The moment you overwrite <code>list</code>, you've lost your only way back to the front of the list.</p>
-</blockquote>
-<hr />
-<h2 id="part-4-running-time-why-prepend-is-free-but-almost-everything-else-isnt">Part 4: Running time (why prepend is free but almost everything else isn't)</h2>
-<p>Now the payoff question: what does all this pointer-stitching actually cost, in Big O terms?</p>
-<p><strong>Prepending is O(1).</strong> Adding a new node to the front touches a small, fixed number of pointers (<code>n-&gt;next = list; list = n;</code>) no matter whether the list has 3 nodes or 3 million. The length of the rest of the list never enters into the work at all.</p>
-<p>Everything else is worse, and the reasons are all the same shape: with no way to jump directly to a position, you have to walk there one node at a time.</p>
-<table>
-<thead>
-<tr>
-<th>Operation</th>
-<th>Running time</th>
-<th>Why</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Prepend</strong> (add to the front, no ordering)</td>
-<td><strong>O(1)</strong></td>
-<td>A fixed number of pointer reassignments: the list's length never matters.</td>
-</tr>
-<tr>
-<td><strong>Append</strong> (add to the back, with no tail pointer)</td>
-<td>O(n)</td>
-<td>You must follow <code>next</code> from the front until you find the node whose <code>next</code> is <code>NULL</code>, then attach there.</td>
-</tr>
-<tr>
-<td><strong>Search</strong> for a value</td>
-<td>O(n)</td>
-<td>Worst case, the value is the very last node, or isn't in the list at all, so you may have to check every node.</td>
-</tr>
-<tr>
-<td><strong>Delete</strong> a value</td>
-<td>O(n)</td>
-<td>Same as search: you must first walk to find it (and, since this is a <em>singly</em> linked list, the node <em>before</em> it too) before you can unlink it.</td>
-</tr>
-</tbody>
-</table>
-<p>Malan's own summary of the trade, once he's walked through search and delete: with arrays, a <strong>sorted</strong> array at least gives you binary search in O(log n): jump to the middle, then the middle of what's left, and so on. A linked list can't do that trick, sorted or not, because you cannot compute the address of "the middle node" the way you can with an array's contiguous arithmetic: you can only get there by walking, one <code>next</code> at a time, from the front. So the dynamism you gained (grow forever, no copying) comes at the cost of the search speed you had with a sorted array.</p>
-<blockquote>
-<p>💡 <strong>A nuance worth sitting with:</strong> "O(1)" for prepend doesn't mean "instant": it means "the <em>same</em> small number of steps regardless of size." That's the entire reason prepending is the cheap operation and everything that requires finding a specific spot is not.</p>
-</blockquote>
-<hr />
-<h2 id="part-5-sorted-insertion-four-cases-and-why-order-comes-out-right-this-time">Part 5: Sorted insertion (four cases, and why order comes out right this time)</h2>
-<p>Prepending is fast, but it leaves values in reverse-insertion order, not sorted order, and a real Contacts app or phone book needs its entries sorted. So instead of always inserting at the front, you now have to figure out, for every new value, exactly <em>where</em> in the list it belongs. Malan breaks the seemingly complicated problem into four separate, much smaller ones:</p>
-<blockquote>
-<p>"You've got scenarios in which you want to insert a new node into an empty list. You want to prepend the new node into the beginning of the list, append it to the end of the list, or somewhere in the middle." (David Malan)</p>
-</blockquote>
-<p><strong>Case 1: the list is empty.</strong> Trivial: just point <code>list</code> at the new node.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">list</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="n">list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p><strong>Case 2: the new value belongs before everything currently in the list.</strong> This is exactly the prepend logic from Part 2: point the new node's <code>next</code> at the current list, then move <code>list</code> to the new node.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="o">-&gt;</span><span class="n">number</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">list</span><span class="o">-&gt;</span><span class="n">number</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="n">n</span><span class="o">-&gt;</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="p">;</span>
-<span class="w">    </span><span class="n">list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p><strong>Case 3: the new value belongs at the end.</strong> Traverse with a pointer until you find a node whose <code>next</code> is <code>NULL</code> (that's the last node), then attach the new node there.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">node</span><span class="w"> </span><span class="o">*</span><span class="n">ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="p">;</span><span class="w"> </span><span class="n">ptr</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w"> </span><span class="n">ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ptr</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ptr</span><span class="o">-&gt;</span><span class="n">next</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="n">ptr</span><span class="o">-&gt;</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
-<span class="w">        </span><span class="k">break</span><span class="p">;</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="p">...</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p><strong>Case 4: the new value belongs somewhere in the middle.</strong> This is the fiddliest case, because you need <em>two</em> pointers at once: one on the node just before where the new value belongs, and one on the node just after. Suppose the list already holds <code>2 -&gt; 4 -&gt; NULL</code> and you're inserting <code>3</code>:</p>
-<div class="codehilite"><pre><span></span><code>BEFORE:      list --&gt; [ 2 ] --&gt; [ 4 ] --&gt; NULL
-                        ^          ^
-                      trail       ptr
-
-n --&gt; [ 3 | next: NULL ]     (freshly malloc&#39;d)
-
-STEP 1:  n-&gt;next = ptr;        n --&gt; [ 3 ] --&gt; [ 4 ] --&gt; NULL
-
-STEP 2:  trail-&gt;next = n;      list --&gt; [ 2 ] --&gt; [ 3 ] --&gt; [ 4 ] --&gt; NULL
-</code></pre></div>
-
-<p>The order of those two steps matters exactly like it did in Part 2: you must point the <em>new</em> node forward, at <code>ptr</code>, before you point the <em>previous</em> node, <code>trail</code>, at the new node, otherwise you'd overwrite <code>trail-&gt;next</code> before you'd captured where it used to point, and orphan everything after it.</p>
-<p>Running time-wise, this is worse news than plain prepending. Even though cases 1 and 2 are still instant, cases 3 and 4 require traversing to find the right spot first, so <strong>sorted insertion, worst case, is O(n)</strong>, same as search and delete. You traded away the one operation (unsorted prepend) that used to be free, in exchange for the list always coming out in order.</p>
-<blockquote>
-<p>✅ <strong>What to do about it:</strong> before writing any insert code, ask which of the four cases you're in (empty, belongs first, belongs last, or belongs in the middle) and handle each with its own small block of code, in that order, rather than trying to write one clever line that covers all four at once.</p>
-</blockquote>
-<hr />
-<h2 id="part-6-freeing-the-list-the-unload-function">Part 6: Freeing the list (the <code>unload</code> function)</h2>
-<p>A linked list never leaks memory on its own just because you stop using it: you have to explicitly give every single node back. Malan is blunt about why you can't shortcut this:</p>
-<blockquote>
-<p>"It's not quite as simple as just saying free the whole list. Free is not that smart. [Malloc] is not that smart, and even though you have called [malloc] 123 times, you have to really call free. You have to call free 123 times." (David Malan)</p>
-</blockquote>
-<p>In other words: <code>malloc</code> and <code>free</code> have no built-in concept of "linked list." Each call to <code>malloc</code> handed you back the address of one chunk of memory, and <code>free</code> only knows how to release exactly the address you hand it, one chunk at a time. Passing it your <code>list</code> pointer and hoping it "figures out" the rest of the chain does nothing of the sort.</p>
-<p>The tricky part is that once you <code>free</code> a node, you can no longer safely read its <code>next</code> field: that memory isn't yours anymore. So you must save <code>next</code> in a temporary variable <em>before</em> freeing the node it came from:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">node</span><span class="w"> </span><span class="o">*</span><span class="n">ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">list</span><span class="p">;</span>
-<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">ptr</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="n">node</span><span class="w"> </span><span class="o">*</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ptr</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span><span class="w">   </span><span class="c1">// remember where to go BEFORE destroying this node</span>
-<span class="w">    </span><span class="n">free</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span><span class="w">                </span><span class="c1">// now safe to free this one</span>
-<span class="w">    </span><span class="n">ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">next</span><span class="p">;</span><span class="w">                </span><span class="c1">// move to the node we remembered</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>Pictorially, freeing <code>3 -&gt; 2 -&gt; 1 -&gt; NULL</code>:</p>
-<div class="codehilite"><pre><span></span><code>ptr --&gt; [ 3 ] --&gt; [ 2 ] --&gt; [ 1 ] --&gt; NULL
-
-1. next = ptr-&gt;next     (remember [2] before destroying [3])
-2. free(ptr)             (destroy [3])
-3. ptr = next            (move to [2]) ... repeat until ptr == NULL
-</code></pre></div>
-
-<p>This exact pattern (traverse, free, advance) is worth wrapping in its own function, <code>unload</code>, so you can call it once at the end of <code>main</code> (or anywhere else you need to discard a whole list) instead of copying this loop around by hand.</p>
-<blockquote>
-<p>🔑 <strong>The single most important takeaway of this part.</strong> Every <code>malloc</code> needs its own matching <code>free</code>: a linked list has no shortcut for that. Always capture <code>ptr-&gt;next</code> into a temporary variable <em>before</em> you <code>free(ptr)</code>, or you'll be reading memory you no longer own.</p>
-</blockquote>
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong>A node is a self-referential struct.</strong> One value field, one <code>struct node *next</code> pointer, and the internal tag name (<code>struct node</code>) exists purely so the struct can name its own type before the <code>typedef</code> finishes.</li>
-<li><strong><code>n-&gt;field</code> is shorthand for <code>(*n).field</code>.</strong> Follow the pointer, then reach inside.</li>
-<li><strong>Prepend order matters.</strong> Always set <code>n-&gt;next = list;</code> <em>before</em> <code>list = n;</code>. Reversing that order orphans the rest of the list, permanently.</li>
-<li><strong>Prepend is O(1); almost everything else is O(n).</strong> Search, delete, append (with no tail pointer), and even sorted insertion (worst case) all require walking the list one node at a time: the price paid for never having to copy the whole structure to grow it.</li>
-<li><strong>Sorted insertion is four small problems, not one big one.</strong> Empty list, belongs first, belongs last, belongs in the middle: handle each separately.</li>
-<li><strong>Nothing frees itself.</strong> <code>malloc</code> and <code>free</code> have no idea what a linked list is; you must traverse and <code>free</code> every node individually, saving <code>next</code> before you free the node it came from.</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ Writing <code>list = n;</code> before <code>n-&gt;next = list;</code> when prepending: this orphans every node the list used to hold, instantly and permanently (a memory leak you can't recover from at runtime).</li>
-<li>❌ Traversing with the <code>list</code> pointer itself instead of a temporary <code>ptr</code>: the moment you advance <code>list</code>, you've lost your only way back to the front of the list.</li>
-<li>❌ Forgetting that plain prepending stores values in <em>reverse</em> insertion order: if you need sorted order, you need the four-case sorted insert from Part 5, not plain prepending.</li>
-<li>❌ Calling <code>free(list)</code> once and expecting the whole list to vanish: <code>free</code> only knows about the one address you hand it; every node needs its own call.</li>
-<li>❌ Freeing a node and then reading its <code>next</code> field afterward: always save <code>ptr-&gt;next</code> into a temporary variable <em>before</em> you <code>free(ptr)</code>.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: <code>numbers.c</code> (Prepend It, Sort It, Free It Clean)</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. You'll build a linked list of numbers on cs50.dev from scratch, watch it come out backwards on purpose, fix that by upgrading to sorted insertion, and then prove with Valgrind that every single node you allocated also got freed.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>A single C program, <code>numbers.c</code>, on cs50.dev that:</p>
-<ul>
-<li>Defines a self-referential <code>struct node</code> (an <code>int</code> plus a <code>next</code> pointer).</li>
-<li>Reads integers from the user one at a time and builds a linked list by <strong>prepending</strong>.</li>
-<li>Prints the list with a <code>while</code> loop, then again with the equivalent <code>for</code> loop.</li>
-<li>Gets upgraded to insert every new number in <strong>sorted order</strong>, using the four cases from Part 5.</li>
-<li>Ends by calling an <code>unload</code> function that frees every node, verified leak-free with Valgrind.</li>
-</ul>
-<p>This is, in miniature, exactly the kind of structure a real database engine or web framework builds and tears down for you invisibly whenever your program later queries and releases rows, the database-backed web app that caps this course. Building it by hand once, here, is what lets you actually understand (and debug) what's happening underneath when that magic occasionally breaks.</p>
-<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in <code>numbers.c</code></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Self-referential <code>struct node</code> and the arrow operator (Part 1)</td>
-<td>Your <code>struct node</code> definition and every <code>n-&gt;field</code> access.</td>
-</tr>
-<tr>
-<td>Prepending, and the correct pointer order (Part 2)</td>
-<td>Your first working version of the program.</td>
-</tr>
-<tr>
-<td>Traversal with <code>while</code> and <code>for</code> (Part 3)</td>
-<td>Your two printing loops.</td>
-</tr>
-<tr>
-<td>Big O of each operation (Part 4)</td>
-<td>A comment above each function stating its running time and why.</td>
-</tr>
-<tr>
-<td>The four cases of sorted insertion (Part 5)</td>
-<td>Your upgraded <code>insert</code> function.</td>
-</tr>
-<tr>
-<td>The <code>unload</code> function (Part 6)</td>
-<td>Your cleanup code at the end of <code>main</code>.</td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>Struct and an empty list.</strong> Define your self-referential <code>struct node</code> (remember the internal tag name) and, in <code>main</code>, declare <code>node *list = NULL;</code>. Compile and run it. It should do nothing and crash nothing. That's a working, if boring, milestone.</li>
-<li><strong>Prepend from user input.</strong> In a loop, use <code>get_int</code> to read numbers until the user enters <code>-1</code> as a sentinel value. For each number: <code>malloc</code> a node, check for <code>NULL</code>, set its <code>number</code>, then stitch it onto the front of <code>list</code> in the correct order (<code>n-&gt;next = list;</code> before <code>list = n;</code>).</li>
-<li><strong>Print it two ways.</strong> Print the list with a <code>while</code> loop and a temporary pointer, then comment that version out and print it again with the equivalent <code>for</code> loop. Confirm both print identical output, in reverse order from how you typed the numbers in.</li>
-<li><strong>Annotate the running time.</strong> Add a one-line comment above your prepend loop and above your print loop stating each one's Big O and why (<code>O(1)</code> because it never touches the rest of the list; <code>O(n)</code> because it must visit every node).</li>
-<li><strong>Upgrade to sorted insertion.</strong> Replace your prepend-only logic with the four-case <code>insert</code> function from Part 5 (empty, belongs first, belongs last, belongs in the middle). Feed in the numbers out of order (say, <code>5 1 9 3 -1</code>) and confirm they print out sorted (<code>1 3 5 9</code>) regardless of the order you typed them.</li>
-<li><strong>Write <code>unload</code> and prove zero leaks.</strong> Write <code>void unload(node *list)</code> using the save-<code>next</code>-then-<code>free</code> pattern from Part 6, call it once at the end of <code>main</code>, then compile and run under <code>valgrind ./numbers</code>. Keep fixing your code until Valgrind reports "All heap blocks were freed -- no leaks are possible."</li>
-<li><strong>Stretch goals.</strong> (a) Add a <code>delete(int number)</code> function that removes a single value from anywhere in the list, handling "it's the first node" as its own case (since removing it means updating <code>list</code> itself, not just some node's <code>next</code>). (b) Rewrite the struct as a doubly linked list (add a <code>prev</code> pointer) and note in a comment which of today's four insertion cases actually get simpler as a result.</li>
-</ol>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ <code>make numbers</code> compiles with no warnings.</li>
-<li>✅ Entering numbers out of order (e.g., <code>5 1 9 3</code>) prints them in sorted order after your Part 5 upgrade.</li>
-<li>✅ <code>valgrind ./numbers</code> reports zero errors and zero leaked bytes after your <code>unload</code> function runs.</li>
-<li>✅ You can point to the exact lines in your <code>insert</code> function that handle each of the four cases, and state out loud why sorted insertion is O(n) even though plain prepending was O(1).</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> run Valgrind after milestone 2, not just at the very end. A leak introduced while you're still prepending is far easier to spot and fix than one buried three milestones later under your sorted-insert logic.</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-prepend-five-hardcoded-numbers-foundational">Exercise 1: Prepend five hardcoded numbers (foundational)</h3>
-<p>Skip user input entirely. In <code>main</code>, prepend the numbers <code>10, 20, 30, 40, 50</code> (in that order, using hardcoded values instead of <code>get_int</code>) onto a linked list, then print it with a <code>while</code> loop. Confirm the printed order is <code>50, 40, 30, 20, 10</code>, the reverse of how you inserted them, and explain in one sentence why.</p>
-<h3 id="exercise-2-write-and-time-trace-a-search-function-intermediate">Exercise 2: Write and time-trace a <code>search</code> function (intermediate)</h3>
-<p>Write <code>bool search(node *list, int number)</code> that traverses the list and returns <code>true</code> if <code>number</code> is found, <code>false</code> otherwise. Build a 5-node list, then call <code>search</code> for a value you know is in the last node and count, by hand, exactly how many nodes your function visits before it returns. Confirm that number matches your expectation for O(n) worst-case behavior.</p>
-<h3 id="exercise-3-delete-a-node-from-the-middle-advanced">Exercise 3: Delete a node from the middle (advanced)</h3>
-<p>Write <code>node *delete(node *list, int number)</code> that removes the node containing <code>number</code> from anywhere in the list and returns the (possibly updated) <code>list</code> pointer. Handle three cases explicitly: the value is in the first node (you must update <code>list</code> itself), the value is somewhere later (you need a trailing pointer to relink around the node you're removing), and the value isn't in the list at all (return the list unchanged). Don't forget to <code>free</code> the node you remove.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>SELF-REFERENTIAL STRUCT
-  typedef struct node
-  {
-      int number;
-      struct node *next;   // &quot;struct node&quot;, not &quot;node&quot; -- typedef isn&#39;t finished yet
-  }
-  node;
-
-ARROW OPERATOR
-  n-&gt;number   ==   (*n).number     &quot;follow the pointer, then reach inside&quot;
-
-PREPEND (always in this order!)
-  n-&gt;next = list;   // 1. point the NEW node at the OLD list
-  list = n;         // 2. THEN move list to point at the new node
-  (swap that order and you orphan everything list used to point to)
-
-TRAVERSAL
-  while:  node *ptr = list; while (ptr != NULL) { ...; ptr = ptr-&gt;next; }
-  for:    for (node *ptr = list; ptr != NULL; ptr = ptr-&gt;next) { ... }
-
-RUNNING TIMES (singly linked list)
-  Prepend                        O(1)
-  Append (no tail pointer)       O(n)
-  Search                         O(n)
-  Delete                         O(n)
-  Sorted insert (4 cases)        O(n) worst case (cases 1-2 instant, 3-4 need a traversal)
-  (a sorted ARRAY gets O(log n) search via binary search -- a linked list never can)
-
-SORTED INSERT: 4 CASES
-  1. Empty list        -&gt; list = n;
-  2. Belongs first      -&gt; n-&gt;next = list; list = n;
-  3. Belongs last        -&gt; walk until ptr-&gt;next == NULL, then ptr-&gt;next = n;
-  4. Belongs in middle    -&gt; n-&gt;next = ptr; trail-&gt;next = n;   (in that order)
-
-UNLOAD (free every node)
-  node *ptr = list;
-  while (ptr != NULL)
-  {
-      node *next = ptr-&gt;next;   // save BEFORE freeing
-      free(ptr);
-      ptr = next;
-  }
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 6 · Lesson 21:</strong> "Stacks, queues, and resizable arrays" solved arrays' fixed-size problem with <code>realloc</code>-and-copy. This lesson solves the same growth problem a completely different way: one new node at a time, stitched in with a pointer, with nothing ever needing to be copied.</li>
-<li><strong>Earlier, Module 5 · Lessons 18-19:</strong> the pointer fundamentals and <code>malloc</code>/<code>free</code> discipline from those lessons are what every line of code in this lesson actually leans on: a linked list is pointers and dynamic memory, applied deliberately.</li>
-<li><strong>Next, Module 6 · Lesson 23:</strong> "Trees, hash tables, and tries" builds a hash table that is, quite literally, an array whose slots each hold their own linked list, so that when two different keys collide at the same array index, they chain together using exactly the node-and-<code>next</code> structure you built in this lesson.</li>
-<li><strong>Later, the course's north-star project:</strong> the database-backed web app you build at the end of this course will store rows and query results using structures descended from exactly this idea: a linked list is the simplest version of "data plus the pointers that let you find more of it" that you'll ever build by hand.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 5 - Data Structures" by David J. Malan, Harvard University (CS50x 2026). Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+<hr /><div class="pager bottom"><span class="pcount">Page 1 of 4 &middot; Start here</span><div class="seg"><a href="22-linked-lists.html" class="cur" title="Start here">1</a><a href="22-linked-lists-2.html" class="" title="Parts 2–5">2</a><a href="22-linked-lists-3.html" class="" title="Part 6">3</a><a href="22-linked-lists-4.html" class="" title="Capstone &amp; wrap-up">4</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="22-linked-lists-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="22" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="21-stacks-queues-arrays.html"><span class="dir">&#8592; Previous</span><b>Stacks, Queues, and Resizable Arrays</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="23-trees-hash-tables-tries.html"><span class="dir">Next &#8594;</span><b>Trees, Hash Tables, and Tries</b></a></nav>
+    <div class="ls-marker" data-lesson-id="22" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="21-stacks-queues-arrays.html"><span class="dir">&#8592; Previous lesson</span><b>Stacks, Queues, and Resizable Arrays</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 

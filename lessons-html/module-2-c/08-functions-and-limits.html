@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 2 · Lesson 8: Functions, Code Quality, and the Limits of Numbers | Self-Paced CS50x</title>
+<title>Module 2 · Lesson 8: Functions, Code Quality, and the Limits of Numbers (p1/4) | Self-Paced CS50x</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -49,6 +49,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -212,7 +235,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
   <div class="navlinks">
     <a href="../index.html">All lessons</a>
     <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="08-functions-and-limits-4.html#capstone">Capstone</a>
   </div>
   <div class="nav-cta">
     <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
@@ -251,7 +274,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="08-functions-and-limits-4.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -277,41 +300,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <li><a href="#getting-something-back-return-values">Getting something back: return values</a></li>
 </ul>
 </li>
-<li><a href="#part-2-code-quality-correctness-design-and-style">Part 2: Code quality (correctness, design, and style)</a><ul>
-<li><a href="#the-mario-grid-seeing-bad-design-then-fixing-it">The Mario grid: seeing bad design, then fixing it</a></li>
-</ul>
-</li>
-<li><a href="#part-3-the-limits-of-numbers-overflow-truncation-and-imprecision">Part 3: The limits of numbers (overflow, truncation, and imprecision)</a><ul>
-<li><a href="#integer-overflow-the-dollar-doubling-meme">Integer overflow: the dollar-doubling meme</a></li>
-<li><a href="#truncation-when-division-throws-away-the-remainder">Truncation: when division throws away the remainder</a></li>
-<li><a href="#floating-point-imprecision-the-approximation-you-cant-escape">Floating-point imprecision: the approximation you can't escape</a></li>
-<li><a href="#y2k-and-the-year-2038-problem">Y2K and the Year 2038 problem</a></li>
-</ul>
-</li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: Refactor Mario, Then Break a Number on Purpose</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-a-function-with-an-argument-foundational">Exercise 1: A function with an argument (foundational)</a></li>
-<li><a href="#exercise-2-a-function-with-a-return-value-and-an-overflow-intermediate">Exercise 2: A function with a return value, and an overflow (intermediate)</a></li>
-<li><a href="#exercise-3-truncation-vs-a-proper-decimal-advanced">Exercise 3: Truncation vs. a proper decimal (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 4 &middot; Start here</span><div class="seg"><a href="08-functions-and-limits.html" class="cur" title="Start here">1</a><a href="08-functions-and-limits-2.html" class="" title="Parts 2–3">2</a><a href="08-functions-and-limits-3.html" class="" title="Wrap-up">3</a><a href="08-functions-and-limits-4.html" class="" title="Capstone &amp; wrap-up">4</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="08-functions-and-limits-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>You will package repeated code into your own reusable C functions (complete with <code>void</code>, arguments, return values, and a prototype), learn the three separate lenses CS50 uses to judge whether code is actually <em>good</em> (correctness, design, and style), and see why every number a computer stores is secretly finite, which is why calculators glitch, a Boeing 787 once needed rebooting mid-fleet, and your computer's clock is scheduled to break again in 2038.</p>
 <blockquote>
@@ -463,257 +458,9 @@ has ever existed or ever will.</p>
 <span class="p">}</span>
 </code></pre></div>
 
-<p>Two things changed from every function so far. First, the return type in both the prototype and the definition is <code>int</code>, not <code>void</code>. Malan calls this out as new: "this notion of returning a value... is going to return, not void, which means nothing, but an integer, and that's the whole purpose of this function in life now." Second, the function body ends with a <code>return</code> statement, which both hands the value back to whoever called the function and immediately exits the function.</p>
-<h2 id="part-2-code-quality-correctness-design-and-style">Part 2: Code quality (correctness, design, and style)</h2>
-<p>Code that compiles and runs isn't automatically <em>good</em> code. Malan names three separate, independent lenses for judging it: "CS50, and really the world in general, tends to focus on these kinds of axes: correctness, design, and style."</p>
-<ul>
-<li><strong>Correctness</strong> is the most basic: does the code do what it's supposed to? "In the context of a class, it should do exactly what the homework assignment... tells you to do. In the real world, it should do exactly what someone decided the software should do... correctness just means it behaves as it should."</li>
-<li><strong>Design</strong> is about <em>how well</em> it does that, even when it's already correct. Malan points back to earlier examples in the lecture (code that asked three redundant questions when two would do) as "100% correct... but I was wasting the computer's time, I was wasting the human's time." As he puts it, design "is more about... not only saying things that are correct but doing it well: making a good, cogent argument, not just one that happens to be correct."</li>
-<li><strong>Style</strong> is the most cosmetic of the three, and it's entirely for other humans, not the computer: "that's more of the aesthetics: is everything pretty printed, that is nicely indented, are variables well named and not just called X, Y, Z arbitrarily... style matters really to other humans, not to the computer, but to other humans."</li>
-</ul>
-<p>CS50 gives you one tool per axis, and they check genuinely different things. Passing one says nothing about the others:</p>
-<table>
-<thead>
-<tr>
-<th>Tool</th>
-<th>What it checks</th>
-<th>In Malan's words</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>check50</code></td>
-<td>Correctness: does the code produce the right output for a specific problem set (identified by a "slug")?</td>
-<td>"You'll get quick feedback on whether or not your code is correct. It doesn't mean it's well implemented or well designed or well stylized, but at least that's the first gauntlet."</td>
-</tr>
-<tr>
-<td><code>design50</code></td>
-<td>Design: subjective, TA-style feedback on how the code is structured</td>
-<td>"Built on top of the CS50 duck... you will get ChatGPT-like advice on how you can improve not the correctness of that code, but the design of that code, the quality thereof."</td>
-</tr>
-<tr>
-<td><code>style50</code></td>
-<td>Style: formatting, indentation, naming, consistent with CS50's style guide</td>
-<td>"It will show you on the left what your code looks like, and on the right what your code really should look like."</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>✅ <strong>What to do about it:</strong> treat a passing <code>check50</code> as step one, not the finish line. Correct-but-ugly and correct-but-wasteful code both pass <code>check50</code> and still deserve a <code>design50</code> and <code>style50</code> pass before you call a problem done.</p>
-</blockquote>
-<h3 id="the-mario-grid-seeing-bad-design-then-fixing-it">The Mario grid: seeing bad design, then fixing it</h3>
-<p>Malan grounds "design" in a concrete example: printing a 3×3 grid of bricks, the kind Mario jumps into underground, using nested loops. The natural first attempt works, but has two design smells worth naming.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;#&quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p><strong>Smell one: unclear names.</strong> <code>i</code> and <code>j</code> are conventional for loop counters, but only up to a point. Malan's rule of thumb: "it is pretty conventional in code when you want another integer, and it's not <code>i</code> because you've used it already, fine, you can use <code>j</code>. So using <code>i</code> and <code>j</code>, maybe <code>k</code>, is generally fine. If you're using <code>l</code>, <code>m</code>, and <code>o</code>, at that point you're probably doing something wrong." Renaming them to say what they mean costs nothing and helps every future reader:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">HEIGHT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
-
-<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">row</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">row</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">HEIGHT</span><span class="p">;</span><span class="w"> </span><span class="n">row</span><span class="o">++</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">column</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">column</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">HEIGHT</span><span class="p">;</span><span class="w"> </span><span class="n">column</span><span class="o">++</span><span class="p">)</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;#&quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p><strong>Smell two: the magic number, twice.</strong> The original version types <code>3</code> in two separate places: the outer loop's condition and the inner loop's condition. It works, but Malan flags exactly why that's fragile: "if I want to make this square bigger and bigger and bigger over time, I'm going to have to change it in two different places, and... eventually that's going to come back and bite you. You're going to do something stupid, or a colleague isn't going to realize you hard-coded 3 in multiple places, just bad design."</p>
-<p>The fix is a <strong>constant</strong>: a variable whose value you (and the compiler) promise never to change after it's set. In C, you signal that with the keyword <code>const</code>. Malan's own test of it: "if I do something stupid later in my code and I try to set <code>N</code> equal to something else, the compiler won't let me do that. It will protect me from myself, so it's just a slightly better design as well." One <code>const int HEIGHT = 3;</code> at the top, used in both loops, means the grid's size now lives in exactly one place.</p>
-<h2 id="part-3-the-limits-of-numbers-overflow-truncation-and-imprecision">Part 3: The limits of numbers (overflow, truncation, and imprecision)</h2>
-<p>Every value in a computer's memory is stored using a fixed, finite number of <strong>bits</strong> (binary digits). An <code>int</code> conventionally gets 32 of them. That's not a minor implementation detail: it's the root cause of everything in this final part of the lesson. Malan connects it back to the simplest possible case: "we've seen this problem even on a small scale with our light bulbs... if I have a 3-digit number as represented by 3 physical light bulbs, I can count 0, 1, 2... up to 7. If I want to count to 8, I need a 4th bit. But if you don't have a 4th bit, for all intents and purposes, that number is just 0." Module 5 will show you exactly where those bits physically live inside a computer's memory; for now, just hold onto the consequence: <strong>every number type has a ceiling, and computers hit it silently.</strong></p>
-<h3 id="integer-overflow-the-dollar-doubling-meme">Integer overflow: the dollar-doubling meme</h3>
-<p>Malan reconstructs a familiar meme in C: start with one dollar, and on each round, ask whether to double it and pass it on.</p>
-<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">dollars</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_char</span><span class="p">(</span><span class="s">&quot;Here&#39;s $%i. Double it and give to next person? &quot;</span><span class="p">,</span><span class="w"> </span><span class="n">dollars</span><span class="p">);</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;Y&#39;</span><span class="p">)</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="n">dollars</span><span class="w"> </span><span class="o">*=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="k">else</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="k">break</span><span class="p">;</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>Say yes enough times, and the dollar amount doesn't just get large: it suddenly goes negative, then drops to zero. That's <strong>integer overflow</strong>: trying to store a value bigger than the variable's bits can hold. As Malan narrates it live, after the number breaks: "the computer only has a finite number of bits allocated to each integer... it's roughly [4] billion... we overflowed the integer in memory. In fact, integer overflow is a term of art." Switching <code>int</code> to a 64-bit <code>long</code> buys you far more headroom, but as Malan demonstrates by continuing to double the amount, it's still finite, and eventually overflows too.</p>
-<p>This is not just a classroom meme. In 2015, the <em>New York Times</em> reported a real Boeing 787 bug caused by exactly this: "a Model 787 airplane that has been powered continuously for 248 days can lose all alternating current electrical power due to the generator control unit simultaneously going into fail-safe mode. This condition is caused by a software counter internal to the GCUs that will overflow after 248 days of continuous power." A counter, almost certainly a 32-bit integer counting tenths of a second, ran out of room after 248 days airborne, and the plane's power shut off mid-flight. Asked what the short-term fix was before Boeing shipped a real patch, Malan gives the answer you already know from your own devices: "literally turn it off and back on again, much like you've probably been taught with your phones and computers... <strong>Reboot the plane.</strong>" Rebooting works because it resets every variable, including that overflowing counter, back to its starting value.</p>
-<p>Overflow shows up in games, too: a well-known bug in the original <em>Pac-Man</em> let you play up to level 255, but "because there was a missing <code>if</code> condition that checked what level you were on, you could accidentally garble the screen if you were amazing at Pac-Man, because they too would overflow an integer, and just random characters would end up appearing on the screen." Reaching that level-256 "kill screen" became a badge of honor among top players precisely because it's an overflow bug you can only trigger by being extremely good.</p>
-<blockquote>
-<p>🔑 <strong>Integer overflow, truncation, and floating-point imprecision are three symptoms of the exact same root cause: a finite number of bits trying to represent an infinite range of numbers.</strong> Which one you get depends only on what kind of value ran out of room.</p>
-</blockquote>
-<h3 id="truncation-when-division-throws-away-the-remainder">Truncation: when division throws away the remainder</h3>
-<p>Change the calculator to divide two whole numbers instead:</p>
-<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_int</span><span class="p">(</span><span class="s">&quot;What&#39;s x? &quot;</span><span class="p">);</span>
-<span class="kt">int</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_int</span><span class="p">(</span><span class="s">&quot;What&#39;s y? &quot;</span><span class="p">);</span>
-<span class="n">printf</span><span class="p">(</span><span class="s">&quot;%i</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">y</span><span class="p">);</span>
-</code></pre></div>
-
-<p>Try <code>1 / 3</code> and you get <code>0</code>, not <code>0.33</code>. Try <code>4 / 3</code> and you get <code>1</code>, not <code>1.33</code>. Nothing crashed. The answer is simply wrong, in a very specific way. This is <strong>truncation</strong>: "this other issue in computing when you have finite numbers of bits... whereby even when you're trying to do floating point math, like with a decimal point, if you are using an integer, you're going to throw away everything after the decimal point unless you're explicitly using the right data type." Switching both variables (and the placeholder) from <code>int</code>/<code>%i</code> to <code>float</code>/<code>%f</code> fixes it: <code>1 / 3</code> correctly becomes <code>0.333333</code>.</p>
-<h3 id="floating-point-imprecision-the-approximation-you-cant-escape">Floating-point imprecision: the approximation you can't escape</h3>
-<p>Fixing truncation doesn't fully fix the deeper problem. Print that same <code>1.0 / 3.0</code> with enough digits (<code>printf("%.50f\n", x / y);</code>) and instead of an endless run of 3s, you get "all this random stuff happening at the end," garbage digits where you'd expect more 3s. The explanation is the same finite-bits story, one level more subtle: "computers only use finitely many bits to represent floating-point numbers, and if there's an infinite number of those, you can't possibly represent every possible floating-point value. So we're essentially seeing an approximation of one-third, precisely... That then is what we'd call floating-point imprecision." Upgrading from a 32-bit <code>float</code> to a 64-bit <code>double</code> buys more precision, the same way <code>long</code> bought more headroom for integers, but it never eliminates the approximation, only shrinks it.</p>
-<h3 id="y2k-and-the-year-2038-problem">Y2K and the Year 2038 problem</h3>
-<p>Finite bits create the same trap at civilization scale. For decades, computers stored a year using two digits instead of four, "because it was convenient: it was more efficient because you use half as much memory." When 1999 rolled into 2000, any system still storing only two digits risked confusing <code>00</code> for 1900, not 2000, the so-called <strong>Y2K problem</strong>, patched worldwide (at enormous effort and expense) just in time.</p>
-<p>A near-identical bug is already scheduled. Since the 1970s, most computers have tracked the current date and time as a 32-bit integer counting seconds since January 1, 1970. That counter has the same roughly-2-billion ceiling as any other 32-bit <code>int</code>, and "on the date January 19th, 2038, we will overflow a 32-bit counter, and... our computers and phones and other devices may very well think it's December 13, 1901", unless the systems still relying on 32-bit time are upgraded before then. It's the same bug you just triggered on purpose in your own calculator, at a scale that will eventually touch infrastructure you rely on every day.</p>
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong>A function is a promise with three parts.</strong> Its return type, its name, and its argument types all have to match between the prototype and the full definition.</li>
-<li><strong>Prototypes exist so <code>main</code> can go first.</strong> C reads top to bottom and won't look ahead; a prototype tells the compiler "trust me, this function exists further down."</li>
-<li><strong>Scope is about curly braces, not file position.</strong> A variable declared inside one function (or one loop) is invisible everywhere else, no matter how nearby that other code looks on the page.</li>
-<li><strong>Correctness, design, and style are three separate report cards.</strong> Code can be 100% correct and still badly designed or badly styled: CS50 checks each with a different tool (<code>check50</code>, <code>design50</code>, <code>style50</code>).</li>
-<li><strong>A magic number typed in two places is a bug waiting to happen; a <code>const</code> typed once protects you from yourself.</strong></li>
-<li><strong>Every number in a computer is finite, so it can overflow (too big), truncate (lost decimal), or blur (imprecise decimal): the fix is always "use a bigger or more appropriate type," never "the computer will just know."</strong></li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ Defining a function below <code>main</code> with no prototype above it: you'll see <code>call to undeclared function</code>. Add the one-line prototype above <code>main</code>; don't move the whole function.</li>
-<li>❌ Assuming a variable declared in <code>main</code> is visible inside another function just because both are in the same file: pass it in as an argument instead.</li>
-<li>❌ Treating a passing <code>check50</code> as "the code is good." It only means the code is <em>correct</em> for that specific problem: run <code>design50</code> and <code>style50</code> too.</li>
-<li>❌ Hardcoding the same size or limit in two or more places instead of one <code>const</code>: the moment you need to change it, one copy will get missed.</li>
-<li>❌ Assuming <code>int</code> division gives you a decimal answer, or that <code>float</code> math is perfectly exact: the first truncates, the second is only ever an approximation.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: Refactor Mario, Then Break a Number on Purpose</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. You'll take the exact
-kind of repetitive, hardcoded code the lecture starts with and turn it
-into properly designed C (functions, a prototype, a constant) and then,
-on purpose, make it fail in one of the three numeric ways you just learned
-to recognize.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>On <a href="https://cs50.dev">cs50.dev</a>, a single program, <code>mario.c</code>, that starts life exactly like the lecture's version (two nested <code>for</code> loops hardcoding a 3×3 grid of <code>#</code> bricks) and evolves, milestone by milestone, into a small but genuinely well-designed program: a <code>void print_row(int width)</code> function with its own prototype, a <code>const int</code> controlling the grid's size, and a custom function that returns a validated height from the user. Below that grid code, you'll add a second, clearly separated block where you deliberately trigger integer overflow, truncation, or floating-point imprecision, with a comment explaining exactly why it happens.</p>
-<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in the project</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Custom function + prototype (Part 1)</td>
-<td><code>print_row</code> is pulled out of <code>main</code> and declared above it.</td>
-</tr>
-<tr>
-<td>Scope (Part 1)</td>
-<td>The row's width is passed in as an argument, not read from a variable defined elsewhere.</td>
-</tr>
-<tr>
-<td>Return value (Part 1)</td>
-<td><code>get_height</code> loops until the input is valid, then <code>return</code>s it to <code>main</code>.</td>
-</tr>
-<tr>
-<td>Constants (Part 2)</td>
-<td>One <code>const int HEIGHT</code> replaces the number 3 typed twice.</td>
-</tr>
-<tr>
-<td><code>design50</code> / <code>style50</code> (Part 2)</td>
-<td>A feedback pass on the finished <code>mario.c</code>.</td>
-</tr>
-<tr>
-<td>Overflow / truncation / imprecision (Part 3)</td>
-<td>A second, deliberate block of code that breaks a number on purpose, with an explanatory comment.</td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>Rebuild the grid, hardcoded.</strong> In a new <code>mario.c</code>, write two nested <code>for</code> loops that print a 3×3 grid of <code>#</code> characters, exactly like the lecture's first version. Compile with <code>make mario</code> and confirm it runs before changing anything.</li>
-<li><strong>Pull the row into its own function.</strong> Write <code>void print_row(int width)</code> that prints one row of <code>width</code> <code>#</code> characters followed by a newline. Add its prototype above <code>main</code>, delete the inner loop from <code>main</code>, and call <code>print_row</code> from inside the outer loop instead.</li>
-<li><strong>Replace both 3s with one constant.</strong> Declare <code>const int HEIGHT = 3;</code> above <code>main</code> and use <code>HEIGHT</code> everywhere the size 3 currently appears. Confirm that editing that single line resizes the whole grid.</li>
-<li><strong>Add a function that returns a value.</strong> Write <code>int get_height(void)</code> that loops with <code>get_int</code> until the user enters a non-negative number, then <code>return</code>s it. Call it from <code>main</code> and use the result in place of (or alongside) <code>HEIGHT</code>.</li>
-<li><strong>Break a number on purpose.</strong> Below your grid code, clearly separated with a comment banner, reproduce one bug from Part 3: your choice of integer overflow (repeatedly double an <code>int</code> until it goes negative), truncation (divide two <code>int</code>s and print the result as if it were a decimal), or floating-point imprecision (print <code>1.0 / 3.0</code> to 20+ digits). Write a <code>//</code> comment, in your own words, explaining why it happens.</li>
-<li><strong>Get outside feedback.</strong> <code>mario.c</code> is a custom exercise, not an official CS50 problem set, so there's no <code>check50</code> slug to run against it: you verify correctness yourself, by eye. Instead, run <code>design50</code> and <code>style50</code> on the finished file and apply at least one suggestion from each.</li>
-<li><strong>Stretch goals.</strong> Extend <code>print_row</code> (or add a sibling function) into a full ascending pyramid, with a second nested loop printing leading spaces before each row's bricks. Or trigger two different number bugs side by side and compare their symptoms in your comments.</li>
-</ol>
-<blockquote>
-<p>💡 <strong>One line ahead:</strong> the database-backed web app you'll build by the end of this course will be full of functions that look exactly like <code>print_row</code>: a name, typed arguments, and often a return value. The habit you're practicing on bricks today is the same habit a web app's route-handling functions use later.</p>
-</blockquote>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ <code>mario.c</code> compiles with <code>make mario</code> and prints its grid using a function you wrote, not copy-pasted <code>printf</code> calls.</li>
-<li>✅ Your program has a prototype above <code>main</code> for every function defined below it, and a <code>const</code> controlling the grid's size.</li>
-<li>✅ Changing the grid's size requires editing exactly one line.</li>
-<li>✅ A second, clearly separated block of code deliberately overflows, truncates, or loses precision, with a comment explaining why in your own words.</li>
-<li>✅ You've run <code>design50</code> and <code>style50</code> on the file and read their feedback, even if you don't apply all of it.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> before you add the deliberate bug in Milestone
-5, run the grid code once more and confirm it's still correct: you want
-to be certain the failure you demonstrate next is the one you intended,
-not a leftover mistake from refactoring.</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice
-on one idea. Optional and independent; the Capstone already touches all of
-them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-a-function-with-an-argument-foundational">Exercise 1: A function with an argument (foundational)</h3>
-<p>Write <code>void print_line(int length)</code> that prints <code>length</code> dash characters followed by a newline, with its prototype above <code>main</code>. Call it three times from <code>main</code> with three different lengths (for example, 5, 10, and 20) and confirm each line is the right size.</p>
-<h3 id="exercise-2-a-function-with-a-return-value-and-an-overflow-intermediate">Exercise 2: A function with a return value, and an overflow (intermediate)</h3>
-<p>Write <code>int square(int n)</code> that returns <code>n * n</code>, with a matching prototype. Use it in <code>main</code> to print the squares of 1 through 5. Then call <code>square(50000)</code> and print the result. It will not be 2,500,000,000: in a comment, explain why, using what you learned about a 32-bit <code>int</code>'s roughly 2-billion ceiling.</p>
-<h3 id="exercise-3-truncation-vs-a-proper-decimal-advanced">Exercise 3: Truncation vs. a proper decimal (advanced)</h3>
-<p>Given a <code>score</code> of 7 and a <code>total</code> of 9, compute and print a percentage two different ways: once using only <code>int</code> math (<code>score * 100 / total</code>), and once by casting at least one value to <code>float</code> or <code>double</code> before dividing. Print both results and, in a comment, explain in your own words why they differ.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>FUNCTION SHAPE
-  return_type name(type argument);              &lt;- prototype (above main)
-  return_type name(type argument)                &lt;- full definition (anywhere else)
-  {
-      ...
-      return value;   // omit if return_type is void
-  }
-
-SCOPE RULE
-  A variable declared between { and } only exists between that { and }.
-  Need it somewhere else?  Pass it in as an argument, or return it out.
-
-CODE QUALITY  (three separate report cards)
-  correctness  -&gt; does it work?           checked by check50  (needs a problem&#39;s slug)
-  design       -&gt; is it well built?       checked by design50 (subjective, TA-style)
-  style        -&gt; is it well formatted?   checked by style50  (formatting, naming)
-
-CONST
-  const int HEIGHT = 3;   // one source of truth; compiler blocks any later change
-
-WHY NUMBERS BREAK  (root cause: finite bits, always)
-  integer overflow          -&gt; value too big for its type -&gt; wraps to negative / 0
-  truncation                -&gt; int / int throws away the decimal part
-  floating-point imprecision -&gt; decimal value can&#39;t be stored exactly -&gt; tiny error
-
-REAL-WORLD OVERFLOW
-  Boeing 787: 32-bit counter overflows after 248 days powered on  -&gt; &quot;reboot the plane&quot;
-  Pac-Man:    level counter overflows past 255                    -&gt; kill screen at 256
-  Y2K:        2-digit year overflows going from 99 to 00           -&gt; 2000 read as 1900
-  Year 2038:  32-bit seconds-since-1970 counter overflows          -&gt; Jan 19, 2038
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 2 · Lesson 7 (Conditionals and loops):</strong> the loops and conditionals you learned there are exactly what you now package inside your own functions: this lesson doesn't add new control flow, it adds a way to name and reuse the control flow you already have.</li>
-<li><strong>Next, Module 3 · Lesson 9 ("The art of debugging"):</strong> every bug category you triggered on purpose here (scope errors, undeclared functions, overflow, truncation, imprecision) is exactly the kind of bug you'll learn to hunt down deliberately, instead of stumbling into by accident.</li>
-<li><strong>Later, Module 5 (Memory):</strong> this lesson explained <em>that</em> every number type has a finite ceiling; Module 5 explains <em>where</em>, physically, in a computer's memory those bits actually live, and why that placement is what makes overflow and imprecision inevitable rather than a bug CS50 could simply have avoided.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 1 - C" by David J. Malan, Harvard University. Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+<p>Two things changed from every function so far. First, the return type in both the prototype and the definition is <code>int</code>, not <code>void</code>. Malan calls this out as new: "this notion of returning a value... is going to return, not void, which means nothing, but an integer, and that's the whole purpose of this function in life now." Second, the function body ends with a <code>return</code> statement, which both hands the value back to whoever called the function and immediately exits the function.</p><div class="pager bottom"><span class="pcount">Page 1 of 4 &middot; Start here</span><div class="seg"><a href="08-functions-and-limits.html" class="cur" title="Start here">1</a><a href="08-functions-and-limits-2.html" class="" title="Parts 2–3">2</a><a href="08-functions-and-limits-3.html" class="" title="Wrap-up">3</a><a href="08-functions-and-limits-4.html" class="" title="Capstone &amp; wrap-up">4</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="08-functions-and-limits-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="8" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="07-conditionals-and-loops.html"><span class="dir">&#8592; Previous</span><b>Conditionals and Loops</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="../module-3-debugging/09-art-of-debugging.html"><span class="dir">Next &#8594;</span><b>The Art of Debugging</b></a></nav>
+    <div class="ls-marker" data-lesson-id="8" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="07-conditionals-and-loops.html"><span class="dir">&#8592; Previous lesson</span><b>Conditionals and Loops</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 

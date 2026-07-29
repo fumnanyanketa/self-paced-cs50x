@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 1 · Lesson 2: Bits and Binary: How Computers Represent Everything | Self-Paced CS50x</title>
+<title>Module 1 · Lesson 2: Bits and Binary: How Computers Represent Everything (p1/3) | Self-Paced CS50x</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -49,6 +49,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -212,7 +235,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
   <div class="navlinks">
     <a href="../index.html">All lessons</a>
     <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="02-bits-and-binary-3.html#capstone">Capstone</a>
   </div>
   <div class="nav-cta">
     <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
@@ -251,7 +274,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="02-bits-and-binary-3.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -274,31 +297,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 </ul>
 </li>
 <li><a href="#part-2-from-bits-to-letters-ascii-and-the-bow-demo">Part 2: From bits to letters (ASCII and the "BOW" demo)</a></li>
-<li><a href="#part-3-beyond-english-unicode-and-emoji">Part 3: Beyond English (Unicode and emoji)</a></li>
-<li><a href="#part-4-painting-with-numbers-rgb-pixels-video-and-sound">Part 4: Painting with numbers (RGB, pixels, video, and sound)</a></li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: Encode yourself in bits</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-binary-warm-up-foundational">Exercise 1: Binary warm-up (foundational)</a></li>
-<li><a href="#exercise-2-decode-a-byte-stream-intermediate">Exercise 2: Decode a byte stream (intermediate)</a></li>
-<li><a href="#exercise-3-reverse-engineer-a-color-advanced">Exercise 3: Reverse-engineer a color (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="02-bits-and-binary.html" class="cur" title="Start here">1</a><a href="02-bits-and-binary-2.html" class="" title="Parts 3–4">2</a><a href="02-bits-and-binary-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="02-bits-and-binary-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>Every letter, emoji, color, photo, video, and song your computer touches is nothing more than a pattern of 0s and 1s that everyone has agreed in advance to interpret the same way, and once you can count in binary and read a lookup table, you can decode any of it by hand.</p>
 <blockquote>
@@ -377,189 +382,9 @@ Light bulbs:     on   on   on   →  7
 <blockquote>
 <p>🔑 <strong>Text is just numbers that everyone agreed on in advance.</strong> There is nothing "letter-like" about the number 65: the ASCII table is the entire agreement, and every keyboard, screen, and messaging app on Earth honors it.</p>
 <p>✅ <strong>What to do about it:</strong> when you need to decode or hand-encode text as numbers, always work from a table (the cheat sheet at the end of this lesson has one) rather than trying to derive the mapping: it's arbitrary by design, so there's nothing to derive.</p>
-</blockquote>
-<h2 id="part-3-beyond-english-unicode-and-emoji">Part 3: Beyond English (Unicode and emoji)</h2>
-<p>ASCII's one byte per character gives you only 256 possible characters, enough for English uppercase, lowercase, digits, and punctuation, but not enough for accented letters, most non-English alphabets, or the images-that-are-secretly-characters you send every day: emoji.</p>
-<p>The fix is <strong>Unicode</strong>, a much larger standard that assigns a number to a character using more bits: 16, 24, or even 32 bits instead of ASCII's 8. With 32 bits available you can represent billions of distinct characters, which is exactly why there's room for thousands of emoji. Malan is careful to point out that an emoji is not a picture file at all. It is a <em>character</em>, just like the letter A, that happens to render as a colorful image: <strong>"You're sending characters. You're not sending images per se… these are just like characters in a different font, and that font happens to be very colorful and graphical as well."</strong></p>
-<p>This also explains a puzzling everyday experience: the same emoji looking slightly different depending on whether you send it from an iPhone, an Android phone, or an app like Telegram. Unicode standardizes <em>which number</em> means "face with tears of joy," but each company is free to draw that number however it likes: the way one font might draw a letter "a" with a curl and another without. The underlying bits sent between your friend's phone and yours are identical; only the "font" rendering them differs.</p>
-<blockquote>
-<p>💡 <strong>Nuance:</strong> <strong>"emoji have been designed to really represent people and places and things and emotions in a way that transcends human language."</strong> But, Malan adds, "even then they're somewhat open to interpretation": a fixed number doesn't fully pin down how an image is drawn.</p>
-</blockquote>
-<h2 id="part-4-painting-with-numbers-rgb-pixels-video-and-sound">Part 4: Painting with numbers (RGB, pixels, video, and sound)</h2>
-<p>Numbers, then letters. What about a color? Once again, the only tool available is agreeing on numbers: <strong>"integers is the exact same answer as before. We just need to agree on what number do we use for red, what do we use for green, what do we use for blue."</strong></p>
-<p>The standard scheme, <strong>RGB</strong>, mixes three amounts of light (red, green, and blue), each ranging from 0 to 255 (one byte, just like an ASCII character). A few reference points:</p>
-<table>
-<thead>
-<tr>
-<th>Red</th>
-<th>Green</th>
-<th>Blue</th>
-<th>Result</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>Black (no light at all)</td>
-</tr>
-<tr>
-<td>255</td>
-<td>255</td>
-<td>255</td>
-<td>White (maximum of all three)</td>
-</tr>
-<tr>
-<td>72</td>
-<td>23</td>
-<td>33</td>
-<td>A dark shade of yellow (Malan's example)</td>
-</tr>
-</tbody>
-</table>
-<p>Because each of the three channels is a byte, one RGB color takes 3 bytes (24 bits) to store. (You may have also seen colors written as pairs of characters like <code>00</code> or <code>FF</code> on web pages or in Photoshop: that's the same 0-255 range written in a different base, hexadecimal, which you'll meet properly in Module 5's memory lesson.)</p>
-<p>A digital image is simply a grid of tiny colored dots called <strong>pixels</strong>, each one carrying its own RGB triplet. Zoom far enough into any photo or emoji and the individual colored squares become visible: Malan shows this by zooming into the "face with tears of joy" emoji until individual pixels appear. A modern photograph with millions of pixels, each needing 3 bytes, is why image files are measured in megabytes.</p>
-<p>From there, the same building-block logic extends outward:</p>
-<ul>
-<li><strong>Video</strong> is just many images shown quickly in sequence: <strong>"It's like 30 images per second flying across the screen or maybe slightly fewer than that, that collectively tricks our mind into thinking we are seeing motion pictures."</strong> A flip-book is the same idea on paper.</li>
-<li><strong>Sound</strong> can be broken into a handful of numbers per note. Malan proposes: <strong>"we could represent each of these notes using 3 numbers, maybe 0 to 255 or some other range that represents the frequency or the pitch of the note"</strong>, plus duration (how long the note lasts) and loudness (how hard the key was struck).</li>
-</ul>
-<p>Stack these ideas together and you get the full hierarchy this lesson has built, bottom to top:</p>
-<div class="codehilite"><pre><span></span><code>transistor (on/off)
-   → bit (0 or 1)
-      → byte (8 bits, 0-255)
-         → ASCII character (a byte, by agreement)          e.g. 72 = &#39;H&#39;
-         → RGB channel (a byte, by agreement)               e.g. 72 = amount of red
-            → pixel (3 bytes: R, G, B)
-               → image (a grid of pixels)
-                  → video (~30 images per second)
-         → musical note (frequency + duration + loudness, each a byte)
-</code></pre></div>
-
-<p>Every layer above "byte" is the <em>same</em> raw material: it's just a matter of what the programmer told the computer to expect. As Malan puts it, the computer can only tell a number from a letter from a color "because the programmer tells the computer how to display the information."</p>
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong>Everything is bits.</strong> Computers only ever store 0s and 1s; what a given pattern "means" (a number, a letter, a color, a sound) is agreed upon in advance, not discovered from the bits themselves.</li>
-<li><strong>A byte is 8 bits, giving 256 possible patterns (0-255).</strong> That's why 256 (and its neighbors, like 255 and 32) shows up everywhere in computing.</li>
-<li><strong>ASCII maps letters to numbers by committee, not by logic.</strong> A is 65 because humans decided so; lowercase is always uppercase + 32.</li>
-<li><strong>Unicode is ASCII's much bigger sibling.</strong> It spends more bits per character so it can represent every human language and thousands of emoji, which are characters, not pictures.</li>
-<li><strong>Color, images, video, and sound are all just more numbers, in agreed formats.</strong> RGB gives each pixel 3 bytes; an image is a grid of pixels; video is many images per second; a sound can be described with a few numbers per note.</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ Reading a binary number as if it were decimal (e.g., assuming <code>100</code> in binary is "one hundred"). Fix: always write the place values (1, 2, 4, 8, 16 …) above the digits and multiply before adding.</li>
-<li>❌ Trying to <em>derive</em> a letter's ASCII code from logic instead of looking it up. Fix: the mapping is an arbitrary, memorized agreement. Use a table, and remember only the two anchors (A=65, a=97) plus the +32 rule.</li>
-<li>❌ Assuming an emoji is a small image file, like a <code>.png</code> you download. Fix: it's a Unicode <em>character</em> (a number). The picture you see is just one company's rendering ("font") of that number.</li>
-<li>❌ Thinking one byte can hold a full RGB color. Fix: one byte is only <em>one channel</em> (just red, or just green, or just blue); a full RGB color needs 3 bytes.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: Encode yourself in bits</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. You'll hand-encode a real message and a tiny image into raw bits (no computer required) so you feel, in your own hands, that "everything is bits" isn't just a slogan.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>A small "byte card" you make entirely on paper: a binary-to-decimal cheat sheet you build yourself, a short message hand-encoded in ASCII binary that someone else decodes without help, and a tiny pixel-art image described entirely as a list of RGB byte triplets. All three pieces are free, need no accounts, and work completely offline.</p>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in the capstone</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Binary place values</td>
-<td>Milestone 1</td>
-</tr>
-<tr>
-<td>ASCII text-to-number mapping</td>
-<td>Milestone 2</td>
-</tr>
-<tr>
-<td>Bits as a shared agreement (the BOW demo)</td>
-<td>Milestone 3</td>
-</tr>
-<tr>
-<td>RGB bytes per pixel</td>
-<td>Milestone 4</td>
-</tr>
-<tr>
-<td>Frequency/duration/loudness as numbers</td>
-<td>Milestone 5 (stretch)</td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>Build your place-value cheat sheet.</strong> On paper, write the columns <code>128 64 32 16 8 4 2 1</code>. Practice by converting the decimal numbers 5, 12, 20, and 100 into 8-bit binary using only addition and these columns.</li>
-<li><strong>Encode your name (or a nickname) in ASCII.</strong> Look up each letter's decimal ASCII code (use the cheat sheet below), then convert each code into 8-bit binary using Milestone 1's columns. You now have your name written entirely as 0s and 1s.</li>
-<li><strong>Send a hidden message.</strong> Pick a short word or phrase (3-6 letters). Write out its full binary encoding (like the volunteers' light-bulb pattern) on a sheet of paper, hand it to a friend or family member along with the ASCII cheat sheet, and have them decode it back into letters without you telling them what it says. (If no one's around, encode a message, set it aside for an hour, then decode your own message "cold" to prove the process works.)</li>
-<li><strong>Build a tiny pixel-art image as a byte map.</strong> Sketch a simple 5×5-pixel grid (a heart, a smiley, your initial). For every pixel, write down its RGB triplet, e.g. <code>(255,0,0)</code> for red or <code>(0,0,0)</code> for black. When you're done you'll have 25 triplets: a literal byte-by-byte description of an image, the same way a real image file works, just smaller.</li>
-<li><strong>Stretch goals.</strong> Encode a 3-note "song" as triples of (frequency 0-255, duration in seconds, loudness 0-255) and have someone try to hum it back from just the numbers. Or, pick your favorite emoji and note how many bits (8, 16, 24, 32?) it would need beyond plain ASCII, and why.</li>
-</ol>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ You can convert any whole number from 0-255 to 8-bit binary and back, on paper, without a calculator.</li>
-<li>✅ You produced a full binary/ASCII encoding of a real word or short phrase.</li>
-<li>✅ Someone else (or you, later) correctly decoded that message using only the cheat sheet, proving the encoding was unambiguous.</li>
-<li>✅ You have a complete list of RGB triplets describing every pixel of a small image you designed.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> don't peek at a calculator or converter tool until <em>after</em> you've worked each conversion by hand at least once: the whole point is to feel the place-value math, not just trust that it works.</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-binary-warm-up-foundational">Exercise 1: Binary warm-up (foundational)</h3>
-<p>Convert the decimal numbers 5, 12, and 20 to 8-bit binary by hand, using the place-value columns <code>128 64 32 16 8 4 2 1</code>. Then convert <code>01101101</code> back to decimal to check you can go both directions.</p>
-<h3 id="exercise-2-decode-a-byte-stream-intermediate">Exercise 2: Decode a byte stream (intermediate)</h3>
-<p>Given the three ASCII decimal codes <code>72 101 108 108 111</code>, use the cheat sheet below to decode the word they spell. Then encode your own 4-letter word into decimal ASCII codes.</p>
-<h3 id="exercise-3-reverse-engineer-a-color-advanced">Exercise 3: Reverse-engineer a color (advanced)</h3>
-<p>Given the RGB triplet <code>(128, 0, 128)</code>, predict what color it produces before checking (hint: it's a common color name). Then, for a color you know by name (like "sky blue" or "forest green"), estimate a plausible RGB triplet and explain your reasoning for each channel.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>BITS &amp; BYTES
-  bit          = a single 0 or 1
-  byte         = 8 bits = 256 possible patterns = decimal 0-255
-  place values (8-bit): 128 64 32 16 8 4 2 1  →  multiply &quot;on&quot; positions, then add
-
-QUICK ASCII REFERENCE (decimal)
-  A-Z  =  65-90        a-z  =  97-122   (always uppercase + 32)
-  0-9 (digit characters) = 48-57
-  space = 32            !   = 33
-  H=72 I=73 !=33   →  &quot;HI!&quot;
-  B=66 O=79 W=87   →  &quot;BOW&quot;
-
-UNICODE
-  ASCII: 8 bits/char, 256 characters max
-  Unicode: 16-32 bits/char, billions possible → room for every language + emoji
-  An emoji is a CHARACTER (a number); how it&#39;s drawn is up to Apple/Google/etc.
-
-COLOR: RGB
-  each channel (R, G, B) = 1 byte = 0-255
-  (0,0,0) = black   (255,255,255) = white   (72,23,33) ≈ dark yellow
-  1 pixel = 3 bytes = 24 bits
-
-IMAGES, VIDEO, SOUND
-  image = grid of pixels, each pixel = 3 bytes
-  video ≈ 30 images/second
-  sound (per note) ≈ frequency + duration + loudness, each a number
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 1 · Lesson 1:</strong> you framed programming as input → algorithm → output and saw a system prompt shape an AI's output. This lesson is what actually flows through that pipe: bits, standing in for text, numbers, and more.</li>
-<li><strong>Next, Module 1 · Lesson 3 ("Your first algorithms: search and pseudocode"):</strong> once information can be represented, the next question is how to <em>find</em> it efficiently: you'll compare linear and binary search and write pseudocode, using the ASCII/RGB style of "agree on a representation first" thinking you practiced here.</li>
-<li><strong>Later, Module 5 (Memory, Lesson 17, "Pixels, hexadecimal, and memory addresses"):</strong> you'll revisit these exact same bytes, but read and write them in hexadecimal, a more compact base for writing the binary you learned to count in today, and see them sitting at real addresses in a computer's memory.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 0 - Scratch" by David J. Malan, Harvard University. Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+</blockquote><div class="pager bottom"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="02-bits-and-binary.html" class="cur" title="Start here">1</a><a href="02-bits-and-binary-2.html" class="" title="Parts 3–4">2</a><a href="02-bits-and-binary-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="02-bits-and-binary-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="2" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="01-welcome-to-cs50.html"><span class="dir">&#8592; Previous</span><b>Welcome to CS50: Computers, Thinking, and a Live AI Chatbot</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="03-first-algorithms.html"><span class="dir">Next &#8594;</span><b>Your First Algorithms: Search and Pseudocode</b></a></nav>
+    <div class="ls-marker" data-lesson-id="2" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="01-welcome-to-cs50.html"><span class="dir">&#8592; Previous lesson</span><b>Welcome to CS50: Computers, Thinking, and a Live AI Chatbot</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 

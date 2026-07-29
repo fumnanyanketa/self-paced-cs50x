@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 11 · Lesson 38: Flask Fundamentals: Routes and Templates | Self-Paced CS50x</title>
+<title>Module 11 · Lesson 38: Flask Fundamentals: Routes and Templates (p1/3) | Self-Paced CS50x</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -49,6 +49,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -212,7 +235,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
   <div class="navlinks">
     <a href="../index.html">All lessons</a>
     <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="38-flask-fundamentals-3.html#capstone">Capstone</a>
   </div>
   <div class="nav-cta">
     <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
@@ -251,7 +274,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="38-flask-fundamentals-3.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -271,33 +294,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <li><a href="#prerequisites">Prerequisites</a></li>
 <li><a href="#part-1-from-file-paths-to-routes">Part 1: From file paths to routes</a></li>
 <li><a href="#part-2-flask-itself-pip-requirementstxt-and-apppy">Part 2: Flask itself (pip, requirements.txt, and app.py)</a></li>
-<li><a href="#part-3-templates-and-jinja-factoring-the-html-back-out">Part 3: Templates and Jinja (factoring the HTML back out)</a></li>
-<li><a href="#part-4-reading-the-url-requestargs-and-defaults">Part 4: Reading the URL (request.args and defaults)</a></li>
-<li><a href="#part-5-how-the-pieces-combine">Part 5: How the pieces combine</a></li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: Build hello-flask</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-predict-the-query-string-foundational">Exercise 1: Predict the query string (foundational)</a></li>
-<li><a href="#exercise-2-a-second-query-parameter-intermediate">Exercise 2: A second query parameter (intermediate)</a></li>
-<li><a href="#exercise-3-diagnose-a-broken-template-on-purpose-advanced">Exercise 3: Diagnose a broken template on purpose (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="38-flask-fundamentals.html" class="cur" title="Start here">1</a><a href="38-flask-fundamentals-2.html" class="" title="Parts 3–5">2</a><a href="38-flask-fundamentals-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="38-flask-fundamentals-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>Instead of a URL pointing at a literal file the way it did with plain HTML, a Flask <strong>route</strong> is a URL wired to a Python function you write yourself, and by the end of this lesson that function will read a name straight out of the URL and hand it to a Jinja <strong>template</strong>, which is the smallest possible skeleton of every dynamic website you use every day.</p>
 <blockquote>
@@ -415,266 +418,9 @@ flask
 <p>Now the browser really did receive full HTML, but hard-coding an entire page as one long string inside <code>app.py</code> is exactly the kind of tangled, unfactored code Lesson 37 already taught you to avoid with CSS and JavaScript. Part 3 fixes it.</p>
 <blockquote>
 <p>✅ <strong>What to do about it:</strong> the moment you catch yourself writing HTML as a Python string, stop: that HTML belongs in its own file, which is exactly what a template is for.</p>
-</blockquote>
-<h2 id="part-3-templates-and-jinja-factoring-the-html-back-out">Part 3: Templates and Jinja (factoring the HTML back out)</h2>
-<p>Flask ships with a second useful function, <code>render_template()</code>, whose entire job is to read an HTML file from disk and send it back as the response, but that file has to live in one very specific place:</p>
-<blockquote>
-<p>"It turns out per flask's documentation, if you want to create your own HTML files, you simply have to add a directory that by convention is called templates, and that's it." (David Malan)</p>
-</blockquote>
-<p>So, alongside <code>app.py</code> and <code>requirements.txt</code>, you need a folder literally named <code>templates</code> (all lowercase), containing your HTML:</p>
-<div class="codehilite"><pre><span></span><code>hello-flask/
-├── app.py
-├── requirements.txt
-└── templates/
-    └── index.html
-</code></pre></div>
-
-<div class="codehilite"><pre><span></span><code><span class="c1"># app.py</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">render_template</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;index.html&quot;</span><span class="p">)</span>
-</code></pre></div>
-
-<div class="codehilite"><pre><span></span><code><span class="cm">&lt;!-- templates/index.html --&gt;</span>
-<span class="cp">&lt;!DOCTYPE html&gt;</span>
-<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&quot;en&quot;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>hello<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
-        hello, world
-    <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
-</code></pre></div>
-
-<p>Notice <code>render_template("index.html")</code> names only the file, never the <code>templates/</code> folder itself. Flask already knows to look there.</p>
-<p>At the moment, this HTML file is no different from the ones you wrote by hand in Lesson 36: it's just static text, quietly relocated. What makes it a genuine <strong>template</strong> is the ability to leave a gap for a real value to be dropped in later:</p>
-<blockquote>
-<p>"It's kind of the blueprint for the web page I want the user to see, but it's going to be dynamically generated using indeed this blueprint by plugging in the value." (David Malan)</p>
-</blockquote>
-<p>That gap is written with a pair of double curly braces:</p>
-<div class="codehilite"><pre><span></span><code>hello, {{ placeholder }}
-</code></pre></div>
-
-<blockquote>
-<p>"By using these pairs of curly braces, I'm telling Flask that I want to interpolate, so to speak, that variable. I want to substitute in its value." (David Malan)</p>
-</blockquote>
-<p>To fill it in, pass a named argument to <code>render_template()</code> matching the name inside the braces:</p>
-<div class="codehilite"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;index.html&quot;</span><span class="p">,</span> <span class="n">placeholder</span><span class="o">=</span><span class="s2">&quot;David&quot;</span><span class="p">)</span>
-</code></pre></div>
-
-<p><strong>Interpolate</strong>, here, just means "substitute a real value into a placeholder." This is Jinja, the templating library bundled with Flask, doing the substitution, the same basic idea as an f-string in Python, just written for an HTML file instead of a line of code.</p>
-<blockquote>
-<p>🔑 <strong>The single most important takeaway of this part.</strong> A template is HTML with <code>{{ }}</code> gaps in it. <code>render_template()</code> fills those gaps with whatever named values you hand it, and it always looks inside a folder called exactly <code>templates</code>.</p>
-</blockquote>
-<h2 id="part-4-reading-the-url-requestargs-and-defaults">Part 4: Reading the URL (request.args and defaults)</h2>
-<p>Hard-coding <code>"David"</code> into <code>render_template()</code> isn't useful: the whole point is to greet whoever actually visits. That value should come from the query string, and Flask hands it to you through a special object:</p>
-<blockquote>
-<p>"You have access to a special global variable ... where args just means the arguments or the parameters that were passed in to this HTTP request." (David Malan)</p>
-</blockquote>
-<p><code>request.args</code> behaves like a dictionary: the key is the parameter's name from the URL, the value is whatever the visitor typed after the <code>=</code>. The first, most literal way to use it is a conditional, checking whether the key is even there before reading it:</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">render_template</span><span class="p">,</span> <span class="n">request</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">():</span>
-    <span class="k">if</span> <span class="s2">&quot;name&quot;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="p">:</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;world&quot;</span>
-    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;index.html&quot;</span><span class="p">,</span> <span class="n">placeholder</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
-</code></pre></div>
-
-<p>That <code>else</code> branch is not optional decoration. Skip it (read <code>request.args["name"]</code> directly with no check) and visiting the bare route with no query string at all breaks the app outright:</p>
-<blockquote>
-<p>"This is sort of bad, bad request. It's an HTTP 400 ... 400 just means the user did something wrong by not passing in the parameter that was expected." (David Malan)</p>
-</blockquote>
-<p>That's the exact status code from Lesson 35, now caused by your own code instead of observed from someone else's server. The <code>if</code>/<code>else</code> above is what prevents it.</p>
-<p>Because "check if a query parameter exists, and fall back to a default if it doesn't" is something practically every route ever written needs to do, Flask folds all four of those lines into one:</p>
-<blockquote>
-<p>"It turns out this is so common to just ask a question as to whether the parameter is there and then do something with it or not that flask comes with some logic to do this." (David Malan)</p>
-</blockquote>
-<div class="codehilite"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">():</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;world&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;index.html&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
-</code></pre></div>
-
-<p><code>request.args.get("name", "world")</code> means exactly what it says: get the query parameter called <code>name</code>; if it isn't there, use <code>"world"</code> instead. One line replaces four, and it can never raise the error the naive version could. Note also the small renaming from <code>placeholder</code> to <code>name</code> in both the template and the function call: <code>name=name</code> looks odd at first, but it's a real Flask convention worth adopting: the left-hand <code>name</code> is the placeholder inside the template, the right-hand <code>name</code> is the Python variable holding the value, and giving them the same word keeps a file with many placeholders readable.</p>
-<blockquote>
-<p>💡 <strong>A nuance worth catching now.</strong> An <em>absent</em> key and a <em>present-but-empty</em> key are not the same thing. Visit <code>/?name=David</code> and you get "David." Visit <code>/</code> with no query string at all, and the default <code>"world"</code> kicks in. But visit <code>/?name=</code> (the key is there, just with nothing after the <code>=</code>) and <code>.get()</code>'s default never fires at all, because the key genuinely exists. You'll see "hello, " with nothing after it, not "hello, world."</p>
-<p>✅ <strong>What to do about it:</strong> always give <code>request.args.get()</code> a sensible default as its second argument, and remember that a default only protects you against a <em>missing</em> key, not an empty one.</p>
-</blockquote>
-<h2 id="part-5-how-the-pieces-combine">Part 5: How the pieces combine</h2>
-<p>Put together, a single request now flows through your route, your query string, and your template in one pass:</p>
-<div class="codehilite"><pre><span></span><code> browser:  GET /?name=David
-              │
-              ▼
- app.py:  @app.route(&quot;/&quot;)
-          def index():
-              name = request.args.get(&quot;name&quot;, &quot;world&quot;)   →  &quot;David&quot;
-              return render_template(&quot;index.html&quot;, name=name)
-              │
-              ▼
- templates/index.html:   hello, {{ name }}
-              │
-              ▼
- response sent to browser:   hello, David
-</code></pre></div>
-
-<p>Nothing here is hidden or magic: it's a <code>def</code> (Lesson 26), answering a GET request with a query string (Lesson 35), returning HTML (Lesson 36), just generated fresh, on the server, on every single request, instead of sitting on disk unchanged.</p>
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong>A route replaces a file path with a function.</strong> <code>@app.route("/greet")</code> tells Flask to run the <code>def</code> right beneath it whenever that URL is visited: the URL is input, not a location on disk.</li>
-<li><strong>A query string is <code>key=value</code> pairs after a <code>?</code>,</strong> joined by <code>&amp;</code> when there's more than one, and Flask parses all of it for you so you never touch raw text after the <code>?</code> yourself.</li>
-<li><strong><code>Flask(__name__)</code>, <code>@app.route</code>, and <code>flask run</code> on port 5000 are the whole minimal skeleton</strong>: everything else in this lesson builds on those three pieces.</li>
-<li><strong><code>render_template()</code> always looks in a folder named exactly <code>templates</code>,</strong> and a template is just HTML with <code>{{ }}</code> gaps that Jinja fills in with values you pass by name.</li>
-<li><strong><code>request.args.get("name", "world")</code> is the safe, one-line way to read a query parameter,</strong> replacing a four-line <code>if</code>/<code>else</code> and eliminating the HTTP 400 a missing, unchecked parameter would otherwise cause.</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ Naming the templates folder anything other than exactly <code>templates</code> (or capitalizing it): <code>render_template()</code> won't find your HTML, and Flask's terminal output will say so with a template-not-found error.</li>
-<li>❌ Forgetting the double curly braces around a placeholder in the template: Jinja won't interpolate it, and the visitor will see the literal word <code>name</code> printed on the page instead of a real value.</li>
-<li>❌ Reading <code>request.args["name"]</code> directly with no <code>if "name" in request.args</code> check and no default: a visitor who leaves off the query string entirely gets a real HTTP 400, not your page.</li>
-<li>❌ Assuming <code>?name=</code> (present but empty) behaves like a missing key: it doesn't; <code>.get()</code>'s default only fires when the key is truly absent, not when it's blank.</li>
-<li>❌ Forgetting to <code>pip install -r requirements.txt</code> (or list <code>flask</code> in it at all) before handing a project to someone else, or to a fresh cs50.dev codespace: the very first <code>import</code> line will fail.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: Build hello-flask</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. On cs50.dev, you'll build <strong>hello-flask</strong>, the smallest possible dynamic website: a route that reads a name out of the URL and greets whoever it is with a real Jinja template, plus a second route proving the same pattern holds up past one page. This is, quite literally, the first running skeleton of the database-backed web app you'll ship at the end of this course.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>A two-route Flask app in a folder called <code>hello-flask/</code>:</p>
-<ul>
-<li><code>requirements.txt</code> listing <code>flask</code>, and <code>app.py</code> creating the app with <code>Flask(__name__)</code>.</li>
-<li><code>templates/index.html</code>, rendered by the <code>/</code> route, greeting <code>?name=...</code> with a default of <code>"world"</code>.</li>
-<li><code>templates/about.html</code>, rendered by a second route, <code>/about</code>, written in the same template style.</li>
-</ul>
-<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in hello-flask</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Routes as generic input, not file paths (Part 1)</td>
-<td>Every <code>@app.route</code> you write.</td>
-</tr>
-<tr>
-<td><code>pip</code>, <code>requirements.txt</code>, <code>Flask(__name__)</code> (Part 2)</td>
-<td>Milestone 1, the scaffold.</td>
-</tr>
-<tr>
-<td><code>render_template()</code> and the mandatory <code>templates/</code> folder (Part 3)</td>
-<td>Milestone 3, factoring your HTML out of <code>app.py</code>.</td>
-</tr>
-<tr>
-<td><code>{{ }}</code> interpolation (Part 3)</td>
-<td>Milestones 4 and 6, the greeting and the about line.</td>
-</tr>
-<tr>
-<td><code>request.args.get("name", "world")</code> (Part 4)</td>
-<td>Milestone 5, and the <code>/about</code> route in Milestone 6.</td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>Scaffold hello-flask and say hello in plain text.</strong> On cs50.dev, create a <code>hello-flask</code> folder with <code>requirements.txt</code> (containing <code>flask</code>) and <code>app.py</code> (with <code>Flask(__name__)</code> and one route, <code>/</code>, returning the plain string <code>"Hello, world!"</code>). Run <code>pip install -r requirements.txt</code>, then <code>flask run</code>. Done when you see the greeting in your browser on port 5000, and view-source shows nothing but that plain text.</li>
-<li><strong>Return real HTML: no template yet.</strong> Change the same route to return a full hard-coded HTML string (doctype, <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, <code>&lt;body&gt;</code>). Done when view-source shows real tags instead of plain text.</li>
-<li><strong>Factor the HTML into a template.</strong> Create a <code>templates/</code> folder (exact spelling and case), move your HTML into <code>templates/index.html</code>, and replace the returned string in <code>app.py</code> with <code>render_template("index.html")</code>. Done when the page looks identical to Milestone 2, but <code>app.py</code> no longer contains any HTML.</li>
-<li><strong>Greet the URL's name, the naive way.</strong> Add a <code>{{ placeholder }}</code> gap to <code>templates/index.html</code>. In <code>app.py</code>, import <code>request</code>, use an <code>if "name" in request.args: ... else: ...</code> block to set <code>name</code>, and pass it to <code>render_template()</code>. Confirm <code>/?name=&lt;your name&gt;</code> shows your name and the bare <code>/</code> shows <code>"world"</code>. Then, on purpose, delete the <code>else</code> branch, visit the bare route, and read the real HTTP 400 your own code just produced, then put the <code>else</code> back.</li>
-<li><strong>Simplify to one line.</strong> Replace the whole <code>if</code>/<code>else</code> with <code>name = request.args.get("name", "world")</code>, and rename <code>placeholder</code> to <code>name</code> in both the template and the <code>render_template()</code> call. Done when the behavior is identical to Milestone 4 but the logic is one line.</li>
-<li><strong>Add a second route: <code>/about</code>.</strong> Create <code>templates/about.html</code> in the same style (doctype, head, title, a body with its own <code>{{ name }}</code> gap: something like <code>"This app was built by {{ name }}."</code>). Add <code>@app.route("/about")</code> in <code>app.py</code>, using the same <code>request.args.get("name", "world")</code> pattern. Done when <code>/</code> and <code>/about</code> each render their own template, independently, both with and without <code>?name=</code>.</li>
-<li><strong>Stretch goals.</strong> Add a third route with its own template; or accept a second query parameter (say <code>?language=</code>) alongside <code>name</code>, with its own default, and interpolate both into one sentence.</li>
-</ol>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ <code>flask run</code> serves <code>hello-flask</code> on port 5000 from cs50.dev.</li>
-<li>✅ Visiting <code>/</code> with no query string shows a default greeting; visiting <code>/?name=YourName</code> shows your actual name, and view-source proves the greeting came from the server, not the browser.</li>
-<li>✅ <code>/about</code> renders its own template, in the same style, entirely independent of <code>/</code>.</li>
-<li>✅ You can point to the single line <code>request.args.get("name", "world")</code> and explain, out loud, what each of its two arguments does.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> don't skip Milestone 4's "break it on purpose" step. Seeing your own code produce a real HTTP 400 is worth more than reading about it: it's the same status code from Lesson 35, except this time you caused it, and you fixed it.</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-predict-the-query-string-foundational">Exercise 1: Predict the query string (foundational)</h3>
-<p>Without running any code, write down what <code>name</code> would equal, using <code>request.args.get("name", "world")</code>, for each of these URLs: <code>/</code>, <code>/?name=Kelly</code>, <code>/?name=</code>, and <code>/?sport=basketball</code>. Then actually build a one-route app to check your answers, and pay special attention to the third one.</p>
-<h3 id="exercise-2-a-second-query-parameter-intermediate">Exercise 2: A second query parameter (intermediate)</h3>
-<p>Extend <code>hello-flask</code>'s <code>/</code> route to also read <code>?language=</code>, defaulting to <code>"English"</code> if absent, and interpolate both <code>name</code> and <code>language</code> into a single sentence in <code>templates/index.html</code>, such as "Hello, {{ name }}! Enjoying CS50 in {{ language }}?"</p>
-<h3 id="exercise-3-diagnose-a-broken-template-on-purpose-advanced">Exercise 3: Diagnose a broken template on purpose (advanced)</h3>
-<p>Rename your <code>templates</code> folder to something else (like <code>template</code>, singular), or delete one <code>}</code> from a <code>{{ }}</code> placeholder, and run <code>flask run</code> again. Read the actual error Flask prints in your terminal, and write one sentence explaining what it means and how you'd recognize this bug in the future without a walkthrough telling you what to look for.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>MINIMAL FLASK APP (app.py)
-  from flask import Flask, render_template, request
-  app = Flask(__name__)
-
-  @app.route(&quot;/&quot;)
-  def index():
-      name = request.args.get(&quot;name&quot;, &quot;world&quot;)
-      return render_template(&quot;index.html&quot;, name=name)
-
-REQUIREMENTS.TXT
-  flask
-
-RUN IT
-  pip install -r requirements.txt
-  flask run                      -- serves on port 5000 by default (not 8080)
-
-ROUTES
-  @app.route(&quot;/path&quot;)            -- decorator: wires a URL to the def below it
-  def some_name(): ...           -- runs whenever that URL is visited
-
-QUERY STRINGS
-  /greet?name=David              -- one key=value pair
-  /greet?name=David&amp;sport=chess  -- two, joined by &amp;
-
-TEMPLATES
-  templates/                     -- folder name is mandatory, exact, lowercase
-  render_template(&quot;file.html&quot;, key=value)   -- never include &quot;templates/&quot; in the filename
-  {{ key }}                      -- Jinja interpolation inside the HTML file
-
-REQUEST.ARGS
-  request.args[&quot;name&quot;]           -- raises trouble (HTTP 400) if &quot;name&quot; is missing
-  request.args.get(&quot;name&quot;, &quot;world&quot;)   -- safe: &quot;world&quot; only if the key is truly absent
-                                       -- ?name= (empty) still counts as present!
-
-GOLDEN RULE
-  A URL is input to your program now, not a path to a file. Everything from here
-  forward is about what your own code decides to do with that input.
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 10 · Lesson 37 (CSS and JavaScript):</strong> that lesson's whole argument was to factor styling and behavior out of hard-coded HTML; this lesson applies the exact same discipline to the HTML itself, factoring it out of <code>app.py</code> and into <code>templates/</code>.</li>
-<li><strong>Earlier callback, Module 10 · Lesson 35 (HTTP and the browser):</strong> the raw GET requests, query strings, and status codes you inspected with <code>curl</code> and DevTools are exactly what <code>@app.route</code> now answers: today, your own code sits on the other end of that conversation for the first time.</li>
-<li><strong>Earlier callback, Module 7 · Lesson 26 (Loops, functions, and exceptions):</strong> every route in this lesson is, underneath the <code>@app.route</code> decorator, an ordinary Python <code>def</code>, the same tool you used to build <code>get_height()</code> back in Module 7.</li>
-<li><strong>Next, Module 11 · Lesson 39 (Forms, layouts, and GET vs POST):</strong> you'll submit an actual HTML form to a route like this one, stop copy-pasting boilerplate HTML between templates with layout inheritance, and choose deliberately between GET and POST.</li>
-<li><strong>Later, Module 11 · Lessons 40-41:</strong> this same route-and-template pattern grows server-side validation, a real SQLite database, login sessions, and a JSON API, all built on exactly the skeleton you wrote today.</li>
-<li><strong>North star:</strong> <code>hello-flask</code> is not a throwaway exercise: it is the first running version of the database-backed web app you will finish building as this course's final capstone.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 9 - Flask" by David J. Malan, Harvard University (CS50x 2026). Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+</blockquote><div class="pager bottom"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="38-flask-fundamentals.html" class="cur" title="Start here">1</a><a href="38-flask-fundamentals-2.html" class="" title="Parts 3–5">2</a><a href="38-flask-fundamentals-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="38-flask-fundamentals-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="38" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="../module-10-web/37-css-and-javascript.html"><span class="dir">&#8592; Previous</span><b>CSS and JavaScript</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="39-forms-layouts-get-post.html"><span class="dir">Next &#8594;</span><b>Forms, Layouts, and GET vs POST</b></a></nav>
+    <div class="ls-marker" data-lesson-id="38" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="../module-10-web/37-css-and-javascript.html"><span class="dir">&#8592; Previous lesson</span><b>CSS and JavaScript</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 

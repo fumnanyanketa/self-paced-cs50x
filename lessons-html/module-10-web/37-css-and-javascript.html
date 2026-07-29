@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 10 · Lesson 37: CSS and JavaScript | Self-Paced CS50x</title>
+<title>Module 10 · Lesson 37: CSS and JavaScript (p1/4) | Self-Paced CS50x</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -49,6 +49,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -212,7 +235,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
   <div class="navlinks">
     <a href="../index.html">All lessons</a>
     <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="37-css-and-javascript-4.html#capstone">Capstone</a>
   </div>
   <div class="nav-cta">
     <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
@@ -251,7 +274,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="37-css-and-javascript-4.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -275,52 +298,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <li><a href="#factoring-it-out-the-style-tag">Factoring it out: the style tag</a></li>
 </ul>
 </li>
-<li><a href="#part-2-selectors-semantic-tags-entities-and-bootstrap">Part 2: Selectors, semantic tags, entities, and Bootstrap</a><ul>
-<li><a href="#type-selectors-arent-reusable-enough">Type selectors aren't reusable enough</a></li>
-<li><a href="#semantic-tags-hints-for-machines-not-just-humans">Semantic tags: hints for machines, not just humans</a></li>
-<li><a href="#html-entities-characters-html-cant-type-directly">HTML entities: characters HTML can't type directly</a></li>
-<li><a href="#hover-a-selector-for-a-state-not-a-tag">:hover: a selector for a state, not a tag</a></li>
-<li><a href="#bootstrap-someone-elses-css-one-link-away">Bootstrap: someone else's CSS, one link away</a></li>
-</ul>
-</li>
-<li><a href="#part-3-javascript-syntax-you-already-know-wearing-new-punctuation">Part 3: JavaScript (syntax you already know, wearing new punctuation)</a><ul>
-<li><a href="#the-one-real-programming-language-of-the-day">The one real programming language of the day</a></li>
-<li><a href="#the-dom-but-now-you-can-change-it">The DOM, but now you can change it</a></li>
-<li><a href="#three-building-blocks-queryselector-addeventlistener-innerhtml">Three building blocks: querySelector, addEventListener, innerHTML</a></li>
-</ul>
-</li>
-<li><a href="#part-4-the-dom-live-six-demos-that-bring-it-together">Part 4: The DOM, live (six demos that bring it together)</a><ul>
-<li><a href="#1-a-greeting-form">1. A greeting form</a></li>
-<li><a href="#2-color-change-buttons">2. Color-change buttons</a></li>
-<li><a href="#3-the-blink-tag-revived">3. The blink tag, revived</a></li>
-<li><a href="#4-autocomplete-search">4. Autocomplete search</a></li>
-<li><a href="#5-a-bootstrap-navbar">5. A Bootstrap navbar</a></li>
-<li><a href="#6-geolocation">6. Geolocation</a></li>
-</ul>
-</li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: Give Your Home Page a Personality</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-john-harvards-page-twice-foundational">Exercise 1: John Harvard's page, twice (foundational)</a></li>
-<li><a href="#exercise-2-three-button-mood-ring-intermediate">Exercise 2: Three-button mood ring (intermediate)</a></li>
-<li><a href="#exercise-3-tiny-autocomplete-advanced">Exercise 3: Tiny autocomplete (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 4 &middot; Start here</span><div class="seg"><a href="37-css-and-javascript.html" class="cur" title="Start here">1</a><a href="37-css-and-javascript-2.html" class="" title="Parts 2–3">2</a><a href="37-css-and-javascript-3.html" class="" title="Part 4">3</a><a href="37-css-and-javascript-4.html" class="" title="Capstone &amp; wrap-up">4</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="37-css-and-javascript-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>You'll take the plain HTML page you already wrote and give it a personality, first with your own CSS selectors and one hover effect, then with Bootstrap's ready-made styles pulled in from a CDN, and then bring it to life with a few lines of JavaScript that reach into the page's DOM and change what the user sees the instant they click, with no reload.</p>
 <blockquote>
@@ -423,442 +407,9 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <blockquote>
 <p>🔑 <strong>The single most important takeaway of this part.</strong> CSS properties are just key-value pairs, exactly like HTML attributes with different punctuation. The cascade means you almost never have to repeat a property on every element: set it once, on a shared parent or a shared selector, and let it flow down the tree.</p>
 </blockquote>
-<hr />
-<h2 id="part-2-selectors-semantic-tags-entities-and-bootstrap">Part 2: Selectors, semantic tags, entities, and Bootstrap</h2>
-<h3 id="type-selectors-arent-reusable-enough">Type selectors aren't reusable enough</h3>
-<p>Tying <code>font-size: large</code> to the <code>header</code> tag works, but only because you happen to have one <code>header</code>. If you wanted "large and centered" for some other, unrelated element too, a type selector can't help: it's tied to the tag name. CSS offers two more ways to select elements for exactly this reason:</p>
-<blockquote>
-<p>"These properties can be applied to different selections of HTML type selectors, class selectors, ID selector, attribute selector." (David Malan)</p>
-</blockquote>
-<p>A <strong>class</strong> (prefixed with <code>.</code> in CSS, written as <code>class="..."</code> in HTML) is a label you can put on <em>any number</em> of elements to reuse the same properties:</p>
-<div class="codehilite"><pre><span></span><code><span class="p">.</span><span class="nc">centered</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">text-align</span><span class="p">:</span><span class="w"> </span><span class="kc">center</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<span class="p">.</span><span class="nc">large</span><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="kc">large</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<span class="p">.</span><span class="nc">medium</span><span class="w">   </span><span class="p">{</span><span class="w"> </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="kc">medium</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<span class="p">.</span><span class="nc">small</span><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="kc">small</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-</code></pre></div>
-
-<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">body</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;centered&quot;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">header</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;large&quot;</span><span class="p">&gt;</span>John Harvard<span class="p">&lt;/</span><span class="nt">header</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">main</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;medium&quot;</span><span class="p">&gt;</span>Welcome to my home page.<span class="p">&lt;/</span><span class="nt">main</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">footer</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;small&quot;</span><span class="p">&gt;</span>Copyright <span class="ni">&amp;#169;</span> John Harvard<span class="p">&lt;/</span><span class="nt">footer</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-</code></pre></div>
-
-<p>An <strong>ID</strong> (prefixed with <code>#</code> in CSS, written as <code>id="..."</code> in HTML) is meant for exactly <em>one</em> unique element, the same uniqueness convention you'll rely on in Part 3 when JavaScript needs to find one specific node.</p>
-<h3 id="semantic-tags-hints-for-machines-not-just-humans">Semantic tags: hints for machines, not just humans</h3>
-<p>Notice the example above already stopped using generic <code>&lt;div&gt;</code>s in favor of <code>&lt;header&gt;</code>, <code>&lt;main&gt;</code>, and <code>&lt;footer&gt;</code>. These carry no different <em>visual</em> behavior on their own, but they carry meaning:</p>
-<blockquote>
-<p>"There are literally tags like header which allows me to define the header of the page, main, which allows me to define the main part of the page, and then even footer, which allows me to define that too." (David Malan)</p>
-</blockquote>
-<p>Search engines crawling a public page read these tags as hints about what matters most, the <strong>semantic web</strong>, in Malan's words: giving machines, not just people, a better sense of what they're looking at.</p>
-<h3 id="html-entities-characters-html-cant-type-directly">HTML entities: characters HTML can't type directly</h3>
-<p>A copyright symbol isn't on most keyboards, and some characters (like <code>&lt;</code>) are reserved by HTML's own syntax. HTML solves this with <strong>entities</strong>, a short, punctuated code the browser converts into a specific character:</p>
-<blockquote>
-<p>"HTML also has what are called entities." (David Malan)</p>
-</blockquote>
-<p><code>&amp;#169;</code> renders as ©. The syntax is always an ampersand, a code, and a semicolon, the same trick that lets you write a literal <code>&lt;</code> as <code>&amp;lt;</code> when you need HTML syntax to appear as plain text instead of being interpreted.</p>
-<h3 id="hover-a-selector-for-a-state-not-a-tag">:hover: a selector for a state, not a tag</h3>
-<p>CSS also has <strong>pseudo-selectors</strong>: selectors that target a temporary <em>state</em> an element can be in, rather than its tag, class, or ID. The most common is <code>:hover</code>:</p>
-<blockquote>
-<p>"I can have these pseudo selectors whereby I say the name of the tag, then a keyword like hover, which browsers know to recognize, and when I hover over an anchor, what I want to do is change the text decoration to underline temporarily." (David Malan)</p>
-</blockquote>
-<div class="codehilite"><pre><span></span><code><span class="nt">a</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="mh">#FF0000</span><span class="p">;</span>
-<span class="w">    </span><span class="k">text-decoration</span><span class="p">:</span><span class="w"> </span><span class="kc">none</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="nt">a</span><span class="p">:</span><span class="nd">hover</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">text-decoration</span><span class="p">:</span><span class="w"> </span><span class="kc">underline</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>Notice <code>#FF0000</code>, the exact hex color format from Lesson 17, now doing double duty as a CSS value. And <code>#harvard</code> here would be an ID selector, not a hex color, even though both use <code>#</code>: CSS tells them apart entirely from context (inside a <code>color</code> property, it's hex; as a bare selector, it's an ID).</p>
-<h3 id="bootstrap-someone-elses-css-one-link-away">Bootstrap: someone else's CSS, one link away</h3>
-<p>Writing every property by hand doesn't scale, which is why <strong>frameworks</strong> exist, pre-written CSS (and often JavaScript) that you adopt by reading its documentation instead of authoring your own:</p>
-<blockquote>
-<p>"One of the most popular frameworks out there nowadays and among the simplest and best documented is one called Bootstrap, which is a set of CSS classes and other features that you can use because it's open source in your own code." (David Malan)</p>
-</blockquote>
-<p>You load it from a CDN, a server someone else runs specifically to host popular files like this:</p>
-<blockquote>
-<p>"It's referencing a third party website, JSD Deliver, which is a CDN content delivery network, which is to say a server that just serves up content for other people to use." (David Malan)</p>
-</blockquote>
-<p>(That "JSD Deliver" is jsDelivr, a real, widely-used CDN: the transcript's ear for a spoken URL, not a typo you need to reproduce.)</p>
-<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">link</span>
-    <span class="na">href</span><span class="o">=</span><span class="s">&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css&quot;</span>
-    <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span><span class="p">&gt;</span>
-</code></pre></div>
-
-<p>Then a class does the rest, no new CSS required:</p>
-<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">table</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;table table-striped&quot;</span><span class="p">&gt;</span>
-    ...
-<span class="p">&lt;/</span><span class="nt">table</span><span class="p">&gt;</span>
-</code></pre></div>
-
-<p>Two lines changed the whole look of a plain table into neatly striped rows, exactly as documented on Bootstrap's own site.</p>
-<blockquote>
-<p>✅ <strong>What to do about it:</strong> before writing a CSS rule by hand, check whether Bootstrap already has a class that does it: read the docs, copy the class name, and save yourself the property-by-property work.</p>
-</blockquote>
-<hr />
-<h2 id="part-3-javascript-syntax-you-already-know-wearing-new-punctuation">Part 3: JavaScript (syntax you already know, wearing new punctuation)</h2>
-<h3 id="the-one-real-programming-language-of-the-day">The one real programming language of the day</h3>
-<p>HTML describes a tree; CSS paints it. JavaScript is different: an actual programming language, with variables, conditionals, and loops, that runs inside the browser after being downloaded like everything else:</p>
-<blockquote>
-<p>"Most every website you use is made from not only HTML and CSS, but if it's in any way interactive, odds are it's using JavaScript, a programming language that is very commonly used client side, whereby humans write the code on the server, but then your browser, as before, downloads it to the client and then it runs in your own Mac, your PC or your phone." (David Malan)</p>
-</blockquote>
-<p>Because you already know Scratch's blocks, Python, and C, JavaScript's syntax needs almost no new teaching, just a translation table:</p>
-<table>
-<thead>
-<tr>
-<th>Concept</th>
-<th>Scratch</th>
-<th>Python</th>
-<th>C</th>
-<th>JavaScript</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Declare a variable</td>
-<td><code>set counter to 0</code></td>
-<td><code>counter = 0</code></td>
-<td><code>int counter = 0;</code></td>
-<td><code>let counter = 0;</code></td>
-</tr>
-<tr>
-<td>Increment</td>
-<td><code>change counter by 1</code></td>
-<td><code>counter += 1</code></td>
-<td><code>counter++;</code></td>
-<td><code>counter++;</code></td>
-</tr>
-<tr>
-<td>Conditional</td>
-<td><code>if &lt;...&gt; then</code></td>
-<td><code>if condition:</code></td>
-<td><code>if (condition) { }</code></td>
-<td><code>if (condition) { }</code></td>
-</tr>
-<tr>
-<td>Loop 3 times</td>
-<td><code>repeat 3</code></td>
-<td><code>for _ in range(3):</code></td>
-<td><code>for (int i = 0; i &lt; 3; i++) { }</code></td>
-<td><code>for (let i = 0; i &lt; 3; i++) { }</code></td>
-</tr>
-<tr>
-<td>Loop forever</td>
-<td><code>forever</code></td>
-<td><code>while True:</code></td>
-<td><code>while (true) { }</code></td>
-<td><code>while (true) { }</code></td>
-</tr>
-</tbody>
-</table>
-<p><code>let</code> replaces a type name (<code>int</code>, <code>char *</code>) because JavaScript variables don't declare a type up front. Curly braces are back (unlike Python's indentation), and semicolons are conventionally expected (unlike C, where they're required, but similar enough that you should just keep using them).</p>
-<h3 id="the-dom-but-now-you-can-change-it">The DOM, but now you can change it</h3>
-<p>Lesson 36 introduced the DOM, the tree the browser builds from your HTML. JavaScript is what turns that tree from a one-time snapshot into something you can edit while the page is running:</p>
-<blockquote>
-<p>"What you have most powerfully though is the ability in memory to mutate this tree in real time." (David Malan)</p>
-</blockquote>
-<p>Think of your email inbox: a table row per message. Without JavaScript, seeing new mail means reloading the whole page, a whole new tree, downloaded from scratch. With JavaScript, code can add a single new table-row node to the existing tree the moment new mail arrives, leaving everything else untouched.</p>
-<h3 id="three-building-blocks-queryselector-addeventlistener-innerhtml">Three building blocks: querySelector, addEventListener, innerHTML</h3>
-<p>Nearly everything interactive on the web reduces to three pieces working together.</p>
-<p><strong><code>document.querySelector(...)</code></strong> finds a node in the tree, using the exact same selector syntax as CSS, a tag name, a <code>.class</code>, or a <code>#id</code>:</p>
-<blockquote>
-<p>"Query selector is a fancy name for a function that lets me select specific elements of the page using CSS selector." (David Malan)</p>
-</blockquote>
-<p><strong><code>addEventListener(...)</code></strong> tells a node to wait for something to happen, then run a function when it does:</p>
-<blockquote>
-<p>"Add event listener is a function or method that you can call on any element that just tells it to listen subsequently for this event, and when that event is heard, submit in this case, call the following anonymous function, otherwise known as a lambda function." (David Malan)</p>
-</blockquote>
-<p>This is the same idea as Scratch's "when green flag clicked", an <strong>event</strong> (a click, a key going up, a form submission) triggers code, instead of code just running top to bottom once.</p>
-<p><strong><code>innerHTML</code></strong> (to rewrite what's <em>inside</em> a node) and <strong><code>.style</code></strong> (to rewrite one of its CSS properties) are how your code actually changes something once it's found the right node and heard the right event.</p>
-<p>One naming quirk trips up everyone the first time: CSS properties with a hyphen, like <code>background-color</code>, become camelCase in JavaScript:</p>
-<blockquote>
-<p>"Anything with hyphens in CSS is changed to Camelcase in JavaScript." (David Malan)</p>
-</blockquote>
-<p>So <code>background-color</code> in a <code>&lt;style&gt;</code> tag is <code>element.style.backgroundColor</code> in JavaScript: a hyphen would be read as subtraction, which is why the language can't use it in a property name.</p>
-<blockquote>
-<p>🔑 <strong>The single most important takeaway of this part.</strong> Every interactive feature on the web is some version of the same three-step pattern: find a node with <code>querySelector</code>, listen for an event with <code>addEventListener</code>, and change the node (its style, or its <code>innerHTML</code>) inside the function that runs.</p>
-</blockquote>
-<hr />
-<h2 id="part-4-the-dom-live-six-demos-that-bring-it-together">Part 4: The DOM, live (six demos that bring it together)</h2>
-<div class="codehilite"><pre><span></span><code>   HTML (Lesson 36)  --&gt;  builds the DOM tree, once, on load
-   CSS  (Parts 1-2)  --&gt;  paints each node: color, size, layout
-   JS   (Part 3)     --&gt;  listens for events, edits the tree, live
-
-        event (click / keyup / submit)
-              |
-              v
-     document.querySelector(&#39;#thing&#39;)   -- finds the node
-              |
-              v
-     node.style.backgroundColor = &#39;red&#39;    -- repaint (CSS via JS)
-     node.innerHTML = &#39;&lt;li&gt;word&lt;/li&gt;&#39;      -- rebuild (new child nodes)
-</code></pre></div>
-
-<h3 id="1-a-greeting-form">1. A greeting form</h3>
-<p>Malan starts with a form, a text input, and a submit button, then wires it up three different ways to make the same point. The first attempt uses an <code>onsubmit</code> attribute directly on the <code>&lt;form&gt;</code> tag, calling a <code>greet()</code> function defined in a <code>&lt;script&gt;</code> in <code>&lt;head&gt;</code>. The refactored version moves the logic into an <code>addEventListener</code> call instead, placed at the very end of <code>&lt;body&gt;</code> (or guarded by a <code>DOMContentLoaded</code> listener), to make sure the form already exists by the time the code runs:</p>
-<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">form</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;name&quot;</span> <span class="na">placeholder</span><span class="o">=</span><span class="s">&quot;Name&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text&quot;</span> <span class="na">autocomplete</span><span class="o">=</span><span class="s">&quot;off&quot;</span> <span class="na">autofocus</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;submit&quot;</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="w">        </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;submit&#39;</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="kd">const</span><span class="w"> </span><span class="nx">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;#name&#39;</span><span class="p">).</span><span class="nx">value</span><span class="p">;</span>
-<span class="w">            </span><span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;Hello, &#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">name</span><span class="p">);</span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
-<span class="w">        </span><span class="p">});</span>
-<span class="w">    </span><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-</code></pre></div>
-
-<p><code>return false</code> stops the browser from actually submitting the form to a server: without it, the alert would flash and then the page would try to navigate away.</p>
-<h3 id="2-color-change-buttons">2. Color-change buttons</h3>
-<p>Three buttons, each with a unique <code>id</code>, each wired to change the whole page's background:</p>
-<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">button</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;red&quot;</span><span class="p">&gt;</span>R<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">button</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;green&quot;</span><span class="p">&gt;</span>G<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">button</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;blue&quot;</span><span class="p">&gt;</span>B<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">);</span>
-<span class="w">    </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;#red&#39;</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nx">body</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">backgroundColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;red&#39;</span><span class="p">;</span>
-<span class="w">    </span><span class="p">});</span>
-<span class="w">    </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;#green&#39;</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nx">body</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">backgroundColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;green&#39;</span><span class="p">;</span>
-<span class="w">    </span><span class="p">});</span>
-<span class="w">    </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;#blue&#39;</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nx">body</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">backgroundColor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;blue&#39;</span><span class="p">;</span>
-<span class="w">    </span><span class="p">});</span>
-<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-</code></pre></div>
-
-<p>Notice <code>backgroundColor</code>, not <code>background-color</code>, the camelCase rule from Part 3 in action.</p>
-<h3 id="3-the-blink-tag-revived">3. The blink tag, revived</h3>
-<p>HTML used to have an actual <code>&lt;blink&gt;</code> tag; it was ugly enough that it was removed from the language entirely, one of the rare tags to be deprecated outright. Malan brings the effect back with JavaScript instead:</p>
-<blockquote>
-<p>"This is what the blink tag used to do back in the day. Now this version is implemented instead in JavaScript code." (David Malan)</p>
-</blockquote>
-<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>hello, world<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="w">        </span><span class="nb">window</span><span class="p">.</span><span class="nx">setInterval</span><span class="p">(</span><span class="nx">blink</span><span class="p">,</span><span class="w"> </span><span class="mf">500</span><span class="p">);</span>
-<span class="w">        </span><span class="kd">function</span><span class="w"> </span><span class="nx">blink</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="kd">const</span><span class="w"> </span><span class="nx">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">);</span>
-<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">body</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">visibility</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">&#39;hidden&#39;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="nx">body</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">visibility</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;visible&#39;</span><span class="p">;</span>
-<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="nx">body</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">visibility</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;hidden&#39;</span><span class="p">;</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-</code></pre></div>
-
-<p><code>window.setInterval(blink, 500)</code> calls the <code>blink</code> function every 500 milliseconds, forever. One more naming quirk to note along the way:</p>
-<blockquote>
-<p>"You would think that the opposite of visible would be invisible, but in CSS the opposite of visible is hidden. Just have to memorize stupid things like that." (David Malan)</p>
-</blockquote>
-<h3 id="4-autocomplete-search">4. Autocomplete search</h3>
-<p>Backed by a large JavaScript array of words (<code>large.js</code>, built from Problem Set 5's dictionary), a <code>keyup</code> listener filters that array on every keystroke and rewrites an empty <code>&lt;ul&gt;</code> with matching results:</p>
-<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;q&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text&quot;</span> <span class="na">placeholder</span><span class="o">=</span><span class="s">&quot;Query&quot;</span> <span class="na">autocomplete</span><span class="o">=</span><span class="s">&quot;off&quot;</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">ul</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;results&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;large.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="w">    </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;#q&#39;</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;keyup&#39;</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="kd">const</span><span class="w"> </span><span class="nx">input</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;#q&#39;</span><span class="p">);</span>
-<span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="nx">html</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">;</span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">input</span><span class="p">.</span><span class="nx">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">const</span><span class="w"> </span><span class="nx">word</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="nx">WORDS</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">word</span><span class="p">.</span><span class="nx">startsWith</span><span class="p">(</span><span class="nx">input</span><span class="p">.</span><span class="nx">value</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<span class="w">                    </span><span class="nx">html</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s1">&#39;&lt;li&gt;&#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">word</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">&#39;&lt;/li&gt;&#39;</span><span class="p">;</span>
-<span class="w">                </span><span class="p">}</span>
-<span class="w">            </span><span class="p">}</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;#results&#39;</span><span class="p">).</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">html</span><span class="p">;</span>
-<span class="w">    </span><span class="p">});</span>
-<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-</code></pre></div>
-
-<p>This is exactly the pattern behind every search box you've ever typed into:</p>
-<blockquote>
-<p>"Someone wrote JavaScript that's listening for keyU or the like, and then dynamically populating an unordered list or in this case a much prettier list of the matching results." (David Malan)</p>
-</blockquote>
-<h3 id="5-a-bootstrap-navbar">5. A Bootstrap navbar</h3>
-<p>Bootstrap isn't only CSS classes: it ships its own JavaScript too, for things like a responsive navigation bar that collapses into a "hamburger" icon on narrow screens:</p>
-<blockquote>
-<p>"It's listening for clicks on this hamburger menu and revealing the menu options that way." (David Malan)</p>
-</blockquote>
-<p>You get this by copying Bootstrap's documented navbar markup and including both their CSS <code>&lt;link&gt;</code> and their JavaScript <code>&lt;script&gt;</code>, no hand-written JavaScript of your own required.</p>
-<h3 id="6-geolocation">6. Geolocation</h3>
-<p>One more built-in browser feature, exposed as a JavaScript object called <code>navigator</code>:</p>
-<blockquote>
-<p>"There exists another global variable in JavaScript in browsers called Navigator, which has a property called an object called geolocation which has a function called get current position that takes an argument which is just an anonymous function, which means call this code when you're ready to know the coordinates because it might take a while to figure out your GPS coordinates." (David Malan)</p>
-</blockquote>
-<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="w">    </span><span class="nx">navigator</span><span class="p">.</span><span class="nx">geolocation</span><span class="p">.</span><span class="nx">getCurrentPosition</span><span class="p">(</span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">position</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span>
-<span class="w">            </span><span class="nx">position</span><span class="p">.</span><span class="nx">coords</span><span class="p">.</span><span class="nx">latitude</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">&#39;, &#39;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">position</span><span class="p">.</span><span class="nx">coords</span><span class="p">.</span><span class="nx">longitude</span><span class="p">;</span>
-<span class="w">    </span><span class="p">});</span>
-<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-</code></pre></div>
-
-<p>The browser asks the visitor's permission first (for privacy), then hands your callback function the coordinates once they're known, the same building block behind every map or delivery app asking "can this site use your location?"</p>
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong>CSS is skin, not skeleton.</strong> Properties are key-value pairs, exactly like HTML attributes, applied to elements through selectors.</li>
-<li><strong>Inline style → <code>&lt;style&gt;</code> tag → external <code>.css</code> file is a one-way street of "factoring out."</strong> Each step separates content (HTML) from presentation (CSS) a little further.</li>
-<li><strong>The cascade is the "C" in CSS.</strong> A property set on a parent, or via a type selector, flows down to every descendant unless something more specific overrides it.</li>
-<li><strong>Three selector types cover most needs.</strong> Type (a tag name), class (<code>.name</code>, reusable across many elements), and ID (<code>#name</code>, unique to one), the same lookup JavaScript's <code>querySelector</code> uses.</li>
-<li><strong>A framework is just someone else's classes, loaded from a CDN.</strong> Bootstrap changes your page's whole look with one <code>&lt;link&gt;</code> and a couple of class names, no new CSS required.</li>
-<li><strong>JavaScript is the one real programming language of the three.</strong> Same variables, conditionals, and loops as C, with <code>let</code> instead of a type and no semicolons required (but keep using them).</li>
-<li><strong>Everything interactive reduces to one pattern.</strong> Find a node with <code>querySelector</code>, listen for an event with <code>addEventListener</code>, and change it: a <code>.style</code> property or its <code>innerHTML</code>.</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ Forgetting to reload the page after editing CSS or JavaScript: the browser is still showing the last downloaded copy, not your saved file.</li>
-<li>❌ Writing a CSS property with a hyphen (<code>background-color</code>) inside JavaScript exactly as written. JavaScript needs the camelCase form (<code>backgroundColor</code>); the hyphenated version silently does nothing.</li>
-<li>❌ Placing a <code>&lt;script&gt;</code> tag in <code>&lt;head&gt;</code> that tries to <code>querySelector</code> an element defined later in <code>&lt;body&gt;</code>: that element doesn't exist yet, so the selector returns nothing. Put the script at the end of <code>&lt;body&gt;</code>, or guard it with a <code>DOMContentLoaded</code> listener.</li>
-<li>❌ Giving two elements the same <code>id</code>. IDs are supposed to be unique; JavaScript's <code>querySelector('#name')</code> will quietly return only the first match, changing the wrong element (or nothing at all) and leaving you confused about why.</li>
-<li>❌ Assuming Bootstrap replaces the need to understand plain CSS. Bootstrap is just someone else's classes; when its default look isn't quite right, you still need type, class, and ID selectors to override it.</li>
-<li>❌ Confusing a class (reusable, <code>.name</code>) with an ID (unique, <code>#name</code>), using one where you meant the other is a common reason a selector matches nothing, or matches too much.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: Give Your Home Page a Personality</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. You'll restyle the exact <code>home.html</code> you built in Lesson 36 three times over, your own CSS, then Bootstrap, then one JavaScript button, proving to yourself that you can control both the look and the behavior of a page you already know how to build.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>The same single file, <code>home.html</code>, still served locally with <code>http-server</code> on port 8080. By the end it will contain: a <code>&lt;style&gt;</code> tag using a type, a class, and an ID selector; one <code>:hover</code> effect; a swapped-in Bootstrap CDN link with at least one Bootstrap class applied; and one JavaScript button that changes the page's colors on click, with no reload.</p>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in this Capstone</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Inline style → style tag (Part 1)</td>
-<td>Refactoring your home page's look into one <code>&lt;style&gt;</code> block in <code>&lt;head&gt;</code>.</td>
-</tr>
-<tr>
-<td>Cascade (Part 1)</td>
-<td>Setting one property once, on <code>body</code> or <code>main</code>, instead of repeating it.</td>
-</tr>
-<tr>
-<td>Type / class / ID selectors (Part 2)</td>
-<td>Styling all paragraphs at once, a reusable class, and one unique element.</td>
-</tr>
-<tr>
-<td>Semantic tags + entities (Part 2)</td>
-<td>Wrapping your page in <code>header</code>/<code>main</code>/<code>footer</code> and adding a real copyright entity.</td>
-</tr>
-<tr>
-<td><code>:hover</code> (Part 2)</td>
-<td>Making a link or button visibly react when the mouse moves over it.</td>
-</tr>
-<tr>
-<td>Bootstrap via CDN (Part 2)</td>
-<td>Swapping your hand-written CSS for Bootstrap's classes with one <code>&lt;link&gt;</code> tag.</td>
-</tr>
-<tr>
-<td><code>querySelector</code> + <code>addEventListener</code> + <code>.style</code> (Part 3-4)</td>
-<td>The button that changes your page's colors without reloading.</td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>Reopen your home page.</strong> On cs50.dev, open the <code>home.html</code> you built in Lesson 36 (or start a fresh copy with the same skeleton) and confirm <code>http-server</code> still serves it on port 8080.</li>
-<li><strong>Write your own <code>&lt;style&gt;</code> tag.</strong> In <code>&lt;head&gt;</code>, add a <code>&lt;style&gt;</code> block with at least one type selector (e.g. <code>body { }</code>), one reusable class applied to two or more elements (e.g. <code>.highlight { }</code>), and one ID selector for a single unique element (e.g. <code>#name { }</code>).</li>
-<li><strong>Add semantic structure.</strong> Wrap your existing sections in <code>&lt;header&gt;</code>, <code>&lt;main&gt;</code>, and <code>&lt;footer&gt;</code> instead of generic <code>&lt;div&gt;</code>s, and add a real HTML entity: a copyright symbol (<code>&amp;#169;</code>) in your footer is a good fit.</li>
-<li><strong>Add one <code>:hover</code> effect.</strong> Pick a link or button and give it a rule like <code>a:hover { text-decoration: underline; }</code> so it visibly reacts the moment the mouse moves over it.</li>
-<li><strong>Swap in Bootstrap.</strong> Add Bootstrap's CDN <code>&lt;link&gt;</code> to <code>&lt;head&gt;</code>, then apply at least one real Bootstrap class (<code>table table-striped</code> on a table, or <code>btn btn-primary</code> on a button) and confirm the look changes with no new CSS of your own.</li>
-<li><strong>Add one JavaScript behavior.</strong> Add a button (or reuse three, for red/green/blue) with a unique <code>id</code>, then write a <code>&lt;script&gt;</code> that uses <code>document.querySelector()</code> to find it, <code>addEventListener('click', ...)</code> to listen for a click, and <code>.style.backgroundColor = '...'</code> to change the page's color live.</li>
-<li><strong>Reload and verify everything.</strong> Confirm every change (CSS and JavaScript alike) actually shows up after a manual reload. Trust what the browser shows you right now, not what you remember writing.</li>
-<li><strong>Stretch goals.</strong> Add a second and third color button; recreate the blink effect on one small element using <code>window.setInterval</code> and toggling <code>style.visibility</code>; or wire up a tiny autocomplete over an array of 10 words you choose, using <code>keyup</code> and <code>innerHTML</code>.</li>
-</ol>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ Your home page has a <code>&lt;style&gt;</code> tag with at least one type selector, one class selector (used on two or more elements), and one ID selector.</li>
-<li>✅ At least one element visibly changes when you hover your mouse over it.</li>
-<li>✅ Your page loads Bootstrap from a CDN <code>&lt;link&gt;</code>, and at least one Bootstrap class is visibly changing something (compare it against removing the class).</li>
-<li>✅ Clicking your button changes the page's background or text color immediately, with no page reload, using <code>querySelector</code> + <code>addEventListener</code>.</li>
-<li>✅ You reloaded the page after your very last edit and it behaves exactly as you expect.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> open developer tools' Elements panel and confirm the CSS you expect is actually attached to the node you clicked, the same trick Malan uses throughout the lecture to debug his own examples live, on his own page, in real time.</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-john-harvards-page-twice-foundational">Exercise 1: John Harvard's page, twice (foundational)</h3>
-<p>Build a three-section page (a name, a welcome line, and a copyright line) exactly as Malan does it live: first stylize each section with an inline <code>style</code> attribute (different <code>font-size</code> per section, <code>text-align: center</code> on all three), confirm it in the browser, then refactor into one <code>&lt;style&gt;</code> tag in <code>&lt;head&gt;</code> using <code>header</code>/<code>main</code>/<code>footer</code> type selectors, and move <code>text-align: center</code> up to <code>body</code> so it's written exactly once, thanks to the cascade.</p>
-<h3 id="exercise-2-three-button-mood-ring-intermediate">Exercise 2: Three-button mood ring (intermediate)</h3>
-<p>Build <code>background.html</code> from scratch: three buttons labeled R, G, and B, each with a unique <code>id</code>, plus a <code>&lt;script&gt;</code> that uses <code>querySelector</code> and <code>addEventListener('click', ...)</code> on each button to set <code>document.querySelector('body').style.backgroundColor</code>. Add a fourth button that resets the color back to white.</p>
-<h3 id="exercise-3-tiny-autocomplete-advanced">Exercise 3: Tiny autocomplete (advanced)</h3>
-<p>Write a JavaScript array of 10 words you choose, a text <code>&lt;input&gt;</code>, and an empty <code>&lt;ul&gt;</code>. On the <code>keyup</code> event, loop over your array with <code>for (const word of words)</code>, check whether each word starts with the current input value using <code>.startsWith()</code>, and rewrite the <code>&lt;ul&gt;</code>'s <code>innerHTML</code> with one <code>&lt;li&gt;</code> per match, the same technique behind the search-box autocomplete you use every day.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>CSS: THREE PLACES TO WRITE IT
-  inline    &lt;p style=&quot;color: red;&quot;&gt;...&lt;/p&gt;            -- one element, one-off
-  internal  &lt;style&gt; p { color: red; } &lt;/style&gt;         -- in &lt;head&gt;, whole page
-  external  &lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot;&gt;   -- separate file, reusable
-
-SELECTORS
-  type      body { }        -- every &lt;body&gt; element
-  class     .name { }       -- every element with class=&quot;name&quot; (reusable)
-  ID        #name { }       -- the one element with id=&quot;name&quot; (unique)
-  pseudo    a:hover { }     -- a state, not a tag -- fires on mouseover
-
-CASCADE
-  set a property on a parent (or use a type selector) and it flows down to
-  every child unless a more specific rule overrides it
-
-SEMANTIC TAGS + ENTITIES
-  &lt;header&gt; &lt;main&gt; &lt;footer&gt;          -- hints for humans and search engines
-  &amp;#169;                             -- HTML entity for the copyright symbol (c)
-
-BOOTSTRAP VIA CDN
-  &lt;link href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css&quot;
-        rel=&quot;stylesheet&quot;&gt;
-  &lt;table class=&quot;table table-striped&quot;&gt;   -- someone else&#39;s CSS, one class away
-
-JS SYNTAX VS C / PYTHON
-  let x = 0;                 -- variable, no type
-  x++;                       -- same as C, not Python
-  if (x &gt; 0) { }             -- curly braces, not indentation
-  for (let i = 0; i &lt; 3; i++) { }
-  while (true) { }
-  background-color  (CSS)  -&gt;  backgroundColor  (JS)   -- hyphen becomes camelCase
-
-DOM IN THREE PIECES
-  document.querySelector(&#39;#id&#39;)       -- find a node
-  node.addEventListener(&#39;click&#39;, fn)  -- listen for an event (click, keyup, submit...)
-  node.innerHTML = &#39;&lt;li&gt;...&lt;/li&gt;&#39;     -- rewrite what&#39;s inside a node
-  node.style.backgroundColor = &#39;red&#39;  -- rewrite a CSS property live
-
-THE ONE RULE THAT MATTERS MOST
-  Everything interactive on the web is: listen for an event, find a node,
-  change it. That&#39;s the whole trick behind buttons, autocomplete, and navbars.
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 10 · Lesson 36 (Building pages with HTML):</strong> gave you the plain skeleton, and the exact DOM tree this lesson's CSS paints and JavaScript now reaches into and edits live.</li>
-<li><strong>Earlier callback, Module 5 · Lesson 17 (Pixels, hex, and addresses):</strong> the hex color codes you met there (<code>#FF0000</code>) are exactly the values CSS's <code>color</code> and <code>background-color</code> properties accept.</li>
-<li><strong>Earlier callback, Module 2 (C) and Module 1 · Lesson 4 (Programming in Scratch):</strong> JavaScript's <code>let</code>, <code>if</code>, and <code>for</code> are the same ideas as C's syntax and Scratch's blocks, just with different punctuation.</li>
-<li><strong>Next, Module 11 · Lesson 38 (Flask fundamentals: routes and templates):</strong> a Python server starts generating the HTML you've been writing by hand, but it will still load exactly this CSS and this JavaScript, unchanged.</li>
-<li><strong>North star:</strong> the style tag, the Bootstrap swap, and the color-change button you build today are, quite literally, the entire look and feel of the database-backed web app you'll finish this course with.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 8 - HTML, CSS, JavaScript" by David J. Malan, Harvard University (CS50x 2026). Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+<hr /><div class="pager bottom"><span class="pcount">Page 1 of 4 &middot; Start here</span><div class="seg"><a href="37-css-and-javascript.html" class="cur" title="Start here">1</a><a href="37-css-and-javascript-2.html" class="" title="Parts 2–3">2</a><a href="37-css-and-javascript-3.html" class="" title="Part 4">3</a><a href="37-css-and-javascript-4.html" class="" title="Capstone &amp; wrap-up">4</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="37-css-and-javascript-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="37" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="36-html.html"><span class="dir">&#8592; Previous</span><b>Building Pages with HTML</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="../module-11-flask/38-flask-fundamentals.html"><span class="dir">Next &#8594;</span><b>Flask Fundamentals: Routes and Templates</b></a></nav>
+    <div class="ls-marker" data-lesson-id="37" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="36-html.html"><span class="dir">&#8592; Previous lesson</span><b>Building Pages with HTML</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 

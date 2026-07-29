@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 11 · Lesson 41: Sessions, Carts, and APIs | Self-Paced CS50x</title>
+<title>Module 11 · Lesson 41: Sessions, Carts, and APIs (p1/3) | Self-Paced CS50x</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -49,6 +49,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -212,7 +235,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
   <div class="navlinks">
     <a href="../index.html">All lessons</a>
     <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="41-sessions-carts-apis-3.html#capstone">Capstone</a>
   </div>
   <div class="nav-cta">
     <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
@@ -251,7 +274,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="41-sessions-carts-apis-3.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -271,33 +294,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <li><a href="#prerequisites">Prerequisites</a></li>
 <li><a href="#part-1-cookies-and-sessions-the-hand-stamp-trick">Part 1: Cookies and sessions (the hand-stamp trick)</a></li>
 <li><a href="#part-2-a-loginlogout-demo-usernames-only-on-purpose">Part 2: A login/logout demo (usernames only, on purpose)</a></li>
-<li><a href="#part-3-a-shopping-cart-one-list-one-session-key">Part 3: A shopping cart (one list, one session key)</a></li>
-<li><a href="#part-4-search-as-an-api-like-wildcards-and-jsonify">Part 4: Search as an API (LIKE, wildcards, and jsonify())</a></li>
-<li><a href="#part-5-how-the-pieces-combine">Part 5: How the pieces combine</a></li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: Give your registration app accounts and an API</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-welcome-back-foundational">Exercise 1: Welcome back (foundational)</a></li>
-<li><a href="#exercise-2-a-tiny-cart-intermediate">Exercise 2: A tiny cart (intermediate)</a></li>
-<li><a href="#exercise-3-one-query-two-audiences-advanced">Exercise 3: One query, two audiences (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="41-sessions-carts-apis.html" class="cur" title="Start here">1</a><a href="41-sessions-carts-apis-2.html" class="" title="Parts 3–5">2</a><a href="41-sessions-carts-apis-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="41-sessions-carts-apis-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>A <strong>session</strong> (a small dictionary Flask keeps for each visitor, tied to a cookie in their browser) is the one idea behind logging someone in, giving them a shopping cart that's theirs alone, and it has nothing to do with the last trick: a search route that hands back plain <strong>JSON</strong> instead of a web page, so any program (not just a browser) can use your data.</p>
 <blockquote>
@@ -414,230 +417,9 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <blockquote>
 <p>❌ <strong>The trap:</strong> never store a real password, or anything else genuinely sensitive, directly inside a cookie or in plain text inside <code>session</code>. A session is convenient, not automatically secure. Real logins store a <em>hashed</em> password on the server and keep only a meaningless session identifier in the cookie, which is exactly what Problem Set 9 teaches.</p>
 <p>✅ <strong>What to do about it:</strong> for this lesson and its Capstone, treat "logged in" as nothing more than "a username is sitting in <code>session</code>." That's honest about what the demo does, and it's a safe habit for the pedagogical version of login you're about to build.</p>
-</blockquote>
-<h2 id="part-3-a-shopping-cart-one-list-one-session-key">Part 3: A shopping cart (one list, one session key)</h2>
-<p>Once you can stash a username in <code>session</code>, storing a shopping cart is the exact same trick applied to a list instead of a string. Malan frames the whole idea this way:</p>
-<blockquote>
-<p>"A session essentially gives you the ability to implement a shopping cart like this, where the shopping cart, of course, in the real world is specific to each user." (David Malan)</p>
-</blockquote>
-<p>The demo uses a tiny bookstore database (an IMDb-style table of books, each with an <code>id</code> and a <code>title</code>) and a page that lists every book with an "Add to Cart" button. Each button is a form with a hidden input carrying that book's <code>id</code>, submitted by POST to a <code>/cart</code> route:</p>
-<div class="codehilite"><pre><span></span><code><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/cart&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">])</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">cart</span><span class="p">():</span>
-    <span class="k">if</span> <span class="s2">&quot;cart&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">session</span><span class="p">:</span>
-        <span class="n">session</span><span class="p">[</span><span class="s2">&quot;cart&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-
-    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
-        <span class="nb">id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">id</span><span class="p">:</span>
-            <span class="n">session</span><span class="p">[</span><span class="s2">&quot;cart&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s2">&quot;/cart&quot;</span><span class="p">)</span>
-
-    <span class="n">books</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-        <span class="s2">&quot;SELECT * FROM books WHERE id IN (?)&quot;</span><span class="p">,</span> <span class="n">session</span><span class="p">[</span><span class="s2">&quot;cart&quot;</span><span class="p">]</span>
-    <span class="p">)</span>
-    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;cart.html&quot;</span><span class="p">,</span> <span class="n">books</span><span class="o">=</span><span class="n">books</span><span class="p">)</span>
-</code></pre></div>
-
-<p>Two ideas do all the work here. First, <code>session["cart"]</code> starts life as an empty list the very first time a visitor shows up, not a database table, not a global variable shared by everyone, just a list that belongs to <em>this</em> browser's session. Second, every "Add to Cart" click appends one more book <code>id</code> onto that same list, and the <code>GET</code> branch turns around and asks the database for every book whose <code>id</code> is in that list, so the cart page always reflects exactly what this one visitor has added.</p>
-<blockquote>
-<p>🔑 <strong>A cart is nothing more than a list under one session key.</strong> <code>session["cart"]</code> behaves like any Python list (append to it, loop over it, look things up by the IDs it contains) except Flask quietly keeps a separate copy for every visitor.</p>
-</blockquote>
-<h2 id="part-4-search-as-an-api-like-wildcards-and-jsonify">Part 4: Search as an API (<code>LIKE</code>, wildcards, and <code>jsonify()</code>)</h2>
-<p>The last building block starts from something familiar: a search box, like Google's, that queries a table of TV shows. The first version does an exact match:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">shows</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM shows WHERE title = ?&quot;</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;q&quot;</span><span class="p">))</span>
-</code></pre></div>
-
-<p>Typing <code>The Office</code> (exact capitalization, exact wording) works. Typing <code>office</code> or <code>the office</code> returns nothing, because <code>=</code> in SQL demands an exact match. This is where <code>LIKE</code> and the <code>%</code> wildcard you met in Module 8 come back, combined with a placeholder to keep the query safe:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">shows</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-    <span class="s2">&quot;SELECT * FROM shows WHERE title LIKE ?&quot;</span><span class="p">,</span> <span class="s2">&quot;%&quot;</span> <span class="o">+</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;q&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;%&quot;</span>
-<span class="p">)</span>
-</code></pre></div>
-
-<p>Malan explains exactly what the <code>%</code> characters are doing:</p>
-<blockquote>
-<p>"I want to tolerate zero or more characters to the left via the SQL wildcard and zero or more characters to the right." (David Malan)</p>
-</blockquote>
-<p>Wrapping the visitor's search term in <code>%</code> on both sides turns "must match exactly" into "must appear somewhere in this text, in any case", so <code>office</code>, <code>The Office</code>, and <code>the office</code> all now match the same rows. The <code>?</code> placeholder still does the job it always does: it lets CS50's SQL library safely insert the visitor's text without ever risking a SQL injection attack, even though the value being inserted now includes those extra <code>%</code> characters.</p>
-<p>So far, this route still returns a rendered template: a bulleted list of matching titles, meant for a human looking at a browser. But nothing requires that. Malan reframes what a route like this really is:</p>
-<blockquote>
-<p>"An API is an application programming interface... you can call to get data from someone else's services generally using HTTP, and you can return the data in any number of formats: in text format, in HTML format, or in something called JSON format, which is short for JavaScript object notation." (David Malan)</p>
-</blockquote>
-<p>The same <code>SELECT ... LIKE ?</code> query can back two completely different routes: one that renders a template full of <code>&lt;li&gt;</code> tags for a human, and one that skips the template entirely and hands back raw data for a program:</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">jsonify</span>
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/api/search&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">api_search</span><span class="p">():</span>
-    <span class="n">q</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;q&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-    <span class="n">shows</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-        <span class="s2">&quot;SELECT * FROM shows WHERE title LIKE ?&quot;</span><span class="p">,</span> <span class="s2">&quot;%&quot;</span> <span class="o">+</span> <span class="n">q</span> <span class="o">+</span> <span class="s2">&quot;%&quot;</span>
-    <span class="p">)</span>
-    <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">shows</span><span class="p">)</span>
-</code></pre></div>
-
-<p>Malan describes what that last function is doing to the rows that came back from the database:</p>
-<blockquote>
-<p>"I'm using a crazy named function called [j]sonify, which is just another function that comes with Flask itself that has the effect of taking the list of Python dictionaries that came back from my SQL database... [and turning it into something you can] serve it to anyone on the internet, myself included, as a service." (David Malan)</p>
-</blockquote>
-<p>(The lecture transcript renders this word phonetically as "Jasonify": it's Flask's real function, <code>jsonify()</code>.) Where <code>render_template()</code> hands back a full HTML page meant for a browser to draw on screen, <code>jsonify()</code> hands back plain text formatted as JSON (square brackets for a list, curly braces for each row's key-value pairs) with the right HTTP header attached so any program reading the response knows to parse it as JSON, not display it as a page. And this is exactly the same pattern you already saw from the other side, all the way back in Lesson 1:</p>
-<blockquote>
-<p>"If you now think way back to week 0... where I was writing code that talked to open AI's so-called API to get responses from our server side cat, they were sending us JavaScript object notation like this, and I was just grabbing the data that I actually cared about." (David Malan)</p>
-</blockquote>
-<p>The chatbot in Lesson 1 was the <em>client</em> calling someone else's JSON API. Here, you're the one <em>building</em> the API: the same shape, from the other side of the conversation.</p>
-<blockquote>
-<p>💡 <strong>One query, two audiences.</strong> The SQL query never changes. What changes is only the last line of the route: <code>render_template(...)</code> for a human in a browser, <code>jsonify(...)</code> for another program. That's the entire difference between a web page and an API.</p>
-</blockquote>
-<h2 id="part-5-how-the-pieces-combine">Part 5: How the pieces combine</h2>
-<p>None of these three ideas depend on each other technically, but real apps stack them together constantly: log a user in, remember something about them across multiple requests, and expose a search feature both to people and to other programs.</p>
-<div class="codehilite"><pre><span></span><code>Browser                                   Flask server
-   |  1. POST /login  {name: &quot;david&quot;}        |
-   |-----------------------------------------&gt;|  session[&quot;name&quot;] = &quot;david&quot;
-   |  2. Set-Cookie: session=abc123           |
-   |&lt;-----------------------------------------|
-   |                                          |
-   |  3. GET /  Cookie: session=abc123        |
-   |-----------------------------------------&gt;|  reads session.get(&quot;name&quot;) -&gt; &quot;david&quot;
-   |  4. &quot;logged in as david&quot;                 |
-   |&lt;-----------------------------------------|
-   |                                          |
-   |  5. POST /cart  {id: 2}  Cookie: ...      |
-   |-----------------------------------------&gt;|  session[&quot;cart&quot;].append(&quot;2&quot;)
-   |                                          |
-   |  6. GET /api/search?q=office              |
-   |-----------------------------------------&gt;|  SELECT ... LIKE &#39;%office%&#39;
-   |  7. [{&quot;id&quot;: 1, &quot;title&quot;: &quot;The Office&quot;}]    |  &lt;- jsonify(), not a template
-   |&lt;-----------------------------------------|
-</code></pre></div>
-
-<p>Steps 1-4 are the login demo from Part 2. Step 5 is the cart from Part 3: note it rides on the very same cookie that logging in planted. Steps 6-7 are the API from Part 4, and notice they don't even need a session at all: an API route can be completely public, or you could just as easily check <code>session.get("name")</code> inside it too, if you wanted search results limited to what one logged-in user is allowed to see.</p>
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong>Cookies turn stateless HTTP into something that feels connected.</strong> A <code>Set-Cookie</code> header plants a hand stamp; a <code>Cookie</code> header presents it again on every later request.</li>
-<li><strong>A session is a per-user dictionary, backed by Flask-Session.</strong> You read and write <code>session[...]</code> like any Python dict; the cookie is just how Flask knows which visitor's copy to use.</li>
-<li><strong>A shopping cart is a list under one session key.</strong> <code>session["cart"]</code> starts empty, gets appended to, and is looked up with a single <code>WHERE id IN (...)</code> query, nothing more exotic than that.</li>
-<li><strong><code>LIKE</code> plus <code>%</code> wildcards turn an exact match into a fuzzy search.</strong> Wrapping a search term in <code>%...%</code> finds it anywhere in the text, case-insensitively.</li>
-<li><strong><code>jsonify()</code> turns a route into an API.</strong> The same SQL query can feed a human-facing HTML page or a machine-facing JSON response: the only difference is the last line of the route.</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ Storing a real password (or anything else sensitive) directly in <code>session</code> or a cookie instead of behind a hashed, server-side check: fine for this lesson's pedagogical login, not fine for anything real (that's what Problem Set 9 fixes).</li>
-<li>❌ Appending to <code>session["cart"]</code> without first checking <code>if "cart" not in session: session["cart"] = []</code>: the very first visit will crash trying to append to a key that doesn't exist yet.</li>
-<li>❌ Building a <code>LIKE</code> query with an f-string (<code>f"...LIKE '%{q}%'"</code>) instead of a placeholder: wrapping in <code>%</code> doesn't make string-building safe; you still need <code>?</code> to avoid SQL injection.</li>
-<li>❌ Rendering an HTML template from a route meant to be an API: a third-party program calling <code>/api/search</code> doesn't want a full web page back, it wants <code>jsonify()</code>'s plain data.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: Give your registration app accounts and an API</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. You'll take the database-backed registration app from Lesson 40 and turn it into something that feels like a real product: it knows who you are, it remembers what's yours, and it can talk to other programs, not just browsers.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>Starting from your Lesson 40 registration app (name + sport, stored in SQLite), you will add:</p>
-<ul>
-<li>A session-backed login, using a username only (no password), exactly as the lecture does it.</li>
-<li>A logout route that clears the session.</li>
-<li>A per-user "my registrations" view that only shows the rows belonging to whoever is logged in.</li>
-<li>A <code>/api/search</code> route that filters registrants with <code>LIKE</code> and returns the results as JSON, not HTML.</li>
-</ul>
-<p>This is a real piece of your course's north-star project: a database-backed web app with user accounts and an API is exactly what makes a final project feel like a real application instead of a form that dumps into a table.</p>
-<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in the Capstone</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Sessions (Part 1)</td>
-<td>Storing and reading <code>session["username"]</code> on every route.</td>
-</tr>
-<tr>
-<td>Login/logout (Part 2)</td>
-<td>Milestones 1 and 2: the login and logout routes themselves.</td>
-</tr>
-<tr>
-<td>Sessions as per-user state (Part 3)</td>
-<td>Milestone 3 and 4: guarding the form and filtering "my registrations" by username.</td>
-</tr>
-<tr>
-<td><code>LIKE</code> + <code>jsonify()</code> (Part 4)</td>
-<td>Milestone 5: the <code>/api/search</code> route.</td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>Add a login route.</strong> <code>GET /login</code> shows a form with just a name field, no password. <code>POST /login</code> reads <code>request.form.get("name")</code>, stores it as <code>session["username"]</code>, and redirects to <code>/</code>. Done when reloading <code>/</code> after logging in shows your name.</li>
-<li><strong>Add a logout route.</strong> <code>GET /logout</code> calls <code>session.clear()</code> and redirects to <code>/</code>. Done when <code>/</code> goes back to showing "not logged in" afterward.</li>
-<li><strong>Guard the registration form.</strong> Before showing or accepting the registration form, check <code>if "username" not in session</code> and redirect to <code>/login</code> if so. Use <code>session["username"]</code> as the registrant's name automatically, instead of asking the visitor to type it again. Done when visiting the registration route while logged out sends you to <code>/login</code> first.</li>
-<li><strong>Build a "my registrations" view.</strong> Add a route (for example <code>/my-registrations</code>) that runs <code>SELECT * FROM registrants WHERE name = ?</code> using <code>session["username"]</code>, and renders a table of just those rows. Done when two different logged-in usernames each see only their own registrations, never each other's.</li>
-<li><strong>Build a JSON search API.</strong> Add <code>/api/search</code> that reads <code>?q=</code> from <code>request.args</code>, runs <code>SELECT * FROM registrants WHERE name LIKE ? OR sport LIKE ?</code> with the query wrapped in <code>%...%</code>, and returns <code>jsonify(rows)</code>, no template. Done when opening <code>/api/search?q=bas</code> directly in a browser shows raw JSON (brackets and quotes), not a formatted page.</li>
-<li><strong>Stretch goals.</strong> Add a real password field and use <code>werkzeug.security.generate_password_hash</code> / <code>check_password_hash</code> instead of a bare username: this is precisely what CS50's official <strong>Problem Set 9, Finance,</strong> walks you through next, so treat this milestone as a bridge to that problem set rather than something to fully solve here. Or: make <code>/api/search</code> return a friendly JSON error, like <code>{"error": "missing q"}</code>, when no query is given.</li>
-</ol>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ Visiting the registration form while logged out redirects you to <code>/login</code> first.</li>
-<li>✅ Logging in as two different usernames and checking "my registrations" shows two different, non-overlapping tables.</li>
-<li>✅ <code>/api/search?q=...</code> returns a JSON array you can view directly in a browser tab or with <code>curl</code>, not an HTML page.</li>
-<li>✅ You can explain, in one sentence, why this login isn't secure enough for a real product, and name the CS50 problem set (Finance, Problem Set 9) that teaches the fix.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> don't let "no passwords" quietly become your habit outside this lesson. The moment you handle a real password anywhere, hash it. Never store or compare it in plain text.</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-welcome-back-foundational">Exercise 1: Welcome back (foundational)</h3>
-<p>Add a "Welcome back, <code>&lt;name&gt;</code>" line and a login/logout link to the homepage of any Flask app you've built, using <code>session.get("name")</code> exactly like Malan's <code>index.html</code> example in Part 2. Confirm it correctly shows "not logged in" before you log in and your name afterward.</p>
-<h3 id="exercise-2-a-tiny-cart-intermediate">Exercise 2: A tiny cart (intermediate)</h3>
-<p>Build (or reuse) a small bookstore-style app with an "Add to Cart" button per item, each submitting a hidden <code>id</code> by POST. Store the growing list of IDs in <code>session["cart"]</code>, and add a <code>/cart</code> page that runs one <code>SELECT * FROM ... WHERE id IN (...)</code> query to show everything currently in the cart.</p>
-<h3 id="exercise-3-one-query-two-audiences-advanced">Exercise 3: One query, two audiences (advanced)</h3>
-<p>Take any existing <code>SELECT</code> query in an app you've built and expose it twice: once as a normal route that renders an HTML template, and once as a <code>/api/...</code> route that returns <code>jsonify()</code> of the exact same rows. Confirm, by comparing them side by side, that both routes are running the identical query: only the last line differs.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>COOKIES &amp; SESSIONS
-  Set-Cookie: &lt;header the server sends&gt;   plants the &quot;hand stamp&quot;
-  Cookie: &lt;header the browser sends&gt;      presents the hand stamp again
-  session[...]                            per-user dict, backed by a cookie
-  session.clear()                         logs the user out (empties the dict)
-
-LOGIN / LOGOUT (pedagogical: username only, no password)
-  session[&quot;name&quot;] = request.form.get(&quot;name&quot;)   # on POST /login
-  session.get(&quot;name&quot;)                          # read it back anywhere
-  session.clear()                              # GET /logout
-  Real passwords -&gt; hash them (see CS50 Problem Set 9: Finance)
-
-SHOPPING CART
-  if &quot;cart&quot; not in session: session[&quot;cart&quot;] = []
-  session[&quot;cart&quot;].append(id)                   # on &quot;Add to Cart&quot;
-  SELECT * FROM items WHERE id IN (?)           # to render the cart
-
-SEARCH AS AN API
-  WHERE title LIKE ?          with value  &quot;%&quot; + q + &quot;%&quot;     -&gt; fuzzy match
-  render_template(...)        -&gt; HTML, for a human in a browser
-  jsonify(rows)                -&gt; JSON, for another program to call
-
-GOLDEN RULE
-  Same SQL query, different last line: render_template() for people,
-  jsonify() for programs. That&#39;s the whole difference between a page
-  and an API.
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 11 · Lesson 40: A real app: validation and databases</strong>: the registration app you validated and connected to SQLite there is exactly what this lesson's Capstone gives accounts and an API.</li>
-<li><strong>Earlier, Module 10 · Lesson 35: HTTP and the Browser</strong>: cookies ride in the very request and response headers you already learned to inspect there; <code>Set-Cookie</code> and <code>Cookie</code> are just two more header lines.</li>
-<li><strong>Earlier, Module 8 · Lesson 29: SQL Fundamentals: CRUD</strong>: you already know <code>LIKE</code> and <code>%</code>; today's new piece is combining them safely with a placeholder inside a live route, then returning the results as JSON instead of a query result.</li>
-<li><strong>Earlier, Module 1 · Lesson 1: Welcome to CS50</strong>: an API returning JSON is exactly what the chatbot called; today you built the server side of that same pattern yourself.</li>
-<li><strong>Next, Module 12 · Lesson 42: Abstraction, precision, and how far you've come</strong>: the course's closing lesson, looking back across everything from Week 0 through the Flask app you can now build, log into, and query from other programs.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 9 - Flask" by David J. Malan, Harvard University (CS50x 2026). Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+</blockquote><div class="pager bottom"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="41-sessions-carts-apis.html" class="cur" title="Start here">1</a><a href="41-sessions-carts-apis-2.html" class="" title="Parts 3–5">2</a><a href="41-sessions-carts-apis-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="41-sessions-carts-apis-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="41" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="40-validation-and-databases.html"><span class="dir">&#8592; Previous</span><b>A Real App: Validation and Databases</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="../module-12-finish-line/42-abstraction-and-the-arc.html"><span class="dir">Next &#8594;</span><b>Abstraction, Precision, and How Far You&#x27;ve Come</b></a></nav>
+    <div class="ls-marker" data-lesson-id="41" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="40-validation-and-databases.html"><span class="dir">&#8592; Previous lesson</span><b>A Real App: Validation and Databases</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 

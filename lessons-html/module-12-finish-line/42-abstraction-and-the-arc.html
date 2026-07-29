@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 12 · Lesson 42: Abstraction, Precision, and How Far You&#x27;ve Come | Self-Paced CS50x</title>
+<title>Module 12 · Lesson 42: Abstraction, Precision, and How Far You&#x27;ve Come (p1/4) | Self-Paced CS50x</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -49,6 +49,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -212,7 +235,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
   <div class="navlinks">
     <a href="../index.html">All lessons</a>
     <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="42-abstraction-and-the-arc-4.html#capstone">Capstone</a>
   </div>
   <div class="nav-cta">
     <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
@@ -251,7 +274,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="42-abstraction-and-the-arc-4.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -276,38 +299,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <li><a href="#demo-2-the-stick-figure-that-worked">Demo 2: the stick figure that worked</a></li>
 </ul>
 </li>
-<li><a href="#part-4-the-course-arc-one-abstraction-at-a-time">Part 4: The course arc, one abstraction at a time</a></li>
-<li><a href="#part-5-cs50-charades-vocabulary-under-time-pressure">Part 5: CS50 Charades (vocabulary under time pressure)</a></li>
-<li><a href="#part-6-test-yourself-the-quiz-show-review">Part 6: Test yourself (the quiz-show review)</a><ul>
-<li><a href="#take-the-quiz-first">Take the quiz first</a></li>
-<li><a href="#answer-key-check-yourself-only-after-answering-all-15">Answer key: check yourself only after answering all 15</a></li>
-<li><a href="#score-yourself">Score yourself</a></li>
-</ul>
-</li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: Run Your Own Pictionary Experiment</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
-<li><a href="#milestones-each-one-produces-its-own-artifact-do-as-many-as-you-have-time-for">Milestones (each one produces its own artifact, do as many as you have time for)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-fix-one-step-foundational">Exercise 1: Fix one step (foundational)</a></li>
-<li><a href="#exercise-2-charades-for-one-intermediate">Exercise 2: Charades for one (intermediate)</a></li>
-<li><a href="#exercise-3-trace-your-own-delta-advanced">Exercise 3: Trace your own Delta (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 4 &middot; Start here</span><div class="seg"><a href="42-abstraction-and-the-arc.html" class="cur" title="Start here">1</a><a href="42-abstraction-and-the-arc-2.html" class="" title="Parts 4–6">2</a><a href="42-abstraction-and-the-arc-3.html" class="" title="Common pitfalls">3</a><a href="42-abstraction-and-the-arc-4.html" class="" title="Capstone &amp; wrap-up">4</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="42-abstraction-and-the-arc-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>Two live Pictionary demos on CS50's last day prove, in real time, that "computer science" always reduces to the same two ingredients: <strong>precision</strong> (exact, unambiguous steps) and <strong>abstraction</strong> (a simpler name hiding the messy detail underneath), and every language this course taught you, from Scratch to AI, was really just moving that same balance to a new level.</p>
 <blockquote>
@@ -402,254 +400,9 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <blockquote>
 <p>"I think that was actually a nice mix of low level details like the directions of the lines and the lengths thereof and also some abstractions because I do dare say someone shouting out that it is to be a stick figure gave him a much more helpful mental model."</p>
 <p>🔑 <strong>The single most important takeaway of this part:</strong> neither pure precision nor pure abstraction wins on its own. The cube failed because it was all precision and no mental model to organize it around; the stick figure worked because it named the target <em>and</em> nailed the details. Every well-written function, README, or AI prompt you'll ever write does the same two things at once.</p>
-</blockquote>
-<h2 id="part-4-the-course-arc-one-abstraction-at-a-time">Part 4: The course arc, one abstraction at a time</h2>
-<p>Zooming out from Pictionary, Malan walks back through the entire term as one continuous climb up the abstraction ladder, with precision never going away, just getting handled for you at each new layer.</p>
-<blockquote>
-<p>"We started with scratch from scratch, literally in the very first week... thereafter we transition to a more traditional language C... arrays and algorithms, all of that and memory and data structures... And then of course over the past few weeks we've sort of used that as a stepping stone to talk about very modern programming paradigms, most recently web programming... and you can't escape now using or seeing or leveraging somehow artificial intelligence."</p>
-</blockquote>
-<p>Here's that same climb, mapped back to where you actually did each piece of it:</p>
-<table>
-<thead>
-<tr>
-<th>Course stage</th>
-<th>What changed underneath</th>
-<th>Where you did it</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Scratch</strong></td>
-<td>Blocks you drag, not syntax you type, loops, conditionals, and variables made visible</td>
-<td>Module 1 · Lesson 4 (<em>Programming in Scratch</em>)</td>
-</tr>
-<tr>
-<td><strong>C</strong></td>
-<td>Real syntax, a compiler, and every byte visible on purpose: "so many other languages today are built on top of" it</td>
-<td>Module 2 · Lesson 5 (<em>Hello, C: From Blocks to Code</em>)</td>
-</tr>
-<tr>
-<td><strong>Memory &amp; data structures</strong></td>
-<td>You manage your own memory by hand, then choose structures (arrays, linked lists, hash tables) by their time/memory trade-offs</td>
-<td>Module 5 · Lesson 18 (<em>Pointers, and What Strings Really Are</em>); Module 6 · Lesson 22 (<em>Linked Lists</em>)</td>
-</tr>
-<tr>
-<td><strong>Python &amp; SQL</strong></td>
-<td>The same ideas, "10× less code": memory management and low-level detail now abstracted away <em>for</em> you by better programmers</td>
-<td>Module 7 · Lesson 24 (<em>Why Python?</em>); Module 8 · Lesson 29 (<em>SQL Fundamentals: CRUD</em>)</td>
-</tr>
-<tr>
-<td><strong>The web</strong></td>
-<td>HTML, CSS, and JavaScript, plus everything underneath a page load (IP, TCP, DNS, HTTP)</td>
-<td>Module 10 · Lesson 35 (<em>HTTP and the Browser</em>)</td>
-</tr>
-<tr>
-<td><strong>AI</strong></td>
-<td>A tool that can now write some of the precise steps <em>for</em> you, but only useful once you can judge what it wrote</td>
-<td>Module 9 · Lesson 32 (<em>Using AI Well</em>)</td>
-</tr>
-</tbody>
-</table>
-<p>Malan is careful to name the trade-off explicitly at the memory/data-structures stage: modern languages let you not "worry as much about managing your own memory because good programmers, better programmers have figured out how to solve those problems for you in the language itself." That sentence <em>is</em> abstraction, defined again, applied to the entire history of programming languages: each stage didn't remove precision. It just moved the precise part into a layer <em>someone else</em> already built correctly, so you could build on top of it as a black box.</p>
-<blockquote>
-<p>💡 <strong>Nuance:</strong> "higher abstraction" does not mean "less rigorous." SQL's <code>SELECT</code> and Python's <code>for x in list</code> still execute a precise sequence of steps underneath: you've simply earned the right to trust that black box instead of writing it yourself every time.</p>
-</blockquote>
-<h2 id="part-5-cs50-charades-vocabulary-under-time-pressure">Part 5: CS50 Charades (vocabulary under time pressure)</h2>
-<p>As a lighter gut-check on the same idea, Malan ran a round of charades: two teams of three, 60 seconds per word, no speaking: physically <em>act out</em> a CS50 term for your teammates to guess. It's the Pictionary experiment again, just with your whole body as the instruction set instead of your voice.</p>
-<p>Words the teams acted out and guessed included: <strong>recursion</strong> (Module 4 · Lesson 16, <em>Recursion and Merge Sort</em>), <strong>array</strong> (Module 3 · Lesson 11, <em>Arrays and Strings Under the Hood</em>), <strong>linked list</strong> (Module 6 · Lesson 22), <strong>abstraction</strong>, <strong>Python</strong> (Module 7 · Lesson 24), the CS50 <strong>duck</strong> (Module 9 · Lesson 32, <em>Using AI Well</em>), <strong>binary</strong> and <strong>byte</strong> and <strong>ASCII</strong> (Module 1 · Lesson 2, <em>Bits and Binary</em>), <strong>loop</strong>, <strong>algorithm</strong>, <strong>input</strong>, <strong>running time</strong> (Module 4 · Lesson 13, <em>Thinking in Running Time: Big O</em>), and <strong>binary search</strong> (Module 4 · Lesson 14, <em>Searching Arrays in C</em>).</p>
-<p>Notice what's actually being tested here: not whether you can <em>define</em> these words on a quiz, but whether you understand them well enough to physically compress each one down to a single, guessable gesture in a few seconds, which is exactly the same discipline as writing one good, abstracted instruction ("draw a stick figure") instead of a pile of precise but disconnected ones. If you can act out "recursion" so a teammate gets it in ten seconds, you understand recursion. If you can't, that's useful information about where to go back and review.</p>
-<blockquote>
-<p>✅ <strong>What to do about it:</strong> for any term in the list above that would stump you in charades, that's your personal signal for which earlier lesson to reread before this course's final project, not the quiz below.</p>
-</blockquote>
-<h2 id="part-6-test-yourself-the-quiz-show-review">Part 6: Test yourself (the quiz-show review)</h2>
-<p>To close, Malan and a colleague ran a 15-question, audience-sourced quiz-show review, the same review questions students themselves had submitted weeks earlier. Below is that same quiz, reconstructed faithfully from the lecture, as a self-test you actually take.</p>
-<p><strong>How to use this:</strong> get a blank sheet of paper. Answer all 15 before looking at the answer key underneath. Don't peek: the whole point of a self-test is finding out what you <em>don't</em> know yet, not confirming what you do.</p>
-<h3 id="take-the-quiz-first">Take the quiz first</h3>
-<ol>
-<li>What is the largest number an 8-bit unsigned binary number can represent?
-   A) 256  B) 128  C) 255  D) 1</li>
-<li>Which issue is at the center of the "Year 2038 problem"?
-   A) Integer overflow  B) Malicious inputs  C) SQL injection  D) Memory leak</li>
-<li>Which of the following is <strong>not</strong> a step of compiling a C program?
-   A) Pre-processing  B) Assembling  C) Interpreting  D) Linking</li>
-<li>What does a pointer store?
-   A) The name of a variable  B) The memory address of a value  C) The size of a value  D) The value of a variable</li>
-<li>What is the running time of linear search, in Big O?
-   A) O(1)  B) O(n)  C) O(n²)  D) O(n log n)</li>
-<li>Which data structure follows the first-in-first-out (FIFO) principle?
-   A) A queue  B) A linked list  C) A stack  D) A hash table</li>
-<li>In C, which operator returns the memory address of a variable?
-   A) <code>*</code>  B) <code>$</code>  C) <code>&amp;</code>  D) <code>-&gt;</code></li>
-<li>Which SQL keyword removes duplicate rows from a result set?
-   A) <code>REMOVE</code>  B) <code>UNIQUE</code>  C) <code>DISTINCT</code>  D) <code>CLEAN</code></li>
-<li>What does an HTTP status code of 418 signify?
-   A) Not Found  B) I'm a Teapot  C) Forbidden  D) Unauthorized</li>
-<li>In C, where does <code>malloc</code> dynamically allocate memory from?
-    A) The heap  B) The stack  C) Global variables  D) Assembly</li>
-<li>If you allocate memory with <code>malloc</code> but forget to call <code>free</code>, what problem occurs?
-    A) A memory leak  B) A segmentation fault  C) A stack overflow  D) All of the above</li>
-<li>Visiting the domain <code>safetyschool.org</code> actually redirects you to the website of which university?
-    A) Harvard  B) Princeton  C) Yale  D) Columbia</li>
-<li>What is the purpose of DNS?
-    A) Encrypt data on the dark web  B) Find the nearest coffee shop  C) Protect your location from hackers  D) Translate domain names into IP addresses</li>
-<li>Which of the following is <strong>not</strong> a built-in SQL feature for handling race conditions?
-    A) <code>BEGIN TRANSACTION</code>  B) <code>COMMIT</code>  C) <code>ROLLBACK</code>  D) <code>ENROLL</code></li>
-<li>What does Malan say at the start of every CS50 lecture?
-    A) "Welcome to Harvard's Computer Science class"  B) "Hello everyone, ready to code?"  C) "This is CS50"  D) "Let's get started with some programming"</li>
-</ol>
-<hr />
-<h3 id="answer-key-check-yourself-only-after-answering-all-15">Answer key: check yourself only after answering all 15</h3>
-<ol>
-<li><strong>C) 255.</strong> Counting starts at zero, so 8 bits give you 256 <em>possibilities</em>, numbered 0 through 255: the largest single value is 255, not 256. (Module 1 · Lesson 2)</li>
-<li><strong>A) Integer overflow.</strong> Computers still commonly track time as a 32-bit count of seconds since January 1, 1970; that counter runs out of room in 2038 unless it's stored in 64 bits instead.</li>
-<li><strong>C) Interpreting.</strong> The real pipeline is pre-process → compile → assemble → link; "interpreting" describes a different kind of language entirely (like Python), not a step inside compiling C.</li>
-<li><strong>B) The memory address of a value.</strong> A pointer never stores the value itself, or a variable's name: only where in memory that value lives. (Module 5 · Lesson 18)</li>
-<li><strong>B) O(n).</strong> Worst case, linear search checks every element once before finding (or ruling out) its target.</li>
-<li><strong>A) A queue.</strong> First in, first out, like a line at a store. (Contrast with a <strong>stack</strong>, which is last in, first out.) (Module 6 · Lesson 22)</li>
-<li><strong>C) <code>&amp;</code>.</strong> The "address-of" operator. (<code>*</code> does the opposite: it dereferences a pointer to get the value at that address.) (Module 5 · Lesson 18)</li>
-<li><strong>C) <code>DISTINCT</code>.</strong> <code>UNIQUE</code> is a real SQL keyword too, but it constrains a column when you <em>define</em> a table (e.g., no two rows may share an email address). It doesn't filter duplicates out of a query's results. (Module 8 · Lesson 29)</li>
-<li><strong>B) I'm a Teapot.</strong> A real HTTP status code, invented as an April Fools' joke, that some servers still implement. (Module 10 · Lesson 35)</li>
-<li><strong>A) The heap.</strong> Not the stack (which holds each function's local variables and arguments): <code>malloc</code> reaches into a separate region of memory called the heap. (Module 5 · Lesson 18)</li>
-<li><strong>A) A memory leak.</strong> By definition: memory you allocated but never released stays reserved and unusable for the rest of the program's run. (A segmentation fault or stack overflow <em>can</em> happen from other memory mistakes, but they aren't the guaranteed consequence of a missing <code>free</code>.)</li>
-<li><strong>C) Yale University.</strong> <code>safetyschool.org</code> returns an HTTP 301 redirect pointing at <code>yale.edu</code>, a decades-old joke, still live. (Module 10 · Lesson 35)</li>
-<li><strong>D) Translate domain names into IP addresses.</strong> DNS is the phone book of the internet. (Module 10 · Lesson 35)</li>
-<li><strong>D) <code>ENROLL</code>.</strong> <code>BEGIN TRANSACTION</code>, <code>COMMIT</code>, and <code>ROLLBACK</code> are all real SQL tools for handling race conditions safely; <code>ENROLL</code> isn't a SQL keyword at all. (Module 8 · Lesson 29)</li>
-<li><strong>C) "This is CS50."</strong></li>
-</ol>
-<h3 id="score-yourself">Score yourself</h3>
-<div class="codehilite"><pre><span></span><code>13-15 correct : Malan&#39;s own line applies to you: &quot;you&#39;ll be considered among the CS elite.&quot;
-9-12 correct  : Solid: reread the answer-key note for each miss before final project week.
-Under 9       : Totally normal this late in a fire-hose of a course. Pick your two weakest
-                topics above and revisit that lesson before you start scoping your final project.
-</code></pre></div>
-
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong>Problem solving is computer science.</strong> Every problem this course ever gave you is the same shape: input, a precise algorithm inside a black box, output.</li>
-<li><strong>An algorithm is "a precise sequence of steps for getting something done,"</strong> Malan's own 25-year-old definition, unchanged.</li>
-<li><strong>Precision alone isn't enough.</strong> The cube demo failed with flawless, unambiguous steps and zero abstraction to organize them around.</li>
-<li><strong>Abstraction alone isn't enough either:</strong> it needs precise detail underneath it, which is exactly what made the stick-figure demo succeed.</li>
-<li><strong>The whole course was one long climb up the abstraction ladder:</strong> Scratch, C, memory and data structures, Python and SQL, the web, and AI each hid more low-level detail while keeping the underlying precision intact.</li>
-<li><strong>Your own struggle at the start is normal, not a red flag:</strong> the person who wrote this course got -2 on his own first assignment.</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ Writing instructions (or code, or a prompt) that are all precise detail and no unifying name: a reader with no mental model to hang the steps on, just like the cube's audience.</li>
-<li>❌ Writing instructions that are all abstraction and no detail ("just draw a house"), technically true, but useless without the specifics to back it up.</li>
-<li>❌ Judging your own progress against classmates instead of against your own week-0 self: Malan explicitly says this is the wrong yardstick.</li>
-<li>❌ Treating "higher-level language" as "less rigorous": Python and SQL still execute precise steps underneath; you've just earned the right to trust that black box.</li>
-<li>❌ Skipping the self-test's answer key selectively: if you're going to check your answers early, you're not actually finding out what you don't know yet.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: Run Your Own Pictionary Experiment</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson, and it costs nothing: paper, a pen, and one other person (or your rubber duck). You will prove to yourself, with real evidence, exactly what made the cube fail and the stick figure succeed, and then take the scored self-test above for real. The same precision-plus-abstraction judgment you sharpen here is exactly what you'll lean on to design routes, functions, and a database schema for your final project's database-backed web app, next lesson.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>Two short, concrete artifacts:</p>
-<ol>
-<li><strong>Two written instruction sets</strong> for drawing the same simple picture, one with zero abstraction (precision only), one mixing abstraction with precise detail, plus the drawings each one actually produced when tested on a real listener.</li>
-<li><strong>A completed, self-scored 15-question quiz</strong> (the one in Part 6), plus a short note on which topics you'd revisit before starting your final project.</li>
-</ol>
-<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in the Capstone</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>The cube demo (precision, no abstraction, fails)</td>
-<td>Your Instruction Set A is a deliberate re-run of exactly that failure</td>
-</tr>
-<tr>
-<td>The stick-figure demo (abstraction + precision, works)</td>
-<td>Your Instruction Set B copies that winning mix on purpose</td>
-</tr>
-<tr>
-<td>"A precise sequence of steps for getting something done"</td>
-<td>The actual wording discipline you use writing both instruction sets</td>
-</tr>
-<tr>
-<td>Charades (compressing an idea to its essential shape)</td>
-<td>Choosing a picture simple enough to describe in under 10 steps</td>
-</tr>
-<tr>
-<td>The quiz-show review</td>
-<td>Taking Part 6's self-test for a real, honest score</td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-each-one-produces-its-own-artifact-do-as-many-as-you-have-time-for">Milestones (each one produces its own artifact, do as many as you have time for)</h3>
-<ol>
-<li><strong>Pick your picture.</strong> Choose something simple and drawable in 10 steps or fewer: a house, a fish, a snowman, a wheel with spokes. Sketch it once yourself first, so you know exactly what "correct" looks like. Do not show anyone this sketch yet.</li>
-<li><strong>Write Instruction Set A: zero abstraction.</strong> Write out every step needed to draw your picture using only pure, literal geometry (lines, directions, lengths, positions) and never once naming the object or any of its recognisable parts (no "roof," no "wheel," no "fin"). Model this directly on the cube demo in Part 3.</li>
-<li><strong>Test Set A.</strong> Read your steps aloud, one at a time, exactly as written, to a friend, roommate, or family member who cannot see your original sketch or ask what the picture is: only what each step means if it's genuinely unclear. (No one around? Read the steps aloud to your rubber duck, then hand the <em>written</em> steps to yourself the next day and follow them cold, as if you'd never seen the picture.) Keep whatever gets drawn.</li>
-<li><strong>Write Instruction Set B: abstraction plus precision.</strong> Write a second, different set of steps for the <em>same</em> picture: this time naming the object or its parts up front ("draw a house," "this is the roof") and then giving precise detail for each part, the way the audience mixed "stick figure" with "diagonal line the same length as."</li>
-<li><strong>Test Set B</strong> the same way you tested Set A, with the same listener if possible.</li>
-<li><strong>Write exactly three sentences.</strong> One sentence on what specifically went wrong with the Set A drawing. One sentence on why: tie it explicitly to "precision" or "abstraction" as defined in this lesson. One sentence on what Set B did differently that fixed it.</li>
-<li><strong>Take the 15-question self-test</strong> in Part 6 honestly, without peeking at the answer key until you've answered all 15, then score yourself.</li>
-<li><strong>Stretch goal.</strong> Write a third instruction set that is pure abstraction and nothing else ("just draw a house, use your imagination") and test that too: predict, then confirm, that it fails in the <em>opposite</em> direction from Set A.</li>
-</ol>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ Two different written instruction sets exist for the same picture, and you tested both on a real listener (or the duck-plus-yourself fallback).</li>
-<li>✅ You kept (or can describe) what each test actually produced.</li>
-<li>✅ Your three sentences name, specifically, what failed in Set A and why, using the words "precision" and/or "abstraction" correctly.</li>
-<li>✅ You answered all 15 quiz questions before checking the key, and you have a score plus a short list of topics to revisit.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> don't quietly "fix" Set A in your head while reading it aloud: read it exactly as written, mistakes and all, the same way Gia's audience only ever heard what she actually said. The gap between what you <em>meant</em> and what you <em>wrote</em> is the entire lesson.</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-fix-one-step-foundational">Exercise 1: Fix one step (foundational)</h3>
-<p>Take any single step from the cube instructions in Part 3 ("draw two vertical lines," for instance) and rewrite it by adding exactly one abstraction word. Predict, in one sentence, how that change would have altered what the audience drew.</p>
-<h3 id="exercise-2-charades-for-one-intermediate">Exercise 2: Charades for one (intermediate)</h3>
-<p>Pick one word from Part 5's charades list that you could <em>not</em> confidently act out in ten seconds. Write, in plain language, a definition precise enough that a stranger who'd never taken this course could act it out correctly on the first try.</p>
-<h3 id="exercise-3-trace-your-own-delta-advanced">Exercise 3: Trace your own Delta (advanced)</h3>
-<p>Pick any two quiz questions you missed in Part 6. For each, find (or reconstruct from memory) the one sentence from that earlier lesson's own Key Takeaways that would have gotten you the right answer, and write it down next to the question.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>THE WHOLE COURSE IN ONE PICTURE
-  INPUT (problem) -&gt; ALGORITHM (precise steps, in a black box) -&gt; OUTPUT (solution)
-  &quot;Problem solving is computer science.&quot; -- Malan
-
-TWO INGREDIENTS, BOTH REQUIRED
-  PRECISION    = steps exact enough that only one reading is possible
-  ABSTRACTION  = a simpler name hiding the messy detail underneath
-  Precision alone   -&gt; the cube demo (audience had no shape to hang steps on)
-  Abstraction alone -&gt; &quot;just draw a house&quot; (technically true, useless)
-  BOTH TOGETHER     -&gt; the stick-figure demo (it worked)
-
-THE COURSE ARC (each stage hides more detail, precision never disappears)
-  Scratch (L4) -&gt; C (L5) -&gt; memory &amp; data structures (L18, L22)
-    -&gt; Python &amp; SQL (L24, L29) -&gt; the web (L35) -&gt; AI (L32)
-
-QUIZ ANSWER LETTERS (Part 6)
-  1C  2A  3C  4B  5B  6A  7C  8C  9B  10A  11A  12C  13D  14D  15C
-
-SELF-SCORE
-  13-15 = &quot;CS50 elite&quot; (Malan&#39;s phrase)   9-12 = solid   under 9 = go reread, it&#39;s fine
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 11 · Lesson 41 (Sessions, carts, and APIs):</strong> the session state and JSON API you built there are themselves abstractions (a browser cookie standing in for "this user is logged in," a JSON response standing in for "here's the precise data you asked for"), the exact pattern this lesson names out loud.</li>
-<li><strong>Earlier, across the whole course (Modules 1-10):</strong> Scratch (Module 1 · Lesson 4), C (Module 2 · Lesson 5), memory and pointers (Module 5 · Lesson 18), data structures (Module 6 · Lesson 22), Python (Module 7 · Lesson 24), SQL (Module 8 · Lesson 29), and the web (Module 10 · Lesson 35) are the concrete stops on the abstraction climb this lesson recaps in Part 4. Go back to any of them if the quiz in Part 6 exposed a gap.</li>
-<li><strong>Next, Module 12 · Lesson 43 (Shipping your final project):</strong> takes this same reflection and turns it into a concrete good/better/best project plan (local setup, Git, hosting, and scoping) for the database-backed web app you've been building toward all along.</li>
-<li><strong>Later, your final project:</strong> every design decision you make there (what to name a function, what to hide inside a route, what a database schema exposes versus hides) is precision and abstraction, applied for the first time to a problem nobody handed you.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 10 - The End" by David J. Malan, Harvard University. Quotes are verbatim from the lecture transcript; the 15-question quiz is a faithful reconstruction of the live quiz-show review described in the talk. Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk.</em></p>
+</blockquote><div class="pager bottom"><span class="pcount">Page 1 of 4 &middot; Start here</span><div class="seg"><a href="42-abstraction-and-the-arc.html" class="cur" title="Start here">1</a><a href="42-abstraction-and-the-arc-2.html" class="" title="Parts 4–6">2</a><a href="42-abstraction-and-the-arc-3.html" class="" title="Common pitfalls">3</a><a href="42-abstraction-and-the-arc-4.html" class="" title="Capstone &amp; wrap-up">4</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="42-abstraction-and-the-arc-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="42" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="../module-11-flask/41-sessions-carts-apis.html"><span class="dir">&#8592; Previous</span><b>Sessions, Carts, and APIs</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="43-shipping-final-project.html"><span class="dir">Next &#8594;</span><b>Shipping Your Final Project</b></a></nav>
+    <div class="ls-marker" data-lesson-id="42" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="../module-11-flask/41-sessions-carts-apis.html"><span class="dir">&#8592; Previous lesson</span><b>Sessions, Carts, and APIs</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 7 · Lesson 25: Python Essentials: Variables, Conditionals, Strings | Self-Paced CS50x</title>
+<title>Module 7 · Lesson 25: Python Essentials: Variables, Conditionals, Strings (p1/3) | Self-Paced CS50x</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -49,6 +49,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -212,7 +235,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
   <div class="navlinks">
     <a href="../index.html">All lessons</a>
     <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="25-python-essentials-3.html#capstone">Capstone</a>
   </div>
   <div class="nav-cta">
     <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
@@ -251,7 +274,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="25-python-essentials-3.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -272,32 +295,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <li><a href="#part-1-modules-packages-and-taking-off-the-cs50-training-wheels">Part 1: Modules, packages, and taking off the CS50 training wheels</a></li>
 <li><a href="#part-2-named-parameters-and-reading-the-docs">Part 2: Named parameters and reading the docs</a></li>
 <li><a href="#part-3-variables-and-data-types-no-declarations-no-pointers">Part 3: Variables and data types (no declarations, no pointers)</a></li>
-<li><a href="#part-4-conditionals-and-mandatory-indentation">Part 4: Conditionals and mandatory indentation</a></li>
-<li><a href="#part-5-strings-are-objects-comparison-and-methods">Part 5: Strings are objects (comparison and methods)</a></li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: Greeter and Agree, Reborn in Python</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-three-way-number-comparator-foundational">Exercise 1: Three-way number comparator (foundational)</a></li>
-<li><a href="#exercise-2-capitalize-vs-uppercase-intermediate">Exercise 2: Capitalize vs. uppercase (intermediate)</a></li>
-<li><a href="#exercise-3-a-three-way-agree-tightened-advanced">Exercise 3: A three-way agree, tightened (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="25-python-essentials.html" class="cur" title="Start here">1</a><a href="25-python-essentials-2.html" class="" title="Parts 4–5">2</a><a href="25-python-essentials-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="25-python-essentials-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>Python replaces C's headers, semicolons, curly braces, and declared types with modules you <code>import</code>, a single <code>input()</code> function, variables whose type Python figures out on its own, colon-and-indentation conditionals, and strings that come with built-in actions like <code>.lower()</code> and <code>.capitalize()</code>: the exact same ideas you already learned in C, just typed in a fraction of the code.</p>
 <blockquote>
@@ -404,228 +408,9 @@ changed since.</p>
 <p>Nesting the call this way (passing <code>input()</code>'s output straight into <code>int()</code>) is exactly the kind of thing Malan flags with the term this lesson's first-principles companion is built around: <strong>"To do something pythonically is to do it the way that most Python programmers would do it."</strong></p>
 <blockquote>
 <p>✅ <strong>What to do about it:</strong> if a program is supposed to do math on something the user typed, wrap <code>input()</code> in <code>int()</code> or <code>float()</code> before you touch it with <code>+</code>, <code>-</code>, <code>*</code>, or <code>/</code>.</p>
-</blockquote>
-<h2 id="part-4-conditionals-and-mandatory-indentation">Part 4: Conditionals and mandatory indentation</h2>
-<p>Module 2 Lesson 7 called <code>if</code>/<code>else if</code>/<code>else</code> "the proverbial fork in the road." The fork itself doesn't change in Python: only its punctuation does. Here is <code>compare.c</code>'s logic, rewritten:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">&quot;What&#39;s x? &quot;</span><span class="p">))</span>
-<span class="n">y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">&quot;What&#39;s y? &quot;</span><span class="p">))</span>
-
-<span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">y</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x is less than y&quot;</span><span class="p">)</span>
-<span class="k">elif</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="n">y</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x is greater than y&quot;</span><span class="p">)</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x is equal to y&quot;</span><span class="p">)</span>
-</code></pre></div>
-
-<p>Three changes from C: no parentheses around the condition, no curly braces around the block, and <code>else if</code> shrinks to one word, <code>elif</code>. In their place, Python asks for a colon at the end of each <code>if</code>/<code>elif</code>/<code>else</code> line, and it <em>requires</em> the lines underneath to be indented. This isn't a style suggestion the way it was with <code>style50</code> in C: it's the actual syntax. Malan is blunt about how strict this is: <strong>"Python requires that you indent your code properly."</strong> He goes further: <strong>"You can't be lazy and leave it all left aligned and sort of fix it up later."</strong> Skip the indentation and Python refuses to run the program at all, the same way a missing semicolon once stopped <code>clang</code>, except now it's whitespace doing the enforcing.</p>
-<p>The comparison operators themselves (<code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>, <code>==</code>, <code>!=</code>) are identical to the C table you already learned. What has changed is only the punctuation wrapped around them.</p>
-<blockquote>
-<p>🔑 <strong>Python has no curly braces. A colon plus consistent indentation is the entire syntax for "this code belongs to that condition."</strong></p>
-<p>💡 <strong>A curiosity worth knowing:</strong> a student in lecture asked what language Python itself is written in. Malan's answer: <strong>"The interpreter we are using within VS Code is itself written in C, AKA CPython."</strong> The tool translating your Python, line by line, into something the machine can run is, underneath, a C program, the same language you spent five weeks learning.</p>
-</blockquote>
-<h2 id="part-5-strings-are-objects-comparison-and-methods">Part 5: Strings are objects (comparison and methods)</h2>
-<p>Module 2's hardest string lesson was that <code>s == t</code> in C compares two addresses, not two words: you needed <code>strcmp</code>, a loop, and knowledge of the null terminator just to ask "are these the same word?" Python erases that entire problem. Rewriting <code>compare.c</code>'s string-comparing sibling:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">s</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;s: &quot;</span><span class="p">)</span>
-<span class="n">t</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;t: &quot;</span><span class="p">)</span>
-
-<span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="n">t</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;same&quot;</span><span class="p">)</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;different&quot;</span><span class="p">)</span>
-</code></pre></div>
-
-<p><code>==</code> here just works, character by character, with no loop of your own. Malan's verdict: <strong>"Python has solved that seemingly annoying problem of not taking us literally, like, don't compare the pointer against the pointer. Compare what a reasonable programmer probably really cares about, the values of those strings."</strong></p>
-<p>Now recall <code>agree.c</code>: get a <code>char</code>, compare it against <code>'y'</code> and <code>'Y'</code> with <code>||</code>. In Python there's no <code>char</code> (just a <code>str</code>, however long), so the comparison becomes a plain string check, and Python's <code>in</code> keyword lets you check membership in a whole list of acceptable answers at once instead of chaining comparisons:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">s</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Do you agree? &quot;</span><span class="p">)</span>
-<span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-
-<span class="k">if</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;yes&quot;</span><span class="p">]:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Agreed&quot;</span><span class="p">)</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Not agreed&quot;</span><span class="p">)</span>
-</code></pre></div>
-
-<p><code>s.lower()</code> is doing something new: it's not a standalone function you pass <code>s</code> into (the way C's <code>tolower</code> worked), it's an action <code>s</code> performs <em>on itself</em>, called with a dot. Malan names what's really going on here: <strong>"methods are simply functions that are inside of objects and in this case the object in question itself is a string."</strong> A <strong>string</strong> in Python isn't just text sitting in memory the way a C string was. It's an <strong>object</strong>: a value that carries both its data and a set of built-in <strong>methods</strong> for acting on that data. <code>s.lower()</code> normalizes capitalization so <code>"YES"</code>, <code>"Yes"</code>, and <code>"yes"</code> all match the same check; without it, <code>"YES" in ["y", "yes"]</code> would fail.</p>
-<p>Two more of those built-in methods, straight from the transcript's own examples. First, <code>copy.c</code>'s Python equivalent, capitalizing just the first letter:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">s</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;s: &quot;</span><span class="p">)</span>
-<span class="n">t</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;s: </span><span class="si">{</span><span class="n">s</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;t: </span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</code></pre></div>
-
-<p>Malan explains <code>.capitalize()</code> by pointing at its documentation entry: <strong>"S.capitalize... whose purpose in life, if we read Python's documentation for string methods, will be to uppercase the first letter of the word that the user has presumably just typed in."</strong> And second, <code>uppercase.c</code>'s equivalent, capitalizing the whole word, no loop required:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">before</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;before: &quot;</span><span class="p">)</span>
-<span class="n">after</span> <span class="o">=</span> <span class="n">before</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;after:  </span><span class="si">{</span><span class="n">after</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</code></pre></div>
-
-<p>Where the C version looped character by character calling <code>toupper</code> on each one, Python's <code>.upper()</code> acts on the entire string in one call. Malan's summary of why that's possible: <strong>"these strings are objects and those objects have methods. Those methods will actually operate on the entire string at once, unlike the more pedantic work we had to do character by character in C."</strong> (Lesson 26 picks this exact thread back up when it shows you how a <code>for</code> loop <em>can</em> still walk a string one character at a time. You just rarely need to anymore.)</p>
-<blockquote>
-<p>✅ <strong>What to do about it:</strong> before you write a loop or a chain of <code>or</code>s to handle a string, check whether a method already named for the job exists: <code>.lower()</code>, <code>.upper()</code>, and <code>.capitalize()</code> are the ones you'll reach for constantly.</p>
-</blockquote>
-<hr />
-<p>Put the five parts together and you get the whole shape of this lesson, the same pipeline as Module 2, with every piece of ceremony trimmed away:</p>
-<div class="codehilite"><pre><span></span><code>MODULES        from cs50 import get_string   -&gt;   input()
-                                                    (Part 1: training wheels off)
-
-PARAMETERS     printf(&quot;%s&quot;, x)               -&gt;   print(x, end=&quot;&quot;)
-                                                    (Part 2: named, not just positional)
-
-VARIABLES      int x = get_int(...);         -&gt;   x = int(input(...))
-                                                    (Part 3: no declared type, converted not cast)
-
-CONDITIONALS   if (x &lt; y) { ... }            -&gt;   if x &lt; y:
-                                                       ...
-                                                    (Part 4: colon + indentation, not braces)
-
-STRINGS        strcmp(s, t) == 0             -&gt;   s == t
-               c == &#39;y&#39; || c == &#39;Y&#39;          -&gt;   s.lower() in [&quot;y&quot;]
-                                                    (Part 5: value comparison + methods, no char)
-</code></pre></div>
-
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong>Modules and packages are Python's word for libraries.</strong> <code>from cs50 import get_string</code> pulls in one function; the CS50 library itself is a training wheel meant to come off in favor of <code>input()</code>.</li>
-<li><strong>Named parameters let you skip memorizing argument order.</strong> <code>print(end="", sep=", ")</code> overrides defaults by name; docs.python.org is where you look up any function's signature to find those names.</li>
-<li><strong>Variables have no declared type, but the underlying types didn't disappear.</strong> <code>bool</code>, <code>float</code>, <code>int</code>, and <code>str</code> still exist; there is no <code>char</code> (a single character is just a <code>str</code> of length one) and no pointers.</li>
-<li><strong><code>int()</code> and <code>float()</code> convert a string to a number; they don't cast it.</strong> <code>input()</code> always returns a <code>str</code>, so math on user input needs an explicit conversion first: skip it and <code>+</code> concatenates instead of adding.</li>
-<li><strong>Indentation is mandatory syntax, not a style choice.</strong> A colon ends each <code>if</code>/<code>elif</code>/<code>else</code> line; the indented block underneath is how Python knows what belongs to that branch.</li>
-<li><strong>Strings are objects, and <code>==</code> compares their values, not their addresses.</strong> No more <code>strcmp</code>, and methods like <code>.lower()</code>, <code>.capitalize()</code>, and <code>.upper()</code> act on a whole string at once via dot notation.</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ Doing math directly on <code>input()</code>'s return value: <code>input("x: ") + input("y: ")</code> concatenates two strings; wrap each call in <code>int()</code> or <code>float()</code> first.</li>
-<li>❌ Leaving a conditional's body un-indented, or mixing tabs and spaces: Python treats this as a syntax error, not a style nit.</li>
-<li>❌ Writing <code>else if</code> out of C habit, Python's keyword is one word: <code>elif</code>.</li>
-<li>❌ Comparing user input to one fixed capitalization, like <code>if s == "Y":</code>, and missing <code>"y"</code>, <code>"yes"</code>, or <code>"YES"</code>: normalize first with <code>.lower()</code> or <code>.upper()</code>.</li>
-<li>❌ Assuming <code>char</code> still exists as its own type: a single character in Python is simply a <code>str</code> with one letter in it.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: Greeter and Agree, Reborn in Python</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. You'll rebuild two
-programs you already wrote once in C, proving to yourself, line by
-vanished line, exactly how much of that C ceremony Python was doing for
-you all along.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>Two small Python programs, run on cs50.dev: a <code>greet.py</code> that captures and echoes back a name, and an <code>agree.py</code> that normalizes and branches on a yes/no answer, the direct Python siblings of Module 2's <code>greeter.c</code> and <code>agree.c</code>. Alongside the code, you'll keep a running tally of every line of C boilerplate that had no Python equivalent.</p>
-<ul>
-<li><code>greet.py</code>: <code>input()</code>, an f-string, and a named parameter used on purpose.</li>
-<li><code>agree.py</code>: <code>input()</code>, <code>.lower()</code>, <code>in</code>, and an <code>if</code>/<code>else</code> branch.</li>
-<li>A short boilerplate audit: the count of vanished <code>#include</code>s, <code>main</code>, curly braces, semicolons, and declared types.</li>
-</ul>
-<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in the project</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Modules &amp; training wheels (Part 1)</td>
-<td><code>greet.py</code> uses <code>input()</code> instead of <code>from cs50 import get_string</code></td>
-</tr>
-<tr>
-<td>Named parameters (Part 2)</td>
-<td>Using <code>end=</code> or <code>sep=</code> at least once to control <code>print()</code>'s formatting</td>
-</tr>
-<tr>
-<td>Variables &amp; conversion (Part 3)</td>
-<td>A bonus numeric prompt in <code>greet.py</code>, converted with <code>int()</code></td>
-</tr>
-<tr>
-<td>Conditionals &amp; indentation (Part 4)</td>
-<td><code>agree.py</code>'s <code>if</code>/<code>elif</code>/<code>else</code> chain, correctly indented</td>
-</tr>
-<tr>
-<td>String methods (Part 5)</td>
-<td><code>.lower()</code> and <code>in</code> in <code>agree.py</code> to accept multiple spellings of "yes"</td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>Rebuild the greeter.</strong> Create <code>greet.py</code>. Use <code>input()</code> to ask "What's your name? ", store it in a variable, and print <code>f"hello, {name}"</code>. Confirm it behaves exactly like Module 2's <code>greeter.c</code>, with none of its <code>#include</code>s, <code>main</code>, or semicolons.</li>
-<li><strong>Add a named parameter on purpose.</strong> Change one <code>print()</code> call in <code>greet.py</code> to use <code>end=""</code> or <code>sep=", "</code> somewhere reasonable (for example, printing the greeting without a trailing newline, then adding a second <code>print()</code> with just <code>"!"</code>). Confirm the output still reads correctly.</li>
-<li><strong>Rebuild agree, the naive way first.</strong> Create <code>agree.py</code>. Ask "Do you agree? " with <code>input()</code>, and branch with <code>if s == "y" or s == "Y":</code> / <code>else:</code>, printing <code>Agreed</code> or <code>Not agreed</code>. Confirm both branches work.</li>
-<li><strong>Normalize and expand with <code>.lower()</code> and <code>in</code>.</strong> Replace the <code>or</code> chain with <code>s = s.lower()</code> followed by <code>if s in ["y", "yes"]:</code>. Test with <code>y</code>, <code>Y</code>, <code>yes</code>, and <code>YES</code>: all four should now print <code>Agreed</code>.</li>
-<li><strong>Add one numeric prompt.</strong> In <code>greet.py</code>, add a second question (a lucky number) captured with <code>int(input(...))</code>, and print it doubled using an f-string. This is the same <code>int()</code>-around-<code>input()</code> pattern from Part 3, just reused.</li>
-<li><strong>Audit the vanished boilerplate.</strong> Open Module 2's <code>greeter.c</code> and <code>agree.c</code> side by side with your two new files. Write a comment at the top of each Python file listing every line from the C version that has no Python counterpart: headers, <code>int main(void)</code>, curly braces, semicolons, declared types, and (for <code>agree.c</code>) the <code>char</code>/single-quote comparisons.</li>
-<li><strong>Stretch goals.</strong> Add a third branch to <code>agree.py</code> with <code>elif</code> for an answer like <code>"maybe"</code>. Or use <code>.capitalize()</code> on the name in <code>greet.py</code> before printing it, so <code>"david"</code> greets back as <code>"David"</code>.</li>
-</ol>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ <code>python greet.py</code> prints a personalized greeting and a doubled lucky number, using <code>input()</code> and <code>int()</code> only, no <code>cs50</code> import anywhere.</li>
-<li>✅ <code>python agree.py</code> prints <code>Agreed</code> for <code>y</code>, <code>Y</code>, <code>yes</code>, and <code>YES</code>, and <code>Not agreed</code> for anything else.</li>
-<li>✅ Your boilerplate-audit comment names at least five specific lines or symbols from the C versions (headers, <code>main</code>, braces, semicolons, declared types, <code>strcmp</code>/single quotes) that Python needed none of.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> this exact pattern (take raw text from a user,
-normalize it with <code>.lower()</code>, and branch on it) is precisely what you'll
-do to sanitize a web form's input in the database-backed app you build at
-the end of this course. Get comfortable with it now.</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice
-on one idea. Optional and independent; the Capstone already touches all of
-them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-three-way-number-comparator-foundational">Exercise 1: Three-way number comparator (foundational)</h3>
-<p>Write a Python program that asks for two numbers with <code>input()</code>, converts each with <code>int()</code>, and prints whether the first is less than, greater than, or equal to the second, the direct Python translation of Module 2's <code>compare.c</code>, using <code>if</code>/<code>elif</code>/<code>else</code> and proper indentation.</p>
-<h3 id="exercise-2-capitalize-vs-uppercase-intermediate">Exercise 2: Capitalize vs. uppercase (intermediate)</h3>
-<p>Write a program that asks for a word once, then prints both <code>word.capitalize()</code> and <code>word.upper()</code> on separate lines using f-strings, so you can see side by side exactly how the two methods differ on the same input.</p>
-<h3 id="exercise-3-a-three-way-agree-tightened-advanced">Exercise 3: A three-way agree, tightened (advanced)</h3>
-<p>Extend <code>agree.py</code> to accept a third answer, "maybe," using <code>elif</code> and its own <code>in</code> list (so <code>"maybe"</code>, <code>"not sure"</code>, and <code>"unsure"</code> all count). Then, using only named parameters (no string concatenation), make the final line of output print all three possible responses (Agreed, Not agreed, Unsure) on one line separated by commas, by calling <code>print()</code> three times with a <code>sep=</code> or <code>end=</code> combination of your choosing.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>MODULES &amp; PACKAGES
-  from cs50 import get_string     import one function (training wheel)
-  answer = input(&quot;Name? &quot;)        the real Python way, no import needed
-
-NAMED PARAMETERS (print)
-  print(x, end=&quot;&quot;)                 suppress the trailing newline
-  print(x, y, sep=&quot;, &quot;)            change what separates multiple arguments
-  docs.python.org                  official reference for any function&#39;s signature
-
-VARIABLES &amp; TYPES            no declared type; Python infers it
-  bool   float   int   str         the four core types (no char, no pointers)
-  int(input(...))                  convert typed text to a number (not a cast)
-
-CONDITIONALS
-  if x &lt; y:
-      ...
-  elif x &gt; y:                      one word, not &quot;else if&quot;
-      ...
-  else:
-      ...
-  colon + indentation = Python&#39;s curly braces; indentation is mandatory
-
-STRINGS AS OBJECTS
-  s == t                           compares VALUES (no strcmp needed)
-  s in [&quot;y&quot;, &quot;yes&quot;]                membership check across a whole list
-  s.lower()   s.upper()   s.capitalize()    methods, called with a dot
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 2 · Lessons 6-7 (Input, Variables, and the Command Line; Conditionals and Loops):</strong> you learned <code>get_string</code>/<code>get_int</code>, declared C types, and <code>if</code>/<code>else if</code>/<code>else</code> chains with <code>||</code>. This lesson is the Python mirror of both lessons at once: same ideas, a fraction of the syntax.</li>
-<li><strong>Earlier, Lesson 24 (Why Python? Your first scripts):</strong> got you running your first <code>.py</code> file. This lesson is where that first script grows into real variables, branching logic, and string handling.</li>
-<li><strong>Next, Lesson 26 (Loops, functions, and exceptions):</strong> picks up exactly where Part 5 left off: Python's <code>for</code> and <code>while</code> loops, <code>def</code> for your own functions, and <code>try</code>/<code>except</code> for handling errors without checking return values.</li>
-<li><strong>Later, the north-star project:</strong> the <code>.lower()</code>-and-branch pattern from <code>agree.py</code> is the same technique you'll use to validate and normalize every form field in the database-backed web app you build at the end of this course.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 6 - Python" by David J. Malan, Harvard University. Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+</blockquote><div class="pager bottom"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="25-python-essentials.html" class="cur" title="Start here">1</a><a href="25-python-essentials-2.html" class="" title="Parts 4–5">2</a><a href="25-python-essentials-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="25-python-essentials-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="25" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="24-why-python.html"><span class="dir">&#8592; Previous</span><b>Why Python? Your First Scripts</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="26-loops-functions-exceptions.html"><span class="dir">Next &#8594;</span><b>Loops, Functions, and Exceptions</b></a></nav>
+    <div class="ls-marker" data-lesson-id="25" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="24-why-python.html"><span class="dir">&#8592; Previous lesson</span><b>Why Python? Your First Scripts</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 

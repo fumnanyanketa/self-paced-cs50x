@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 3 · Lesson 11: Arrays and Strings Under the Hood | Self-Paced CS50x</title>
+<title>Module 3 · Lesson 11: Arrays and Strings Under the Hood (p1/4) | Self-Paced CS50x</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -49,6 +49,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -212,7 +235,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
   <div class="navlinks">
     <a href="../index.html">All lessons</a>
     <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="11-arrays-and-strings-4.html#capstone">Capstone</a>
   </div>
   <div class="nav-cta">
     <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
@@ -251,7 +274,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="11-arrays-and-strings-4.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -274,46 +297,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <li><a href="#killing-the-magic-number">Killing the magic number</a></li>
 </ul>
 </li>
-<li><a href="#part-2-passing-arrays-to-functions-writing-average">Part 2: Passing arrays to functions, writing average()</a><ul>
-<li><a href="#the-truncation-trap-again">The truncation trap, again</a></li>
-</ul>
-</li>
-<li><a href="#part-3-chars-strings-and-the-null-terminator">Part 3: Chars, strings, and the null terminator</a><ul>
-<li><a href="#a-char-is-a-number-in-a-costume">A char is a number in a costume</a></li>
-<li><a href="#a-string-is-an-array-of-chars">A string is an array of chars</a></li>
-<li><a href="#the-hidden-byte-at-the-end">The hidden byte at the end</a></li>
-</ul>
-</li>
-<li><a href="#part-4-stringh-and-ctypeh-stop-reinventing-the-wheel">Part 4: string.h and ctype.h, stop reinventing the wheel</a><ul>
-<li><a href="#measuring-a-string-yourself-then-not">Measuring a string yourself, then not</a></li>
-<li><a href="#dont-call-strlen-from-inside-a-loops-condition">Don't call strlen from inside a loop's condition</a></li>
-<li><a href="#uppercasing-the-hard-way-then-the-easy-way">Uppercasing: the hard way, then the easy way</a></li>
-</ul>
-</li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: The Word Inspector</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-kill-the-magic-number-foundational">Exercise 1: Kill the magic number (foundational)</a></li>
-<li><a href="#exercise-2-a-sum-function-intermediate">Exercise 2: A sum() function (intermediate)</a></li>
-<li><a href="#exercise-3-write-your-own-strlen-advanced">Exercise 3: Write your own strlen (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 4 &middot; Start here</span><div class="seg"><a href="11-arrays-and-strings.html" class="cur" title="Start here">1</a><a href="11-arrays-and-strings-2.html" class="" title="Parts 2–4">2</a><a href="11-arrays-and-strings-3.html" class="" title="Wrap-up">3</a><a href="11-arrays-and-strings-4.html" class="" title="Capstone &amp; wrap-up">4</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="11-arrays-and-strings-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>An array lets you replace a pile of copy-pasted variables with one variable and a number in square brackets, because C actually stores it as one unbroken block of memory, and once you see that a string is nothing more than an array of characters ending in a hidden terminator byte, functions like <code>strlen</code>, <code>islower</code>, and <code>toupper</code> stop looking like magic tricks and start looking like ordinary loops over memory you could have written yourself.</p>
 <blockquote>
@@ -446,353 +436,9 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 </code></pre></div>
 
 <p>Now the size lives in exactly one place, <code>N</code>, and both the array declaration and the loop bound refer to it. Change one number, and the whole program follows.</p>
-<hr />
-<h2 id="part-2-passing-arrays-to-functions-writing-average">Part 2: Passing arrays to functions, writing average()</h2>
-<p>The averaging math is still stuffed directly into <code>main</code>, and it still doesn't scale: you'd want the exact same averaging logic for a class of 3 students or 300. The next step is to package it into its own function, <code>average()</code>, that takes the array of scores as input.</p>
-<p>Passing an array to a function needs one new piece of syntax. Because, unlike more modern languages, C cannot ask an array its own size, you must pass the length in separately, as a second argument:</p>
-<blockquote>
-<p>"If you've come into CS50 with programming before, you can usually just ask an array, AKA a vector, what its length is in Java and in Python and the like. You can't do that in C." (David Malan)</p>
-<p>"When you create your own function that takes an array as input, you have to take as input the length of the array." (David Malan)</p>
-</blockquote>
-<div class="codehilite"><pre><span></span><code><span class="kt">float</span><span class="w"> </span><span class="nf">average</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">numbers</span><span class="p">[],</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">length</span><span class="p">);</span>
-
-<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
-<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">scores</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
-
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="n">scores</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_int</span><span class="p">(</span><span class="s">&quot;Score: &quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="p">}</span>
-
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Average: %f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">average</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="p">));</span>
-<span class="p">}</span>
-
-<span class="kt">float</span><span class="w"> </span><span class="nf">average</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">numbers</span><span class="p">[],</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">length</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">length</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="w"> </span><span class="n">length</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>Notice the parameter <code>int numbers[]</code>: empty square brackets. You don't repeat the size in the function's own signature; the function trusts whatever <code>length</code> you hand it alongside the array.</p>
-<h3 id="the-truncation-trap-again">The truncation trap, again</h3>
-<p>The very first version of <code>average()</code> you'd naturally write divides <code>sum / length</code>, where both are <code>int</code>s. That reintroduces a bug you first met at the end of Module 2: <strong>truncation</strong>, where dividing two whole numbers in C throws away everything after the decimal point rather than rounding. For scores 72, 73, and 33, the true average is 59.33, and an all-<code>int</code> division reports a flat, wrong <code>59</code>.</p>
-<p>The fix is to make sure at least one value in the division is a <code>float</code> before the division happens:</p>
-<blockquote>
-<p>"It turns out so long as you involve like one float in your math, the whole thing is going to get promoted, so to speak, to floating point values instead of integers." (David Malan)</p>
-</blockquote>
-<p>You have a few equally valid ways to do this (change <code>sum</code>'s type to <code>float</code>, divide by a literal <code>3.0</code> instead of <code>3</code>), but the most explicit and reusable one is an explicit <strong>cast</strong>: writing the target type in parentheses immediately before the value you want converted.</p>
-<div class="codehilite"><pre><span></span><code><span class="k">return</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="w"> </span><span class="n">length</span><span class="p">;</span>
-</code></pre></div>
-
-<p><code>(float) length</code> doesn't change what's stored in <code>length</code>: it just tells the compiler "for this one calculation, treat this value as a float." Because one side of the division is now a <code>float</code>, C promotes the whole expression to floating point, and <code>average()</code> correctly returns <code>59.333333</code> instead of <code>59</code>.</p>
-<blockquote>
-<p>✅ <strong>What to do about it:</strong> any time you divide to get an average, a percentage, or a rate, cast at least one operand to <code>float</code> (or <code>double</code>) <em>before</em> the division runs: casting the final result afterward is too late; the truncation already happened.</p>
-</blockquote>
-<hr />
-<h2 id="part-3-chars-strings-and-the-null-terminator">Part 3: Chars, strings, and the null terminator</h2>
-<p>So far every array has held numbers. Now Malan turns the same square-bracket syntax on something you've been using since week one without looking underneath: the string.</p>
-<h3 id="a-char-is-a-number-in-a-costume">A char is a number in a costume</h3>
-<p>Start with three individual <code>char</code> variables: a <strong>char</strong> holds exactly one character, written in single quotes (not double quotes, which are reserved for strings):</p>
-<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
-
-<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">c1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">&#39;H&#39;</span><span class="p">;</span>
-<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">c2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">&#39;I&#39;</span><span class="p">;</span>
-<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">c3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">&#39;!&#39;</span><span class="p">;</span>
-
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%c%c%c</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">c1</span><span class="p">,</span><span class="w"> </span><span class="n">c2</span><span class="p">,</span><span class="w"> </span><span class="n">c3</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>This prints <code>HI!</code>, unsurprisingly. Malan draws the char/string line explicitly:</p>
-<blockquote>
-<p>"chars are single quotes, strings are double quotes" (David Malan)</p>
-</blockquote>
-<p>But here's the trick: swap the <code>%c</code> format codes for <code>%i</code> (integer), with no other change to the variables themselves:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%i %i %i</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">c1</span><span class="p">,</span><span class="w"> </span><span class="n">c2</span><span class="p">,</span><span class="w"> </span><span class="n">c3</span><span class="p">);</span>
-</code></pre></div>
-
-<p>This prints <code>72 73 33</code>, the exact same numbers as the averaging program from Part 1. That's not a coincidence Malan invented for this lesson alone; it demonstrates a real fact about how the computer stores characters:</p>
-<blockquote>
-<p>"there's nothing stopping me from telling the compiler, don't print these as chars, print them as integers." (David Malan)</p>
-</blockquote>
-<p>Every character your computer can display is secretly a whole number under <strong>ASCII</strong>, the standard table assigning every letter, digit, and punctuation mark a number from 0 to 255. <code>'H'</code> is 72. <code>'I'</code> is 73. <code>'!'</code> is 33. A <code>char</code> variable and an <code>int</code> variable holding 72 are, in memory, the identical pattern of bits: <code>char</code> just tells <code>printf</code> which way to <em>display</em> it.</p>
-<h3 id="a-string-is-an-array-of-chars">A string is an array of chars</h3>
-<p>Now write the same three characters as a string instead:</p>
-<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cs50.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
-
-<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="n">string</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;HI!&quot;</span><span class="p">;</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>Because a <code>string</code> is just our training-wheels name for this idea, you can index into it exactly like the <code>scores</code> array from Part 1:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%c%c%c</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">s</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
-</code></pre></div>
-
-<p>Same output, <code>HI!</code>, because underneath, <code>s[0]</code> really is <code>'H'</code>, <code>s[1]</code> really is <code>'I'</code>, <code>s[2]</code> really is <code>'!'</code>. This is the connection the whole lecture has been building toward:</p>
-<blockquote>
-<p>"It's just going to be an array of characters, hence the dots we're trying to connect today." (David Malan)</p>
-</blockquote>
-<p><strong>Strings are arrays for today's purposes.</strong> A <code>char</code> is a one-byte number; a string is simply several of those bytes sitting contiguously, one after another, exactly the way <code>scores[0]</code>, <code>scores[1]</code>, and <code>scores[2]</code> sat contiguously.</p>
-<h3 id="the-hidden-byte-at-the-end">The hidden byte at the end</h3>
-<p>If a string is only as long as the characters you typed, how does <code>printf</code>'s <code>%s</code> know <em>where to stop</em>, especially once there's other data sitting in memory right after it? Malan answers this by deliberately poking one array position past the end of a 3-character string:</p>
-<blockquote>
-<p>"let's look 1 location past the end of this array." (David Malan)</p>
-</blockquote>
-<p>Reading <code>s[3]</code> (one past <code>'H'</code>, <code>'I'</code>, <code>'!'</code> at indexes 0, 1, 2) with <code>%i</code> reveals a <code>0</code>:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%i</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span><span class="w">   </span><span class="c1">// prints 0</span>
-</code></pre></div>
-
-<p>That zero is not an accident, and it is not garbage. C automatically appends one extra invisible byte, worth the number 0, to the end of every string literal, written as the escape sequence <code>\0</code> and called the <strong>null terminator</strong>:</p>
-<blockquote>
-<p>"The null character is just a byte of zero bits, and it represents the end of a string." (David Malan)</p>
-</blockquote>
-<p>So the string <code>"HI!"</code>, three visible characters, actually occupies <strong>four</strong> bytes in memory: <code>'H'</code>, <code>'I'</code>, <code>'!'</code>, <code>\0</code>. Every function that walks a string (<code>printf</code>'s <code>%s</code>, <code>strlen</code>, the loop you're about to write yourself) works the same simple way: read one character at a time and stop the instant you hit that <code>\0</code>. That's also why two strings sitting next to each other in memory never bleed into one another when you print them: each one's own <code>\0</code> acts as a stop sign before the next string begins.</p>
-<div class="codehilite"><pre><span></span><code>Memory (each box is one byte):
-
-  s[0]   s[1]   s[2]   s[3]
- +------+------+------+------+
- | &#39;H&#39;  | &#39;I&#39;  | &#39;!&#39;  | &#39;\0&#39; |
- |  72  |  73  |  33  |   0  |
- +------+------+------+------+
-</code></pre></div>
-
-<blockquote>
-<p>🔑 <strong>The single most important takeaway of this part.</strong> A C string is not a special built-in type: it is an array of <code>char</code> with one extra hidden byte, <code>\0</code>, glued onto the end automatically, so that any function reading it knows exactly where to stop.</p>
-</blockquote>
-<hr />
-<h2 id="part-4-stringh-and-ctypeh-stop-reinventing-the-wheel">Part 4: string.h and ctype.h, stop reinventing the wheel</h2>
-<h3 id="measuring-a-string-yourself-then-not">Measuring a string yourself, then not</h3>
-<p>Knowing that a string ends at <code>\0</code>, you could count its length by hand with a <code>while</code> loop that walks forward until it hits that terminator:</p>
-<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">name</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="sc">&#39;\0&#39;</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="n">n</span><span class="o">++</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>This genuinely works. But someone solved this exact problem decades ago and packaged the solution into a library function so nobody has to rewrite that loop ever again:</p>
-<blockquote>
-<p>"Someone else literally decades ago wrote the code that essentially looks quite like this but packaged it up in a function that you and I can use so we don't have to jump through these stupid hoops just to count the length of a string." (David Malan)</p>
-</blockquote>
-<p>That function is <code>strlen</code> ("string length"), declared in the header file <code>string.h</code>:</p>
-<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string.h&gt;</span>
-
-<span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">strlen</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
-</code></pre></div>
-
-<p>One line replaces the whole hand-rolled loop.</p>
-<h3 id="dont-call-strlen-from-inside-a-loops-condition">Don't call strlen from inside a loop's condition</h3>
-<p>Here's a subtle trap. A perfectly reasonable-looking loop that prints a string one character at a time might check the length like this:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">strlen</span><span class="p">(</span><span class="n">s</span><span class="p">);</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%c&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>It produces correct output, but it's wasteful, and Malan is blunt about exactly why:</p>
-<blockquote>
-<p>"...you are literally using strlen again and again and again and like a crazy person you're asking the computer what's the length of S, what's the length of S? What's the length of S? It's not going to change." (David Malan)</p>
-</blockquote>
-<p>Recall how a <code>for</code> loop actually runs: the condition (<code>i &lt; strlen(s)</code>) is re-checked on <em>every single pass</em>. If <code>s</code> has 20 characters, that means calling <code>strlen</code>, which itself walks the whole string looking for <code>\0</code>, 20 separate times, recomputing an answer that never changes. The fix is to compute the length exactly once, store it, and reuse the stored value:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">strlen</span><span class="p">(</span><span class="n">s</span><span class="p">);</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%c&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>C lets you declare more than one variable before a <code>for</code> loop's first semicolon, as long as they share the same type, which is exactly what <code>i</code> and <code>n</code> do here (both <code>int</code>).</p>
-<blockquote>
-<p>✅ <strong>What to do about it:</strong> if a loop's condition calls a function whose answer can't change between iterations (like <code>strlen</code> on a string you aren't modifying), compute it once before or at the start of the loop and reuse a variable: don't recompute it on every pass.</p>
-</blockquote>
-<h3 id="uppercasing-the-hard-way-then-the-easy-way">Uppercasing: the hard way, then the easy way</h3>
-<p>Last piece: transforming a string, not just reading it. Say you want to force every character of user input to uppercase. Recall from Part 3 that lowercase and uppercase letters are just nearby ASCII numbers: Malan points out the exact distance between them:</p>
-<blockquote>
-<p>"lowercase a for instance, is 97, and they are all contiguous thereafter." (David Malan)</p>
-</blockquote>
-<p>Uppercase <code>'A'</code> is 65. The gap between every matching lowercase and uppercase letter is a constant 32. So you <em>could</em> uppercase a character by hand: check whether it falls in the lowercase range, and if so, subtract 32:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="sc">&#39;a&#39;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="sc">&#39;z&#39;</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%c&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">32</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="k">else</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%c&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>This works, but just like <code>strlen</code>, someone already solved "is this character lowercase?" and "convert this character to uppercase" as reusable library functions, this time in <code>ctype.h</code>:</p>
-<blockquote>
-<p>"someone else years ago wrote the conditional code that checks if it's between little a and little Z." (David Malan)</p>
-</blockquote>
-<p><code>ctype.h</code> gives you <code>islower(c)</code> (true if <code>c</code> is a lowercase letter) and <code>toupper(c)</code> (returns the uppercase version of <code>c</code>, or passes any non-lowercase character through completely unchanged, no <code>if</code> needed at all):</p>
-<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;ctype.h&gt;</span>
-
-<span class="n">printf</span><span class="p">(</span><span class="s">&quot;%c&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">toupper</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]));</span>
-</code></pre></div>
-
-<p>That one call replaces the entire <code>if</code>/<code>else</code> block above. (<code>ctype.h</code> also provides the mirror-image functions <code>isupper(c)</code> and <code>tolower(c)</code>, for exactly the opposite checks and conversions.)</p>
-<p>Putting it together as <code>uppercase.c</code>:</p>
-<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cs50.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;ctype.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string.h&gt;</span>
-
-<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="n">string</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_string</span><span class="p">(</span><span class="s">&quot;Before: &quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;After:  &quot;</span><span class="p">);</span>
-
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">strlen</span><span class="p">(</span><span class="n">s</span><span class="p">);</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%c&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">toupper</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]));</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong>An array is contiguous memory, addressed by index.</strong> <code>int scores[3]</code> reserves three <code>int</code>-sized slots back to back; <code>scores[0]</code>, <code>scores[1]</code>, <code>scores[2]</code> reach them by position, starting at 0.</li>
-<li><strong>Name your sizes.</strong> A hard-coded number repeated in more than one place is a magic number; a <code>const int N</code> used everywhere that number belongs removes the bug of forgetting to update one copy.</li>
-<li><strong>Functions can't ask an array its own length in C.</strong> Always pass the length as a separate parameter alongside the array itself.</li>
-<li><strong>Casting before dividing avoids truncation.</strong> <code>sum / (float) length</code> promotes the whole division to floating point; casting after the division is too late.</li>
-<li><strong>A string is an array of <code>char</code> plus one hidden <code>\0</code>.</strong> That null terminator, worth the number 0, is what every string-reading function uses to know where to stop.</li>
-<li><strong>Chars and their ASCII numbers are the same bits.</strong> <code>'H'</code> and <code>72</code> are stored identically; <code>%c</code> and <code>%i</code> just choose how to display them.</li>
-<li><strong>Don't reinvent, and don't recompute.</strong> <code>strlen</code>, <code>islower</code>, and <code>toupper</code> already solve problems you could hand-roll; and once you've called <code>strlen</code> on an unchanging string, store the answer instead of calling it again on every loop iteration.</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ Hard-coding an array's size as a bare number in two or more places (the declaration and a loop bound) instead of one shared <code>const int</code>.</li>
-<li>❌ Writing a function that takes an array but forgetting to also take its length as a separate parameter: C cannot recover it for you.</li>
-<li>❌ Dividing two <code>int</code>s and expecting a decimal answer: cast one operand to <code>float</code> (or <code>double</code>) <em>before</em> the division, not after.</li>
-<li>❌ Calling <code>strlen(s)</code> directly inside a <code>for</code> loop's condition, recomputing an unchanging answer on every single pass.</li>
-<li>❌ Assuming a string ends wherever you stopped typing: it ends at the hidden <code>\0</code> the compiler appended, which is one byte <em>past</em> your last visible character.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: The Word Inspector</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. You'll build a small program that reads one word and shows you, byte by byte, everything this lesson just taught about how C actually stores it, proving to yourself that a string really is an array, not just taking Malan's word for it.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>A program, <code>inspector.c</code>, built on cs50.dev, that reads a single word from the user and reports on it in increasing detail: its length, every character's ASCII code and position, and two independently-computed uppercase versions of it that must agree with each other.</p>
-<ul>
-<li>Reading input and measuring it → <code>get_string</code> and <code>strlen</code>.</li>
-<li>Walking the array → a <code>for</code> loop indexing into the string with <code>[i]</code>.</li>
-<li>Chars as numbers → printing each character next to its ASCII code with <code>%c</code> and <code>%i</code>.</li>
-<li>Manual vs. library uppercasing → the hand-written <code>if</code>/subtract-32 version, then <code>toupper</code>.</li>
-</ul>
-<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in The Word Inspector</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Arrays and indexing (Part 1)</td>
-<td>Every character of the word is reached with <code>word[i]</code>.</td>
-</tr>
-<tr>
-<td>Passing length separately, casting (Part 2)</td>
-<td>You'll reuse the pattern of computing a value once (the length) and reusing it, exactly like <code>average()</code>'s length parameter.</td>
-</tr>
-<tr>
-<td>Strings as char arrays, the null terminator (Part 3)</td>
-<td>You print each character's ASCII code, proving the string is really numbers underneath.</td>
-</tr>
-<tr>
-<td><code>string.h</code> / <code>ctype.h</code> (Part 4)</td>
-<td><code>strlen</code> measures the word once (not on every loop pass); <code>islower</code>/subtraction and then <code>toupper</code> uppercase it two ways.</td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>Read it and measure it.</strong> Write a program that asks <code>get_string("Word: ")</code>, computes its length once with <code>strlen</code>, and prints <code>Length: &lt;n&gt;</code>. Confirm it reports the right length for a few different words, including a one-letter word and an empty string (just pressing enter).</li>
-<li><strong>Show every character and its ASCII code.</strong> Loop from <code>i = 0</code> to the stored length, and for each position print the character, its ASCII number, and its index, one per line: for example <code>s[2] = 'l' (108)</code>. This is where you prove to yourself a string is an array: you're indexing it exactly like <code>scores[i]</code> from Part 1.</li>
-<li><strong>Uppercase it by hand.</strong> Add a second loop that builds and prints an uppercased version using the manual check-and-subtract-32 technique from Part 4 (no <code>ctype.h</code> yet). Confirm it correctly leaves non-letters (spaces, punctuation, digits) untouched.</li>
-<li><strong>Uppercase it again with <code>toupper</code>.</strong> Add <code>#include &lt;ctype.h&gt;</code> and a third loop that uses <code>toupper</code> instead of your manual math. Print both uppercased results side by side and confirm they are character-for-character identical.</li>
-<li><strong>Stretch goals.</strong> Also print a lowercased version using <code>tolower</code>; count and print how many characters in the word were already uppercase before you touched them (using <code>isupper</code>); or handle multi-word input by printing the ASCII code of the space character too, and explain why it doesn't get uppercased.</li>
-</ol>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ <code>make inspector</code> compiles with no errors or warnings.</li>
-<li>✅ For the input <code>Hi!</code>, your program reports length <code>3</code>, and lists <code>s[0] = 'H' (72)</code>, <code>s[1] = 'i' (105)</code>, <code>s[2] = '!' (33)</code>.</li>
-<li>✅ Your manual uppercase loop and your <code>toupper</code>-based loop produce identical output for the same input.</li>
-<li>✅ You can explain, out loud, why <code>strlen</code> is called exactly once in your program rather than inside a loop condition.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> before you add <code>ctype.h</code>, actually run your manual, subtract-32 version on a string with a space or a digit in it. If your manual <code>if</code> check is wrong, you'll uppercase things that should never change: exactly the kind of logical bug <code>islower</code>'s already-tested library code protects you from.</p>
-</blockquote>
-<p>This same byte-by-byte discipline (never trusting that a string "just works," always knowing how it's laid out and where it ends) is precisely what you'll rely on later when your database-backed capstone web app has to validate, trim, or compare a username or password field.</p>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-kill-the-magic-number-foundational">Exercise 1: Kill the magic number (foundational)</h3>
-<p>Write a program that declares <code>int scores[5]</code> with a hard-coded <code>5</code> in the declaration and a separate hard-coded <code>5</code> in a <code>for</code> loop that fills it using <code>get_int</code>. Refactor it to use one <code>const int N = 5</code> in both places instead, then confirm the program still behaves identically. Change <code>N</code> to <code>7</code> and confirm both the declaration and the loop update automatically.</p>
-<h3 id="exercise-2-a-sum-function-intermediate">Exercise 2: A sum() function (intermediate)</h3>
-<p>Write a function <code>int sum(int numbers[], int length)</code> that adds up every element of an array of integers and returns the total (no casting needed here, since an integer sum has no truncation risk). Write a prototype for it above <code>main</code>, call it on an array of at least 4 numbers you fill with <code>get_int</code>, and print the result.</p>
-<h3 id="exercise-3-write-your-own-strlen-advanced">Exercise 3: Write your own strlen (advanced)</h3>
-<p>Without using <code>string.h</code>, write your own function <code>int my_strlen(string s)</code> that walks the string with a <code>while</code> loop looking for <code>'\0'</code>, exactly like the hand-rolled version in Part 4. Call both your <code>my_strlen</code> and the real <code>strlen</code> on the same <code>get_string</code> input and print both results side by side to confirm they always agree.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>DECLARE AN ARRAY
-  int scores[3];                declares room for 3 ints, uninitialized
-  int scores[3] = {72, 73, 33}; declares AND fills it in one line (size optional here)
-  scores[0] = 72;                assign one element (indexes start at 0)
-
-PASS AN ARRAY TO A FUNCTION
-  float average(int numbers[], int length);   &lt;- always pass length separately, C can&#39;t ask
-  average(scores, N);                          &lt;- call site: array name, then its length
-
-AVOID TRUNCATION
-  sum / length            &lt;- int / int  = truncates (wrong)
-  sum / (float) length    &lt;- cast BEFORE dividing = correct
-
-CHAR &lt;-&gt; ASCII NUMBER (same bits, different %format)
-  &#39;H&#39; = 72   &#39;I&#39; = 73   &#39;!&#39; = 33   &#39;a&#39; = 97   &#39;A&#39; = 65   (gap of 32)  &#39;\0&#39; = 0
-
-STRING = ARRAY OF CHAR + HIDDEN \0
-  &quot;HI!&quot;  -&gt;  s[0]=&#39;H&#39; s[1]=&#39;I&#39; s[2]=&#39;!&#39; s[3]=&#39;\0&#39;   (4 bytes total, not 3)
-
-string.h / ctype.h  (don&#39;t reinvent, don&#39;t recompute)
-  strlen(s)      length of s, walks to &#39;\0&#39;   -&gt; compute ONCE, reuse; don&#39;t call in loop condition
-  islower(c)     true if c is a-z
-  isupper(c)     true if c is A-Z
-  toupper(c)     uppercase version of c (unchanged if not a lowercase letter)
-  tolower(c)     lowercase version of c (unchanged if not an uppercase letter)
-
-  for (int i = 0, n = strlen(s); i &lt; n; i++)   &lt;- the idiomatic, efficient pattern
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 3 · Lesson 10:</strong> "From source code to machine code" established that every variable is just bytes sitting somewhere in memory: this lesson used that same idea to explain why arrays must be contiguous and why a string needs an explicit end marker.</li>
-<li><strong>Next, Module 3 · Lesson 12: Command-line arguments and a first cipher</strong>: you'll meet <code>argv</code>, which is literally an array of strings, and write your first Caesar cipher by looping over a string's characters exactly the way you did in this lesson's <code>uppercase.c</code> and Word Inspector.</li>
-<li><strong>Later, Module 5 · Lesson 18</strong> reveals what <code>string</code> was secretly hiding this whole time: a string is literally a <code>char *</code>, a pointer to the first character of exactly the kind of array you built by hand in this lesson.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 2 - Arrays" by David J. Malan, Harvard University (CS50x 2026). Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+<hr /><div class="pager bottom"><span class="pcount">Page 1 of 4 &middot; Start here</span><div class="seg"><a href="11-arrays-and-strings.html" class="cur" title="Start here">1</a><a href="11-arrays-and-strings-2.html" class="" title="Parts 2–4">2</a><a href="11-arrays-and-strings-3.html" class="" title="Wrap-up">3</a><a href="11-arrays-and-strings-4.html" class="" title="Capstone &amp; wrap-up">4</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="11-arrays-and-strings-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="11" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="10-source-to-machine-code.html"><span class="dir">&#8592; Previous</span><b>From Source Code to Machine Code</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="12-cli-args-and-cipher.html"><span class="dir">Next &#8594;</span><b>Command-Line Arguments and a First Cipher</b></a></nav>
+    <div class="ls-marker" data-lesson-id="11" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="10-source-to-machine-code.html"><span class="dir">&#8592; Previous lesson</span><b>From Source Code to Machine Code</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 

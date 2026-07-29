@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 2 · Lesson 7: Conditionals and Loops | Self-Paced CS50x</title>
+<title>Module 2 · Lesson 7: Conditionals and Loops (p1/3) | Self-Paced CS50x</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -49,6 +49,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -212,7 +235,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
   <div class="navlinks">
     <a href="../index.html">All lessons</a>
     <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="07-conditionals-and-loops-3.html#capstone">Capstone</a>
   </div>
   <div class="nav-cta">
     <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
@@ -251,7 +274,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="07-conditionals-and-loops-3.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -275,38 +298,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 </ul>
 </li>
 <li><a href="#part-2-data-types-and-the-cs50-get_-functions">Part 2: Data types and the CS50 get_ functions</a></li>
-<li><a href="#part-3-comparing-characters-and-combining-conditions">Part 3: Comparing characters and combining conditions</a></li>
-<li><a href="#part-4-loops-while-do-while-for-and-controlling-them-from-the-inside">Part 4: Loops: while, do while, for, and controlling them from the inside</a><ul>
-<li><a href="#infinite-loops-and-how-to-stop-one">Infinite loops, and how to stop one</a></li>
-<li><a href="#validating-input-with-break-and-continue">Validating input with break and continue</a></li>
-<li><a href="#do-while-check-the-condition-at-the-bottom-not-the-top">do while: check the condition at the bottom, not the top</a></li>
-</ul>
-</li>
-<li><a href="#part-5-putting-branches-and-loops-together">Part 5: Putting branches and loops together</a></li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: Guess My Number</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-two-number-comparator-foundational">Exercise 1: Two-number comparator (foundational)</a></li>
-<li><a href="#exercise-2-temperature-classifier-intermediate">Exercise 2: Temperature classifier (intermediate)</a></li>
-<li><a href="#exercise-3-star-grid-with-an-early-stop-advanced">Exercise 3: Star grid with an early stop (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="07-conditionals-and-loops.html" class="cur" title="Start here">1</a><a href="07-conditionals-and-loops-2.html" class="" title="Parts 3–5">2</a><a href="07-conditionals-and-loops-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="07-conditionals-and-loops-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>You can make a C program branch between different actions with <code>if</code>/<code>else if</code>/<code>else</code>, and repeat an action with <code>while</code>, <code>do while</code>, or <code>for</code>, as long as you store each value in a variable of the right data type.</p>
 <blockquote>
@@ -493,268 +491,9 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <blockquote>
 <p>🔑 <strong>Every variable has exactly one type; that type decides which <code>get_</code> function fills it and which <code>%</code> placeholder prints it.</strong></p>
 </blockquote>
-<hr />
-<h2 id="part-3-comparing-characters-and-combining-conditions">Part 3: Comparing characters and combining conditions</h2>
-<p>A <code>char</code> holds exactly one character: not a word, not a sentence, just one letter, digit, or symbol. To get one from the user and check it, CS50's <code>agree.c</code> pattern looks like this:</p>
-<div class="codehilite"><pre><span></span><code><span class="kt">char</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_char</span><span class="p">(</span><span class="s">&quot;Do you agree? &quot;</span><span class="p">);</span>
-
-<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;y&#39;</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Agreed.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;n&#39;</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Not agreed.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>Notice the single quotes around <code>'y'</code> and <code>'n'</code>. That's not optional styling: it's how C tells a lone character apart from a string. Malan draws the line clearly: <strong>"When you want to compare a single character, you use chars and you use single quotes. When you want to use strings of text like multiple characters, multiple words, multiple sentences or paragraphs, you use strings."</strong> Double quotes (<code>"y"</code>) would make a string of one character, which is a different type than <code>char</code> and would not compare correctly with <code>==</code>.</p>
-<p>The <code>agree.c</code> example above has a real gap, though: typing an uppercase <code>Y</code> doesn't match <code>'y'</code>, so a perfectly reasonable answer gets treated as disagreement. You could add a second, nearly-identical <code>else if</code> for <code>'Y'</code>, but that repeats yourself: the same message twice, so a future wording change means editing it in two places. The better fix is a <strong>logical operator</strong>, which combines two boolean expressions into one:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;y&#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="sc">&#39;Y&#39;</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Agreed.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>On what that symbol means, Malan says: <strong>"the two vertical bars, which is probably not a character you type that often [...] just means logical or."</strong> <code>||</code> asks "is at least one of these true?", so this line reads "the character equals lowercase y, or the character equals uppercase Y." The other logical operator, <code>&amp;&amp;</code> ("and"), requires <em>both</em> sides to be true, which would be the wrong choice here, since a single character obviously cannot simultaneously equal <code>'y'</code> and <code>'Y'</code> at the same time.</p>
-<blockquote>
-<p>✅ <strong>What to do about it:</strong> when more than one input should count as a match, reach for <code>||</code> instead of copy-pasting a near-identical branch for each accepted value.</p>
-</blockquote>
-<hr />
-<h2 id="part-4-loops-while-do-while-for-and-controlling-them-from-the-inside">Part 4: Loops: while, do while, for, and controlling them from the inside</h2>
-<p>A loop repeats a block of code. Malan's plain definition: <strong>"a loop is just something that does something again and again and again."</strong> Scratch's "repeat" block doesn't exist by that name in C. The closest match is a <code>while</code> loop, built from a boolean expression that stays true until it doesn't:</p>
-<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
-<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;meow</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="n">i</span><span class="o">--</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>This counts <em>down</em> from 3 to 1, printing <code>meow</code> each time, and stops the instant <code>i &gt; 0</code> becomes false. You can just as easily count <em>up</em>, which is the more conventional style in C, start at 0, and loop while the counter is <em>less than</em> the value you care about:</p>
-<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;meow</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="n">i</span><span class="o">++</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>Because "loop a known number of times" is so common, C offers a <code>for</code> loop that packs the setup, the condition, and the increment into a single line:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;meow</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>Read it left to right: initialize <code>i</code> to 0, check <code>i &lt; 3</code> before every pass, and run <code>i++</code> automatically after every pass. It behaves identically to the <code>while</code> version above, just fewer lines to write.</p>
-<h3 id="infinite-loops-and-how-to-stop-one">Infinite loops, and how to stop one</h3>
-<p>Sometimes you want something to repeat forever, until you say otherwise. There's no dedicated "forever" keyword, so the convention is <code>while (true)</code>:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;meow</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>Malan ran exactly this in class and let it run through a break, printing <code>meow</code> nonstop, until VS Code itself warned about runaway CPU use. The escape hatch is a keyboard shortcut, not a code fix: <strong>"Control C would have been our friend."</strong> <code>Ctrl+C</code> interrupts whatever is currently running in the terminal: good to know before you accidentally write your own infinite loop.</p>
-<h3 id="validating-input-with-break-and-continue">Validating input with <code>break</code> and <code>continue</code></h3>
-<p>An infinite loop becomes genuinely useful once you can exit it on your own terms. Suppose you want to keep asking for a number until the user gives you a non-negative one:</p>
-<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
-<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_int</span><span class="p">(</span><span class="s">&quot;What&#39;s n? &quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="k">continue</span><span class="p">;</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="k">else</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="k">break</span><span class="p">;</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p><code>continue</code> and <code>break</code> are two different ways of interrupting a loop from inside: <strong>"So continue essentially brings you to the top, brake [break] brings you to the bottom if you will."</strong> <code>continue</code> jumps back up to re-check the loop's condition (try again); <code>break</code> jumps out past the loop's closing curly brace entirely (stop looping). Since asking to loop again is already the default behavior, the <code>continue</code> here is optional: the same logic reads more cleanly as just <code>if (n &gt;= 0) { break; }</code>.</p>
-<p>Notice <code>int n;</code> is declared <em>above</em> the loop, with no value yet, rather than inside it. That's deliberate, and it's the first time this lesson touches <strong>scope</strong>: a variable declared inside a pair of curly braces only exists inside that same pair of braces. Malan hits this directly while debugging exactly this mistake: <strong>"This is a problem of what's known as scope [...] and only exists inside of the scope of the while loop in which it was declared."</strong> Declare <code>n</code> inside the loop's braces, and it vanishes the moment the loop's block ends, so if you need the value afterward, declare it one level up first.</p>
-<h3 id="do-while-check-the-condition-at-the-bottom-not-the-top"><code>do while</code>: check the condition at the bottom, not the top</h3>
-<p>A <code>while (true)</code> loop with a manual <code>break</code> works, but C offers a construct built for exactly this "do it, then decide whether to repeat" shape: <code>do while</code>.</p>
-<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
-<span class="k">do</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_int</span><span class="p">(</span><span class="s">&quot;What&#39;s n? &quot;</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
-</code></pre></div>
-
-<p>The difference from a plain <code>while</code> loop is simply <em>when</em> the condition is checked: at the bottom instead of the top, meaning the body always runs at least once before anything is questioned. Malan illustrates the distinction with a cartoon pairing: <strong>"the difference between do while loop, like the roadrunner, is stopping because he's checking the condition while not on edge, he'll run, but if he is on the edge, he's not going to proceed further. But of course the coyote here, he's going to do running no matter what and then only too late does he check."</strong> A <code>do while</code> loop is the coyote: it runs first and checks after. A plain <code>while</code> loop is the roadrunner: it checks first and only runs if the check passes. Use <code>do while</code> whenever you know you want to do something at least once: asking the user a question is the classic case.</p>
-<blockquote>
-<p>🔑 <strong><code>while</code> checks before it runs; <code>do while</code> runs once before it checks: pick <code>do while</code> whenever the first attempt should happen unconditionally.</strong></p>
-</blockquote>
-<hr />
-<h2 id="part-5-putting-branches-and-loops-together">Part 5: Putting branches and loops together</h2>
-<p>The whole point of this lesson is that conditionals and loops are not separate tools. They combine. A validation loop is a loop wrapped around a conditional; a game loop is a loop wrapped around several conditionals in a row. In text form:</p>
-<div class="codehilite"><pre><span></span><code>do
-{
-    guess = get_int(&quot;Guess: &quot;);     &lt;- loop body (repeats)
-
-    if (guess &lt; secret)             &lt;- conditional (branches)
-    {
-        printf(&quot;Too low!\n&quot;);
-    }
-    else if (guess &gt; secret)
-    {
-        printf(&quot;Too high!\n&quot;);
-    }
-    else
-    {
-        printf(&quot;Correct!\n&quot;);
-    }
-}
-while (guess != secret);            &lt;- loop&#39;s exit condition
-</code></pre></div>
-
-<p>The <code>do while</code> guarantees the player gets at least one guess before anything is checked; the <code>if</code>/<code>else if</code>/<code>else</code> chain inside decides what to tell them; and the loop's own condition (checked at the bottom) decides whether to ask again. This exact shape is what you'll build in the Capstone below.</p>
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong><code>if</code>/<code>else if</code>/<code>else</code> is a fork in the road.</strong> Chain mutually-exclusive branches with <code>else if</code> so C never checks a question whose answer is already implied.</li>
-<li><strong><code>=</code> assigns, <code>==</code> compares.</strong> Confusing them is one of the most common early C bugs: <code>if (x = y)</code> silently assigns instead of asking a question.</li>
-<li><strong>Every variable has a type, and the type decides everything downstream.</strong> Pick the right <code>get_</code> function to read it and the right <code>%</code> placeholder to print it: <code>bool</code>, <code>char</code>/<code>get_char</code>/<code>%c</code>, <code>int</code>/<code>get_int</code>/<code>%i</code>, <code>float</code>/<code>get_float</code>/<code>%f</code>, <code>double</code>/<code>%f</code>, <code>long</code>/<code>%li</code>.</li>
-<li><strong>Single characters use single quotes; strings use double quotes.</strong> <code>c == 'y'</code> compares a char; <code>c == "y"</code> does not mean what you think it means.</li>
-<li><strong><code>||</code> accepts either side; <code>&amp;&amp;</code> requires both.</strong> Use <code>||</code> to accept more than one valid answer for the same input.</li>
-<li><strong><code>while</code> checks first, <code>do while</code> checks last, <code>for</code> packs a counting loop onto one line.</strong> <code>break</code> exits a loop immediately; <code>continue</code> jumps back to re-check the condition.</li>
-<li><strong>A variable only exists inside the curly braces it was declared in (its scope).</strong> Declare it one level higher if you need it to outlive a loop.</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ Writing <code>if (x = 5)</code> when you meant <code>if (x == 5)</code>: this assigns 5 to <code>x</code> (and is usually treated as true), it does not compare anything.</li>
-<li>❌ Writing three independent <code>if</code> statements for mutually exclusive cases instead of chaining them with <code>else if</code>: every one gets checked even after the answer is already known.</li>
-<li>❌ Comparing a <code>char</code> against a string, like <code>c == "y"</code> instead of <code>c == 'y'</code>: double quotes and single quotes are different types in C.</li>
-<li>❌ Reaching for <code>&amp;&amp;</code> when you mean <code>||</code> (or vice versa): ask yourself whether <em>both</em> conditions must hold, or whether <em>either</em> one is enough.</li>
-<li>❌ Writing <code>while (true)</code> without a <code>break</code> anywhere inside it: you now have a real infinite loop; remember <code>Ctrl+C</code> if you get stuck.</li>
-<li>❌ Declaring a variable inside a loop's curly braces and then trying to use it after the loop ends: it's out of scope. Declare it above the loop instead.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: Guess My Number</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. You'll build a small, complete C program on cs50.dev that validates input with a loop, branches on the player's guess, and loops the whole game until they win: proving you can combine every idea from this lesson into one working thing. Validation loops and branching logic like this run every form your app will ever process, right up through the database-backed web app you build at the end of this course.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>A command-line guessing game, <code>guess.c</code>, where the computer picks a secret number and the player guesses until they get it right, with the program telling them "too high" or "too low" after each guess.</p>
-<ul>
-<li>A <code>do while</code> loop that rejects out-of-range input (Part 4).</li>
-<li>An <code>if</code>/<code>else if</code>/<code>else</code> chain, ordered efficiently, that compares the guess to the secret number (Part 1).</li>
-<li>A loop that repeats the guess-and-check cycle until the player wins, using <code>break</code> to stop (Part 4).</li>
-<li>A <code>char</code>-based "play again?" prompt using <code>||</code> to accept <code>'y'</code> or <code>'Y'</code> (Part 3).</li>
-</ul>
-<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in Guess My Number</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>if</code>/<code>else if</code>/<code>else</code>, ordered efficiently</td>
-<td>Comparing the guess to the secret number</td>
-</tr>
-<tr>
-<td><code>==</code> vs <code>=</code></td>
-<td>Checking <code>guess == secret</code> to end the loop</td>
-</tr>
-<tr>
-<td>Data types &amp; <code>get_int</code>/<code>get_char</code></td>
-<td>Reading the guess (<code>int</code>) and the replay answer (<code>char</code>)</td>
-</tr>
-<tr>
-<td><code>||</code> / <code>&amp;&amp;</code></td>
-<td>Accepting <code>'y'</code> or <code>'Y'</code> for "play again?"</td>
-</tr>
-<tr>
-<td><code>do while</code></td>
-<td>Forcing at least one valid guess before checking it</td>
-</tr>
-<tr>
-<td><code>while</code> / <code>for</code> + <code>break</code></td>
-<td>Repeating guesses until correct, and counting attempts</td>
-</tr>
-<tr>
-<td>Scope</td>
-<td>Declaring the attempt counter above the loop so you can print it after</td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>Validate a range with <code>do while</code>.</strong> In a new <code>guess.c</code>, hardcode <code>int secret = 42;</code>. Write a <code>do while</code> loop that uses <code>get_int</code> to ask "Guess a number between 1 and 100: " and rejects (loops again on) anything outside 1-100.</li>
-<li><strong>Branch on the guess.</strong> Inside the loop, add an <code>if</code>/<code>else if</code>/<code>else</code> chain that prints <code>"Too low!\n"</code>, <code>"Too high!\n"</code>, or <code>"Correct!\n"</code> by comparing the guess to <code>secret</code>. Order the checks so the correct case needs no extra question.</li>
-<li><strong>Loop until correct, and count attempts.</strong> Wrap the guessing in a <code>while</code> (or <code>for</code>) loop with a counter (<code>int tries = 0;</code>, declared <em>above</em> the loop). Increment it each pass, <code>break</code> out the moment the guess is correct, and print the number of tries it took.</li>
-<li><strong>Ask "play again?" with <code>get_char</code> and <code>||</code>.</strong> After a win, use <code>get_char</code> to ask <code>"Play again? (y/n) "</code>. If the answer is <code>'y'</code> or <code>'Y'</code>, loop the whole game again from the top (wrap steps 1-3 in an outer <code>while (true)</code> that <code>break</code>s on <code>'n'</code>/<code>'N'</code>); otherwise, print a goodbye message and end.</li>
-<li><strong>Stretch goals.</strong> Add a difficulty menu at the start (<code>'e'</code>/<code>'m'</code>/<code>'h'</code> via <code>get_char</code> and an <code>if</code>/<code>else if</code> chain) that changes the guessing range to 1-10, 1-100, or 1-1000. Or track and print the player's total wins across replays using a counter declared outside the outer loop.</li>
-</ol>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ Entering a number outside 1-100 (or letters, which <code>get_int</code> itself rejects) re-prompts you instead of crashing or misbehaving.</li>
-<li>✅ The program correctly tells you "too low" or "too high" and eventually "correct" no matter which number you guess.</li>
-<li>✅ Typing <code>y</code>, <code>Y</code>, <code>n</code>, or <code>N</code> at the "play again?" prompt all behave correctly; nothing else does.</li>
-<li>✅ <code>make guess</code> compiles with no errors or warnings, and you can play multiple full rounds without restarting the program.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> if you find yourself writing the same <code>if</code>/<code>else if</code> block twice for uppercase and lowercase versions of an answer, that's your cue to reach for <code>||</code> instead.</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-two-number-comparator-foundational">Exercise 1: Two-number comparator (foundational)</h3>
-<p>Write a program that uses <code>get_float</code> twice to read two numbers and prints which one is smaller, using <code>%f</code> and an efficiently-ordered <code>if</code>/<code>else if</code>/<code>else</code> chain (don't ask a third question once the first two have ruled it out).</p>
-<h3 id="exercise-2-temperature-classifier-intermediate">Exercise 2: Temperature classifier (intermediate)</h3>
-<p>Write a program that uses <code>get_int</code> to read a Fahrenheit temperature and prints <code>"Freezing"</code>, <code>"Cold"</code>, <code>"Mild"</code>, or <code>"Hot"</code> using an <code>if</code>/<code>else if</code>/<code>else</code> chain. Pick your own cutoffs, but order the checks so the most likely case is cheap to reach.</p>
-<h3 id="exercise-3-star-grid-with-an-early-stop-advanced">Exercise 3: Star grid with an early stop (advanced)</h3>
-<p>Using only nested <code>for</code> loops (no functions yet, that's next lesson), print an <code>n</code>-by-<code>n</code> grid of <code>*</code> characters, where <code>n</code> is read with <code>get_int</code>. Then add a <code>break</code> so that if a special row index (say, row 2) is reached, the grid stops printing early: practice tracing exactly which loop your <code>break</code> exits.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>CONDITIONALS
-  if (bool_expr)      { ... }               one branch
-  if (...) else       { ... }               two branches
-  if (...) else if (...) else { ... }       chain: order for efficiency
-  ==  equals (compare)     =  assigns (never compare with this!)
-  &lt;  &gt;  &lt;=  &gt;=  ==  !=      comparison operators
-  ||  &quot;or&quot; (either true)    &amp;&amp;  &quot;and&quot; (both must be true)
-
-DATA TYPES              get_ FUNCTION      printf PLACEHOLDER
-  bool                     --                  --
-  char                     get_char            %c
-  int                      get_int             %i
-  float                    get_float           %f
-  double                   --                  %f
-  long                     --                  %li
-  char literals use single quotes: &#39;y&#39;   strings use double quotes: &quot;y&quot;
-
-LOOPS
-  while (cond)     { ... }             checks BEFORE running
-  do { ... } while (cond);             checks AFTER running (runs &gt;= once)
-  for (init; cond; update) { ... }     counting loop, one line of setup
-  while (true) { ... }                 infinite -- needs a break inside
-  break     -&gt; exit the loop now
-  continue  -&gt; skip to the next check of the condition
-  Ctrl+C    -&gt; kill a runaway program from the terminal
-  Scope: a variable declared inside { } only exists inside those { }
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 2 · Lesson 6:</strong> you learned to capture input with <code>get_string</code>, store it in a variable, and print it with <code>%s</code> and <code>printf</code> placeholders. This lesson reused that exact pattern for <code>get_int</code>, <code>get_char</code>, and <code>get_float</code>, and added the decision-making and repetition that turn a one-shot script into an interactive program.</li>
-<li><strong>Next, Module 2 · Lesson 8 "Functions, code quality, and the limits of numbers":</strong> you'll notice the guessing loop's body has repeated bits: that's exactly what functions exist to eliminate. Lesson 8 also finally explains what happens when the <code>int</code> and <code>float</code> types you used here get pushed past their limits (overflow and imprecision).</li>
-<li><strong>Later, Module 4:</strong> the <code>while</code> and <code>for</code> loops you wrote today become the object of study themselves: you'll learn to measure how many times a loop like this runs as its input grows (Big O), turning "does it work" into "how well does it scale."</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 1 - C" by David J. Malan, Harvard University. Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+<hr /><div class="pager bottom"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="07-conditionals-and-loops.html" class="cur" title="Start here">1</a><a href="07-conditionals-and-loops-2.html" class="" title="Parts 3–5">2</a><a href="07-conditionals-and-loops-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="07-conditionals-and-loops-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="7" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="06-input-variables-cli.html"><span class="dir">&#8592; Previous</span><b>Input, Variables, and the Command Line</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="08-functions-and-limits.html"><span class="dir">Next &#8594;</span><b>Functions, Code Quality, and the Limits of Numbers</b></a></nav>
+    <div class="ls-marker" data-lesson-id="7" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="06-input-variables-cli.html"><span class="dir">&#8592; Previous lesson</span><b>Input, Variables, and the Command Line</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 

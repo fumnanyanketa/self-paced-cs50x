@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 4 · Lesson 14: Searching Arrays in C | Self-Paced CS50x</title>
+<title>Module 4 · Lesson 14: Searching Arrays in C (p1/4) | Self-Paced CS50x</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -49,6 +49,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -212,7 +235,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
   <div class="navlinks">
     <a href="../index.html">All lessons</a>
     <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="14-searching-4.html#capstone">Capstone</a>
   </div>
   <div class="nav-cta">
     <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
@@ -251,7 +274,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="14-searching-4.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -271,34 +294,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <li><a href="#prerequisites">Prerequisites</a></li>
 <li><a href="#part-1-the-memory-model-arrays-as-lockers">Part 1: The memory model: arrays as lockers</a></li>
 <li><a href="#part-2-two-ways-to-search-linear-vs-binary-the-locker-demo">Part 2: Two ways to search: linear vs binary (the locker demo)</a></li>
-<li><a href="#part-3-writing-pseudocode-without-shooting-yourself-in-the-foot">Part 3: Writing pseudocode without shooting yourself in the foot</a></li>
-<li><a href="#part-4-big-o-naming-the-worst-case">Part 4: Big O: naming the worst case</a></li>
-<li><a href="#part-5-and-naming-the-best-case-and-when-they-match">Part 5: Ω and Θ: naming the best case (and when they match)</a></li>
-<li><a href="#part-6-from-pseudocode-to-c-ints-strings-and-structs">Part 6: From pseudocode to C: ints, strings, and structs</a></li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: Mini Phonebook, Two Ways</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-spot-the-ifelse-bug-foundational">Exercise 1: Spot the if/else bug (foundational)</a></li>
-<li><a href="#exercise-2-convert-an-int-search-to-a-string-search-intermediate">Exercise 2: Convert an int search to a string search (intermediate)</a></li>
-<li><a href="#exercise-3-add-a-struct-advanced">Exercise 3: Add a struct (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 4 &middot; Start here</span><div class="seg"><a href="14-searching.html" class="cur" title="Start here">1</a><a href="14-searching-2.html" class="" title="Parts 3–6">2</a><a href="14-searching-3.html" class="" title="Common pitfalls">3</a><a href="14-searching-4.html" class="" title="Capstone &amp; wrap-up">4</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="14-searching-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>An array is nothing more exotic than a row of numbered lockers in memory that a computer can only open one at a time, and once you accept that one constraint, searching it comes down to a single design choice: check every locker in order (linear search) or exploit the fact they're sorted to skip half of what's left at every step (binary search). It's a choice you can now name precisely with Big O, Ω, and Θ, and implement in C over integers, strings, and your own custom struct.</p>
 <blockquote>
@@ -379,425 +381,9 @@ value:  [20] [500] [10]  [5] [100]  [1]  [50]
 <blockquote>
 <p>"If it's going to take you some crazy long time... to sort... but you only need to search the data once, then what the heck are you doing? Like why are you wasting time sorting?" (David Malan)</p>
 <p>💡 <strong>A nuance worth keeping:</strong> "faster" isn't just about the search step: it's about the total cost, including any sorting you do to earn the right to binary-search in the first place. Sometimes linear search on unsorted data is the smarter engineering call.</p>
-</blockquote>
-<h2 id="part-3-writing-pseudocode-without-shooting-yourself-in-the-foot">Part 3: Writing pseudocode without shooting yourself in the foot</h2>
-<p>Once you have the algorithm in your head, the next skill is writing it down precisely enough that a computer (or a fellow programmer) can't misread it. This is where a subtle but very real bug hides.</p>
-<p>Here's linear search, written correctly:</p>
-<div class="codehilite"><pre><span></span><code>For each door from left to right:
-    if 50 is behind the door
-        return true
-return false
-</code></pre></div>
-
-<p>The <code>return false</code> sits at the very bottom, outside and after the loop entirely, running only if the loop finishes without ever finding a match. Now here's the version that looks almost identical but is wrong:</p>
-<div class="codehilite"><pre><span></span><code>For each door from left to right:
-    if 50 is behind the door
-        return true
-    else
-        return false
-</code></pre></div>
-
-<blockquote>
-<p>"This version of this code would be wrong if I instead used our old friend if/else and made this conditional decision... because if the number 50 is not behind the first door, the [else] is telling you right then and there return false. But as we've seen in C code, whenever you return a value... that's it for the function, it is done doing its work." (David Malan)</p>
-</blockquote>
-<p>In other words: the moment the first locker doesn't match, the <code>else</code> branch fires and the function quits, having checked exactly one out of seven lockers, and answering "not found" even if the $50 was sitting in locker 6 the whole time.</p>
-<blockquote>
-<p>✅ <strong>What to do about it:</strong> write your "not found" case as an unconditional line that only runs after the entire loop finishes, never as an <code>else</code> attached to the very first comparison.</p>
-</blockquote>
-<p>Translated into array notation, using zero-indexing from Part 1, linear search reads:</p>
-<div class="codehilite"><pre><span></span><code>for i from 0 to n - 1
-    if 50 is behind doors[i]
-        return true
-return false
-</code></pre></div>
-
-<p>Why <code>n - 1</code> and not <code>n</code>? Because of zero-indexing:</p>
-<blockquote>
-<p>"If you start counting at 0 and you have n elements, the last one is going to be addressed as n minus 1, not N, because if it were N, then you actually have N + 1 elements, which is not what we're talking about." (David Malan)</p>
-</blockquote>
-<p>Binary search's pseudocode needs one more thing linear search didn't: a <strong>base case</strong>: a check for when there's nothing left to search at all.</p>
-<div class="codehilite"><pre><span></span><code>if there are no doors left
-    return false
-if 50 is behind doors[middle]
-    return true
-else if 50 &lt; doors[middle]
-    search doors[0] through doors[middle - 1]      # left half
-else if 50 &gt; doors[middle]
-    search doors[middle + 1] through doors[n - 1]   # right half
-</code></pre></div>
-
-<p>Notice the halves exclude the middle index itself. That's deliberate:</p>
-<blockquote>
-<p>"We already checked the middle door by asking this previous question, so you're just wasting everyone's time if you divide the half and still consider that door as checkable again." (David Malan)</p>
-<p>🔑 <strong>The single most important takeaway of this part:</strong> every correct search needs an unconditional "give up" path (linear search's trailing <code>return false</code>, binary search's "no doors left" check), and binary search additionally must never re-examine the middle element it just ruled out.</p>
-</blockquote>
-<h2 id="part-4-big-o-naming-the-worst-case">Part 4: Big O: naming the worst case</h2>
-<p>Rather than count steps exactly, computer scientists describe running time in broad strokes: <strong>Big O notation</strong>, which names the <em>worst-case</em> number of steps as the input size <code>n</code> grows large.</p>
-<blockquote>
-<p>"It's generally useful to use this big O notation in the context of worst case scenarios, because that really gives you a sense of how badly this algorithm could perform if you just get really unlucky with your data set." (David Malan)</p>
-</blockquote>
-<p>Big O only cares about the <em>dominant</em> term, the one that matters most once <code>n</code> gets huge, and throws away everything smaller:</p>
-<blockquote>
-<p>"You ignore lower order terms, or equivalently, you only worry about the dominant term in whatever mathematical expression is in question." (David Malan)</p>
-</blockquote>
-<p>Here is the cheat sheet of common running times, from fastest-growing to slowest-growing as <code>n</code> increases:</p>
-<table>
-<thead>
-<tr>
-<th>Notation</th>
-<th>Name</th>
-<th>What it means</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>O(1)</code></td>
-<td>constant</td>
-<td>A fixed number of steps, no matter how big <code>n</code> gets</td>
-</tr>
-<tr>
-<td><code>O(log n)</code></td>
-<td>logarithmic</td>
-<td>Steps grow <em>very</em> slowly: each step cuts the remaining problem in half</td>
-</tr>
-<tr>
-<td><code>O(n)</code></td>
-<td>linear</td>
-<td>Steps grow in direct proportion to <code>n</code></td>
-</tr>
-<tr>
-<td><code>O(n log n)</code></td>
-<td>"n log n"</td>
-<td>You'll meet this properly with merge sort in Lesson 16</td>
-</tr>
-<tr>
-<td><code>O(n²)</code></td>
-<td>quadratic</td>
-<td>You'll meet this properly with selection and bubble sort in Lesson 15</td>
-</tr>
-</tbody>
-</table>
-<p>Only two of these apply to what you've built so far:</p>
-<ul>
-<li><strong>Linear search is <code>O(n)</code>.</strong> In the worst case, the value you want is in the very last locker, so you check all <code>n</code> of them.</li>
-<li><strong>Binary search is <code>O(log n)</code>.</strong> Each comparison discards half of what's left, so the number of comparisons needed is the number of times you can halve <code>n</code> before reaching 1, which is exactly what a logarithm measures.</li>
-</ul>
-<blockquote>
-<p>🔑 <strong>The key contrast:</strong> as <code>n</code> gets large, <code>O(log n)</code> pulls dramatically ahead of <code>O(n)</code>. Doubling the number of lockers costs linear search one more step on average, but it costs binary search only <em>one more halving</em>. That's the entire reason sorted data is worth having.</p>
-</blockquote>
-<h2 id="part-5-and-naming-the-best-case-and-when-they-match">Part 5: Ω and Θ: naming the best case (and when they match)</h2>
-<p>Big O tells you the worst that could happen. There's a matching symbol for the <em>best</em> that could happen:</p>
-<blockquote>
-<p>"Omega, a capital Omega symbol here is used for lower bounds." (David Malan)</p>
-</blockquote>
-<p>Both of the search algorithms in this lesson can get lucky in exactly the same way, the value you want happens to be the very first thing checked:</p>
-<ul>
-<li><strong>Linear search's best case is Ω(1)</strong>: Jose could, in principle, have opened the very first door and found the $50 immediately.</li>
-<li><strong>Binary search's best case is also Ω(1)</strong>: the value you want could be sitting right at the middle on the first guess.</li>
-</ul>
-<p>Whenever Big O and Ω turn out to describe the <em>same</em> running time, there's a third symbol that says both at once:</p>
-<blockquote>
-<p>"Capital theta is jargon you can use when big O and Omega happen to be the same." (David Malan)</p>
-</blockquote>
-<p>Neither algorithm in this lesson qualifies yet: linear search is <code>O(n)</code> but <code>Ω(1)</code>, and binary search is <code>O(log n)</code> but <code>Ω(1)</code>, so for both, the worst case and best case are far apart. (You'll meet a real Θ in Lesson 15, once selection sort turns out to be exactly as slow no matter how lucky you get.)</p>
-<table>
-<thead>
-<tr>
-<th>Algorithm</th>
-<th>Big O (worst case)</th>
-<th>Ω (best case)</th>
-<th>Θ?</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Linear search</td>
-<td>O(n)</td>
-<td>Ω(1)</td>
-<td>Not equal, no Θ yet</td>
-</tr>
-<tr>
-<td>Binary search</td>
-<td>O(log n)</td>
-<td>Ω(1)</td>
-<td>Not equal, no Θ yet</td>
-</tr>
-</tbody>
-</table>
-<h2 id="part-6-from-pseudocode-to-c-ints-strings-and-structs">Part 6: From pseudocode to C: ints, strings, and structs</h2>
-<p>Pseudocode becomes real once it compiles. Here's linear search over an array of integers, <code>search.c</code>, matching the seven Monopoly denominations from the demo:</p>
-<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cs50.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
-
-<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">numbers</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="p">};</span>
-
-<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_int</span><span class="p">(</span><span class="s">&quot;Number: &quot;</span><span class="p">);</span>
-
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">n</span><span class="p">)</span>
-<span class="w">        </span><span class="p">{</span>
-<span class="w">            </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Found</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Not found</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>Searching for <code>50</code> finds it (at the last position); searching for <code>1000</code> correctly reports "Not found."</p>
-<p>Now try the same program over strings instead of integers. Swap in six Monopoly game pieces and compare with <code>==</code> the way you would with integers:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">string</span><span class="w"> </span><span class="n">strings</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="s">&quot;battleship&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;boot&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;cannon&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;iron&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;thimble&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;top hat&quot;</span><span class="p">};</span>
-<span class="n">string</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_string</span><span class="p">(</span><span class="s">&quot;String: &quot;</span><span class="p">);</span>
-
-<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">strings</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">s</span><span class="p">)</span><span class="w">   </span><span class="c1">// looks reasonable, but it&#39;s wrong</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Found</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>Every single search reports "Not found," even for values that are clearly sitting in the array. The reason is a fact about how C sees strings versus integers:</p>
-<blockquote>
-<p>"For a computer it's super easy to compare two integers because they're either there or they're not in memory. But with a string... you have to compare each and every character in a string to make sure they're in fact the same." (David Malan)</p>
-</blockquote>
-<p><code>==</code> on strings compares <em>where</em> they live in memory, not what characters they spell out. So for today's purposes:</p>
-<blockquote>
-<p>"You cannot use equals equals apparently to compare two strings." (David Malan)</p>
-</blockquote>
-<p>The fix is a function called <code>strcmp</code> ("string compare"), which walks both strings character by character and returns <code>0</code> if and only if they are identical. It lives in a header file that must be included:</p>
-<blockquote>
-<p>"I didn't include the string.h header library, so... [the compiler] is encountering literally the word [strcmp] and not knowing what it is, because we haven't taught it what it is by simply saying include string.h at the top." (David Malan)</p>
-</blockquote>
-<p>The corrected loop:</p>
-<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string.h&gt;</span>
-<span class="p">...</span>
-<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">strings</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Found</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<blockquote>
-<p>❌ <strong>The trap:</strong> comparing C strings with <code>==</code>, or calling <code>strcmp</code> without <code>#include &lt;string.h&gt;</code> above <code>main</code>. Both compile-or-run problems show up exactly this way: a program that builds but silently gets every answer wrong, or a compiler error naming a function it's never heard of.</p>
-</blockquote>
-<p>Now scale this up to something closer to week 0's phone book: names and numbers together. A first attempt uses two separate, same-length arrays:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">string</span><span class="w"> </span><span class="n">names</span><span class="p">[]</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="s">&quot;Kelly&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;David&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;John Harvard&quot;</span><span class="p">};</span>
-<span class="n">string</span><span class="w"> </span><span class="n">numbers</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="s">&quot;+1-617-495-1000&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;+1-617-495-1000&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;+1-949-468-2750&quot;</span><span class="p">};</span>
-</code></pre></div>
-
-<p>This works (searching <code>names</code> for <code>"John Harvard"</code> at index 2 and printing <code>numbers[2]</code> gives the right answer), but it depends on the two arrays always staying perfectly aligned by index, entry for entry, forever. Malan names the problem directly:</p>
-<blockquote>
-<p>"We're kind of on the honor system here, whereby the onus is on us to make sure we don't screw this up." (David Malan)</p>
-</blockquote>
-<p>C's fix for this is a custom data type, a <strong>struct</strong>, that bundles a name and a number into one thing, so there's only one array to keep in sync:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="n">string</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
-<span class="w">    </span><span class="n">string</span><span class="w"> </span><span class="n">number</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="n">person</span><span class="p">;</span>
-</code></pre></div>
-
-<blockquote>
-<p>"These several lines together tell C: invent for me a new data type called person, and assume that every person in the world has a string called name and a string called number." (David Malan)</p>
-</blockquote>
-<p>With <code>person</code> defined above <code>main</code>, you can build one array of them and fill in each record with <strong>dot notation</strong>:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">person</span><span class="w"> </span><span class="n">people</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
-
-<span class="n">people</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Kelly&quot;</span><span class="p">;</span>
-<span class="n">people</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;+1-617-495-1000&quot;</span><span class="p">;</span>
-
-<span class="n">people</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;David&quot;</span><span class="p">;</span>
-<span class="n">people</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;+1-617-495-1000&quot;</span><span class="p">;</span>
-
-<span class="n">people</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;John Harvard&quot;</span><span class="p">;</span>
-<span class="n">people</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;+1-949-468-2750&quot;</span><span class="p">;</span>
-</code></pre></div>
-
-<blockquote>
-<p>"You literally use a dot, a single period, to say go inside of that structure and access the name field, the name attribute, so to speak." (David Malan)</p>
-</blockquote>
-<p>The search loop barely changes (it's still linear search, still using <code>strcmp</code>) but now it reads from one coherent record instead of trusting two arrays in lockstep:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">string</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_string</span><span class="p">(</span><span class="s">&quot;Name: &quot;</span><span class="p">);</span>
-
-<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">people</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Found %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">people</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">number</span><span class="p">);</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-<span class="n">printf</span><span class="p">(</span><span class="s">&quot;Not found</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-<span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-</code></pre></div>
-
-<blockquote>
-<p>🔑 <strong>What the struct actually buys you:</strong> <code>people[i]</code> is now one indivisible record, a name <em>and</em> a number that can never drift out of sync, instead of an index you hope lines up correctly across two independent arrays. Keep this "one row, several fields" shape in mind; it is exactly the shape of a row in a database table, which you'll meet formally in Module 8.</p>
-</blockquote>
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong>A computer reads memory like closed lockers.</strong> Arrays store values contiguously and zero-indexed, and code can only inspect one element at a time. That's why counting steps is a meaningful exercise at all.</li>
-<li><strong>Linear search always works; binary search needs sorted data.</strong> Linear search checks every candidate in the worst case; binary search halves the remaining range each step, but only because it can trust the order.</li>
-<li><strong>Big O is a worst-case upper bound; Ω is a best-case lower bound; Θ is when they agree.</strong> Linear search is <code>O(n)</code>/<code>Ω(1)</code>; binary search is <code>O(log n)</code>/<code>Ω(1)</code>. Neither has a matching Θ yet.</li>
-<li><strong><code>==</code> cannot compare strings in C.</strong> Use <code>strcmp</code> from <code>string.h</code>, and check its return value against <code>0</code> for equality.</li>
-<li><strong>A <code>struct</code> bundles related fields into one type.</strong> Dot notation (<code>person.name</code>) replaces the fragile "honor system" of keeping two parallel arrays aligned by index.</li>
-<li><strong>Choosing an algorithm is a design decision, not just a correctness one.</strong> Sometimes the "slow" algorithm is the right call, for instance, if you're only going to search the data once.</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ Writing linear search's "not found" case as an <code>else</code> instead of an unconditional line after the loop: the <code>else</code> returns false the instant the <em>first</em> element fails to match, without ever checking the rest.</li>
-<li>❌ Running binary search on unsorted data: the less-than/greater-than branches only make sense because the array is ordered; on unsorted data you will confidently walk right past the answer.</li>
-<li>❌ Re-checking the middle element after a wrong guess in binary search: the next range must exclude index <code>middle</code> (use <code>middle - 1</code> or <code>middle + 1</code>), or you waste a comparison re-asking a question you already answered.</li>
-<li>❌ Comparing C strings with <code>==</code>: that compares two memory addresses, not the text inside them; always use <code>strcmp(a, b) == 0</code>.</li>
-<li>❌ Forgetting <code>#include &lt;string.h&gt;</code> before calling <code>strcmp</code>: the compiler will refuse to build, exactly as happened live in lecture.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: Mini Phonebook, Two Ways</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. You'll build a working array-of-structs phonebook on cs50.dev, then search it two different ways (linear and binary) and literally print how many steps each one takes, so the <code>O(n)</code> vs <code>O(log n)</code> gap stops being an abstraction and becomes a number on your own screen.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>A single C program, <code>phonebook.c</code>, that defines a <code>person</code> struct (name + number), stores several contacts in an array of them, and can look up a contact by name two ways: a straightforward left-to-right linear search, and a binary search over a sorted copy of the same data. Both searches count and print how many comparisons ("steps") they needed, so the gap between <code>O(n)</code> and <code>O(log n)</code> shows up as a real number instead of a graph.</p>
-<ul>
-<li>The <code>person</code> struct and array → Part 6.</li>
-<li>Linear search with a step counter → Parts 2 and 3.</li>
-<li>A sorted array and binary search with a step counter → Parts 2, 3, 4, and 5.</li>
-<li>Comparing the two step counts side by side → Parts 4 and 5 (Big O and Ω made concrete).</li>
-</ul>
-<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in Mini Phonebook, Two Ways</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Arrays &amp; the memory model (Part 1)</td>
-<td>Your <code>person</code> array is a row of lockers you index into one at a time.</td>
-</tr>
-<tr>
-<td>Linear vs binary search (Part 2)</td>
-<td>You implement both, over the same data, searching by name.</td>
-</tr>
-<tr>
-<td>Pseudocode pitfalls &amp; base cases (Part 3)</td>
-<td>Your loops need the same unconditional final "not found" and boundary checks.</td>
-</tr>
-<tr>
-<td>Big O worst case (Part 4)</td>
-<td>You'll watch linear search's step count grow as the phonebook grows.</td>
-</tr>
-<tr>
-<td>Ω best case (Part 5)</td>
-<td>You'll see both searches occasionally get lucky and finish in one step.</td>
-</tr>
-<tr>
-<td>structs, strcmp, dot notation (Part 6)</td>
-<td>Your whole data model, and every comparison, depends on getting these right.</td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>Define the record and load the data.</strong> In <code>phonebook.c</code> on cs50.dev, <code>#include &lt;cs50.h&gt;</code>, <code>&lt;stdio.h&gt;</code>, and <code>&lt;string.h&gt;</code>. Define <code>typedef struct { string name; string number; } person;</code>, then hard-code an array of at least 6 <code>person</code>s (any names and numbers you like). Compile with <code>make phonebook</code>. It should build cleanly.</li>
-<li><strong>Linear search by name, with a step counter.</strong> Ask for a name with <code>get_string</code>. Loop over the array with an <code>int steps = 0</code> you increment on every comparison, using <code>strcmp</code>, never <code>==</code>, to compare names. Print the matching number if found, "Not found" if you exhaust the array, and always print the final step count.</li>
-<li><strong>Build a sorted copy.</strong> Manually re-type (or reorder) a second array, <code>sorted[]</code>, containing the exact same people arranged alphabetically by name. You're hand-sorting for now on purpose: Lesson 15 shows you how to make the computer do this itself.</li>
-<li><strong>Binary search by name, with a step counter.</strong> Search <code>sorted[]</code> using the middle-comparison pattern from Part 3: compare <code>strcmp(sorted[middle].name, query)</code> against <code>0</code> for a match, search the left half if the name comes before the middle, the right half if after, and stop and report "not found" once the range is empty. Count and print steps here too.</li>
-<li><strong>Put them side by side.</strong> Run both searches for the same three names (one near the front of the unsorted array, one near the back, and one that doesn't exist at all) and print both step counts for each. Confirm binary search never needs more steps than linear search, and usually needs far fewer.</li>
-<li><strong>Stretch goals.</strong> (a) Grow the phonebook to 20+ entries and rerun step 5. Watch the gap widen. (b) Try searching by phone number instead of name in the <em>unsorted</em> array only, since it isn't sorted by number, and explain in a comment why binary search isn't an option there. (c) Make the "not found" case report how many steps it took to determine that, for both algorithms.</li>
-</ol>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ <code>phonebook.c</code> compiles cleanly with <code>make phonebook</code>, and both search paths exist and run from the same file.</li>
-<li>✅ Searching for a name near the end of the unsorted array takes noticeably more steps via linear search than the same name takes via binary search on the sorted copy.</li>
-<li>✅ Searching for a name that isn't in the phonebook correctly prints "Not found" for both algorithms, without crashing.</li>
-<li>✅ You can explain out loud, for your own code, why binary search would give a wrong answer if you ran it on the unsorted array instead of the sorted one.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> don't hand-wave the step counter: make it a real integer you increment on every comparison. It's the difference between believing <code>O(n)</code> vs <code>O(log n)</code> and actually watching it happen in your own terminal.</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-spot-the-ifelse-bug-foundational">Exercise 1: Spot the if/else bug (foundational)</h3>
-<p>Here is a piece of linear search pseudocode with the exact bug from Part 3, hiding in plain sight:</p>
-<div class="codehilite"><pre><span></span><code>for i from 0 to n - 1
-    if numbers[i] == target
-        return true
-    else
-        return false
-</code></pre></div>
-
-<p>Before touching a keyboard, write down in one sentence why this returns the wrong answer whenever <code>target</code> isn't in <code>numbers[0]</code>. Then translate it into real C, run it against an array where the target is in the <em>last</em> position, and confirm your prediction.</p>
-<h3 id="exercise-2-convert-an-int-search-to-a-string-search-intermediate">Exercise 2: Convert an int search to a string search (intermediate)</h3>
-<p>Starting from the ints version of <code>search.c</code> in Part 6, adapt it to search a small array of six of your favorite movie titles instead of numbers. Remember: <code>#include &lt;string.h&gt;</code>, and compare with <code>strcmp(...) == 0</code>, never <code>==</code>. Test it against a title at the front, one at the back, and one that isn't there.</p>
-<h3 id="exercise-3-add-a-struct-advanced">Exercise 3: Add a struct (advanced)</h3>
-<p>Extend Exercise 2 so each movie is paired with your own 1-10 rating, using a <code>typedef struct { string title; int rating; } movie;</code>. Ask the user for a title, and if found, print the rating you gave it using dot notation (<code>movies[i].rating</code>). If not found, print "Not found."</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>ARRAYS
-  - Contiguous memory, one type, fixed size, zero-indexed: index 0 .. n-1
-  - The computer inspects ONE element at a time (&quot;open one locker at a time&quot;)
-
-SEARCH ALGORITHMS
-  Linear search   check every element left to right    needs NO particular order
-  Binary search   check the middle, discard a half      needs SORTED data
-
-PSEUDOCODE PITFALLS
-  - &quot;not found&quot; = an unconditional line AFTER the loop, never an `else`
-    off the first comparison (that quits after checking just 1 element)
-  - Binary search needs a base case: &quot;if no elements left, return false&quot;
-  - After checking middle, search middle-1 (left) or middle+1 (right) -- never middle again
-
-RUNNING TIME (n = size of the input)
-  O(1)          constant     -- a fixed number of steps
-  O(log n)      logarithmic  -- binary search, worst case
-  O(n)          linear       -- linear search, worst case
-  O(n log n)    -- preview: merge sort (Lesson 16)
-  O(n^2)        -- preview: selection/bubble sort (Lesson 15)
-
-BIG O, OMEGA (Ω), THETA (Θ)
-  O   worst case / upper bound  -- &quot;how bad can it get&quot;
-  Ω   best case / lower bound   -- &quot;how lucky can you get&quot;
-  Θ   used only when O and Ω are the same value
-
-  Linear search:  O(n),     Ω(1)
-  Binary search:  O(log n), Ω(1)
-
-C SYNTAX INTRODUCED
-  strcmp(a, b) == 0              correct way to test string equality (string.h)
-  typedef struct { ... } name;   defines a custom data type
-  variable.field                 dot notation -- accesses a field inside a struct
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 4 · Lesson 13:</strong> "Thinking in running time: Big O" gave you the intuition, divide-and-conquer beats brute force, and the running-time growth graph this lesson turns into named notation and real, compilable C.</li>
-<li><strong>Next, Module 4 · Lesson 15:</strong> "Sorting, the slow way" answers the question this lesson leaves open: binary search needs sorted data, so how expensive is it to actually produce that order? (Selection sort and bubble sort, both O(n²).)</li>
-<li><strong>Later, Module 6:</strong> binary search trees are binary search turned into a data structure that stays searchable even as you insert and delete entries.</li>
-<li><strong>Later, Module 8:</strong> indexes make SQLite perform this same divide-and-conquer trick internally every time you query a table: the array of structs you built today is a preview of a database table's rows.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 3 - Algorithms" by David J. Malan, Harvard University (CS50x 2026). Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+</blockquote><div class="pager bottom"><span class="pcount">Page 1 of 4 &middot; Start here</span><div class="seg"><a href="14-searching.html" class="cur" title="Start here">1</a><a href="14-searching-2.html" class="" title="Parts 3–6">2</a><a href="14-searching-3.html" class="" title="Common pitfalls">3</a><a href="14-searching-4.html" class="" title="Capstone &amp; wrap-up">4</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="14-searching-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="14" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="13-big-o.html"><span class="dir">&#8592; Previous</span><b>Thinking in Running Time: Big O</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="15-selection-bubble-sort.html"><span class="dir">Next &#8594;</span><b>Sorting, the Slow Way: Selection and Bubble Sort</b></a></nav>
+    <div class="ls-marker" data-lesson-id="14" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="13-big-o.html"><span class="dir">&#8592; Previous lesson</span><b>Thinking in Running Time: Big O</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 

@@ -175,6 +175,7 @@ main{padding:0 0 100px}
 .actions button:hover{border-color:var(--teal)}
 .actions button.danger:hover{border-color:var(--coral);color:var(--coral)}
 
+main.wrap{padding-bottom:100px}
 .intro{text-align:center;max-width:40em;margin:48px auto 30px;color:var(--muted)}
 .modcard{border:1px solid var(--line);border-radius:20px;padding:26px;margin:22px 0;box-shadow:var(--shadow)}
 .modhead{margin-bottom:16px}
@@ -208,7 +209,7 @@ dialog textarea{width:100%;height:150px;background:var(--navy);color:#e8eef6;bor
 dialog p{margin:0 0 8px}
 dialog .row{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
 dialog button{background:var(--navy-3);color:#e8eef6;border:1px solid #1e3a5a;border-radius:8px;padding:8px 14px;cursor:pointer;font:inherit}
-@media(max-width:700px){.hero h1{font-size:34px}.hero{padding:56px 0 72px}.hstats{gap:22px}.stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.hero h1{font-size:34px}.hero{padding:56px 0 72px}.hstats{gap:22px}.stats{grid-template-columns:repeat(2,1fr)}main.wrap{padding-bottom:64px}}
 """
 
 PANEL = """

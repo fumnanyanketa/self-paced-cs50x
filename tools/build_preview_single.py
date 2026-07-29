@@ -113,14 +113,30 @@ def main(md_path, out_path, cfg, word_target):
         return f'<div class="pager {where}">{count}{seg}{btns}</div>'
 
     banner = ('<div class="pv-banner">&#128064; Preview of the multi-page-lesson prototype '
-              '&mdash; use the pager (Prev / Next / numbers) to switch pages. Nothing here is '
-              'live yet; this is a standalone demo file.</div>')
+              '&mdash; use the pager (Prev / Next / numbers) to switch pages. The progress '
+              'tracker (bottom bar + &ldquo;Mark complete&rdquo; on the last page) is fully '
+              'working here, saved in this browser only.</div>')
+
+    # lesson number for the tracker hook
+    lesson_num = ""
+    lm2 = re.search(r"Lesson\s+(\d+)", title_full)
+    if lm2:
+        lesson_num = lm2.group(1)
+    lesson_sync = (
+        f'<section class="lesson-sync" data-lesson-id="{lesson_num or "10"}" data-home="#">'
+        '<div class="ls-inner">'
+        '<button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button>'
+        '<span class="ls-status" data-sync-status></span></div>'
+        '<a class="ls-track" href="#" onclick="return false">Your progress &#8594;</a></section>'
+    )
 
     pages_html = ""
     for i, (body_html, _toc) in enumerate(rendered, 1):
         inner = pager(i, "top") + body_html + pager(i, "bottom")
         if i == 1:
             inner = banner + inner
+        if i == n:                       # tracker "mark complete" only on last page
+            inner += lesson_sync
         pages_html += f'<div class="pv-page{" on" if i == 1 else ""}" data-page="{i}">{inner}</div>'
 
     toc_blocks = ""
@@ -175,7 +191,21 @@ def main(md_path, out_path, cfg, word_target):
 }})();
 </script>
 """
-    out = out.replace("</body>", switch_js + "</body>")
+    # ---- inline the real tracker engine so it works offline (localStorage) ----
+    root = pathlib.Path(__file__).resolve().parent.parent
+    assets = root / "lessons-html" / "assets"
+    course_data_js = (assets / "course-data.js").read_text(encoding="utf-8")
+    sync_js = (assets / "sync.js").read_text(encoding="utf-8")
+    sync_config_js = (assets / "sync-config.js").read_text(encoding="utf-8")
+    # fold sync-config into sync.js: drop the import, prepend the config as a
+    # local const (strip the `export`), so the module is fully self-contained.
+    sync_js = sync_js.replace('import { firebaseConfig } from "./sync-config.js";', "")
+    inline_config = re.sub(r"(?m)^export\s+const", "const", sync_config_js)
+    tracker_scripts = (
+        f'<script>{course_data_js}</script>'
+        f'<script type="module">{inline_config}\n{sync_js}</script>'
+    )
+    out = out.replace("</body>", switch_js + tracker_scripts + "</body>")
 
     out = (out
            .replace("{{TITLE}}", html.escape(title_full) + " (preview)")

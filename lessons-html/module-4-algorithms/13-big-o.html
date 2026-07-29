@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 4 · Lesson 13: Thinking in Running Time: Big O | Self-Paced CS50x</title>
+<title>Module 4 · Lesson 13: Thinking in Running Time: Big O (p1/3) | Self-Paced CS50x</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -49,6 +49,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -140,13 +163,13 @@ code{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.86em;b
 .copy-btn.done{background:var(--teal);color:#04231c;border-color:var(--teal)}
 
 /* callouts */
-blockquote{margin:24px 0;padding:16px 20px;border-radius:14px;background:var(--soft);border:1px solid var(--line);border-left:5px solid var(--teal)}
+blockquote{margin:24px 0;padding:18px 22px;border-radius:14px;background:var(--soft);border:1px solid var(--line);box-shadow:var(--shadow)}
 blockquote p{margin:7px 0}blockquote p:first-child{margin-top:0}blockquote p:last-child{margin-bottom:0}
-blockquote.cl-key{background:var(--k-bg);border-left-color:var(--k);border-color:transparent}
-blockquote.cl-tip{background:var(--tip-bg);border-left-color:var(--tip);border-color:transparent}
-blockquote.cl-ok{background:var(--ok-bg);border-left-color:var(--ok);border-color:transparent}
-blockquote.cl-no{background:var(--no-bg);border-left-color:var(--no);border-color:transparent}
-blockquote.cl-goal{background:var(--goal-bg);border-left-color:var(--goal);border-color:transparent}
+blockquote.cl-key{background:var(--k-bg);border-color:transparent}
+blockquote.cl-tip{background:var(--tip-bg);border-color:transparent}
+blockquote.cl-ok{background:var(--ok-bg);border-color:transparent}
+blockquote.cl-no{background:var(--no-bg);border-color:transparent}
+blockquote.cl-goal{background:var(--goal-bg);border-color:transparent}
 
 /* capstone banner */
 h2.capstone-h{background:linear-gradient(115deg,var(--navy),var(--navy-3));color:#fff;border-radius:20px;padding:30px 28px 26px;margin-top:64px;box-shadow:0 20px 50px rgba(10,26,47,.3);overflow:hidden;position:relative}
@@ -212,7 +235,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
   <div class="navlinks">
     <a href="../index.html">All lessons</a>
     <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="13-big-o-3.html#capstone">Capstone</a>
   </div>
   <div class="nav-cta">
     <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
@@ -251,7 +274,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="13-big-o-3.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -276,31 +299,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <li><a href="#algorithm-3-pairwise-divide-and-conquer">Algorithm 3: pairwise divide and conquer</a></li>
 </ul>
 </li>
-<li><a href="#part-3-reading-a-running-time-graph-and-giving-it-a-name">Part 3: Reading a running-time graph, and giving it a name</a></li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: The Running-Time Lab</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-name-the-family-foundational">Exercise 1: Name the family (foundational)</a></li>
-<li><a href="#exercise-2-predict-before-you-compute-intermediate">Exercise 2: Predict before you compute (intermediate)</a></li>
-<li><a href="#exercise-3-why-the-constant-doesnt-matter-advanced">Exercise 3: Why the constant doesn't matter (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="13-big-o.html" class="cur" title="Start here">1</a><a href="13-big-o-2.html" class="" title="Part 3">2</a><a href="13-big-o-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="13-big-o-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>Running time measures how the <em>number of steps</em> an algorithm needs grows as its input grows (not how many seconds a clock shows), and Big O notation is the shorthand computer scientists use to say, at a glance, whether an algorithm scales gracefully (like repeatedly cutting a problem in half) or badly (like checking every item one at a time).</p>
 <blockquote>
@@ -412,180 +417,9 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <td>Rounds barely grow: ~8 → ~9</td>
 </tr>
 </tbody>
-</table>
-<h2 id="part-3-reading-a-running-time-graph-and-giving-it-a-name">Part 3: Reading a running-time graph, and giving it a name</h2>
-<p>To compare the three algorithms fairly, the lecture draws them as curves on a graph: the size of the problem (n: how many people, or how many pages) along the bottom, and the number of steps needed up the side. This is the exact same shape of picture Lesson 3 used for the phone book, just re-drawn for today's attendance demo, and Malan calls back to it directly:</p>
-<blockquote>
-<p>"We'll think back to week zero when we did the whole phone book example…" (David Malan)</p>
-</blockquote>
-<p>Here is a sketch of that graph, reconstructed from the talk:</p>
-<div class="codehilite"><pre><span></span><code>steps
-needed
-   ^
-   |                                             count by 1s: a straight line (grows as n)
-   |                                          ,-&#39;
-   |                                       ,-&#39;
-   |                                    ,-&#39;           count by 2s: a straight line, half the slope
-   |                                 ,-&#39;          ,-&#39; (grows as n/2 -- still a straight line)
-   |                              ,-&#39;          ,-&#39;
-   |                           ,-&#39;          ,-&#39;
-   |                        ,-&#39;          ,-&#39;
-   |                     ,-&#39;          ,-&#39;
-   |                  ,-&#39;          ,-&#39;   ________________ pairwise halving: nearly flat
-   |               ,-&#39;          ,-&#39;  _-&#39;                 (grows as log2 n)
-   |            ,-&#39;          ,-&#39; _-&#39;
-   |         ,-&#39;          ,-&#39; _-&#39;
-   |______,-&#39;_________,-&#39;_-&#39;____________________________________________________&gt;
-   0                                                                size of the room (n)
-</code></pre></div>
-
-<p>Two of these lines are perfectly straight; only their steepness differs. Malan describes the first one directly:</p>
-<blockquote>
-<p>"…this N number denoting number of people in the room is indeed a straight line. And on the x axis… we have the size of the problem in people and the time to solve in steps…" (David Malan)</p>
-</blockquote>
-<p>Counting by 1s has "a slope of one": one more person costs exactly one more step, forever. Counting by 2s is also a straight line, just a flatter one; it's faster by a fixed multiplier, but it never stops climbing in direct proportion to n. Pairwise halving is the odd one out: it curves, flattening out so much that, as Malan puts it, doubling the room barely moves it.</p>
-<p>Rather than track the exact numbers precisely, computer science uses a broad-strokes shorthand for these shapes:</p>
-<blockquote>
-<p>"…we're going to use what's called big O notation, which literally is like a big O and then some parentheses…" (David Malan)</p>
-</blockquote>
-<p>By that notation: counting by 1s is <strong>O(n)</strong>, "on the order of n steps." Counting by 2s is <strong>O(n/2)</strong>, but here's the twist that trips up almost every beginner:</p>
-<blockquote>
-<p>"…you ignore lower order terms or equivalently you only worry about the dominant term in whatever mathematical expression is in question." (David Malan)</p>
-</blockquote>
-<p>O(n) and O(n/2) are both, for Big O's purposes, considered the <em>same family</em>: linear. The "divide by 2" is a constant (it doesn't change as n grows), so Big O throws it away and keeps only the part that actually shapes the curve as n gets huge. As Malan puts it:</p>
-<blockquote>
-<p>"…computer scientists don't care about lower order terms like divide by 2 or base 2 or anything like that." (David Malan)</p>
-</blockquote>
-<p>Pairwise halving belongs to a different family entirely: <strong>O(log n)</strong>, read "on the order of log n," or "logarithmic." You don't need to be fluent in logarithms to use this: just take on faith that "log₂ of n" means "how many times can you cut n in half before you're down to one?" That's precisely the question the attendance demo's third algorithm answers with its rounds of pairing.</p>
-<blockquote>
-<p>🔑 <strong>The single most important takeaway of this part.</strong> Big O ignores constants and only cares about the <em>shape</em> of the growth. O(n) and O(n/2) both scale badly as n gets huge: they're both "linear." O(log n) scales gracefully, because each doubling of the problem only costs about one more step, not twice as many.</p>
-<p>✅ <strong>What to do about it:</strong> when you're comparing two algorithms, don't ask "which one has a smaller constant?" Ask "which <em>family</em> do they belong to?" A linear algorithm with a small constant will still eventually lose to a logarithmic algorithm as n keeps growing.</p>
-</blockquote>
-<p>Big O has more families than the two you've met today (a constant-time O(1), and faster- or slower-growing ones like O(n log n) and O(n²)), and you'll meet those as later lessons need them (Lesson 15, right in this module, introduces O(n²) sorting). For now, the two shapes on the graph above, a straight line and a flattening curve, are the ones to recognize on sight.</p>
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong>An algorithm's correctness and its running time are two separate questions.</strong> A recipe can get the right answer and still be a bad choice if it doesn't scale.</li>
-<li><strong>Counting by 1s and counting by 2s are both O(n).</strong> A constant speed-up (twice as fast) doesn't change which family an algorithm belongs to.</li>
-<li><strong>Pairwise halving is O(log n)</strong>, because each additional round of halving can absorb roughly twice as many items: doubling the problem costs only about one more step.</li>
-<li><strong>Big O deliberately ignores constants and lower-order terms</strong>, keeping only the single fastest-growing term, so the notation stays useful no matter how big n eventually gets.</li>
-<li><strong>A graph of size versus steps is the fastest way to tell two algorithms apart at a glance</strong>: a straight line versus a curve that flattens out.</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ <strong>Treating "twice as fast" as "a different Big O family."</strong> Counting by 2s feels much snappier than counting by 1s, but both are O(n): the improvement is a constant, and Big O is built to ignore constants on purpose.</li>
-<li>❌ <strong>Confusing an execution mistake with a bad algorithm.</strong> The attendance demo's pairwise count came out slightly off from the manual count because of human arithmetic slips mid-demo, not because the divide-and-conquer <em>algorithm</em> was flawed. Keep "is the recipe sound?" separate from "did this particular run follow it exactly?"</li>
-<li>❌ <strong>Assuming any "cut it in half" trick is automatically O(log n).</strong> The attendance demo's halving works because addition doesn't care what order you add numbers in: every pair can combine independently. Not every problem allows this; you'll see in later lessons (and in Lesson 14's binary search) that some divide-and-conquer tricks additionally require the data to already be sorted.</li>
-<li>❌ <strong>Reading Big O as an exact step count.</strong> O(n) doesn't mean "exactly n steps": it means "grows in proportion to n, give or take constants." Big O describes a growth trend, not a precise number.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: The Running-Time Lab</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. You'll physically count steps for a brute-force strategy and a halving strategy across three problem sizes, so the difference between O(n) and O(log n) shows up as numbers you counted yourself, not just a claim from a lecture.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>A small, paper-first experiment (with an optional coded stretch) that produces two things: a table of real step counts, and a hand-sketched growth graph you drew from your own data. The database-backed web app you'll build by the end of this course will run queries against tables of rows: a slow, brute-force query and a fast, indexed one are exactly this experiment, just with database rows standing in for tally marks.</p>
-<ul>
-<li>A tally-mark count for the "count by 1s" strategy at three sizes</li>
-<li>A round-count for the "pairwise halving" strategy at the same three sizes</li>
-<li>A table and a hand-sketched graph comparing the two</li>
-<li>An optional C program that reproduces both counts automatically</li>
-</ul>
-<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in The Running-Time Lab</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Counting by 1s (Part 2)</td>
-<td>Milestone 1: tally-mark counting at n = 16, 64, 256</td>
-</tr>
-<tr>
-<td>Pairwise halving (Part 2)</td>
-<td>Milestone 2: round-counting at the same three sizes</td>
-</tr>
-<tr>
-<td>The size-vs-steps graph (Part 3)</td>
-<td>Milestone 4: sketching your own two curves from your own numbers</td>
-</tr>
-<tr>
-<td>Big O ignoring constants (Part 3)</td>
-<td>Milestone 3: seeing that your halving counts barely grow while your linear counts triple</td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>Count by 1s, three times.</strong> For n = 16, then n = 64, then n = 256, make one tally mark per item, one at a time, and record the total tally count for each size. (Yes, 256 tally marks is tedious on purpose: that tedium <em>is</em> the O(n) lesson.)</li>
-<li><strong>Count by pairwise halving, three times.</strong> For the same three sizes, simulate the room's pairing-off process on paper without needing physical people or objects: start with n, divide by two (round up if it's odd), write down the result, and repeat until you reach 1. Count how many divisions (rounds) it took for each of n = 16, 64, and 256.</li>
-<li><strong>Tabulate your results.</strong> Build a table with one row per problem size and two columns: "steps counted by 1s" and "rounds counted by halving." Notice how the first column roughly matches n itself, while the second column barely grows at all across the same range.</li>
-<li><strong>Sketch the growth curves.</strong> On a single sheet of graph paper (or a plain sheet with hand-drawn axes), put problem size (16, 64, 256) along the bottom and step count up the side, then plot your two data sets from Milestone 3 as two separate lines. You should see one line climbing steeply and one line staying nearly flat: your own hand-drawn version of the graph in Part 3.</li>
-<li><strong>Stretch: verify it in C.</strong> On cs50.dev, write a short program with a <code>for</code> loop that counts from 0 to n − 1 by 1, incrementing a counter each time, and a second loop that starts at n and repeatedly divides by 2 (integer division, rounding as needed) until it reaches 1, also incrementing a counter each time. Print both counters for n = 16, 64, and 256, and confirm they match the numbers you counted by hand in Milestones 1-2.</li>
-<li><strong>Stretch goals.</strong> Predict, without counting, how many halving rounds you'd need for n = 1,024 and n = 1,000,000, then check your prediction with the C program from Milestone 5 if you built it. Notice how small the increase is compared to how much bigger n became.</li>
-</ol>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ You have real step counts for both strategies at n = 16, 64, and 256, recorded in a table.</li>
-<li>✅ Your "count by 1s" numbers roughly triple each time n roughly quadruples (16 → 64 → 256), while your "pairwise halving" numbers only climb by a couple of rounds each time.</li>
-<li>✅ You have a hand-sketched graph, built from your own numbers, showing one steep line and one nearly flat curve.</li>
-<li>✅ You can explain, in one or two sentences and without looking anything up, why the halving strategy is O(log n) and the counting strategy is O(n).</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> don't estimate the halving rounds in your head. Actually write down each division (256 → 128 → 64 → …) and count the rows. The whole point of this capstone is replacing "I'm pretty sure logarithms are slow-growing" with a table you produced yourself.</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-name-the-family-foundational">Exercise 1: Name the family (foundational)</h3>
-<p>For each of the following, say whether it's most likely O(n) or O(log n), and explain why in one sentence: (a) reading every page of a book to find one sentence, (b) repeatedly folding a piece of paper in half until it's too thick to fold again, (c) checking every locker in a hallway one at a time for a lost key.</p>
-<h3 id="exercise-2-predict-before-you-compute-intermediate">Exercise 2: Predict before you compute (intermediate)</h3>
-<p>Without a calculator or computer, predict how many times you'd need to divide 1,000,000 by 2 (rounding as needed) before reaching 1. Write down your reasoning, then verify it by actually doing the divisions on paper. How does the answer compare to your intuition about how "big" a million is?</p>
-<h3 id="exercise-3-why-the-constant-doesnt-matter-advanced">Exercise 3: Why the constant doesn't matter (advanced)</h3>
-<p>Explain, in your own words and without quoting the lesson, why an algorithm that takes exactly n/100 steps is still considered O(n) rather than some faster category, even though it's 100 times quicker than an algorithm that takes n steps. Then explain why that same algorithm, at n/100 steps, is still eventually slower than an O(log n) algorithm once n is large enough, and roughly how large "enough" has to be.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>ALGORITHM = step-by-step instructions for solving a problem.
-RUNNING TIME = how the number of steps grows as the problem (n) grows.
-
-THREE WAYS TO TAKE ATTENDANCE:
-  count by 1s ............ O(n)       -- one step per person
-  count by 2s ............ O(n/2)     -- still O(n): a constant speed-up, same family
-  pairwise halving ........ O(log n)  -- each round can absorb roughly 2x more people
-
-DOUBLE THE PROBLEM (n -&gt; 2n):
-  O(n) and O(n/2):  steps roughly double
-  O(log n):         only about ONE more round/step needed
-
-BIG O RULES OF THUMB:
-  - Drop constants:      O(n/2)  is the same FAMILY as O(n)
-  - Keep the dominant term only: the fastest-growing part is what matters as n gets huge
-  - Big O usually describes the WORST case, not an exact count
-
-FAMILIES YOU&#39;VE MET SO FAR (steepest to flattest):
-  O(n)       straight line, grows in direct proportion to n
-  O(log n)   curve that flattens fast; doubling n adds ~1 step
-
-MORE FAMILIES COMING LATER: O(1) constant, O(n log n), O(n^2) -- Lesson 15+
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 1 · Lesson 3 (Your First Algorithms):</strong> you saw an informal n-vs-log n graph for a phone book, without any formal notation attached to it. This lesson is that same graph, now with a name (Big O) and a vocabulary you can use with anyone else who's studied computer science.</li>
-<li><strong>Next, Module 4 · Lesson 14 (Searching arrays in C):</strong> you'll implement linear search and binary search in real C code, apply Big O to them directly, and meet two new symbols: Ω (Omega, the best case) and Θ (Theta, when best and worst case match).</li>
-<li><strong>Later, Module 4 · Lesson 15 (Sorting, the slow way):</strong> you'll meet a new, worse family, O(n²), and see exactly why it costs so much more than the O(n) and O(log n) you learned today.</li>
-<li><strong>Later, Module 6 (Data structures):</strong> you'll choose which data structure to use for a job largely by comparing their Big O running times: this lesson's vocabulary is the tool you'll use to make that choice.</li>
-<li><strong>Later, Module 8 · Lesson 31 (Indexes):</strong> you'll see how a database index turns a slow, linear table scan into a logarithmic lookup: Big O, at the scale of your own final project's database.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 3 - Algorithms" by David J. Malan, Harvard University (CS50x 2026). Quotes are transcribed from the talk; obvious auto-transcription artifacts (e.g., a missing "O" rendered as a stray period in "you pronounce it big[.] of such and such") have been silently corrected for readability while preserving Malan's exact wording and meaning. Diagrams are illustrative reconstructions of the graph shown in the talk.</em></p>
+</table><div class="pager bottom"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="13-big-o.html" class="cur" title="Start here">1</a><a href="13-big-o-2.html" class="" title="Part 3">2</a><a href="13-big-o-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="13-big-o-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="13" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="../module-3-debugging/12-cli-args-and-cipher.html"><span class="dir">&#8592; Previous</span><b>Command-Line Arguments and a First Cipher</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="14-searching.html"><span class="dir">Next &#8594;</span><b>Searching Arrays in C</b></a></nav>
+    <div class="ls-marker" data-lesson-id="13" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="../module-3-debugging/12-cli-args-and-cipher.html"><span class="dir">&#8592; Previous lesson</span><b>Command-Line Arguments and a First Cipher</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 

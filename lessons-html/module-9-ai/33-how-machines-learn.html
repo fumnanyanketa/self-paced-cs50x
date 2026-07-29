@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 9 · Lesson 33: How Machines Learn | Self-Paced CS50x</title>
+<title>Module 9 · Lesson 33: How Machines Learn (p1/4) | Self-Paced CS50x</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -49,6 +49,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -140,13 +163,13 @@ code{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.86em;b
 .copy-btn.done{background:var(--teal);color:#04231c;border-color:var(--teal)}
 
 /* callouts */
-blockquote{margin:24px 0;padding:16px 20px;border-radius:14px;background:var(--soft);border:1px solid var(--line);border-left:5px solid var(--teal)}
+blockquote{margin:24px 0;padding:18px 22px;border-radius:14px;background:var(--soft);border:1px solid var(--line);box-shadow:var(--shadow)}
 blockquote p{margin:7px 0}blockquote p:first-child{margin-top:0}blockquote p:last-child{margin-bottom:0}
-blockquote.cl-key{background:var(--k-bg);border-left-color:var(--k);border-color:transparent}
-blockquote.cl-tip{background:var(--tip-bg);border-left-color:var(--tip);border-color:transparent}
-blockquote.cl-ok{background:var(--ok-bg);border-left-color:var(--ok);border-color:transparent}
-blockquote.cl-no{background:var(--no-bg);border-left-color:var(--no);border-color:transparent}
-blockquote.cl-goal{background:var(--goal-bg);border-left-color:var(--goal);border-color:transparent}
+blockquote.cl-key{background:var(--k-bg);border-color:transparent}
+blockquote.cl-tip{background:var(--tip-bg);border-color:transparent}
+blockquote.cl-ok{background:var(--ok-bg);border-color:transparent}
+blockquote.cl-no{background:var(--no-bg);border-color:transparent}
+blockquote.cl-goal{background:var(--goal-bg);border-color:transparent}
 
 /* capstone banner */
 h2.capstone-h{background:linear-gradient(115deg,var(--navy),var(--navy-3));color:#fff;border-radius:20px;padding:30px 28px 26px;margin-top:64px;box-shadow:0 20px 50px rgba(10,26,47,.3);overflow:hidden;position:relative}
@@ -212,7 +235,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
   <div class="navlinks">
     <a href="../index.html">All lessons</a>
     <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="33-how-machines-learn-4.html#capstone">Capstone</a>
   </div>
   <div class="nav-cta">
     <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
@@ -251,7 +274,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="33-how-machines-learn-4.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -271,44 +294,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <li><a href="#prerequisites">Prerequisites</a></li>
 <li><a href="#part-1-the-ai-you-already-use-every-day">Part 1: The AI you already use, every day</a></li>
 <li><a href="#part-2-decision-trees-an-ifelse-chain-you-can-draw">Part 2: Decision trees (an if/else chain you can draw)</a></li>
-<li><a href="#part-3-tic-tac-toe-and-minimax-scoring-a-game-to-solve-it">Part 3: Tic-tac-toe and minimax (scoring a game to solve it)</a><ul>
-<li><a href="#working-backward-from-the-end-of-the-game">Working backward from the end of the game</a></li>
-</ul>
-</li>
-<li><a href="#part-4-the-combinatorial-explosion-why-brute-force-breaks">Part 4: The combinatorial explosion (why brute force breaks)</a></li>
-<li><a href="#part-5-reinforcement-learning-reward-punishment-and-epsilon">Part 5: Reinforcement learning (reward, punishment, and epsilon)</a><ul>
-<li><a href="#explore-vs-exploit-and-the-epsilon-variable">Explore vs. exploit, and the epsilon variable</a></li>
-</ul>
-</li>
-<li><a href="#part-6-from-rules-to-learning-supervised-learning-deep-learning-and-neural-networks">Part 6: From rules to learning (supervised learning, deep learning, and neural networks)</a><ul>
-<li><a href="#a-tiny-neural-network-solving-a-real-problem">A tiny neural network, solving a real problem</a></li>
-</ul>
-</li>
-<li><a href="#part-7-inside-an-llm-embeddings-attention-gpt-and-why-ai-hallucinates">Part 7: Inside an LLM (embeddings, attention, GPT, and why AI hallucinates)</a></li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: Solve It Like a Machine</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-score-three-boards-foundational">Exercise 1: Score three boards (foundational)</a></li>
-<li><a href="#exercise-2-explore-a-tiny-maze-intermediate">Exercise 2: Explore a tiny maze (intermediate)</a></li>
-<li><a href="#exercise-3-hand-fit-a-bluered-classifier-advanced">Exercise 3: Hand-fit a blue/red classifier (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 4 &middot; Start here</span><div class="seg"><a href="33-how-machines-learn.html" class="cur" title="Start here">1</a><a href="33-how-machines-learn-2.html" class="" title="Parts 3–5">2</a><a href="33-how-machines-learn-3.html" class="" title="Parts 6–7">3</a><a href="33-how-machines-learn-4.html" class="" title="Capstone &amp; wrap-up">4</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="33-how-machines-learn-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>Every "invisible" AI feature you already rely on (a spam filter, a movie recommendation, a video-game opponent) is running one of just a few underlying ideas: a <strong>decision tree</strong> of yes/no questions, a <strong>scored game tree</strong> searched by an algorithm called minimax, or, once the tree of possible choices gets too enormous to search by hand (as in chess or Go), a system trained by reward and punishment or by pattern-matching on huge amounts of data instead. Once you can tell which one is running, you can predict exactly where and why it will get something wrong.</p>
 <blockquote>
@@ -410,326 +402,9 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <blockquote>
 <p>🔑 <strong>A decision tree is just <code>if</code>/<code>else</code>, drawn as a tree.</strong> If you can enumerate the questions and there's a small, fixed number of them, you don't need machine learning at all.</p>
 </blockquote>
-<hr />
-<h2 id="part-3-tic-tac-toe-and-minimax-scoring-a-game-to-solve-it">Part 3: Tic-tac-toe and minimax (scoring a game to solve it)</h2>
-<p>Tic-tac-toe looks almost as simple as Breakout (get three in a row, horizontally, vertically, or diagonally), but Malan makes a bold claim about it:</p>
-<blockquote>
-<p>"If back in childhood or more recently you've ever lost a game of tic-tac-toe, like, you're just bad at tic-tac-toe, because logically there's no reason you should ever lose a game of tic-tac-toe if you're playing optimally. At worst you should force a tie, but at best you should win the game." (David Malan)</p>
-</blockquote>
-<p>The algorithm that guarantees this is called <strong>minimax</strong>, and the trick is to strip the fun out of the game entirely by turning it into arithmetic. Malan proposes a single, consistent scoring rule for any finished board:</p>
-<blockquote>
-<p>"Anytime O wins, the score of the game is -1. Anytime X wins, the score of the game is a positive one. And anytime nobody wins, the score is 0." (David Malan)</p>
-</blockquote>
-<p>Once every finished board has a number, the two players get opposite goals: <strong>X tries to maximize the score</strong> (push it toward <code>+1</code>), and <strong>O tries to minimize it</strong> (push it toward <code>-1</code>). As a sanity check, a board where X has already completed three in a row down the middle scores <code>1</code>; a board where nobody has won yet scores <code>0</code>.</p>
-<h3 id="working-backward-from-the-end-of-the-game">Working backward from the end of the game</h3>
-<p>The genuinely useful trick is applying this to boards that <em>aren't</em> finished yet, by looking ahead to how the game <em>will</em> end if both players keep playing well. Malan walks through a position with only two squares left, O's turn, where O can play either of two open squares:</p>
-<div class="codehilite"><pre><span></span><code>Current board: O to move, 2 squares empty (top-left, bottom-middle)
-
-                        O&#39;s choices
-              /                              \
-     O plays top-left                O plays bottom-middle
-              |                                |
-     X plays bottom-middle              X plays top-left
-     (X completes 3-in-a-row)      (no one completes 3-in-a-row)
-              |                                |
-        board value = 1                  board value = 0
-          (X wins)                          (a tie)
-
-O is MINIMIZING -&gt; compares the two outcomes {1, 0} -&gt; picks the LOWER one
-O plays bottom-middle, forcing a tie (value 0) instead of letting X win (value 1)
-</code></pre></div>
-
-<p>Malan narrates the logic directly: <strong>"O more mathematically and logically can decide: do I want an endpoint of 1 or an endpoint of 0? Well, 0 is probably the better option because that's less than 1, and thus it's the minimal possibility."</strong> Nobody has to guess or trust an instinct: the value of <em>this</em> board is fully determined by the values of the boards it can turn into.</p>
-<p>That's the whole algorithm, stated as code Malan describes on screen: <strong>"If the player is X, for each possible move, calculate the score for the board at that point in time, and then choose the move with the highest score... else if the player is O, essentially do the same thing but choose the minimal possible score."</strong></p>
-<div class="codehilite"><pre><span></span><code>function best_move(board, player):
-    if player == &quot;X&quot;:                 # X is maximizing
-        for each legal move:
-            compute the resulting board&#39;s value      # via recursion
-        play the move with the HIGHEST resulting value
-    else:                              # O is minimizing
-        for each legal move:
-            compute the resulting board&#39;s value
-        play the move with the LOWEST resulting value
-</code></pre></div>
-
-<p>Notice that "compute the resulting board's value" for a board that <em>isn't</em> finished means running this exact same process again, one level deeper: this is Lesson 16's recursion, applied to a game tree instead of a sorted list. To know a board's value, you need the values of every board it could turn into, all the way down to boards where the game is actually over.</p>
-<blockquote>
-<p>🔑 <strong>Minimax doesn't guess: it exhaustively proves the answer.</strong> Every finished board gets a real number (<code>-1</code>, <code>0</code>, or <code>1</code>); every unfinished board's value is computed from the values of every board that follows from it, all the way down.</p>
-</blockquote>
-<hr />
-<h2 id="part-4-the-combinatorial-explosion-why-brute-force-breaks">Part 4: The combinatorial explosion (why brute force breaks)</h2>
-<p>Minimax feels almost like cheating for a 2-square-left position, because there's only one branch to check. But Malan is honest about what happens as more squares open up:</p>
-<blockquote>
-<p>"The catch is that the decision tree gets a lot bigger the more and more moves that are left. It gets sort of bigger and bushier, in that it's essentially doubling in size." (David Malan)</p>
-</blockquote>
-<p>Even tic-tac-toe, small as it looks, has a surprisingly large total tree: <strong>"How many ways are there to play tic-tac-toe though? Well, 255,168."</strong> That's still small enough that a computer (or, with real patience, a determined human) can walk the whole tree and solve the game perfectly every time, which is exactly why the code sketch in Part 3 works so well for tic-tac-toe.</p>
-<p>Chess and Go are a different story entirely. Counting only the first four moves each player makes (not the whole game, just the <em>opening</em>), Malan reports the totals: <strong>"it turns out 85 billion just to get the game started"</strong> for chess, and, for Go, <strong>"266 quintillion possibilities."</strong> His own reaction: <strong>"this is where we sort of as humans, and even with our modern PCs and Macs and phones, kind of have to throw up our hands, because I don't have this many bits of memory in my computer. I don't have this many hours in my life left to actually crunch all of those numbers."</strong></p>
-<table>
-<thead>
-<tr>
-<th>Game</th>
-<th>Total possibilities counted</th>
-<th>Can you brute-force it?</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Tic-tac-toe (full game)</td>
-<td>255,168</td>
-<td>Yes, small enough for a computer (or a patient human) to walk the entire tree</td>
-</tr>
-<tr>
-<td>Chess (first 4 moves only)</td>
-<td>~85 billion</td>
-<td>No, and that's just the <em>opening</em></td>
-</tr>
-<tr>
-<td>Go (first 4 moves only)</td>
-<td>~266 quintillion</td>
-<td>Absolutely not</td>
-</tr>
-</tbody>
-</table>
-<p>This is Lesson 13's Big O lesson, at a much larger scale. Lesson 13 showed you the difference between an algorithm that grows linearly (<code>O(n)</code>) and one that grows logarithmically (<code>O(log n)</code>). A game tree that "essentially doubles in size" with every move left is growing <em>combinatorially</em>, far faster than either of those families, and no amount of extra memory or a faster CPU rescues you from a curve that steep for long.</p>
-<p>That's the exact gap machine learning exists to close. As Malan puts it, once brute force is off the table:</p>
-<blockquote>
-<p>"You instead need to write code that doesn't solve the problem directly but in some sense indirectly. You write code so that the computer figures out how to win... In other words, you train it... this is what we mean nowadays by machine learning: writing code via which machines learn how to solve problems generally by being trained on massive amounts of data, and then, in new problems, looking for patterns via which they can apply those past training data to the problem at hand." (David Malan)</p>
-<p>✅ <strong>What to do about it:</strong> whenever a problem's tree of possibilities is small and fully known (tic-tac-toe, Breakout's paddle), exhaustive search or a decision tree is the right, simplest tool. The moment the count of possibilities explodes past what any computer could enumerate, that's your signal that you need a system that learns from examples instead of one that checks every possibility.</p>
-</blockquote>
-<hr />
-<h2 id="part-5-reinforcement-learning-reward-punishment-and-epsilon">Part 5: Reinforcement learning (reward, punishment, and epsilon)</h2>
-<p><strong>Reinforcement learning</strong> is the machine-learning technique Malan reaches for first, because, as he notes, humans already use it constantly, on each other. He shows a lab recording of a researcher teaching a robot arm to flip a pancake:</p>
-<blockquote>
-<p>"Here's the key detail with reinforcement learning: behind the scenes, the human is probably rewarding the robot when it does a good job, like, better and better it flips, the more it's rewarded, as by hitting a key and giving it a point... or conversely, every time the robot screws up and drops the pancake on the floor, sort of a proverbial slap on the wrist, a punishment, so that it does less of that behavior the next time." (David Malan)</p>
-</blockquote>
-<p>After roughly 50 trials of this reward-and-punishment loop, the robot reliably flips the pancake, not because anyone programmed the physics of a flip, but because good attempts were reinforced and bad ones were not.</p>
-<h3 id="explore-vs-exploit-and-the-epsilon-variable">Explore vs. exploit, and the epsilon variable</h3>
-<p>Malan then turns to a maze: a player (a yellow dot) needs to reach an exit (a green dot) while avoiding lava pits, moving only up, down, left, or right, with no map. Bumping a lava pit is a punishment (remember: don't do that); reaching the exit is a reward (remember: do more of that). Given enough tries, the player eventually stumbles onto <em>a</em> working path and can always repeat it. But Malan asks the obvious follow-up:</p>
-<blockquote>
-<p>"Is this the best way to play? Am I as good at Super Mario Brothers as I might think? ... I've moved many more times than I need to." (David Malan)</p>
-</blockquote>
-<p>A player that only ever repeats its first working path never discovers a shorter one: the same habit, Malan admits, as always ordering the same good dish at a restaurant instead of risking something that might be even better. This tension has a name:</p>
-<blockquote>
-<p>"There's this principle of exploring versus exploiting when it comes to using artificial intelligence to solve problems... what if I just sprinkle in a little bit of randomness along the way? And maybe 10% of the time, as represented by this <strong>epsilon</strong> variable, I, as the computer in the story, generate a random number between 0 and 1, and if it's less than that, which is going to happen 10% of the time, I'm going to make a random move instead of one that I know will get me closer to the exit. Otherwise I'll indeed make the move with the highest value." (David Malan)</p>
-</blockquote>
-<p>That's the whole mechanism: on every decision, generate a random number; if it's less than epsilon, <strong>explore</strong> (try something new); otherwise, <strong>exploit</strong> (do whatever has worked best so far). Set epsilon too low, and the agent never finds a better path than the first one it stumbled on. Set it too high, and it wastes too many turns trying random things instead of using what it already knows works.</p>
-<p>Applied to an AI actually playing Breakout, this loop produces something Malan calls "a little creepy":</p>
-<blockquote>
-<p>"If you let it play long enough... you might find a certain trick to the game. Turns out if you're smart enough to break through that top row, you can let the game just play itself for you and maximize your score without even touching the ball, something that I do find a little creepy, that I just figured out how to do that without being told. But it's just a logical continuation of rewarding it for good behavior and punishing it for bad behavior." (David Malan)</p>
-</blockquote>
-<p>No one programmed that trick. Reward-and-punishment, repeated enough times with a bit of exploration mixed in, discovered it on its own.</p>
-<blockquote>
-<p>🔑 <strong>Reinforcement learning trades a known recipe for trial, reward, and punishment.</strong> Epsilon is the one number that decides how much of the agent's behavior is "try something new" versus "do what already worked", and getting that balance wrong is the difference between a mediocre, well-worn path and the best solution available.</p>
-</blockquote>
-<hr />
-<h2 id="part-6-from-rules-to-learning-supervised-learning-deep-learning-and-neural-networks">Part 6: From rules to learning (supervised learning, deep learning, and neural networks)</h2>
-<p>Reinforcement learning solves problems with no obvious "right answer" to imitate: nobody hands the maze-solver a labeled list of correct moves. But some of Part 1's examples, like spam, actually do have a human supplying the right answer, at least at first:</p>
-<blockquote>
-<p>"There's specifically a category of learning that's supervised, and we've been using this for years. And in fact, our first example of spam early on was certainly supervised... maybe once a day I hit the keyboard shortcut in Gmail to say, 'ah, this is spam, you should have caught this', and that is training Google's algorithm further." (David Malan)</p>
-</blockquote>
-<p>That's <strong>supervised learning</strong>: a human labels examples (spam or not spam), and the system learns to imitate those labels on new, unseen email. The catch, Malan points out immediately, is that it doesn't scale:</p>
-<blockquote>
-<p>"The catch is that labeling data in that way manually just doesn't scale very well... it's just not realistic for humans to label millions of pieces of data, billions of pieces of data." (David Malan)</p>
-</blockquote>
-<p>That limitation is exactly what pushes the field toward <strong>deep learning</strong>, training systems that find their own patterns in raw, unlabeled data, using <strong>neural networks</strong>, loosely inspired by neurons in the brain: simple units, drawn as circles, connected by lines ("edges") that carry a signal from one to the next.</p>
-<h3 id="a-tiny-neural-network-solving-a-real-problem">A tiny neural network, solving a real problem</h3>
-<p>Malan builds the smallest possible example: a two-dimensional grid of dots, each either blue or red, with no rule given for which color goes where. A tiny network with just three neurons (one for the X-coordinate, one for the Y-coordinate, and one for the output) has to <em>discover</em> the rule from examples alone:</p>
-<div class="codehilite"><pre><span></span><code>      x  (X-coordinate) ---\
-                             \
-                              o----&gt; output: predict &quot;blue&quot; or &quot;red&quot;
-                             /
-      y  (Y-coordinate) ---/
-</code></pre></div>
-
-<p>Given only a couple of dots, the best the network can do is guess a rough dividing line; given more dots, that line can be adjusted, angled, even curved, to fit the data better. Mathematically, this whole network reduces to finding three numbers, called <strong>parameters</strong> (or <strong>weights</strong>): <strong>"an A, a B, and a C,"</strong> plugged into the formula <code>A·x + B·y + C</code>. Malan gives the rule for turning that formula into a prediction: <strong>"if that value mathematically gives me a number greater than 0, predict it's going to be blue; otherwise predict it's going to be red."</strong></p>
-<p>Real neural networks scale this same idea up enormously: not three neurons, but billions, each edge carrying its own numeric weight, tuned automatically by training on vast amounts of data. And that scale comes at a cost of transparency:</p>
-<blockquote>
-<p>"Even though there'd be millions, billions of numbers going on there, I can't tell you what this neuron represents or why this edge has this weight. It's because of the massive amount of training data: that's just how the math works out." (David Malan)</p>
-</blockquote>
-<p>That is the honest, slightly uncomfortable truth about deep learning: nobody, not even the people who built the network, can point to one neuron and say exactly what it means. The network works because the training data, in aggregate, pushed billions of numbers into a configuration that happens to predict well, not because a human designed each piece.</p>
-<blockquote>
-<p>✅ <strong>What to do about it:</strong> when labeled data is scarce or too expensive to gather at scale, that's the signal to reach for deep learning instead of supervised learning, but expect to trade away the ability to explain <em>why</em> any single decision came out the way it did.</p>
-</blockquote>
-<hr />
-<h2 id="part-7-inside-an-llm-embeddings-attention-gpt-and-why-ai-hallucinates">Part 7: Inside an LLM (embeddings, attention, GPT, and why AI hallucinates)</h2>
-<p>The same neural-network idea, scaled up to enormous size and trained on text instead of colored dots, is what powers <strong>large language models</strong> (LLMs) like the GPT behind CS50's duck. GPT itself stands for "generative pre-trained transformer", a mouthful, but Malan is quick to note the familiar half: <strong>"there's the GPT in ChatGPT."</strong></p>
-<p>Before an LLM can reason about words, it needs a way to represent them as numbers. Malan uses a deliberately hard example (a paragraph about Massachusetts, ending on the (unstated) word "Boston") to show why this used to be difficult: the key words ("Massachusetts," "capital") are far apart in the sentence, and the same idea gets referred to with different words ("Massachusetts," then just "the state"), so an AI needs some way to notice that those far-apart words are actually connected. The fix has two parts. First, every word gets converted into a list of numbers, called an <strong>embedding</strong>:</p>
-<blockquote>
-<p>"The word Massachusetts, if you encode it in a certain way, is going to be represented with an array or vector of numbers, floating point values, so many so that the word Massachusetts, in one model, would use 1,536 floating point numbers to represent Massachusetts, essentially, in an N-dimensional space." (David Malan)</p>
-</blockquote>
-<p>Second, the model computes <strong>attention</strong>, a measure of how strongly each word in a sentence relates to every other word:</p>
-<blockquote>
-<p>"Attention is calculated based on all of that data, whereby... the thicker lines imply more of a relationship between those two words. So Massachusetts and state is inferred as having a thicker line, a higher attention from one word to the other, whereas 'our' and 'and' and 'the's have thinner lines, because they're just not as much signal to the AI as to what the answer to this question is." (David Malan)</p>
-</blockquote>
-<p>Embeddings plus attention are what let a model connect "the state's capital" all the way back to "Massachusetts," even though many other words sit in between. With that context assembled, Malan describes what the model is actually doing, in the end, with brutal simplicity:</p>
-<blockquote>
-<p>"All these LLMs, large language models, are just statistical models, like, what is the highest probability word that it should spit out at the end of this paragraph, based on all of the Reddit posts and Google search results and encyclopedias and Wikipedias that it's found and trained on online." (David Malan)</p>
-</blockquote>
-<p>Almost always, that highest-probability word is correct: for the Massachusetts example, "Boston." But "highest probability" is not the same thing as "guaranteed true," and that gap has a name:</p>
-<blockquote>
-<p>"Even CS50's own duck is fallible, even though we've written lots of code to try to put downward pressure on those mistakes, and those mistakes are what we'll call <strong>hallucinations</strong>, where the AI just makes something up, perhaps because some crazy human on the internet made something up and it was interpreted as authoritative, or just by bad luck, because of a bit of that exploration... the AI sort of veered this way... and spit out an answer that, in fact, is not correct." (David Malan)</p>
-</blockquote>
-<p>That's the whole mechanism behind a hallucination: it isn't a bug in the ordinary sense of broken code. It's the entirely predictable result of a system that always outputs its single most probable next word: a system that, occasionally, has been trained on bad information, or simply lands on a less likely (and wrong) word instead of the right one. Knowing that is exactly what makes Lesson 32's advice (read AI output critically, don't accept it on faith) make sense at a mechanical level, not just as a warning.</p>
-<p>Malan closes the lecture on a fittingly imperfect note: a recitation of Shel Silverstein's poem "The Homework Machine," about a machine that answers any homework problem "in ten seconds' time," only for the child in the poem to ask it a simple addition problem and get back a nonsense answer: <strong>"9 plus 4, and the answer is 33?"</strong>, a decades-old joke about a machine that answers instantly and confidently, and is still sometimes wrong.</p>
-<blockquote>
-<p>🔑 <strong>A hallucination is a structural property of "predict the most likely next word," not a rare glitch.</strong> The same statistical machinery that makes an LLM useful almost all of the time is exactly what occasionally makes it confidently wrong.</p>
-</blockquote>
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong>Most everyday "smart" features are not hardcoded rulebooks.</strong> Spam filters, handwriting recognition, recommendations, and voice assistants all replace an impossibly long <code>if</code>/<code>else</code> chain with patterns learned from data.</li>
-<li><strong>A decision tree is just <code>if</code>/<code>else</code>, drawn as a tree.</strong> Pong and Breakout's paddles can play perfectly with three yes/no questions, no learning required.</li>
-<li><strong>Minimax scores a finished game (<code>-1</code>/<code>0</code>/<code>1</code>) and works backward.</strong> X maximizes, O minimizes, and every unfinished board's value comes from recursively scoring the boards that follow it, exactly like Lesson 16's recursion.</li>
-<li><strong>Combinatorial explosion (255,168 tic-tac-toe games; ~85 billion chess openings; ~266 quintillion Go openings) is Big O's warning at war-story scale.</strong> Once a game tree "doubles in size" with every move, brute force stops being an option no matter how fast your computer is.</li>
-<li><strong>Reinforcement learning replaces exhaustive search with reward and punishment</strong>, and epsilon controls the balance between exploiting a known-good path and exploring for a possibly better one.</li>
-<li><strong>Neural networks tune millions or billions of numeric parameters from training data</strong>, rather than being hand-programmed rule by rule, which is powerful, and also why nobody can fully explain any single decision they make.</li>
-<li><strong>Hallucinations are a structural side effect of predicting the statistically likely next word</strong>, not a rare bug: the exact mechanism behind Lesson 32's warning to always read AI output critically.</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ Assuming every "smart" feature must be a neural network. Many everyday features (a game paddle, a simple rule engine) are just decision trees: check whether the questions can be fully enumerated before reaching for machine learning.</li>
-<li>❌ Thinking minimax "peeks ahead a little." It doesn't estimate: it walks the <em>entire</em> remaining game tree and scores every possible ending, which is exactly why it stops being practical once the tree explodes (Part 4).</li>
-<li>❌ Treating "explore sometimes" as a vague vibe instead of an actual mechanism. Epsilon is a concrete probability, checked with an actual random-number comparison on every single decision, not an occasional mood.</li>
-<li>❌ Treating a hallucination as a rare bug you can fully eliminate. It's a structural property of predicting the most probable next word, not a lookup error, which is why even a well-engineered system like CS50's duck remains fallible.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: Solve It Like a Machine</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. No accounts, tools, or spending required: just paper, a pencil, two six-sided dice, and (for the stretch) a way to generate a number from 1 to 10. You'll prove, by hand, that minimax genuinely solves tic-tac-toe; write a real decision tree as real code; and, if you want to go further, watch the explore-vs-exploit trade-off change your own score across 20 rounds.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>Three small, independent artifacts:</p>
-<ol>
-<li><strong>A fully hand-drawn minimax tree</strong> for a specific tic-tac-toe endgame with three empty squares, with every leaf scored and every intermediate value backed up correctly, proving which move is objectively best.</li>
-<li><strong>A real Python file</strong>, <code>paddle.py</code>, implementing the Breakout paddle's decision tree from Part 2 as runnable <code>if</code>/<code>elif</code>/<code>else</code> code.</li>
-<li><strong>(Stretch)</strong> A hand-run, 20-round explore-vs-exploit experiment comparing total scores across three different epsilon values.</li>
-</ol>
-<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in the Capstone</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Scoring a board -1/0/1 (Part 3)</td>
-<td>Milestone 1: scoring every leaf of your hand-drawn tree</td>
-</tr>
-<tr>
-<td>Minimax recurses (Part 3, Lesson 16)</td>
-<td>Milestone 1: backing values up from leaves to the root</td>
-</tr>
-<tr>
-<td>Decision trees are if/else (Part 2, Lesson 7)</td>
-<td>Milestone 2: the paddle's tree becomes real Python</td>
-</tr>
-<tr>
-<td>Epsilon and explore vs. exploit (Part 5)</td>
-<td>Milestone 3 (stretch): comparing epsilon = 0, 0.1, and 0.5</td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>Hand-draw the full minimax tree and prove the optimal move.</strong> Use this exact board (numbering cells 1-9, left to right, top to bottom, like a phone dial), with <strong>X to move</strong> and three empty squares remaining at 4, 6, and 8:</li>
-</ol>
-<p>```text
-    O | O | X</p>
-<hr />
-<div class="codehilite"><pre><span></span><code>  | X |
-</code></pre></div>
-
-<hr />
-<div class="codehilite"><pre><span></span><code>O |   | X
-</code></pre></div>
-
-<p>```</p>
-<p>(Cell 1 = O, 2 = O, 3 = X, 4 = empty, 5 = X, 6 = empty, 7 = O, 8 = empty, 9 = X.) On paper, draw all three of X's opening options (playing 4, 6, or 8) as the top level of a tree. For each option that doesn't immediately end the game, draw O's possible replies below it, and keep going until every branch ends in a finished board. Score every finished (leaf) board <code>-1</code> (O wins), <code>0</code> (tie), or <code>1</code> (X wins). Then back the values up the tree: at every level where it's <strong>X's</strong> turn, the value is the <strong>maximum</strong> of the branches below it; at every level where it's <strong>O's</strong> turn, the value is the <strong>minimum</strong>. Write down, in one sentence, which of X's three opening moves is objectively optimal and why: you should be able to point to a real, immediate three-in-a-row as part of your proof.
-2. <strong>Turn the paddle's decision tree into real code.</strong> In a new file <code>paddle.py</code>, write a function <code>move_paddle(ball_x, paddle_x)</code> that returns the string <code>"left"</code>, <code>"right"</code>, or <code>"stay"</code>, using the exact three-question tree from Part 2 (is the ball left of the paddle? is it right of the paddle? otherwise, stay). Test it by hand with at least five different <code>(ball_x, paddle_x)</code> pairs you choose yourself, including a case where they're equal, and confirm each returns the answer you'd expect.
-3. <strong>Stretch goal: run a 20-round explore-vs-exploit experiment.</strong> Using two six-sided dice, secretly assign one die a "win" threshold of 1-4 (about 67%) and the other a threshold of 1-3 (about 50%): write these two thresholds on a slip of paper, fold it, and don't look again until Step 6. Call them Machine A and Machine B, but don't tell yourself which threshold belongs to which; you're only allowed to learn each machine's win rate by actually "playing" it. For each of three separate 20-round runs (one for epsilon = 0, one for epsilon = 0.1, one for epsilon = 0.5): each round, generate a number from 1-10 (roll two dice and take one, or use any random-number source); if that number is less than or equal to epsilon × 10, <strong>explore</strong> (play whichever machine you have less data on so far); otherwise <strong>exploit</strong> (play whichever machine currently has the better observed win rate from your own tally, picking randomly on a tie). Roll the corresponding die once to see if that round wins or loses, and update your running win/play tally for that machine. After 20 rounds, record the total wins out of 20 for that epsilon value, then repeat for the other two epsilon values. Finally, unfold your paper and compare your total wins across epsilon = 0, 0.1, and 0.5.</p>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ Your hand-drawn tree for Milestone 1 shows all three of X's opening moves, every reply beneath each non-terminal one, and a score on every leaf.</li>
-<li>✅ You correctly identify that <strong>playing cell 6</strong> is X's optimal move (it completes column 3 (cells 3, 6, 9) for an immediate win, value <code>+1</code>), while playing 4 only forces a tie (value <code>0</code>) and playing 8 lets O force a win (value <code>-1</code>) if O replies optimally.</li>
-<li>✅ <code>paddle.py</code> returns <code>"left"</code>, <code>"right"</code>, or <code>"stay"</code> correctly for every one of your five hand-picked test cases.</li>
-<li>✅ (Stretch) You have three real total-win counts, one per epsilon value, and can say in one sentence whether a higher epsilon helped or hurt your score over just 20 rounds.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> for Milestone 1, don't skip drawing a branch just because it "looks worse": minimax's whole proof rests on actually scoring every option, not on trusting your gut about which one wins. That discipline (check every branch, don't assume) is the same rigor you'll want later when you can't just eyeball whether a database query or an AI-suggested fix is correct.</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-score-three-boards-foundational">Exercise 1: Score three boards (foundational)</h3>
-<p>Score each of these three <em>finished</em> tic-tac-toe boards as <code>-1</code>, <code>0</code>, or <code>1</code>, using the scoring rule from Part 3 (X wins = <code>1</code>, O wins = <code>-1</code>, nobody wins = <code>0</code>): (a) <code>X X X / O O _ / _ _ _</code>, (b) <code>X O X / O X O / O X O</code>, (c) <code>O O O / X X _ / X _ _</code>. For each, name which line (row, column, or diagonal) determines the score.</p>
-<h3 id="exercise-2-explore-a-tiny-maze-intermediate">Exercise 2: Explore a tiny maze (intermediate)</h3>
-<p>On paper, draw a 4×4 grid. Mark one cell "start," one cell "exit," and two other cells "lava." First, trace a path from start to exit using only "always move toward the exit, avoiding lava" (pure exploitation): count how many moves it takes. Then trace a second path where, at exactly one random step along the way, you deliberately move in a different direction than the exploit rule would pick (simulating one exploration step) before returning to exploiting. Compare the two path lengths and write one sentence about whether the detour ever paid off.</p>
-<h3 id="exercise-3-hand-fit-a-bluered-classifier-advanced">Exercise 3: Hand-fit a blue/red classifier (advanced)</h3>
-<p>Here are five points on a grid, each labeled blue or red: <code>(1, 1) blue</code>, <code>(2, 3) blue</code>, <code>(1, 4) blue</code>, <code>(4, 1) red</code>, <code>(5, 2) red</code>. Using the formula from Part 6 (<code>A·x + B·y + C</code>, predicting blue if the result is greater than 0 and red otherwise), pick your own whole-number values for <code>A</code>, <code>B</code>, and <code>C</code> and check, by computing the formula for all five points, whether your line correctly separates every blue point from every red point. If it doesn't, adjust one parameter and try again.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>INVISIBLE AI, EVERYDAY EXAMPLES
-  Spam filters, handwriting recognition, recommendations, voice assistants
-  -&gt; none of them run on one giant hardcoded if/else
-
-DECISION TREE  =  if/else, drawn as a tree
-  Small, fixed number of questions -&gt; no learning needed (Pong, Breakout paddle)
-
-MINIMAX (tic-tac-toe)
-  Score every FINISHED board:  O wins = -1   tie = 0   X wins = +1
-  X&#39;s turn  -&gt; take the MAXIMUM of the options below
-  O&#39;s turn  -&gt; take the MINIMUM of the options below
-  Recursive: a board&#39;s value = the values of every board that follows it
-
-COMBINATORIAL EXPLOSION
-  Tic-tac-toe (whole game): 255,168 possibilities        -- brute-forceable
-  Chess (first 4 moves only): ~85 billion possibilities   -- not brute-forceable
-  Go (first 4 moves only): ~266 quintillion possibilities -- nowhere close
-
-REINFORCEMENT LEARNING
-  Try an action -&gt; reward (do more of that) or punishment (do less of that)
-  EPSILON = probability of exploring (trying something new) instead of
-            exploiting (doing what already worked best)
-  epsilon too low  -&gt; stuck with the first okay solution found
-  epsilon too high -&gt; wastes turns on things that don&#39;t pay off
-
-SUPERVISED -&gt; DEEP LEARNING
-  Supervised: humans label the data (you marking email as spam)
-  Deep learning: no human labels each example -- a neural network finds
-  its own patterns instead, because labeling doesn&#39;t scale to billions of items
-
-NEURAL NETWORK, SMALLEST VERSION
-  inputs (x, y) -&gt; one output neuron
-  formula:  A*x + B*y + C
-  if result &gt; 0: predict blue   else: predict red
-  real networks: billions of these &quot;weights,&quot; tuned by training data,
-  impossible for a human to interpret one at a time
-
-LLMs (GPT, Claude, Gemini, CS50&#39;s duck)
-  word -&gt; embedding (a long list of numbers, e.g. 1,536 per word)
-  attention -&gt; how strongly each word relates to every other word
-  output -&gt; the single highest-probability next word, over and over
-  HALLUCINATION = a confident, wrong answer -- a structural side effect
-  of &quot;predict the likely next word,&quot; not a rare bug
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 2 · Lesson 7 (Conditionals and loops):</strong> the <code>if</code>/<code>else if</code>/<code>else</code> chain from that lesson is exactly what a decision tree becomes once you write it as code (Part 2). This lesson just draws it as branches first.</li>
-<li><strong>Earlier, Module 4 · Lesson 13 (Thinking in running time: Big O):</strong> combinatorial explosion (Part 4) is that lesson's "how does this scale?" question, at a scale (255,168 to 266 quintillion) that makes the difference between O(n) and O(log n) look tame by comparison.</li>
-<li><strong>Earlier, Module 4 · Lesson 16 (Recursion and merge sort):</strong> minimax (Part 3) recurses exactly the way merge sort does: a board's value depends on the values of smaller sub-problems (the boards that follow it), all the way down to a base case.</li>
-<li><strong>Earlier, Module 9 · Lesson 32 (Using AI well):</strong> this lesson delivers on that lesson's closing promise, going underneath the prompts and APIs to the decision trees, reinforcement learning, and neural networks that make the duck, Copilot, and every other AI tool possible.</li>
-<li><strong>Next, Module 10 · Lesson 34 (How the internet works):</strong> a different topic: the course moves from AI to networking. Nothing from this lesson is required there.</li>
-<li><strong>Later, your final project:</strong> you won't hand-code minimax or a neural network into your database-backed web app, but the habit of mapping a decision to explicit, enumerable branches <em>before</em> writing a line of code (Part 2) is exactly how you'll design server-side logic like access checks and form validation when you get there.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Artificial Intelligence" by David J. Malan, Harvard University. Quotes are transcribed from the talk; obvious auto-transcription artifacts (stray words, garbled game names, and misheard phrasing) have been silently corrected for readability while preserving Malan's exact wording and meaning wherever possible. The closing poem, "The Homework Machine," is the copyrighted work of Shel Silverstein (from </em>A Light in the Attic<em>, 1981) and is only briefly excerpted here; seek out the full poem directly if you'd like to read it. Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+<hr /><div class="pager bottom"><span class="pcount">Page 1 of 4 &middot; Start here</span><div class="seg"><a href="33-how-machines-learn.html" class="cur" title="Start here">1</a><a href="33-how-machines-learn-2.html" class="" title="Parts 3–5">2</a><a href="33-how-machines-learn-3.html" class="" title="Parts 6–7">3</a><a href="33-how-machines-learn-4.html" class="" title="Capstone &amp; wrap-up">4</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="33-how-machines-learn-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="33" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="32-using-ai-well.html"><span class="dir">&#8592; Previous</span><b>Using AI Well: Prompts and Copilots</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="../module-10-web/34-how-the-internet-works.html"><span class="dir">Next &#8594;</span><b>How the Internet Works</b></a></nav>
+    <div class="ls-marker" data-lesson-id="33" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="32-using-ai-well.html"><span class="dir">&#8592; Previous lesson</span><b>Using AI Well: Prompts and Copilots</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 

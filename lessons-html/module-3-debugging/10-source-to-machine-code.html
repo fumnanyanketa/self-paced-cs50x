@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 3 · Lesson 10: From Source Code to Machine Code | Self-Paced CS50x</title>
+<title>Module 3 · Lesson 10: From Source Code to Machine Code (p1/3) | Self-Paced CS50x</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -49,6 +49,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -140,13 +163,13 @@ code{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.86em;b
 .copy-btn.done{background:var(--teal);color:#04231c;border-color:var(--teal)}
 
 /* callouts */
-blockquote{margin:24px 0;padding:16px 20px;border-radius:14px;background:var(--soft);border:1px solid var(--line);border-left:5px solid var(--teal)}
+blockquote{margin:24px 0;padding:18px 22px;border-radius:14px;background:var(--soft);border:1px solid var(--line);box-shadow:var(--shadow)}
 blockquote p{margin:7px 0}blockquote p:first-child{margin-top:0}blockquote p:last-child{margin-bottom:0}
-blockquote.cl-key{background:var(--k-bg);border-left-color:var(--k);border-color:transparent}
-blockquote.cl-tip{background:var(--tip-bg);border-left-color:var(--tip);border-color:transparent}
-blockquote.cl-ok{background:var(--ok-bg);border-left-color:var(--ok);border-color:transparent}
-blockquote.cl-no{background:var(--no-bg);border-left-color:var(--no);border-color:transparent}
-blockquote.cl-goal{background:var(--goal-bg);border-left-color:var(--goal);border-color:transparent}
+blockquote.cl-key{background:var(--k-bg);border-color:transparent}
+blockquote.cl-tip{background:var(--tip-bg);border-color:transparent}
+blockquote.cl-ok{background:var(--ok-bg);border-color:transparent}
+blockquote.cl-no{background:var(--no-bg);border-color:transparent}
+blockquote.cl-goal{background:var(--goal-bg);border-color:transparent}
 
 /* capstone banner */
 h2.capstone-h{background:linear-gradient(115deg,var(--navy),var(--navy-3));color:#fff;border-radius:20px;padding:30px 28px 26px;margin-top:64px;box-shadow:0 20px 50px rgba(10,26,47,.3);overflow:hidden;position:relative}
@@ -212,7 +235,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
   <div class="navlinks">
     <a href="../index.html">All lessons</a>
     <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="10-source-to-machine-code-3.html#capstone">Capstone</a>
   </div>
   <div class="nav-cta">
     <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
@@ -251,7 +274,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="10-source-to-machine-code-3.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -271,33 +294,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <li><a href="#prerequisites">Prerequisites</a></li>
 <li><a href="#part-1-make-is-not-the-compiler">Part 1: Make Is Not the Compiler</a></li>
 <li><a href="#part-2-the-four-hidden-steps-inside-compiling">Part 2: The Four Hidden Steps Inside "Compiling"</a></li>
-<li><a href="#part-3-why-you-cant-just-reverse-the-process">Part 3: Why You Can't Just Reverse the Process</a></li>
-<li><a href="#part-4-every-data-type-has-an-exact-size-in-memory">Part 4: Every Data Type Has an Exact Size in Memory</a></li>
-<li><a href="#part-5-how-it-all-comes-together-bytes-in-a-grid-called-ram">Part 5: How It All Comes Together: Bytes in a Grid Called RAM</a></li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: The Compiler's Assembly Line</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-measure-the-invisible-code-foundational">Exercise 1: Measure the invisible code (foundational)</a></li>
-<li><a href="#exercise-2-explain-the-linker-error-to-a-friend-intermediate">Exercise 2: Explain the linker error to a friend (intermediate)</a></li>
-<li><a href="#exercise-3-do-the-bit-math-yourself-advanced">Exercise 3: Do the bit math yourself (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="10-source-to-machine-code.html" class="cur" title="Start here">1</a><a href="10-source-to-machine-code-2.html" class="" title="Parts 3–5">2</a><a href="10-source-to-machine-code-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="10-source-to-machine-code-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>Every time you run <code>make</code>, your C file secretly passes through four separate translation steps (preprocessing, compiling, assembling, and linking) before it becomes a runnable program, and once it runs, every variable you declare takes up an exact, predictable number of bytes inside one giant addressable grid of memory called RAM.</p>
 <blockquote>
@@ -423,248 +426,9 @@ hello / a.out               one executable: your code + cs50&#39;s + stdio&#39;s
 <p>That is exactly what <code>-lcs50</code> controls: it tells the linker where to find CS50's object code so it has something to combine yours with.</p>
 <blockquote>
 <p>✅ <strong>What to do about it:</strong> when you see an error mentioning "undefined reference" or "linker command failed," you are not looking at a syntax mistake in your own code: you are looking at a missing <code>-l</code> flag (a library the linker doesn't know to include). Check your <code>#include</code>s are matched by the right library flag.</p>
-</blockquote>
-<h2 id="part-3-why-you-cant-just-reverse-the-process">Part 3: Why You Can't Just Reverse the Process</h2>
-<p>If a compiler turns readable C into zeros and ones, could you run it backward: take someone else's compiled program and reconstruct their original source code? This is called <strong>decompiling</strong>, and it's a real question with real stakes:</p>
-<blockquote>
-<p>"Couldn't you just kind of reverse this process and reverse engineer someone else's code by decompiling it? ... This is genuinely a threat, and this comes up in matters of law and intellectual property." (David Malan)</p>
-</blockquote>
-<p>In practice, though, it is far harder than it sounds:</p>
-<blockquote>
-<p>"It's sort of easier said than done to reverse engineer code from these zeros and ones... if you are smart enough and capable enough and have enough free time to do that, it would probably take you less time to just implement Microsoft Word the normal way and just rebuild the software." (David Malan)</p>
-</blockquote>
-<p>And decompiling can never be <em>perfectly</em> reversed, even in principle, because some information about your original source is simply thrown away during compiling:</p>
-<blockquote>
-<p>"You can't figure out from the zeros and ones whether or not it was a while loop or a for loop, because it just results in the same pattern of zeros and ones... it's not going to be obvious from the zeros and ones what the source code originally looked like." (David Malan)</p>
-<p>💡 <strong>A nuance worth keeping.</strong> Not every language even works this way. As a preview of Module 10, Malan points out that JavaScript is different:</p>
-<p>"JavaScript source code is actually sent from web servers to web browsers, and you can look at the source code of any website on the internet... not all languages, it turns out, are even compiled typically. Sometimes the source code is just executed by the underlying computer." (David Malan)</p>
-<p>C is compiled ahead of time into zeros and ones before you ever run it. JavaScript, by contrast, typically ships as plain readable source and is executed directly, which is why "view source" on any webpage works, and "view source" on a compiled C program does not.</p>
-</blockquote>
-<h2 id="part-4-every-data-type-has-an-exact-size-in-memory">Part 4: Every Data Type Has an Exact Size in Memory</h2>
-<p>Back in Module 2 you used data types like <code>bool</code>, <code>int</code>, <code>float</code>, <code>char</code>, and <code>string</code> without worrying about their footprint. It turns out each one reserves a specific, predictable number of bytes:</p>
-<table>
-<thead>
-<tr>
-<th>Data type</th>
-<th>Size (bytes)</th>
-<th>What it holds</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>bool</code></td>
-<td>1</td>
-<td><code>true</code> or <code>false</code></td>
-</tr>
-<tr>
-<td><code>char</code></td>
-<td>1</td>
-<td>one ASCII character</td>
-</tr>
-<tr>
-<td><code>int</code></td>
-<td>4</td>
-<td>a whole number</td>
-</tr>
-<tr>
-<td><code>long</code></td>
-<td>8</td>
-<td>a bigger whole number (twice an <code>int</code>'s range)</td>
-</tr>
-<tr>
-<td><code>float</code></td>
-<td>4</td>
-<td>a real (decimal-point) number, by default</td>
-</tr>
-<tr>
-<td><code>double</code></td>
-<td>8</td>
-<td>a real number, with roughly twice a <code>float</code>'s precision</td>
-</tr>
-<tr>
-<td><code>string</code></td>
-<td><em>varies</em></td>
-<td>depends entirely on how many characters it holds</td>
-</tr>
-</tbody>
-</table>
-<p>A <code>bool</code> is a good example of memory being spent for convenience, not necessity:</p>
-<blockquote>
-<p>"A bool, it turns out, actually takes up one byte, which is kind of stupid because technically a bool, true or false, really only needs one bit. It just turns out that it's more efficient and easier to just use a whole byte." (David Malan)</p>
-</blockquote>
-<p><code>int</code> and <code>long</code> scale the same way:</p>
-<blockquote>
-<p>"An int uses 4 bytes... A long, meanwhile, is twice that: it uses 8 bytes." (David Malan)</p>
-</blockquote>
-<p>And <code>float</code>/<code>double</code> follow the identical doubling pattern, trading memory for precision:</p>
-<blockquote>
-<p>"A float is 4 bytes by default, but a double gives you twice as many bits to play with." (David Malan)</p>
-</blockquote>
-<p>A <code>char</code>, meanwhile, is the simplest of all: one byte, holding one ASCII character. A <code>string</code> is the odd one out on this list:</p>
-<blockquote>
-<p>"String, I'll put as a question mark, because a string totally depends on its length." (David Malan)</p>
-</blockquote>
-<p>Every other type on this list has one fixed answer no matter what value you put in it: an <code>int</code> is always 4 bytes, whether it holds <code>0</code> or <code>2,000,000,000</code>. A <code>string</code>'s size, by contrast, depends entirely on what's inside it. Exactly <em>why</em> that is, and what a string actually turns out to be underneath, is the subject of the next lesson.</p>
-<blockquote>
-<p>🔑 <strong>The single most important takeaway of this part.</strong> A data type isn't just a label for the compiler: it's a promise about exactly how many bytes to reserve. Everything on this list keeps that promise with a fixed number, except <code>string</code>.</p>
-</blockquote>
-<h2 id="part-5-how-it-all-comes-together-bytes-in-a-grid-called-ram">Part 5: How It All Comes Together: Bytes in a Grid Called RAM</h2>
-<p>Once your program is compiled, linked, and running, every variable it declares has to physically live somewhere. That "somewhere" is RAM (random access memory), and Malan's mental model for it is refreshingly simple:</p>
-<blockquote>
-<p>"Let's go ahead and draw this really as a grid of memory, a sort of canvas that we... use to store types of data like bools and ints and chars and floats and everything else." (David Malan)</p>
-</blockquote>
-<p>Picture RAM as one enormous strip of numbered, one-byte mailboxes, stretching from byte 0 to however many billions of bytes your machine has:</p>
-<div class="codehilite"><pre><span></span><code>Byte address:    0     1     2     3     4     5     6     7     8   ...
-Contents:      [ 01 ][ 00 ][ 11 ][ 01 ][ ?? ][ ?? ][ ?? ][ ?? ][ ?? ]  ...
-                \____________________/
-                 a 4-byte int lives here, in 4 addressed bytes side by side
-</code></pre></div>
-
-<p>Because an <code>int</code> is 4 bytes, it doesn't get 4 bytes scattered randomly around the grid, but it gets 4 <em>consecutive</em> ones:</p>
-<blockquote>
-<p>"If you want to store an int, well, that's 4: you might use all 4 of these bytes, necessarily contiguous. You can't just choose random bits all over the place. When you have a 4-byte value like an int, they're all going to be contiguous, back to back to back, in memory." (David Malan)</p>
-</blockquote>
-<p>A <code>char</code> uses just 1 of those mailboxes. A <code>long</code> or <code>double</code> uses 8 in a row. The computer itself has no concept of "up," "down," or "next row": that's purely a drawing convenience for a wide screen. Underneath, it's just one long strip of addressable bytes, and every data type from Part 4 is really just an agreement about how many of those bytes belong to one value.</p>
-<div class="codehilite"><pre><span></span><code>                Preprocess → Compile → Assemble → Link
-                        (Parts 1-2: turns hello.c into a running program)
-                                        |
-                                        v
-                While the program runs, its variables live in RAM:
-                a giant addressable grid of bytes (Part 5), where each
-                data type (Part 4) reserves a fixed, contiguous number
-                of those bytes.
-</code></pre></div>
-
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong><code>make</code> is not the compiler.</strong> <code>clang</code> is. <code>make hello</code> automates <code>clang hello.c -o hello -lcs50</code>: naming your output file and linking the CS50 library for you.</li>
-<li><strong>"Compiling" is really four steps.</strong> Preprocessing (copy-paste headers), compiling (C → assembly), assembling (assembly → object code, zeros and ones), and linking (combine your object code with libraries' object code into one executable).</li>
-<li><strong>A linker error is not a syntax error.</strong> "Undefined reference" or "linker command failed" means a missing <code>-l</code> flag, not a spelling mistake in your code.</li>
-<li><strong>Every data type reserves a fixed number of bytes</strong> (<code>bool</code> and <code>char</code> get 1, <code>int</code> and <code>float</code> get 4, <code>long</code> and <code>double</code> get 8), except <code>string</code>, whose size depends on its contents.</li>
-<li><strong>RAM is one giant addressable grid of bytes</strong>, and a multi-byte value like an <code>int</code> always occupies consecutive bytes in that grid, never scattered ones.</li>
-<li><strong>Decompiling is technically possible but practically brutal</strong>, and it can never be perfectly reversed: details like whether a loop was written as <code>for</code> or <code>while</code> are gone forever once compiled.</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ Saying "the compiler" when you mean <code>make</code>, or vice versa: <code>make</code> is the automation; <code>clang</code> is the actual compiler doing the translating.</li>
-<li>❌ Seeing "undefined reference to <code>get_string</code>" and looking for a typo in your own code: check for a missing <code>-lcs50</code> (or the matching library flag) instead.</li>
-<li>❌ Assuming a data type's byte size is a law of the universe: Malan is careful to say "on most modern systems." It's a near-universal convention on today's hardware, not a mathematical guarantee for every computer that has ever existed.</li>
-<li>❌ Expecting <code>sizeof</code> on a <code>string</code> variable to tell you how many characters it holds: a <code>string</code>'s byte size isn't fixed the way <code>int</code> or <code>char</code> is, for reasons the next lesson explains.</li>
-<li>❌ Assuming every language works like C. Some, like JavaScript, ship as plain source and are executed directly, with no separate compiled file to decompile in the first place.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: The Compiler's Assembly Line</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. You'll manually run each of the four build stages against a real <code>hello.c</code> (producing and inspecting the files <code>make</code> normally deletes for you) and then measure, in bytes, exactly what six C data types cost. Knowing precisely how much memory a value costs, and that a "compiled program" is really just your code stitched together with other people's already-compiled code, is exactly the mental model you'll lean on later when your own database-backed final project needs to store and serve real data efficiently.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>Two small artifacts on cs50.dev: (1) four intermediate files: <code>hello.i</code>, <code>hello.s</code>, <code>hello.o</code>, and a final executable, produced by hand from one <code>hello.c</code>, each inspected before moving to the next; and (2) a <code>sizeof.c</code> program that prints the exact byte size of six C data types on your own machine.</p>
-<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Clang vs. <code>make</code> (Part 1)</td>
-<td>Milestone 1</td>
-</tr>
-<tr>
-<td>Preprocessing, <code>-E</code> (Part 2)</td>
-<td>Milestone 2</td>
-</tr>
-<tr>
-<td>Compiling to assembly, <code>-S</code> (Part 2)</td>
-<td>Milestone 3</td>
-</tr>
-<tr>
-<td>Assembling to object code, <code>-c</code> (Part 2)</td>
-<td>Milestone 4</td>
-</tr>
-<tr>
-<td>Linking, <code>-lcs50</code> (Parts 1-2)</td>
-<td>Milestone 5</td>
-</tr>
-<tr>
-<td>Data type sizes (Part 4)</td>
-<td>Milestone 6</td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>Set up <code>hello.c</code>.</strong> On cs50.dev, write a small <code>hello.c</code> that includes <code>cs50.h</code> and <code>stdio.h</code>, asks for the user's name with <code>get_string</code>, and prints <code>hello, NAME</code>. Confirm it works the normal way first: <code>make hello</code> then <code>./hello</code>.</li>
-<li><strong>Preprocess it by hand.</strong> Run <code>clang -E hello.c -o hello.i</code>. Open <code>hello.i</code>. Scroll past the large wall of text near the top (that's <code>stdio.h</code> and <code>cs50.h</code>, copy-pasted in) and find your own few lines of code, unchanged, near the bottom.</li>
-<li><strong>Compile it to assembly by hand.</strong> Run <code>clang -S hello.c -o hello.s</code>. Open <code>hello.s</code>. You are not expected to understand most of it: just find the word <code>main</code>, and look for <code>call</code> instructions that mention <code>get_string</code> or <code>printf</code>.</li>
-<li><strong>Assemble it to object code by hand.</strong> Run <code>clang -c hello.c -o hello.o</code>. Try <code>./hello.o</code> directly: it will fail, because object code is real zeros and ones but is not yet a complete, linked program. Run <code>ls -l hello.o</code> and note its size in bytes.</li>
-<li><strong>Link it by hand, and reproduce the missing-library error on purpose.</strong> First run <code>clang hello.c -o hello_broken</code> (no <code>-lcs50</code>) and copy the exact error text. Then run <code>clang hello.c -o hello -lcs50</code> and confirm <code>./hello</code> now works correctly.</li>
-<li><strong>Measure your data types.</strong> Write <code>sizeof.c</code>, including <code>stdio.h</code> and <code>stdbool.h</code>, that uses <code>printf</code> and <code>sizeof()</code> to print the byte size of <code>bool</code>, <code>char</code>, <code>int</code>, <code>long</code>, <code>float</code>, and <code>double</code> on your own cs50.dev machine. Compare your output to the table in Part 4.</li>
-<li><strong>Stretch goals.</strong> (a) Run <code>ls -l hello</code> and compare its size to <code>hello.o</code>'s size from Milestone 4: in one sentence, explain why the linked executable is bigger. (b) Declare a <code>string</code> variable and try <code>sizeof</code> on it: notice it does <em>not</em> tell you the number of characters stored, which is a preview of Lesson 11.</li>
-</ol>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ You have four separate files on disk built from one <code>hello.c</code>: <code>hello.i</code>, <code>hello.s</code>, <code>hello.o</code>, and a runnable executable, and can say in one sentence what changed at each step.</li>
-<li>✅ You've triggered the "undefined reference" / linker error yourself, on purpose, and can explain in your own words what <code>-lcs50</code> fixes.</li>
-<li>✅ <code>sizeof.c</code> prints six correct byte counts, and you can explain why <code>bool</code> gets a whole byte instead of a single bit.</li>
-<li>✅ You can explain, without looking it up, why decompiling <code>hello.o</code> back into readable C would be far harder than just writing <code>hello.c</code> again from scratch.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> don't let <code>make</code> or a cleanup command delete <code>hello.i</code>, <code>hello.s</code>, or <code>hello.o</code> before you've actually opened and looked inside each one: the whole point is seeing the in-between states <code>make</code> normally hides.</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-measure-the-invisible-code-foundational">Exercise 1: Measure the invisible code (foundational)</h3>
-<p>Write a one-line program (just <code>#include &lt;stdio.h&gt;</code> and an empty <code>main</code>). Run <code>clang -E</code> on it and save the output. Count how many lines longer the preprocessed file is than your original: that's roughly how many lines of "invisible" code <code>stdio.h</code> was hiding from you the whole time.</p>
-<h3 id="exercise-2-explain-the-linker-error-to-a-friend-intermediate">Exercise 2: Explain the linker error to a friend (intermediate)</h3>
-<p>Deliberately compile a program that calls <code>get_string</code> with plain <code>clang program.c</code> (no <code>-lcs50</code>). Copy the exact error text. In two or three sentences, in your own words, explain to a friend what a linker actually does and why this specific error happens.</p>
-<h3 id="exercise-3-do-the-bit-math-yourself-advanced">Exercise 3: Do the bit math yourself (advanced)</h3>
-<p>In your <code>sizeof.c</code> from the Capstone, print <code>sizeof(int) * 8</code> (that should equal the number of bits). Then, using the fact that a 4-byte signed <code>int</code> splits its range across positive and negative values, calculate by hand, no looking it up, the largest positive number a 4-byte signed <code>int</code> can hold. Compare your answer to the "roughly 2 billion" figure from the lecture.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>MAKE VS. THE REAL COMPILER
-  make hello   =  clang hello.c -o hello -lcs50   (make just automates this)
-  a.out         =  Clang&#39;s default output name (&quot;assembler output&quot;)
-
-THE FOUR HIDDEN STEPS
-  1. PREPROCESS   clang -E file.c -o file.i    #include lines -&gt; real header text
-  2. COMPILE      clang -S file.c -o file.s    C -&gt; assembly (CPU-specific instructions)
-  3. ASSEMBLE     clang -c file.c -o file.o    assembly -&gt; object code (0s and 1s, not runnable alone)
-  4. LINK         clang file.c -o file -lXXX   your object code + library object code -&gt; one executable
-
-  &quot;undefined reference&quot; / &quot;linker command failed&quot;  -&gt;  missing -l&lt;library&gt; flag, not a typo
-
-DATA TYPE SIZES
-  bool     1 byte    char     1 byte
-  int      4 bytes   float    4 bytes
-  long     8 bytes   double   8 bytes
-  string   varies: depends on its contents (see Lesson 11)
-
-MEMORY MODEL
-  RAM = one giant grid of individually addressed bytes (byte 0, byte 1, byte 2, ...)
-  A multi-byte value (int, long, double, ...) always occupies CONSECUTIVE bytes.
-
-DECOMPILING
-  Technically possible, practically brutal, and never perfectly reversible
-  (e.g., a compiled for-loop and while-loop can look identical).
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 3 · Lesson 9:</strong> <code>debug50</code> showed you a "garbage value" sitting in a variable before its line of code ran. This lesson explains where that memory actually is: one giant addressable grid of bytes.</li>
-<li><strong>Next, Module 3 · Lesson 11 "Arrays and strings under the hood":</strong> now that you know a <code>char</code> is exactly 1 byte and memory is addressable, you'll see that a <code>string</code> is really just a contiguous array of <code>char</code>s, which is exactly why its size "depends on its length."</li>
-<li><strong>Later, Module 5 · Lesson 17 "Pixels, hexadecimal, and memory addresses":</strong> every byte in the grid you sketched here turns out to have an actual numeric address, which you'll print directly from your own C code.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 2 - Arrays" by David J. Malan, Harvard University (CS50x 2026). Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+</blockquote><div class="pager bottom"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="10-source-to-machine-code.html" class="cur" title="Start here">1</a><a href="10-source-to-machine-code-2.html" class="" title="Parts 3–5">2</a><a href="10-source-to-machine-code-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="10-source-to-machine-code-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="10" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="09-art-of-debugging.html"><span class="dir">&#8592; Previous</span><b>The Art of Debugging</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="11-arrays-and-strings.html"><span class="dir">Next &#8594;</span><b>Arrays and Strings Under the Hood</b></a></nav>
+    <div class="ls-marker" data-lesson-id="10" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="09-art-of-debugging.html"><span class="dir">&#8592; Previous lesson</span><b>The Art of Debugging</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 

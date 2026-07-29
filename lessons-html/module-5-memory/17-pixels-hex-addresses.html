@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 5 · Lesson 17: Pixels, Hexadecimal, and Memory Addresses | Self-Paced CS50x</title>
+<title>Module 5 · Lesson 17: Pixels, Hexadecimal, and Memory Addresses (p1/4) | Self-Paced CS50x</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -49,6 +49,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -140,13 +163,13 @@ code{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.86em;b
 .copy-btn.done{background:var(--teal);color:#04231c;border-color:var(--teal)}
 
 /* callouts */
-blockquote{margin:24px 0;padding:16px 20px;border-radius:14px;background:var(--soft);border:1px solid var(--line);border-left:5px solid var(--teal)}
+blockquote{margin:24px 0;padding:18px 22px;border-radius:14px;background:var(--soft);border:1px solid var(--line);box-shadow:var(--shadow)}
 blockquote p{margin:7px 0}blockquote p:first-child{margin-top:0}blockquote p:last-child{margin-bottom:0}
-blockquote.cl-key{background:var(--k-bg);border-left-color:var(--k);border-color:transparent}
-blockquote.cl-tip{background:var(--tip-bg);border-left-color:var(--tip);border-color:transparent}
-blockquote.cl-ok{background:var(--ok-bg);border-left-color:var(--ok);border-color:transparent}
-blockquote.cl-no{background:var(--no-bg);border-left-color:var(--no);border-color:transparent}
-blockquote.cl-goal{background:var(--goal-bg);border-left-color:var(--goal);border-color:transparent}
+blockquote.cl-key{background:var(--k-bg);border-color:transparent}
+blockquote.cl-tip{background:var(--tip-bg);border-color:transparent}
+blockquote.cl-ok{background:var(--ok-bg);border-color:transparent}
+blockquote.cl-no{background:var(--no-bg);border-color:transparent}
+blockquote.cl-goal{background:var(--goal-bg);border-color:transparent}
 
 /* capstone banner */
 h2.capstone-h{background:linear-gradient(115deg,var(--navy),var(--navy-3));color:#fff;border-radius:20px;padding:30px 28px 26px;margin-top:64px;box-shadow:0 20px 50px rgba(10,26,47,.3);overflow:hidden;position:relative}
@@ -212,7 +235,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
   <div class="navlinks">
     <a href="../index.html">All lessons</a>
     <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="17-pixels-hex-addresses-4.html#capstone">Capstone</a>
   </div>
   <div class="nav-cta">
     <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
@@ -251,7 +274,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="17-pixels-hex-addresses-4.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -271,36 +294,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <li><a href="#prerequisites">Prerequisites</a></li>
 <li><a href="#part-1-images-are-just-grids-of-numbered-dots">Part 1: Images are just grids of numbered dots</a></li>
 <li><a href="#part-2-one-bit-per-pixel-the-smiley-face-hidden-in-0s-and-1s">Part 2: One bit per pixel (the smiley face hidden in 0s and 1s)</a></li>
-<li><a href="#part-3-rgb-and-the-hexadecimal-color-code">Part 3: RGB and the hexadecimal color code</a></li>
-<li><a href="#part-4-hexadecimal-itself-counting-in-base-16">Part 4: Hexadecimal itself (counting in base 16)</a></li>
-<li><a href="#part-5-a-number-even-for-memory-your-first-look-at-addressesc">Part 5: A number even for memory (your first look at addresses.c)</a><ul>
-<li><a href="#putting-it-all-together">Putting it all together</a></li>
-</ul>
-</li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: The Hex Fluency Drill</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-count-in-hex-foundational">Exercise 1: Count in hex (foundational)</a></li>
-<li><a href="#exercise-2-reverse-a-color-intermediate">Exercise 2: Reverse a color (intermediate)</a></li>
-<li><a href="#exercise-3-predict-address-behavior-advanced">Exercise 3: Predict address behavior (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 4 &middot; Start here</span><div class="seg"><a href="17-pixels-hex-addresses.html" class="cur" title="Start here">1</a><a href="17-pixels-hex-addresses-2.html" class="" title="Parts 3–5">2</a><a href="17-pixels-hex-addresses-3.html" class="" title="Common pitfalls">3</a><a href="17-pixels-hex-addresses-4.html" class="" title="Capstone &amp; wrap-up">4</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="17-pixels-hex-addresses-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>An image is just a grid of numbered dots, a color is just three of those numbers squeezed together, hexadecimal is nothing more than a compact way to write any number a computer uses, including colors and, as you'll see today for the first time, the actual address where one of your variables lives inside the computer.</p>
 <blockquote>
@@ -373,273 +373,9 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <blockquote>
 <p>"In modern times we would actually use 16 bits per color, 24 bits per color, maybe even more, and that's how we can get every color of the rainbow instead of just something black and white." (David Malan)</p>
 <p>🔑 <strong>Bit depth (bits per pixel) is what determines how many colors are possible.</strong> One bit gives you exactly 2 colors. More bits per pixel means more possible colors, which is exactly the door that opens into Part 3, RGB.</p>
-</blockquote>
-<h2 id="part-3-rgb-and-the-hexadecimal-color-code">Part 3: RGB and the hexadecimal color code</h2>
-<p>Rewinding to the RGB you met in Module 1 · Lesson 2: a color is red, green, and blue, each from 0 to 255. Malan shows a screenshot of Photoshop's color picker, a professional photo-editing tool, to introduce the notation almost every image editor and web page actually uses for that same information: hexadecimal.</p>
-<p>Black, in Photoshop's color picker, is typed as <code>000000</code>, which also reads as 0 red, 0 green, 0 blue. Malan describes choosing it this way:</p>
-<blockquote>
-<p>"I chose black by typing in 000000, which also... means that I want 0 red, 0 green, and 0 blue." (David Malan)</p>
-</blockquote>
-<p>White works the same way, just at the opposite end of the range: <code>FFFFFF</code>, equivalently 255 red, 255 green, 255 blue. Recall from Part 4 that <code>FF</code> is the largest two-digit hex number there is, exactly 255 in decimal.</p>
-<p>And the primary colors follow the same pattern, two hex digits per channel, in order red, green, blue:</p>
-<blockquote>
-<p>"If we wanted to represent something like Red, we're going to use FF 0000. If we want to represent green, we're going to use 00 FF 00. And lastly, to represent blue, we're going to use 0000 FF." (David Malan)</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>Color</th>
-<th>RGB (decimal)</th>
-<th>Hex code</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Black</td>
-<td>0, 0, 0</td>
-<td><code>000000</code></td>
-</tr>
-<tr>
-<td>White</td>
-<td>255, 255, 255</td>
-<td><code>FFFFFF</code></td>
-</tr>
-<tr>
-<td>Red</td>
-<td>255, 0, 0</td>
-<td><code>FF0000</code></td>
-</tr>
-<tr>
-<td>Green</td>
-<td>0, 255, 0</td>
-<td><code>00FF00</code></td>
-</tr>
-<tr>
-<td>Blue</td>
-<td>0, 0, 255</td>
-<td><code>0000FF</code></td>
-</tr>
-</tbody>
-</table>
-<p>Notice the pattern: every hex color code is exactly six hex digits (two for red, two for green, two for blue) written back to back with no punctuation between them. <code>FF0000</code> is not one mysterious number; it is the decimal number 255 (for red), then 0 (for green), then 0 (for blue), each just written as a two-digit hex pair instead of a plain decimal number.</p>
-<blockquote>
-<p>✅ <strong>What to do about it:</strong> whenever you see a 6-digit hex color like <code>#2E8B57</code>, mentally split it into three 2-digit pairs (<code>2E</code>, <code>8B</code>, <code>57</code>) before you try to make sense of it: each pair is one RGB channel, and you'll convert those pairs to decimal in Part 4.</p>
-</blockquote>
-<h2 id="part-4-hexadecimal-itself-counting-in-base-16">Part 4: Hexadecimal itself (counting in base 16)</h2>
-<p>So why write 255 as <code>FF</code> instead of just <code>255</code>? To answer that, you have to actually learn to count in hexadecimal, the same way you already know how to count in binary.</p>
-<p>Decimal (base 10) uses ten digits, 0 through 9. Binary (base 2) uses two, 0 and 1. Hexadecimal just picks a bigger number of digits, but decimal Arabic numerals run out after 9, so computer scientists borrowed letters:</p>
-<blockquote>
-<p>"We're sort of out of Arabic numerals here, but I could toss into the mix like A, B, C, D, E, and F either in lower case or uppercase. And in fact, that's what computer scientists do when they want to have... 16 digits available, and in fact when you want to use this many digits, you call it hexadecimal, implying that you've got 16 digits, aka base 16." (David Malan)</p>
-</blockquote>
-<p>So the 16 hexadecimal digits, in order, are:</p>
-<div class="codehilite"><pre><span></span><code>0 1 2 3 4 5 6 7 8 9 A B C D E F
-                    ↑  ↑  ↑  ↑  ↑  ↑
-                   10 11 12 13 14 15
-</code></pre></div>
-
-<p>Just like decimal and binary, hexadecimal is read using <strong>place value</strong>. It's the exact same columns-and-weights idea you already use every day, just with a different set of weights:</p>
-<blockquote>
-<p>"Instead of using powers of 2 or powers of 10, we're going to today use powers of 16." (David Malan)</p>
-</blockquote>
-<p>That means the columns, from right to left, are worth 1, 16, 256, 4096, and so on (16⁰, 16¹, 16², 16³ …), the same way decimal's columns are worth 1, 10, 100, 1000 (10⁰, 10¹, 10², 10³ …).</p>
-<p>Counting through the first two hex digits looks like this:</p>
-<div class="codehilite"><pre><span></span><code>Hex:      00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F 10 11 12 ...
-Decimal:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 ...
-</code></pre></div>
-
-<p>The interesting jump is right after <code>0F</code>. In decimal, running out of single digits means carrying a 1 and rolling back to 0: that happens after 9. In hexadecimal it happens after F (15), so <code>0F</code> is followed by <code>10</code>, and <code>10</code> in hexadecimal is <strong>not</strong> ten, it's sixteen, because it means (1 × 16) + (0 × 1) = 16.</p>
-<p>This is exactly why two hex digits are so convenient: a single hex digit can represent any value from 0 through 15, which is exactly the range of 4 bits (a "nibble"). Put two hex digits side by side and you can represent 4 bits + 4 bits, a full byte, 0 through 255:</p>
-<blockquote>
-<p>"It turns out that it's just convenient to use two hexadecimal digits to represent numbers because a single hexadecimal digit can be used to represent 4 bits at once." (David Malan)</p>
-</blockquote>
-<p>You can check this with the FF example from Part 3: F is 15, and 15 × 16 (the sixteens column) + 15 × 1 (the ones column) = 240 + 15 = 255, exactly the RGB maximum you'd expect for white or for a fully-saturated red, green, or blue channel.</p>
-<p>Because hexadecimal is everywhere in computing but looks, at a glance, exactly like decimal, there's a real risk of ambiguity: if you see a label like <code>10</code> on a diagram with no other context, is that the 10th thing (decimal) or the 16th thing (hex)? To remove that ambiguity, programmers prefix every hexadecimal number with two characters, <code>0x</code>:</p>
-<blockquote>
-<p>"It's super common to literally prefix any number you ever write in hexadecimal notation using zero X... it just means what follows the 0x is a number in hexadecimal notation." (David Malan)</p>
-</blockquote>
-<p>So <code>0x10</code> unambiguously means sixteen, never ten. From here on, any time you see <code>0x</code> in front of a number, read the rest of it in hex.</p>
-<blockquote>
-<p>🔑 <strong>Hexadecimal is not new information: it's a compact rewrite of numbers you already know, and two hex digits always represent exactly one byte (0-255).</strong> The <code>0x</code> prefix exists purely to say "read what follows in base 16," nothing more.</p>
-</blockquote>
-<h2 id="part-5-a-number-even-for-memory-your-first-look-at-addressesc">Part 5: A number even for memory (your first look at addresses.c)</h2>
-<p>Hexadecimal's usefulness doesn't stop at colors. Malan reintroduces the "canvas of memory" (the picture of a computer's memory as a long row of numbered bytes) and this time numbers those bytes in hex instead of decimal, for the exact same reason colors are written in hex:</p>
-<blockquote>
-<p>"We would actually number these from 0 on up through 9 and then keep going with A, B, C, D, E, F." (David Malan)</p>
-</blockquote>
-<p>That means bytes 0 through 9 are numbered as you'd expect, and then the 10th through 15th bytes are <code>A</code> through <code>F</code>, followed by <code>10</code>, <code>11</code>, <code>12</code>, and so on, the identical counting pattern from Part 4, just applied to memory locations instead of colors.</p>
-<p>Now, some real code. Malan writes a tiny program, <code>addresses.c</code>, that does nothing more exciting than declare a variable and print it:</p>
-<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
-
-<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50</span><span class="p">;</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%i</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>Running it prints <code>50</code>. Nothing new. But that <code>50</code> has to physically live <em>somewhere</em> inside the computer's memory the moment the program runs, at some specific location:</p>
-<blockquote>
-<p>"When I actually call printf and pass in n, clearly the computer is going to that location in memory and actually printing out that value, but that value is indeed at a specific memory address." (David Malan)</p>
-</blockquote>
-<p>Up to now, you've never had a way to ask the computer <em>where</em>. Today you get one, in the form of a new operator: a single ampersand, <code>&amp;</code>, placed directly in front of a variable's name.</p>
-<blockquote>
-<p>"The ampersand has a very simple straightforward one, which is to just get the address of a variable in memory. So if you've got a variable like n, if you prefix it with ampersand n, you can actually ask the computer at what address is this variable stored." (David Malan)</p>
-</blockquote>
-<p>There's also a new format code to go with it. Because a memory address is technically a number but not one you'd ever want to do arithmetic on, it's conventional not to print it with <code>%i</code> (which is for ordinary integers). Instead, C gives you <code>%p</code> (short for "pointer"), a format code whose entire job is to print a value as a memory address:</p>
-<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
-
-<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50</span><span class="p">;</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%p</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">n</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>Instead of <code>50</code>, this version prints something like <code>0x7fffd3c34ecc</code>, a long string of hexadecimal digits, prefixed with <code>0x</code> exactly as Part 4 predicted. Malan's own run of this program produced a similarly long hex address, and was quick to note the number itself is not the point:</p>
-<blockquote>
-<p>"It would be painful to do the mental math to figure out what the numeric address is, but we're seeing it indeed in this common hexadecimal notation, which is not going to be often useful for us as humans, but the computer is and has been using this information for some time." (David Malan)</p>
-</blockquote>
-<p>Two things are worth holding onto here, and both are deliberately small for now:</p>
-<ul>
-<li><code>&amp;n</code> means "the address of <code>n</code>," not "the value of <code>n</code>." Swapping <code>n</code> for <code>&amp;n</code> inside <code>printf</code> changes what question you're asking the computer.</li>
-<li><code>%p</code> exists specifically so a <code>printf</code> call reads correctly: "print this as an address," the same way <code>%i</code> says "print this as an integer" and <code>%s</code> says "print this as a string."</li>
-</ul>
-<p>You may have noticed Malan also mentions a second new symbol, the asterisk (<code>*</code>), used for something called <em>dereferencing</em>: actually following an address to the value stored there. This lesson stops on purpose before that: the next lesson, <strong>Module 5 · Lesson 18: Pointers, and What Strings Really Are</strong>, is entirely about what you can <em>do</em> once you can already read an address, including using <code>*</code> to go find what's stored at one.</p>
-<h3 id="putting-it-all-together">Putting it all together</h3>
-<p>Every idea in this lesson is the same raw material, bits, read through a different lens:</p>
-<div class="codehilite"><pre><span></span><code>bit (0 or 1)
-  → byte (8 bits, 0-255)                    written in hex as 2 digits: 00-FF
-     → RGB channel (one byte)               e.g. decimal 255 = hex FF
-        → pixel (3 bytes: R, G, B)          e.g. (255,0,0) = FF0000 = red
-           → image (a grid of pixels)       resolution = width × height
-     → one numbered byte in memory          written in hex with a 0x prefix
-        → a variable&#39;s address (&amp;n)         e.g. 0x7fffd3c34ecc, printed with %p
-</code></pre></div>
-
-<p>Hexadecimal is the thread running through the whole diagram: the same base-16 counting from Part 4 is what makes a color code readable and what makes a memory address readable. Nothing about the underlying bytes changed all lesson: only the notation you now know how to read.</p>
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong>An image is a grid of numbered pixels.</strong> Resolution is just width × height: how many dots there are, not how big or beautiful the picture looks.</li>
-<li><strong>Bit depth determines how many colors are possible.</strong> A 1-bit image can only be two colors; modern images spend many more bits per pixel to get the full range of RGB.</li>
-<li><strong>Hexadecimal is not new information.</strong> It's the same RGB (or any other) numbers you already know, spelled with 16 digits instead of 10, in Malan's own words: it "doesn't add anything intellectually new."</li>
-<li><strong>Hex place values are powers of 16</strong> (1, 16, 256, 4096…), the same columns-and-weights idea as decimal and binary, just with a different base.</li>
-<li><strong>Two hex digits always equal exactly one byte</strong> (0 through 255, i.e. <code>00</code> through <code>FF</code>): that's the entire reason hex is convenient.</li>
-<li><strong>The <code>0x</code> prefix removes ambiguity.</strong> <code>0x10</code> is unambiguously sixteen; a bare <code>10</code> on a diagram could be either base.</li>
-<li><strong><code>&amp;variable</code> gets an address, and <code>%p</code> prints one.</strong> You now have a way to ask C exactly where one of your own variables lives in memory.</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ Reading <code>0x10</code> as "ten" out of habit. Fix: the <code>0x</code> prefix is your signal to switch your brain to base 16: <code>0x10</code> is sixteen.</li>
-<li>❌ Assuming a pixel is always one byte. Fix: it depends entirely on bit depth: a 1-bit image spends 1 bit per pixel, while a full-color RGB image spends 3 bytes (24 bits) per pixel.</li>
-<li>❌ Printing an address with <code>%i</code> instead of <code>%p</code>. Fix: <code>%i</code> is for integers you'd do arithmetic on; <code>%p</code> is specifically for memory addresses, and using the wrong format code is undefined behavior in C even if it happens to "look fine" once.</li>
-<li>❌ Treating the specific digits of a printed address as meaningful or reproducible. Fix: the exact address your program prints will differ from run to run and from computer to computer: what matters is that it's a real, valid location, not its specific digits.</li>
-<li>❌ Forgetting that F is worth 15, not "the 6th letter." Fix: anchor on the two endpoints (<code>0x0</code> is 0, <code>0xF</code> is 15) and count from there instead of re-deriving it each time.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: The Hex Fluency Drill</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. You'll practice reading and writing hexadecimal by hand in the two contexts where you'll meet it constantly for the rest of this course, colors and memory addresses, then prove you can generate a real memory address yourself in C.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>A short worked drill, done on paper or in a notes file plus one small C program on cs50.dev: a set of hand conversions between decimal and hexadecimal, a plain-language decode of five real CSS colors, and an <code>addresses.c</code> program that prints several of your own variables' values and their addresses.</p>
-<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in the drill</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Place value in base 16 (Part 4)</td>
-<td>Milestone 1: hand conversions</td>
-</tr>
-<tr>
-<td>RGB ↔ hex color codes (Part 3)</td>
-<td>Milestone 2: decoding CSS colors</td>
-</tr>
-<tr>
-<td><code>&amp;</code> and <code>%p</code> (Part 5)</td>
-<td>Milestone 3: <code>addresses.c</code></td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>Convert numbers by hand, both directions.</strong> Without a calculator or converter, convert these decimal numbers to hexadecimal: <code>45</code>, <code>200</code>, <code>4000</code>. Then convert these hexadecimal numbers to decimal: <code>2A</code>, <code>FF</code>, <code>1A4</code>. Show your place-value work for each one (which powers of 16 you multiplied and added).</li>
-<li><strong>Decode five CSS colors into plain-language RGB.</strong> For each hex color below, split it into its three 2-digit pairs, convert each pair to a decimal number from 0-255, and write one plain-language sentence describing the mix (for example, "mostly blue, a little red, almost no green"):
-   - <code>#1E90FF</code>
-   - <code>#FFD700</code>
-   - <code>#2E8B57</code>
-   - <code>#8A2BE2</code>
-   - <code>#DC143C</code></li>
-<li><strong>Write <code>addresses.c</code> and print real addresses.</strong> On cs50.dev, create <code>addresses.c</code> declaring at least three variables of different types (for example an <code>int</code>, a <code>char</code>, and a <code>double</code>). For each one, use <code>printf</code> to print both its value (with the matching format code: <code>%i</code>, <code>%c</code>, <code>%f</code>) and its address (using <code>&amp;</code> and <code>%p</code>). Compile with <code>make addresses</code> and run it with <code>./addresses</code>.</li>
-<li><strong>Stretch goals.</strong> Run your <code>addresses.c</code> a second time and compare the addresses printed: note that they're different from the first run, even though it's the exact same program. Separately, predict how many hex digits a 64-bit address needs (hint: each hex digit is 4 bits, so how many hex digits cover 64 bits?), then count the digits your own program actually printed.</li>
-</ol>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ You converted all six numbers in Milestone 1 by hand, and can explain the place-value math for at least one of each direction out loud.</li>
-<li>✅ You produced decimal R, G, B values and a one-sentence plain-language description for all five colors in Milestone 2.</li>
-<li>✅ <code>addresses.c</code> compiles with <code>make addresses</code> and, when run, prints both a value and a <code>0x</code>-prefixed address for at least three variables.</li>
-<li>✅ You can explain, in your own words, the difference between what <code>printf("%i\n", n)</code> and <code>printf("%p\n", &amp;n)</code> each print.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> do Milestones 1 and 2 by hand before you check them against any calculator or online converter: the goal is to feel the place-value arithmetic, not just trust that a tool got it right.</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-count-in-hex-foundational">Exercise 1: Count in hex (foundational)</h3>
-<p>Write out hexadecimal counting from <code>00</code> to <code>20</code> by hand, the same way Part 4's table does, without looking back at the lesson. Circle the point right after <code>0F</code> where the second digit rolls over, and explain in one sentence why that happens where it does.</p>
-<h3 id="exercise-2-reverse-a-color-intermediate">Exercise 2: Reverse a color (intermediate)</h3>
-<p>You're given the plain-language description "a fully-saturated purple: full red, no green, full blue." Write its RGB decimal triplet, then its 6-digit hex code. Then do the reverse: given the hex code <code>#00CED1</code>, describe the color it makes in plain words before converting it.</p>
-<h3 id="exercise-3-predict-address-behavior-advanced">Exercise 3: Predict address behavior (advanced)</h3>
-<p>Take the <code>addresses.c</code> you wrote for the Capstone and add a second <code>int</code> variable declared right after the first one. Predict, before running it, whether the two variables' addresses will be close together or far apart, then run the program and check. (You don't need to explain <em>why</em> precisely yet. That's next lesson's topic. Just observe and describe what you see.)</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>IMAGES
-  pixel        = one colored dot in an image
-  resolution   = width x height, in pixels
-  bit depth    = bits per pixel -&gt; how many colors are possible
-                 1 bit/pixel  = 2 colors (black/white)
-                 24 bits/pixel = full RGB (3 bytes: R, G, B)
-
-HEXADECIMAL (base 16)
-  digits: 0 1 2 3 4 5 6 7 8 9 A B C D E F   (A-F = 10-15)
-  place values: ... 4096  256   16    1
-  0x prefix: &quot;everything after this is hex&quot; -&gt; 0x10 = sixteen, not ten
-  2 hex digits = 1 byte = 0-255 = 00-FF
-
-RGB &lt;-&gt; HEX QUICK REFERENCE
-  black = (0,0,0)       = 000000
-  white = (255,255,255) = FFFFFF
-  red   = (255,0,0)     = FF0000
-  green = (0,255,0)     = 00FF00
-  blue  = (0,0,255)     = 0000FF
-
-MEMORY ADDRESSES
-  &amp;variable   -&gt; &quot;the address of this variable&quot; (an operator, not a value)
-  %p          -&gt; the printf format code for printing an address
-  printf(&quot;%p\n&quot;, &amp;n);   prints something like 0x7fffd3c34ecc
-  addresses differ every run -- the fact that one exists is the point, not its digits
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 1 · Lesson 2 (Bits and Binary):</strong> you learned RGB as three decimal numbers and bytes as 8-bit patterns. This lesson is that exact same material, revisited: the same bytes, now read in hexadecimal, with real memory addresses attached.</li>
-<li><strong>Earlier, Module 4 · Lesson 16 (Recursion and Merge Sort):</strong> the immediately preceding lesson in the course path; it doesn't feed into this one directly, but it's where Module 4 (Algorithms) closed before this lesson opens Module 5 (Memory).</li>
-<li><strong>Next, Module 5 · Lesson 18 (Pointers, and What Strings Really Are):</strong> takes the <code>&amp;</code> operator you just met and adds its partner, the dereference operator <code>*</code>, so you can not just <em>read</em> an address but actually <em>go to</em> it, and reveals that a C string has secretly been a memory address (a <code>char*</code>) since week one.</li>
-<li><strong>Later, Module 5 (Lessons 19-20):</strong> <code>malloc</code>, <code>free</code>, and file I/O all lean on being able to read a hex address at a glance, exactly as practiced here.</li>
-<li><strong>Later, Module 10 (The Web: CSS):</strong> the hex color codes you practiced decoding in this lesson's Capstone are exactly what you'll type into a stylesheet the moment you write CSS for your own final project's pages.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 4 - Memory" by David J. Malan, Harvard University (CS50x 2026). Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+</blockquote><div class="pager bottom"><span class="pcount">Page 1 of 4 &middot; Start here</span><div class="seg"><a href="17-pixels-hex-addresses.html" class="cur" title="Start here">1</a><a href="17-pixels-hex-addresses-2.html" class="" title="Parts 3–5">2</a><a href="17-pixels-hex-addresses-3.html" class="" title="Common pitfalls">3</a><a href="17-pixels-hex-addresses-4.html" class="" title="Capstone &amp; wrap-up">4</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="17-pixels-hex-addresses-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="17" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="../module-4-algorithms/16-recursion-merge-sort.html"><span class="dir">&#8592; Previous</span><b>Recursion and Merge Sort</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="18-pointers-and-strings.html"><span class="dir">Next &#8594;</span><b>Pointers, and What Strings Really Are</b></a></nav>
+    <div class="ls-marker" data-lesson-id="17" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="../module-4-algorithms/16-recursion-merge-sort.html"><span class="dir">&#8592; Previous lesson</span><b>Recursion and Merge Sort</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 

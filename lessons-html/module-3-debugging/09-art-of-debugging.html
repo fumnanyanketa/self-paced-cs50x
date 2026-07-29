@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 3 · Lesson 9: The Art of Debugging | Self-Paced CS50x</title>
+<title>Module 3 · Lesson 9: The Art of Debugging (p1/3) | Self-Paced CS50x</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -49,6 +49,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -140,13 +163,13 @@ code{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.86em;b
 .copy-btn.done{background:var(--teal);color:#04231c;border-color:var(--teal)}
 
 /* callouts */
-blockquote{margin:24px 0;padding:16px 20px;border-radius:14px;background:var(--soft);border:1px solid var(--line);border-left:5px solid var(--teal)}
+blockquote{margin:24px 0;padding:18px 22px;border-radius:14px;background:var(--soft);border:1px solid var(--line);box-shadow:var(--shadow)}
 blockquote p{margin:7px 0}blockquote p:first-child{margin-top:0}blockquote p:last-child{margin-bottom:0}
-blockquote.cl-key{background:var(--k-bg);border-left-color:var(--k);border-color:transparent}
-blockquote.cl-tip{background:var(--tip-bg);border-left-color:var(--tip);border-color:transparent}
-blockquote.cl-ok{background:var(--ok-bg);border-left-color:var(--ok);border-color:transparent}
-blockquote.cl-no{background:var(--no-bg);border-left-color:var(--no);border-color:transparent}
-blockquote.cl-goal{background:var(--goal-bg);border-left-color:var(--goal);border-color:transparent}
+blockquote.cl-key{background:var(--k-bg);border-color:transparent}
+blockquote.cl-tip{background:var(--tip-bg);border-color:transparent}
+blockquote.cl-ok{background:var(--ok-bg);border-color:transparent}
+blockquote.cl-no{background:var(--no-bg);border-color:transparent}
+blockquote.cl-goal{background:var(--goal-bg);border-color:transparent}
 
 /* capstone banner */
 h2.capstone-h{background:linear-gradient(115deg,var(--navy),var(--navy-3));color:#fff;border-radius:20px;padding:30px 28px 26px;margin-top:64px;box-shadow:0 20px 50px rgba(10,26,47,.3);overflow:hidden;position:relative}
@@ -212,7 +235,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
   <div class="navlinks">
     <a href="../index.html">All lessons</a>
     <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="09-art-of-debugging-3.html#capstone">Capstone</a>
   </div>
   <div class="nav-cta">
     <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
@@ -251,7 +274,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="09-art-of-debugging-3.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -271,32 +294,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <li><a href="#prerequisites">Prerequisites</a></li>
 <li><a href="#part-1-two-kinds-of-mistakes-and-where-the-word-bug-came-from">Part 1: Two kinds of mistakes, and where the word "bug" came from</a></li>
 <li><a href="#part-2-when-the-code-runs-but-lies-to-you-printf-as-a-debugging-tool">Part 2: When the code runs but lies to you: printf as a debugging tool</a></li>
-<li><a href="#part-3-stepping-through-time-the-debug50-debugger">Part 3: Stepping through time: the debug50 debugger</a></li>
-<li><a href="#part-4-ask-the-duck-before-you-ask-a-human-or-an-ai">Part 4: Ask the duck before you ask a human (or an AI)</a></li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: The Bug Hunt</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-break-it-on-purpose-foundational">Exercise 1: Break it on purpose (foundational)</a></li>
-<li><a href="#exercise-2-trace-a-mystery-loop-intermediate">Exercise 2: Trace a mystery loop (intermediate)</a></li>
-<li><a href="#exercise-3-step-into-a-helper-function-advanced">Exercise 3: Step into a helper function (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="09-art-of-debugging.html" class="cur" title="Start here">1</a><a href="09-art-of-debugging-2.html" class="" title="Parts 3–4">2</a><a href="09-art-of-debugging-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="09-art-of-debugging-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>Every programmer writes bugs constantly. What separates a frustrated beginner from a productive programmer is a repeatable process for finding them: read what the compiler is actually telling you, ask <code>printf</code> to show you what your variables really contain, step through your code one line at a time with a debugger, and explain your reasoning out loud before you let anyone, human or AI, fix it for you.</p>
 <blockquote>
@@ -432,211 +436,9 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <p>✅ <strong>What to do about it:</strong> when a program compiles and runs but produces a suspicious number, print the value of the variable driving the suspicious behavior (usually a loop counter) at the point where you think the logic breaks down. Once you understand why the number is wrong, delete the temporary <code>printf</code> and fix the real line.</p>
 </blockquote>
 <p>Malan also shows that this scales badly: once he moves the loop into its own function (<code>print_column</code>), there is more code to sprinkle with <code>printf</code> calls, and adding, recompiling, and removing trace statements over and over gets "very tedious quickly." That tedium is exactly what the next tool solves.</p>
-<hr />
-<h2 id="part-3-stepping-through-time-the-debug50-debugger">Part 3: Stepping through time: the debug50 debugger</h2>
-<p>Rather than manually printing variable values and recompiling again and again, you can use a <strong>debugger</strong>: a program that pauses your code mid-run and lets you inspect it, one line at a time, without touching your source file. CS50 wraps the industry-standard debugger inside VS Code as a single command, <code>debug50</code>, but as Malan is careful to point out:</p>
-<blockquote>
-<p>"A debugger is a piece of software that is used in the real world that literally lets you do that: debug your code by letting you slow down or even pause execution and walk through execution of your code line by line." (David Malan)</p>
-</blockquote>
-<p>To use it, you first need to tell the debugger where to pause: click just to the left of a line number in VS Code to set a <strong>breakpoint</strong> (a small red dot appears).</p>
-<blockquote>
-<p>"A break point is where your code will break, the point at which it will break." (David Malan)</p>
-</blockquote>
-<p>Malan sets a breakpoint on the first line inside <code>main</code> and runs <code>debug50 buggy</code> from the terminal. Execution pauses before that line has even run. At this point the debugger's side panel shows two things worth knowing about:</p>
-<ul>
-<li><strong>Variables</strong>: the current value of every variable in scope. Before a variable is ever assigned, it can show a <strong>garbage value</strong>: a leftover pattern of bits from whatever the computer's memory was used for previously. It is not a bug in your code: it is just uninitialized memory, and Malan flags that we'll come back to exactly what that means (and why it matters for security) in Module 5, when Valgrind enters the picture.</li>
-<li><strong>Call stack</strong>: which function you're currently paused inside, and which function called it.</li>
-</ul>
-<p>From here, two buttons matter most:</p>
-<table>
-<thead>
-<tr>
-<th>Button</th>
-<th>What it does</th>
-<th>When to use it</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Step over</strong></td>
-<td>"Step over this line and execute it, but only one line at a time" (Malan's words): runs the current line, including any function it calls, without pausing inside that function.</td>
-<td>You trust the function being called and just want to see its result.</td>
-</tr>
-<tr>
-<td><strong>Step into</strong></td>
-<td>Jumps <em>inside</em> the function being called on the current line, so you can watch it execute line by line too.</td>
-<td>You suspect the bug is inside that function, as Malan demonstrates: "Let me step into line 9 and walk through the print column function itself line by line."</td>
-</tr>
-</tbody>
-</table>
-<p>Stepping into <code>print_column</code> with the height set to 3, Malan watches the loop variable go from its garbage starting value to 0, then 1, then 2 (a hash mark printed on each pass), and finally to 3, where a fourth hash mark appears. The debugger doesn't name the bug for him; it just lets him watch the state change one step at a time until the mistake, the same <code>&lt;=</code> off-by-one from Part 2, becomes visible with his own eyes.</p>
-<blockquote>
-<p>🔑 <strong>The single most important takeaway of this part.</strong> A debugger doesn't find bugs for you: it removes the guesswork of "what is my program doing right now" so that your own reasoning has something reliable to work with. Step over what you trust; step into what you suspect.</p>
-</blockquote>
-<hr />
-<h2 id="part-4-ask-the-duck-before-you-ask-a-human-or-an-ai">Part 4: Ask the duck before you ask a human (or an AI)</h2>
-<p>Sometimes printf tracing and debug50 stepping aren't the block. The block is your own thinking, and you don't have a teaching assistant nearby to talk it through with. That's the point of <strong>rubber duck debugging</strong>: explain your code and your confusion out loud, one line at a time, to something that cannot answer back. Often, hearing yourself describe the logic reveals the flawed assumption before you finish the sentence.</p>
-<p>CS50 hands out hundreds of physical rubber ducks for exactly this reason, and also offers a virtual version: the AI-powered duck at CS50.ai, embedded directly into VS Code at cs50.dev. But Malan is explicit that the AI duck is not a replacement for doing the reasoning yourself:</p>
-<blockquote>
-<p>"It's less reasonable to say: copy paste your code into the duck and say, 'what's wrong with my code?' You should really be meeting the AI halfway." (David Malan)</p>
-<p>"After all, what's the point of actually doing this, or any other class, is to develop that muscle memory, develop those mental models, get some practical skills." (David Malan)</p>
-</blockquote>
-<p>In other words: asking "what does this specific error message mean?" is a reasonable use of the AI duck. Pasting your whole file and asking it to diagnose and fix the problem for you skips the exact mental exercise the assignment exists to build.</p>
-<p>Put together, the four techniques from this lesson form one workflow you can run on any bug:</p>
-<div class="codehilite"><pre><span></span><code>Won&#39;t compile?              -&gt; Read the compiler&#39;s file name, line number, and message first.
-Compiles, wrong output?     -&gt; Add a temporary printf to show what a variable ACTUALLY is.
-Still don&#39;t understand it?  -&gt; debug50: set a breakpoint, step over what you trust,
-                                step into what you suspect, watch the Variables pane.
-Still stuck?                -&gt; Explain the bug out loud, line by line, to a duck
-                                (physical or CS50.ai), narrate your OWN reasoning first.
-</code></pre></div>
-
-<blockquote>
-<p>❌ <strong>The trap:</strong> treating the AI duck as step one instead of step four. Try reading the error, tracing with printf, and stepping with debug50 before you ask anything (human or AI) to look at your whole file.</p>
-</blockquote>
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong>Syntax errors vs. logical errors.</strong> Syntax errors stop compilation and the compiler tells you exactly where; logical errors compile and run fine while doing the wrong thing, and only your own reasoning (aided by tools) can catch them.</li>
-<li><strong>printf tracing is temporary.</strong> Print a variable's real value to understand a bug, then delete the trace line once you've fixed it: it isn't part of your finished program.</li>
-<li><strong>debug50 gives you time, not answers.</strong> Breakpoints tell it where to pause; step over trusts a function's result, step into walks through that function's own lines; the Variables pane and call stack show you the truth of the running program.</li>
-<li><strong>Meet the AI duck halfway.</strong> Ask it to explain an error message; don't hand it your whole file and ask it to diagnose and fix the bug for you.</li>
-<li><strong>"Bug" predates software.</strong> Grace Hopper's Harvard Mark II logbook entry about an actual moth is why we still say "debugging" today.</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ Reading only the first compiler error and panicking at the "whole bunch of scary looking messages": fix the <em>first</em> error and recompile; later errors are often just consequences of the first one.</li>
-<li>❌ Submitting code with leftover debugging <code>printf</code> statements still in it: remove them once the bug is understood.</li>
-<li>❌ Clicking "step over" when the bug is actually inside the function being called. You'll never see the faulty line execute. Step into when you suspect the helper function itself.</li>
-<li>❌ Pasting an entire file into CS50.ai and asking "what's wrong with my code?" instead of narrating your own reasoning first, or asking a narrower question like "what does this error mean?"</li>
-<li>❌ Assuming a strange starting value in the debugger's Variables pane is itself a bug: an uninitialized variable's garbage value is expected until the line that assigns it actually runs.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: The Bug Hunt</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. You'll take one small, deliberately broken C program with three separate bugs and clear every one of them using the three techniques from this lesson, proving to yourself that each technique actually works, not just watching Malan use it.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>A working <code>debug_me.c</code> on cs50.dev: a program that asks for a wall's height and prints that many brick rows, then reports how many bricks it placed. As given to you, it has three planted bugs:</p>
-<ol>
-<li><strong>A syntax error</strong>: the program won't even compile yet.</li>
-<li><strong>An off-by-one error</strong>: once it compiles, it prints one too many brick rows.</li>
-<li><strong>A logic error</strong>: the row count is right, but the reported total is wrong.</li>
-</ol>
-<p>Here is the broken listing. Copy it into <code>debug_me.c</code> exactly as shown:</p>
-<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cs50.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
-
-<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_int</span><span class="p">(</span><span class="s">&quot;Height: &quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">total</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;#</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-<span class="w">        </span><span class="n">total</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">total</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Bricks placed: %i</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">total</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in The Bug Hunt</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Reading a compiler error message (Part 1)</td>
-<td>Bug 1 (the missing semicolon) won't let the program compile at all.</td>
-</tr>
-<tr>
-<td>printf tracing (Part 2)</td>
-<td>Bug 2 (the off-by-one loop) is easiest to catch by tracing <code>i</code> each iteration.</td>
-</tr>
-<tr>
-<td>debug50 breakpoints and stepping (Part 3)</td>
-<td>Bug 3 (the miscounted total) is easiest to catch by watching <code>total</code> change in the Variables pane across iterations.</td>
-</tr>
-<tr>
-<td>Rubber duck reasoning (Part 4)</td>
-<td>Narrating each bug out loud before checking your fix, and using CS50.ai narrowly if you get stuck.</td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>Set up and hit the wall.</strong> Create <code>debug_me.c</code> on cs50.dev with the listing above and run <code>make debug_me</code>. You should get a compiler error. Don't fix anything yet, just read it.</li>
-<li><strong>Bug 1: fix it by reading the error.</strong> Note the file name and line number <code>clang</code> reports, and what it says is missing. Fix only that (add the missing <code>;</code> after <code>get_int("Height: ")</code>), then re-run <code>make debug_me</code> until it builds cleanly.</li>
-<li><strong>Bug 2: fix it with printf tracing.</strong> Run <code>./debug_me</code> with a height of 3; you'll get 4 rows instead of 3. Add a temporary <code>printf("i is %i\n", i);</code> inside the loop, recompile, and run again to see the actual values of <code>i</code>. Once you see the extra iteration, fix the loop condition, then delete your temporary trace line.</li>
-<li><strong>Bug 3: fix it with debug50.</strong> Run <code>debug50 ./debug_me</code>, set a breakpoint on the <code>for</code> loop line, and step over each line of the loop while watching <code>total</code> in the Variables pane. Once you see it growing by <code>n</code> instead of by <code>1</code> each pass, fix the line that updates <code>total</code>.</li>
-<li><strong>Cross-check with the other techniques (stretch).</strong> Go back and re-find bug 2 using debug50 instead of printf, and re-find bug 3 using a temporary printf trace instead of the debugger. This proves each technique is general-purpose, not tied to one bug's shape.</li>
-<li><strong>Rubber-duck it (stretch).</strong> Before checking any single fix against the answer above, explain out loud (or type to CS50.ai as a narrow question, not "fix this for me") what you expect each line to do and why you think it's wrong.</li>
-</ol>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ <code>make debug_me</code> compiles with no errors or warnings.</li>
-<li>✅ Running <code>./debug_me</code> with height 3 prints exactly 3 rows of <code>#</code> and reports <code>Bricks placed: 3</code>.</li>
-<li>✅ You used <code>debug50</code> at least once with a breakpoint and both a step-over and a step-into.</li>
-<li>✅ You can say out loud, for each of the three bugs, which technique caught it and why that technique was the right tool for that particular symptom.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> don't peek at "the fix" for a bug before you've actually reproduced its symptom (the compiler error, the wrong row count, or the wrong total) yourself first. The value of this capstone is in the diagnosis, not the one-line patch.</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-break-it-on-purpose-foundational">Exercise 1: Break it on purpose (foundational)</h3>
-<p>Take any working "hello, world" program you've already written. One at a time, introduce each of the six mistakes from Malan's <code>buggy.c</code> walkthrough in Part 1 (missing header, missing semicolon, misspelled header, undeclared variable, missing <code>cs50.h</code>, missing format placeholder). After each one, run <code>make</code> and read the exact error message before fixing it and moving to the next.</p>
-<h3 id="exercise-2-trace-a-mystery-loop-intermediate">Exercise 2: Trace a mystery loop (intermediate)</h3>
-<p>Write a <code>for</code> loop that is supposed to print the numbers 1 through 5 but deliberately gets the bounds wrong (for example, <code>for (int i = 1; i &lt;= 6; i++)</code>). Without looking at the loop's declaration, add a temporary <code>printf</code> inside it to trace <code>i</code>, use only that output to figure out exactly what's wrong, then fix the bounds and delete the trace line.</p>
-<h3 id="exercise-3-step-into-a-helper-function-advanced">Exercise 3: Step into a helper function (advanced)</h3>
-<p>Write a small program with a <code>main</code> function that calls a helper function (for example, a function that squares a number but has a typo that makes it add instead of multiply). Use <code>debug50</code>, set your breakpoint at <code>main</code>, step over until you reach the call to your helper, then step into it and watch the Variables pane to catch the mistake. Rubber-duck what you expect to see out loud before each step.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>SYNTAX ERROR              -&gt; Compiler refuses to build. Read: file, line, message. Fix exactly that.
-LOGICAL ERROR              -&gt; Compiles and runs, wrong result. No error message to read.
-
-printf DEBUGGING
-  - Add a temporary printf to show a variable&#39;s REAL value, not what you assume it is.
-  - Best for: loop counters, off-by-one errors.
-  - Always delete the trace line once the bug is found.
-
-debug50 DEBUGGING
-  debug50 &lt;program&gt;          start the debugger (set &gt;=1 breakpoint first, click left of a line number)
-  Step over                  run this line (and anything it calls) without pausing inside it
-  Step into                  jump inside the function this line calls, and pause there too
-  Variables pane              current value of every in-scope variable (garbage value = not yet assigned)
-  Call stack                  which function you&#39;re paused in, and who called it
-
-RUBBER DUCK DEBUGGING
-  - Explain your code out loud, line by line, before asking anyone (or any AI) for help.
-  - CS50.ai / cs50.dev duck: OK to ask &quot;what does this error mean?&quot;
-                             NOT ok to paste your file and ask &quot;what&#39;s wrong with my code?&quot;
-
-WORKFLOW
-  Won&#39;t compile      -&gt; read the error
-  Wrong output        -&gt; printf trace
-  Still confused      -&gt; debug50 (step over / step into)
-  Still stuck          -&gt; rubber duck (physical or AI), narrate your own reasoning first
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 2 · Lesson 8:</strong> functions, prototypes, and scope gave you the code structure (like <code>print_column</code>) that this lesson's debug50 walkthrough steps into.</li>
-<li><strong>Next, Module 3 · Lesson 10:</strong> "From source code to machine code" pulls back the curtain on what <code>make</code> actually does in four stages (preprocess, compile, assemble, link): the same <code>buggy.c</code> and <code>hello.c</code> programs you debugged here.</li>
-<li><strong>Later, Module 5:</strong> Valgrind adds a fourth kind of bug to your toolkit, memory bugs (leaks and invalid reads/writes), building directly on the "garbage value" idea introduced here in the debugger's Variables pane.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 2 - Arrays" by David J. Malan, Harvard University (CS50x 2026). Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+<hr /><div class="pager bottom"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="09-art-of-debugging.html" class="cur" title="Start here">1</a><a href="09-art-of-debugging-2.html" class="" title="Parts 3–4">2</a><a href="09-art-of-debugging-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="09-art-of-debugging-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="9" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="../module-2-c/08-functions-and-limits.html"><span class="dir">&#8592; Previous</span><b>Functions, Code Quality, and the Limits of Numbers</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="10-source-to-machine-code.html"><span class="dir">Next &#8594;</span><b>From Source Code to Machine Code</b></a></nav>
+    <div class="ls-marker" data-lesson-id="9" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="../module-2-c/08-functions-and-limits.html"><span class="dir">&#8592; Previous lesson</span><b>Functions, Code Quality, and the Limits of Numbers</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 

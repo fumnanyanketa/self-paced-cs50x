@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 2 · Lesson 6: Input, Variables, and the Command Line | Self-Paced CS50x</title>
+<title>Module 2 · Lesson 6: Input, Variables, and the Command Line (p1/3) | Self-Paced CS50x</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -49,6 +49,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -140,13 +163,13 @@ code{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.86em;b
 .copy-btn.done{background:var(--teal);color:#04231c;border-color:var(--teal)}
 
 /* callouts */
-blockquote{margin:24px 0;padding:16px 20px;border-radius:14px;background:var(--soft);border:1px solid var(--line);border-left:5px solid var(--teal)}
+blockquote{margin:24px 0;padding:18px 22px;border-radius:14px;background:var(--soft);border:1px solid var(--line);box-shadow:var(--shadow)}
 blockquote p{margin:7px 0}blockquote p:first-child{margin-top:0}blockquote p:last-child{margin-bottom:0}
-blockquote.cl-key{background:var(--k-bg);border-left-color:var(--k);border-color:transparent}
-blockquote.cl-tip{background:var(--tip-bg);border-left-color:var(--tip);border-color:transparent}
-blockquote.cl-ok{background:var(--ok-bg);border-left-color:var(--ok);border-color:transparent}
-blockquote.cl-no{background:var(--no-bg);border-left-color:var(--no);border-color:transparent}
-blockquote.cl-goal{background:var(--goal-bg);border-left-color:var(--goal);border-color:transparent}
+blockquote.cl-key{background:var(--k-bg);border-color:transparent}
+blockquote.cl-tip{background:var(--tip-bg);border-color:transparent}
+blockquote.cl-ok{background:var(--ok-bg);border-color:transparent}
+blockquote.cl-no{background:var(--no-bg);border-color:transparent}
+blockquote.cl-goal{background:var(--goal-bg);border-color:transparent}
 
 /* capstone banner */
 h2.capstone-h{background:linear-gradient(115deg,var(--navy),var(--navy-3));color:#fff;border-radius:20px;padding:30px 28px 26px;margin-top:64px;box-shadow:0 20px 50px rgba(10,26,47,.3);overflow:hidden;position:relative}
@@ -212,7 +235,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
   <div class="navlinks">
     <a href="../index.html">All lessons</a>
     <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="06-input-variables-cli-3.html#capstone">Capstone</a>
   </div>
   <div class="nav-cta">
     <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
@@ -251,7 +274,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="06-input-variables-cli-3.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -271,32 +294,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <li><a href="#prerequisites">Prerequisites</a></li>
 <li><a href="#part-1-look-it-up-like-a-pro-documentation-libraries-and-header-files">Part 1: Look it up like a pro (documentation, libraries, and header files)</a></li>
 <li><a href="#part-2-capturing-what-the-user-types-get_string-and-variables">Part 2: Capturing what the user types (get_string and variables)</a></li>
-<li><a href="#part-3-printing-it-back-nicely-the-s-placeholder">Part 3: Printing it back nicely (the %s placeholder)</a></li>
-<li><a href="#part-4-leaving-the-mouse-behind-the-linux-command-line">Part 4: Leaving the mouse behind (the Linux command line)</a></li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: Greeter + Terminal Scavenger Hunt</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-read-a-man-page-cold-foundational">Exercise 1: Read a man page cold (foundational)</a></li>
-<li><a href="#exercise-2-two-placeholders-one-sentence-intermediate">Exercise 2: Two placeholders, one sentence (intermediate)</a></li>
-<li><a href="#exercise-3-three-folders-deep-advanced">Exercise 3: Three folders deep (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="06-input-variables-cli.html" class="cur" title="Start here">1</a><a href="06-input-variables-cli-2.html" class="" title="Parts 3–4">2</a><a href="06-input-variables-cli-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="06-input-variables-cli-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>You will look up how to use code you didn't write, capture what a user actually types with <code>get_string</code>, print it back inside a sentence using a placeholder like <code>%s</code>, and organize the growing pile of files this creates by driving the Linux command line instead of a mouse.</p>
 <blockquote>
@@ -372,205 +376,9 @@ itself will keep changing shape over your career, but the discipline of
 <p>Reading it left to right: <code>string</code> is the type (this variable will hold text), <code>name</code> is the name you chose, <code>=</code> means "store whatever comes back on the right into the thing on the left," and <code>get_string("What's your name? ")</code> prints the prompt in the parentheses, waits for the user to type, and hands back what they typed. Notice <code>get_string</code> is quietly doing its own <code>printf</code> for you: that's why you never see a separate <code>printf</code> for the question itself.</p>
 <blockquote>
 <p>🔑 <strong>The equal sign in code means "copy the value on the right into the variable on the left," not "these two things are equal."</strong> That distinction matters more once conditionals arrive next lesson.</p>
-</blockquote>
-<h2 id="part-3-printing-it-back-nicely-the-s-placeholder">Part 3: Printing it back nicely (the <code>%s</code> placeholder)</h2>
-<p>The intuitive-but-wrong next move is to try to print the greeting and the name as if they were one glued-together phrase. Malan does exactly this on purpose, writing <code>printf("hello answer\n");</code>, and the program prints the literal word <code>answer</code>, because that's what you told it to print: a string in quotes is just text, not a reference to a variable. As he puts it while diagnosing the bug, "the computer's just doing literally what I told it to do."</p>
-<p>C doesn't let you join a fixed phrase and a variable's value inside the quotes directly. Instead, you leave a <strong>placeholder</strong> where the value should go, then tell <code>printf</code> separately what to plug in there: "percent S is the placeholder for a string that you don't know when you're writing the code, but when someone else is running the code, it will be filled in and substituted for their input." The corrected line looks like this:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">printf</span><span class="p">(</span><span class="s">&quot;hello, %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">);</span>
-</code></pre></div>
-
-<p>The comma is the key piece of new grammar here. The comma <em>inside</em> the quotes is just ordinary English punctuation. The comma <em>outside</em> the quotes is meaningful to C: it separates the first input to <code>printf</code> (the phrase with the placeholder in it) from the second input (the variable whose value should replace that placeholder). When a student pointed out that the first input, the fixed question or phrase, doesn't feel like "input" the way typed text does, Malan agreed but held the line on the terminology: "these are both inputs because they're being provided as inputs to the function... the origins of those inputs though are entirely up to what I'm trying to achieve."</p>
-<blockquote>
-<p>✅ <strong>What to do about it:</strong> whenever you want to print a mix of fixed text and a variable's value, reach for a placeholder (<code>%s</code> for a string) and a comma-separated second argument, never string concatenation, which C's <code>printf</code> doesn't support this way.</p>
-</blockquote>
-<h2 id="part-4-leaving-the-mouse-behind-the-linux-command-line">Part 4: Leaving the mouse behind (the Linux command line)</h2>
-<p>Under the hood, cs50.dev is running <strong>Linux</strong>, the operating system most servers and most professional developer tools use. Every file you've created so far (<code>hello.c</code>, the compiled <code>hello</code> program) lives in a folder (a <strong>directory</strong>) on that machine, and so far you've only seen it appear in the File Explorer sidebar. Malan now shows the alternative: doing every one of those same things by typing, at the <code>$</code> prompt, rather than clicking.</p>
-<p>Here is the core toolkit, in Malan's own words, one command per everyday action:</p>
-<table>
-<thead>
-<tr>
-<th>Command</th>
-<th>What it does</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>ls</code></td>
-<td>"if I want to list the files in my current folder, I can type LS"</td>
-</tr>
-<tr>
-<td><code>mkdir &lt;name&gt;</code></td>
-<td>"if I want to create a new folder, otherwise known as a directory, I can use MKDIR to make a directory"</td>
-</tr>
-<tr>
-<td><code>mv &lt;from&gt; &lt;to&gt;</code></td>
-<td>"if I want to rename a file, I can use MV for move" (also moves a file into a folder)</td>
-</tr>
-<tr>
-<td><code>cp &lt;from&gt; &lt;to&gt;</code></td>
-<td>"if I want to copy a file, CP"</td>
-</tr>
-<tr>
-<td><code>cd &lt;folder&gt;</code></td>
-<td>"if I want to change directories, change into a folder, I can use CD"</td>
-</tr>
-<tr>
-<td><code>rm &lt;file&gt;</code></td>
-<td>"if I want to remove a file, I can use RM"</td>
-</tr>
-<tr>
-<td><code>rmdir &lt;folder&gt;</code></td>
-<td>"if I want to remove a directory, I can use RM directory"</td>
-</tr>
-</tbody>
-</table>
-<p>A few of these deserve a second look because the syntax is easy to misread the first time:</p>
-<ul>
-<li><strong><code>mv</code> takes two arguments, not one.</strong> Where <code>code hello.c</code> and <code>make hello</code> only ever took a single word after the command, <code>mv hello.c hello/</code> takes an <em>origin</em> first and a <em>destination</em> second: "the way the move command is designed is to expect the origin as the first word and the destination as the second." That same command also doubles as "rename": <code>mv</code> a file to a new filename in the same folder, and it's renamed, not moved.</li>
-<li><strong><code>./</code> means "right here."</strong> To run a program you just compiled, you type <code>./hello</code> rather than just <code>hello</code>. As Malan explains, "what the slash means is that after having just made a program called hello, that program's going to end up in my current folder... when I say slash, that's like saying go into the current folder and run the program therein called hello specifically."</li>
-<li><strong><code>../</code> means "one level up."</strong> Once your programs live inside subfolders, you'll need to climb back out of them. "A single dot, which we have seen before, means this folder, two dots means one step up. There's no triple dots or quadruple dots." Those two are the only shortcuts of their kind.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>If you ever get lost, <code>cd</code> with no folder name at all takes you straight home.</strong> Malan: "if you ever get yourself into a confusing mess, just type CD enter alone and you'll be magically whisked away to your default folder."</p>
-</blockquote>
-<p>Putting all four parts together is the whole story of this lesson: you look up how a function works in the documentation (Part 1), you use it to capture text from a real person into a variable (Part 2), you print that text back inside a sentence using a placeholder (Part 3), and once you're writing more than one or two programs, you use the command line (Part 4) to keep them from turning, in Malan's phrase, into "a hot mess of files inside of this one main folder."</p>
-<div class="codehilite"><pre><span></span><code>manual.cs50.io  --tells you--&gt;  get_string() exists in cs50.h
-        |
-        v
-string name = get_string(&quot;What&#39;s your name? &quot;);   &lt;- captures input into a variable
-        |
-        v
-printf(&quot;hello, %s\n&quot;, name);                        &lt;- prints it back with a placeholder
-        |
-        v
-mkdir greeter &amp;&amp; mv greeter.c greeter/ &amp;&amp; cd greeter/  &lt;- keeps the resulting files organized
-</code></pre></div>
-
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong>Documentation isn't optional: it's the actual source of truth.</strong> <code>manual.cs50.io</code> and the official man pages tell you what a library function expects and returns; even AI tutors are trained on this same material.</li>
-<li><strong>A library needs a header file to be usable, and <code>get_string</code> comes from CS50's own <code>cs50.h</code>.</strong> No <code>#include &lt;cs50.h&gt;</code>, no <code>get_string</code>.</li>
-<li><strong><code>=</code> stores a value in a variable; it does not test for equality.</strong> <code>string name = get_string(...)</code> copies the returned string into <code>name</code>.</li>
-<li><strong><code>printf</code> can't glue text and a variable together directly: use a placeholder (<code>%s</code>) plus a comma-separated argument.</strong></li>
-<li><strong>The command line does everything the File Explorer does, just typed.</strong> <code>ls</code>, <code>mkdir</code>, <code>mv</code>, <code>cp</code>, <code>cd</code>, <code>rm</code>, <code>./</code>, and <code>../</code> are enough to organize an entire term's worth of programs.</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ Using <code>get_string</code> without <code>#include &lt;cs50.h&gt;</code>: you'll see <code>call to undeclared function 'get_string'</code>. Fix it by adding the include, not by rewriting the rest of your code.</li>
-<li>❌ Writing <code>printf("hello, name\n");</code> and expecting it to print the variable's value: in quotes, <code>name</code> is just the four letters n-a-m-e. Use <code>printf("hello, %s\n", name);</code> instead.</li>
-<li>❌ Forgetting the <code>./</code> when running a program you just compiled: typing <code>hello</code> instead of <code>./hello</code> in a shell that doesn't search the current folder by default will fail or run something unintended.</li>
-<li>❌ Running <code>mv</code> with only one argument, or in the wrong order: remember origin first, destination second. <code>mv hello.c hello/</code> moves the file; <code>mv hello.c hello/</code> with <code>hello.c</code> and <code>hello/</code> swapped is not the same command.</li>
-<li>❌ Typing <code>rm</code> on the wrong file without a backup: there's no undo, no recycle bin. If you're not sure, <code>cp</code> a backup copy first.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: Greeter + Terminal Scavenger Hunt</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. You'll write a program
-that actually reacts to a real person, then prove you can keep it (and its
-future siblings) organized entirely from the keyboard, the same command
-line that, later in this course, will drive every server you ever deploy.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>A tiny interactive program called <code>greeter.c</code> that asks for someone's name and greets them back by name, plus a small folder structure you build, rearrange, and clean up entirely with Linux commands. The pieces:</p>
-<ul>
-<li><code>greeter.c</code>: uses <code>get_string</code> to capture a name and <code>printf</code> with <code>%s</code> to print a personalized greeting.</li>
-<li>A <code>greeter/</code> folder, created, populated, and navigated using <code>mkdir</code>, <code>mv</code>, <code>cd</code>, <code>./</code>, and <code>../</code>.</li>
-<li>A backup-and-cleanup pass using <code>cp</code> and <code>rm</code>, so you've touched every command in the toolkit at least once.</li>
-</ul>
-<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in the project</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Documentation (Part 1)</td>
-<td>Look up <code>get_string</code>'s prototype at <code>manual.cs50.io</code> before you write a line of code.</td>
-</tr>
-<tr>
-<td><code>get_string</code> + variables (Part 2)</td>
-<td>Capture the user's name into a <code>string</code> variable in <code>greeter.c</code>.</td>
-</tr>
-<tr>
-<td><code>printf</code> placeholder (Part 3)</td>
-<td>Print <code>"hello, %s!\n"</code> with the name substituted in.</td>
-</tr>
-<tr>
-<td>Linux CLI (Part 4)</td>
-<td>Create <code>greeter/</code>, move your files into it, run the program from inside it, then reorganize and clean up.</td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>Look it up.</strong> Visit <code>manual.cs50.io</code>, find the <code>cs50.h</code> page, and read the entry for <code>get_string</code>. Note its return type (<code>string</code>) and what it prints for you automatically.</li>
-<li><strong>Write the greeter.</strong> In your terminal, run <code>code greeter.c</code> and write a program that includes <code>cs50.h</code> and <code>stdio.h</code>, captures a name with <code>get_string("What's your name? ")</code> into a variable, and prints <code>hello, &lt;name&gt;!</code> using a <code>%s</code> placeholder.</li>
-<li><strong>Compile and run it.</strong> <code>make greeter</code> then <code>./greeter</code>. Type your own name and confirm the greeting is personalized, not the literal word "name".</li>
-<li><strong>Start the scavenger hunt.</strong> Run <code>mkdir greeter_files</code>, then <code>mv greeter.c greeter_files/</code> and <code>mv greeter greeter_files/</code> (or just <code>greeter.c</code> if you'd rather recompile inside the folder). Confirm with <code>ls</code> that your main folder is now tidy.</li>
-<li><strong>Work from inside the folder.</strong> <code>cd greeter_files</code>, run <code>ls</code> to confirm your files are there, then run <code>./greeter</code> from inside this new location.</li>
-<li><strong>Back up, rename, clean up, and climb back out.</strong> Inside <code>greeter_files</code>, <code>cp greeter.c backup.c</code> to make a spare copy, <code>mv greeter.c greeter_v1.c</code> to rename the original, then delete the backup with <code>rm backup.c</code>. Finally, use <code>mv greeter_v1.c ../</code> to send the renamed file back up to the parent folder, then <code>cd ..</code> (or <code>cd</code> alone) to follow it there and confirm with <code>ls</code>.</li>
-<li><strong>Stretch goals.</strong> Look up <code>get_int</code> at <code>manual.cs50.io</code> and add a second question to <code>greeter.c</code> (for example, asking for a lucky number and printing it back with <code>%i</code>). Or build a <code>psets/</code> folder containing a <code>pset1/</code> folder inside it, and move a program two levels deep, running it the whole way with the correct <code>./</code> and <code>../</code> paths.</li>
-</ol>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ <code>./greeter</code> (or <code>./greeter</code> from inside <code>greeter_files</code>) prints a greeting containing the actual name you typed, not the word "name" or "answer".</li>
-<li>✅ You can explain, in one sentence each, what <code>mkdir</code>, <code>mv</code>, <code>cp</code>, <code>cd</code>, <code>rm</code>, <code>./</code>, and <code>../</code> each did in your scavenger hunt.</li>
-<li>✅ Your main folder is not cluttered with a backup file you no longer need: you deleted it with <code>rm</code> on purpose, not by accident.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> after every command, run <code>ls</code> and actually read
-the output before typing the next command. That's the whole muscle you're
-building today.</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice
-on one idea. Optional and independent; the Capstone already touches all of
-them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-read-a-man-page-cold-foundational">Exercise 1: Read a man page cold (foundational)</h3>
-<p>Visit <code>manual.cs50.io</code>, find the entry for <code>get_int</code> (not <code>get_string</code>), and write down, in your own words: what type of value it returns, and one example situation where you'd use it instead of <code>get_string</code>.</p>
-<h3 id="exercise-2-two-placeholders-one-sentence-intermediate">Exercise 2: Two placeholders, one sentence (intermediate)</h3>
-<p>Modify <code>greeter.c</code> to ask for both a first name and a favorite color with two separate <code>get_string</code> calls, then print a single sentence using two <code>%s</code> placeholders in one <code>printf</code> call, such as <code>"%s's favorite color is %s!\n"</code>.</p>
-<h3 id="exercise-3-three-folders-deep-advanced">Exercise 3: Three folders deep (advanced)</h3>
-<p>Starting from your home folder, use <code>mkdir</code> three separate times to build <code>week1/</code>, then <code>week1/programs/</code>, then <code>week1/programs/greetings/</code> (you'll need to <code>cd</code> into each new folder before making the next one, since there's no shortcut for making all three at once yet). Move a copy of <code>greeter.c</code> all the way down into the deepest folder, compile it there, and run it using <code>./greeter</code>. Then navigate back to your starting folder using only <code>cd ..</code> three times, not <code>cd</code> alone, and confirm you're back with <code>ls</code>.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>DOCS       manual.cs50.io  -- CS50&#39;s plain-language rewrite of the official man pages
-           man7.org        -- the real, original Unix/Linux man pages
-LIBRARY    code someone else wrote (e.g. printf&#39;s home, the C standard library)
-HEADER     a .h file that tells the compiler a library exists (#include &lt;cs50.h&gt;, &lt;stdio.h&gt;)
-
-CAPTURE INPUT     string name = get_string(&quot;What&#39;s your name? &quot;);
-PRINT IT BACK     printf(&quot;hello, %s\n&quot;, name);
-PLACEHOLDERS      %s string   %i integer   %c char   %f float   %li long
-
-LINUX CLI
-  ls              list files in the current folder
-  mkdir &lt;name&gt;    create a new folder
-  mv &lt;a&gt; &lt;b&gt;      move OR rename a file/folder (origin first, destination second)
-  cp &lt;a&gt; &lt;b&gt;      copy a file
-  cd &lt;folder&gt;     change into a folder      cd .. -&gt; go up one level     cd -&gt; go home
-  rm &lt;file&gt;       delete a file (no undo!)  rmdir &lt;folder&gt; -&gt; delete an empty folder
-  ./program       run a program in the CURRENT folder
-  ..              the parent (one level up) folder; there is no &quot;...&quot; or beyond
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 2 · Lesson 5 (Hello, C):</strong> you learned to write, compile with <code>make</code>, and run a single fixed program, and to read a compiler error. This lesson makes that program dynamic and gives you a way to keep the growing pile of programs organized.</li>
-<li><strong>Next, Module 2 · Lesson 7 (Conditionals and loops):</strong> you'll use the values you now know how to capture and print, like the number from <code>get_int</code>, to make programs branch and repeat, turning <code>greeter.c</code>-style programs into real decision-makers.</li>
-<li><strong>Later, Module 5 (Memory):</strong> CS50's <code>get_string</code> and friends are, in Malan's own words, "training wheels": that module removes them and shows you how to capture input using only standard C, once you understand pointers and memory well enough not to need the crutch.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 1 - C" by David J. Malan, Harvard University. Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+</blockquote><div class="pager bottom"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="06-input-variables-cli.html" class="cur" title="Start here">1</a><a href="06-input-variables-cli-2.html" class="" title="Parts 3–4">2</a><a href="06-input-variables-cli-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="06-input-variables-cli-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="6" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="05-hello-c.html"><span class="dir">&#8592; Previous</span><b>Hello, C: From Blocks to Code</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="07-conditionals-and-loops.html"><span class="dir">Next &#8594;</span><b>Conditionals and Loops</b></a></nav>
+    <div class="ls-marker" data-lesson-id="6" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="05-hello-c.html"><span class="dir">&#8592; Previous lesson</span><b>Hello, C: From Blocks to Code</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 

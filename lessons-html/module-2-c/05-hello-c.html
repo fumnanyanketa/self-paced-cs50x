@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 2 · Lesson 5: Hello, C: From Blocks to Code | Self-Paced CS50x</title>
+<title>Module 2 · Lesson 5: Hello, C: From Blocks to Code (p1/3) | Self-Paced CS50x</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -49,6 +49,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -140,13 +163,13 @@ code{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.86em;b
 .copy-btn.done{background:var(--teal);color:#04231c;border-color:var(--teal)}
 
 /* callouts */
-blockquote{margin:24px 0;padding:16px 20px;border-radius:14px;background:var(--soft);border:1px solid var(--line);border-left:5px solid var(--teal)}
+blockquote{margin:24px 0;padding:18px 22px;border-radius:14px;background:var(--soft);border:1px solid var(--line);box-shadow:var(--shadow)}
 blockquote p{margin:7px 0}blockquote p:first-child{margin-top:0}blockquote p:last-child{margin-bottom:0}
-blockquote.cl-key{background:var(--k-bg);border-left-color:var(--k);border-color:transparent}
-blockquote.cl-tip{background:var(--tip-bg);border-left-color:var(--tip);border-color:transparent}
-blockquote.cl-ok{background:var(--ok-bg);border-left-color:var(--ok);border-color:transparent}
-blockquote.cl-no{background:var(--no-bg);border-left-color:var(--no);border-color:transparent}
-blockquote.cl-goal{background:var(--goal-bg);border-left-color:var(--goal);border-color:transparent}
+blockquote.cl-key{background:var(--k-bg);border-color:transparent}
+blockquote.cl-tip{background:var(--tip-bg);border-color:transparent}
+blockquote.cl-ok{background:var(--ok-bg);border-color:transparent}
+blockquote.cl-no{background:var(--no-bg);border-color:transparent}
+blockquote.cl-goal{background:var(--goal-bg);border-color:transparent}
 
 /* capstone banner */
 h2.capstone-h{background:linear-gradient(115deg,var(--navy),var(--navy-3));color:#fff;border-radius:20px;padding:30px 28px 26px;margin-top:64px;box-shadow:0 20px 50px rgba(10,26,47,.3);overflow:hidden;position:relative}
@@ -212,7 +235,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
   <div class="navlinks">
     <a href="../index.html">All lessons</a>
     <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="05-hello-c-3.html#capstone">Capstone</a>
   </div>
   <div class="nav-cta">
     <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
@@ -251,7 +274,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="05-hello-c-3.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -275,37 +298,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 </li>
 <li><a href="#part-2-the-environment-gui-cli-and-cs50dev">Part 2: The environment (GUI, CLI, and cs50.dev)</a></li>
 <li><a href="#part-3-writing-compiling-and-running-helloc">Part 3: Writing, compiling, and running hello.c</a></li>
-<li><a href="#part-4-escape-sequences-and-reading-compiler-errors">Part 4: Escape sequences and reading compiler errors</a><ul>
-<li><a href="#escape-sequences">Escape sequences</a></li>
-<li><a href="#reading-a-compiler-error-the-missing-semicolon">Reading a compiler error: the missing semicolon</a></li>
-<li><a href="#reading-a-compiler-error-the-missing-header">Reading a compiler error: the missing header</a></li>
-</ul>
-</li>
-<li><a href="#part-34-combined-how-the-pieces-fit-together">Part 3+4 combined: how the pieces fit together</a></li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: Break It, Read It, Fix It</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-personalize-it-foundational">Exercise 1: Personalize it (foundational)</a></li>
-<li><a href="#exercise-2-a-second-program-intermediate">Exercise 2: A second program (intermediate)</a></li>
-<li><a href="#exercise-3-one-file-two-bugs-advanced">Exercise 3: One file, two bugs (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="05-hello-c.html" class="cur" title="Start here">1</a><a href="05-hello-c-2.html" class="" title="Parts 4–3">2</a><a href="05-hello-c-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="05-hello-c-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>The Scratch program you already understand becomes a real C program today: text you type as <strong>source code</strong>, that a tool called the <strong>compiler</strong> turns into the zeros-and-ones <strong>machine code</strong> your computer actually runs, and in this lesson you'll write it, compile it, run it, break it on purpose, and fix it, all from a terminal.</p>
 <blockquote>
@@ -440,199 +439,9 @@ Hello, world!
 <p>The <code>./</code> means "look in my current folder and run the program found there called <code>hello</code>." That three-step rhythm (<strong>write the source code, <code>make</code> it, <code>./</code> run it</strong>) is a pattern you'll repeat for the rest of the course, no matter what the program is called.</p>
 <blockquote>
 <p>❌ <strong>A trap to notice now:</strong> if you edit <code>hello.c</code> again, you must run <code>make hello</code> again before <code>./hello</code> will reflect your changes. The compiler only translates source code into machine code when you ask it to; editing the text alone changes nothing that's already been compiled.</p>
-</blockquote>
-<h2 id="part-4-escape-sequences-and-reading-compiler-errors">Part 4: Escape sequences and reading compiler errors</h2>
-<h3 id="escape-sequences">Escape sequences</h3>
-<p>Try deleting the <code>\n</code> from the end of the string and recompiling. The program still technically prints "Hello, world!", but your terminal's next prompt now appears squashed onto the same line, which looks wrong. That backslash-n was never optional decoration; it's what's called an <strong>escape sequence</strong>:</p>
-<blockquote>
-<p>"special sequences of symbols like backslash and N in this case that do a little something unusual." (David J. Malan)</p>
-</blockquote>
-<p>Two you'll use constantly:</p>
-<table>
-<thead>
-<tr>
-<th>Sequence</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>\n</code></td>
-<td>move to a new line</td>
-</tr>
-<tr>
-<td><code>\"</code></td>
-<td>print an actual double-quote character inside a string that is itself delimited by double quotes</td>
-</tr>
-</tbody>
-</table>
-<p><code>\"</code> exists because the compiler needs some way to tell "this quote ends my string" apart from "I actually want to print a quote mark." Without the backslash, <code>printf("She said "hi"\n");</code> would be ambiguous: which quote is real punctuation and which is a stray character?</p>
-<blockquote>
-<p>💡 <strong>Nuance:</strong> you might be tempted to fix a too-long line by literally pressing Enter partway through your code. Resist it: most programming languages, C included, expect one complete thought per line. Escape sequences like <code>\n</code> are the sanctioned way to put a new line into your <em>output</em> without breaking up your <em>source code</em>.</p>
-</blockquote>
-<h3 id="reading-a-compiler-error-the-missing-semicolon">Reading a compiler error: the missing semicolon</h3>
-<p>Delete the semicolon after <code>printf(...)</code> and run <code>make hello</code> again. Instead of silence, you'll get an error message. It looks intimidating, but it's structured and specific:</p>
-<blockquote>
-<p>"Here is the name of the file in which the problem exists ... Here is the line number in which the problem seems to exist ... it even says expected semicolon after expression. There's a little green carrot symbol pointing me at the mistake." (David J. Malan)</p>
-</blockquote>
-<p>Every compiler error you'll see this term follows that same shape: <strong>file name → line number → plain-English description → a marker pointing at the spot.</strong> The fix here is simply to add the missing semicolon back and recompile.</p>
-<h3 id="reading-a-compiler-error-the-missing-header">Reading a compiler error: the missing header</h3>
-<p>Now instead delete the <code>#include &lt;stdio.h&gt;</code> line entirely (leaving the semicolon back in place) and recompile. You'll get a completely different error, one about an "undeclared" function. That's because <code>printf</code> isn't actually part of the core C language: it lives in a <strong>library</strong>, code someone else wrote that you can reuse:</p>
-<blockquote>
-<p>"a library is code someone else wrote that you can use." (David J. Malan)</p>
-</blockquote>
-<p>The header file <code>stdio.h</code> is what tells the compiler "the function <code>printf</code> is defined elsewhere; go include its definition before you try to use it." Leave that line out, and the compiler has genuinely never heard of <code>printf</code>. Add it back, and the error disappears.</p>
-<blockquote>
-<p>❌ <strong>A pitfall you will make at least once:</strong> typing the header's name wrong. Malan calls this out directly:</p>
-<p>"It is not studio.h. This is a very common bug online if you find yourself typing studio." (David J. Malan)</p>
-<p>It's <code>stdio.h</code> (<strong>st</strong>andard <strong>i</strong>nput/<strong>o</strong>utput), not "studio.h."</p>
-</blockquote>
-<h2 id="part-34-combined-how-the-pieces-fit-together">Part 3+4 combined: how the pieces fit together</h2>
-<div class="codehilite"><pre><span></span><code> you type this ──────────► SOURCE CODE (hello.c)
-                                  │
-                          make hello  (the compiler)
-                                  │
-                                  ▼
-                          MACHINE CODE (hello)
-                                  │
-                              ./hello
-                                  │
-                                  ▼
-                          Hello, world!  (runs on screen)
-
- If a step fails, the compiler stops and reports:
-   file name → line number → description → pointer to the mistake
-</code></pre></div>
-
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong>Same ideas, new syntax.</strong> Functions, inputs, and outputs from Scratch reappear in C: you're learning new punctuation, not new concepts.</li>
-<li><strong>Source code becomes machine code through the compiler.</strong> Nothing runs until you compile it, and nothing reflects your latest edits until you recompile it.</li>
-<li><strong><code>make hello</code> then <code>./hello</code> is the whole cycle.</strong> Compile, then run: that pattern repeats for every C program you'll ever write.</li>
-<li><strong>Escape sequences (<code>\n</code>, <code>\"</code>) are not optional flourishes.</strong> They're how you put a new line or a literal quote mark inside a string.</li>
-<li><strong>Compiler errors are structured, not random.</strong> File, line number, plain-English message, and a pointer at the mistake: read them in that order.</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ Forgetting to recompile (<code>make hello</code>) after editing <code>hello.c</code>, then wondering why <code>./hello</code> doesn't show your change.</li>
-<li>❌ Typing <code>studio.h</code> instead of <code>stdio.h</code>: a real, common typo Malan calls out by name.</li>
-<li>❌ Forgetting the semicolon at the end of a statement: C, unlike Scratch, needs an explicit "I'm done with this thought" marker.</li>
-<li>❌ Trying to fix a long line of code by literally pressing Enter in the middle of it, instead of using <code>\n</code> in the output.</li>
-<li>❌ Panicking at the length of a compiler error message instead of reading it top to bottom for the file, line, and description.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: Break It, Read It, Fix It</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. You'll write a working <code>hello.c</code> on cs50.dev, then deliberately sabotage it three different ways so that reading, and trusting, a compiler error message stops feeling scary.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>A single <code>hello.c</code> file that you compile and run successfully, then break on purpose three separate times, fixing each break by reading what the compiler tells you before you touch the code. Each milestone below stands on its own: if you get stuck on one, reset to your last working <code>hello.c</code> and move to the next.</p>
-<ul>
-<li>A working <code>hello.c</code> that prints a greeting.</li>
-<li>Three logged "break → read the error → fix" cycles.</li>
-<li>A version that uses both <code>\n</code> and <code>\"</code> deliberately.</li>
-</ul>
-<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in the capstone</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Source code → compiler → machine code</td>
-<td>Every <code>make hello</code> you run</td>
-</tr>
-<tr>
-<td><code>#include</code>, <code>main</code>, <code>printf</code></td>
-<td>Writing <code>hello.c</code> from scratch</td>
-</tr>
-<tr>
-<td>Escape sequences <code>\n</code> and <code>\"</code></td>
-<td>Milestone 4, adding them deliberately</td>
-</tr>
-<tr>
-<td>Reading compiler errors (file, line, message)</td>
-<td>Milestones 2-3, diagnosing each intentional bug</td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>Get a working baseline.</strong> On cs50.dev, run <code>code hello.c</code>, type the four lines from Part 3, run <code>make hello</code>, then <code>./hello</code>. Confirm you see your greeting printed. This is your safe checkpoint: keep a mental (or copy-pasted) note of what correct <code>hello.c</code> looks like.</li>
-<li><strong>Break it by removing the semicolon.</strong> Delete the <code>;</code> after your <code>printf(...)</code> line. Run <code>make hello</code>. Read the error's file name, line number, and description out loud before you fix anything. Then add the semicolon back and confirm <code>make hello</code> and <code>./hello</code> work again.</li>
-<li><strong>Break it by removing the header.</strong> Starting again from your working baseline, delete the <code>#include &lt;stdio.h&gt;</code> line. Run <code>make hello</code>. Notice this error looks nothing like the semicolon error: it complains about an unrecognized function, not punctuation. Restore the <code>#include</code> line and confirm it compiles again.</li>
-<li><strong>Break it a third way: an unclosed string.</strong> Starting again from your working baseline, delete the closing <code>"</code> at the end of your greeting (leave the semicolon in place). Run <code>make hello</code> and read the new error: it will complain about the string itself, not a missing semicolon or an unknown function. Restore the closing quote and confirm it works.</li>
-<li><strong>Add escape sequences on purpose.</strong> Edit your working <code>hello.c</code> so it prints two lines: one ending in <code>\n</code>, and a second one using <code>\"</code> to print an actual quotation mark, for example a line like <code>She said \"hello\".\n</code>. Recompile and confirm both escape sequences behave as expected.</li>
-<li><strong>Stretch goals.</strong> Before running <code>make hello</code>, predict what kind of error you'll get, then test yourself against: misspelling <code>main</code> as <code>Main</code>, deleting one of the curly braces, or misspelling <code>printf</code>. See how close your prediction was.</li>
-</ol>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ <code>./hello</code> prints your greeting correctly after each of the three intentional breaks has been fixed.</li>
-<li>✅ You can state, from memory and without looking it up, what a "missing semicolon" error looks like versus a "missing header" error.</li>
-<li>✅ Your <code>hello.c</code> uses <code>\n</code> at least once and <code>\"</code> at least once, on purpose, and you can explain what each does.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> don't fix a break by guessing and retyping the whole line. Read the compiler's file name and line number first, form a hypothesis about the cause, then make the smallest possible edit to test it.</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-personalize-it-foundational">Exercise 1: Personalize it (foundational)</h3>
-<p>Change your working <code>hello.c</code> so it prints your own name instead of "world" (for example, <code>Hello, Ada!</code>). Recompile with <code>make hello</code> and rerun with <code>./hello</code> to confirm the change took effect.</p>
-<h3 id="exercise-2-a-second-program-intermediate">Exercise 2: A second program (intermediate)</h3>
-<p>Create a brand-new file called <code>goodbye.c</code> (remember: <code>make</code> will infer the source file from the program name you give it). Write a <code>main</code> function that prints two lines: a plain "Goodbye, world!" ending in <code>\n</code>, and a second line that uses <code>\"</code> to print a sentence containing an actual quotation mark.</p>
-<h3 id="exercise-3-one-file-two-bugs-advanced">Exercise 3: One file, two bugs (advanced)</h3>
-<p>In a scratch copy of <code>hello.c</code>, introduce two mistakes at once: for example, remove both the semicolon <em>and</em> the <code>#include &lt;stdio.h&gt;</code> line. Run <code>make hello</code> and notice how many errors are reported, and in what order. Fix only one of the two mistakes, recompile, and observe how the error list changes before fixing the second.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>THE C COMPILE-AND-RUN CYCLE
-  1. code hello.c        write/open the source file
-  2. (type your code)    #include, main, printf, semicolons
-  3. make hello          compile: source code -&gt; machine code
-  4. ./hello              run the compiled program
-
-MINIMAL hello.c
-  #include &lt;stdio.h&gt;
-
-  int main(void)
-  {
-      printf(&quot;Hello, world!\n&quot;);
-  }
-
-ESCAPE SEQUENCES
-  \n   new line
-  \&quot;   a literal double-quote inside a quoted string
-
-READING A COMPILER ERROR
-  file name -&gt; line number -&gt; plain-English message -&gt; pointer (^) at the spot
-
-COMMON CAUSE -&gt; SYMPTOM
-  missing semicolon        -&gt; &quot;expected semicolon after expression&quot;
-  missing #include &lt;stdio.h&gt; -&gt; &quot;undeclared function&quot; (printf unrecognized)
-  unclosed &quot;  string         -&gt; error pointing at the string itself
-  &quot;studio.h&quot; typo           -&gt; header not found (it&#39;s stdio.h)
-
-RULE OF THUMB
-  No output after `make hello`?  Good: that means it compiled.
-  Any output?  Read it top to bottom before touching your code again.
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 1 · Lesson 4:</strong> you built functions, inputs, outputs, and variables in Scratch by dragging blocks. This lesson re-expressed those exact same ideas as typed C syntax: nothing conceptually new, just new spelling and punctuation to get right.</li>
-<li><strong>Next, Module 2 · Lesson 6:</strong> "Input, variables, and the command line" builds directly on <code>hello.c</code>: you'll capture what a user types with <code>get_string</code>, plug it into <code>printf</code> with the <code>%s</code> placeholder, and start navigating files with Linux commands like <code>ls</code> and <code>cd</code>.</li>
-<li><strong>Later, Module 3 · Lesson 10:</strong> "From source code to machine code" pulls back the curtain on <code>make</code> itself, tracing the full preprocess → compile → assemble → link pipeline that today's lesson treated as a single black-box step.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 1 - C" by David J. Malan, Harvard University (CS50x 2026). Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+</blockquote><div class="pager bottom"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="05-hello-c.html" class="cur" title="Start here">1</a><a href="05-hello-c-2.html" class="" title="Parts 4–3">2</a><a href="05-hello-c-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="05-hello-c-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="5" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="../module-1-computational-thinking/04-programming-in-scratch.html"><span class="dir">&#8592; Previous</span><b>Programming in Scratch</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="06-input-variables-cli.html"><span class="dir">Next &#8594;</span><b>Input, Variables, and the Command Line</b></a></nav>
+    <div class="ls-marker" data-lesson-id="5" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="../module-1-computational-thinking/04-programming-in-scratch.html"><span class="dir">&#8592; Previous lesson</span><b>Programming in Scratch</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 

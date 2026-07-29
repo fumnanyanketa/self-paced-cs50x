@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 4 · Lesson 16: Recursion and Merge Sort | Self-Paced CS50x</title>
+<title>Module 4 · Lesson 16: Recursion and Merge Sort (p1/3) | Self-Paced CS50x</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -49,6 +49,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -140,13 +163,13 @@ code{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.86em;b
 .copy-btn.done{background:var(--teal);color:#04231c;border-color:var(--teal)}
 
 /* callouts */
-blockquote{margin:24px 0;padding:16px 20px;border-radius:14px;background:var(--soft);border:1px solid var(--line);border-left:5px solid var(--teal)}
+blockquote{margin:24px 0;padding:18px 22px;border-radius:14px;background:var(--soft);border:1px solid var(--line);box-shadow:var(--shadow)}
 blockquote p{margin:7px 0}blockquote p:first-child{margin-top:0}blockquote p:last-child{margin-bottom:0}
-blockquote.cl-key{background:var(--k-bg);border-left-color:var(--k);border-color:transparent}
-blockquote.cl-tip{background:var(--tip-bg);border-left-color:var(--tip);border-color:transparent}
-blockquote.cl-ok{background:var(--ok-bg);border-left-color:var(--ok);border-color:transparent}
-blockquote.cl-no{background:var(--no-bg);border-left-color:var(--no);border-color:transparent}
-blockquote.cl-goal{background:var(--goal-bg);border-left-color:var(--goal);border-color:transparent}
+blockquote.cl-key{background:var(--k-bg);border-color:transparent}
+blockquote.cl-tip{background:var(--tip-bg);border-color:transparent}
+blockquote.cl-ok{background:var(--ok-bg);border-color:transparent}
+blockquote.cl-no{background:var(--no-bg);border-color:transparent}
+blockquote.cl-goal{background:var(--goal-bg);border-color:transparent}
 
 /* capstone banner */
 h2.capstone-h{background:linear-gradient(115deg,var(--navy),var(--navy-3));color:#fff;border-radius:20px;padding:30px 28px 26px;margin-top:64px;box-shadow:0 20px 50px rgba(10,26,47,.3);overflow:hidden;position:relative}
@@ -212,7 +235,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
   <div class="navlinks">
     <a href="../index.html">All lessons</a>
     <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="16-recursion-merge-sort-3.html#capstone">Capstone</a>
   </div>
   <div class="nav-cta">
     <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
@@ -251,7 +274,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="16-recursion-merge-sort-3.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -273,42 +296,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <li><a href="#a-cs-in-joke-as-a-mnemonic">A CS in-joke, as a mnemonic</a></li>
 </ul>
 </li>
-<li><a href="#part-2-recursion-in-code-the-mario-pyramid-twice">Part 2: Recursion in code (the Mario pyramid, twice)</a><ul>
-<li><a href="#the-iterative-version-first">The iterative version first</a></li>
-<li><a href="#the-recursive-version">The recursive version</a></li>
-<li><a href="#the-stack-overflow-teaser">The stack-overflow teaser</a></li>
-</ul>
-</li>
-<li><a href="#part-3-merge-sort-divide-conquer-merge-and-why-n-log-n-wins">Part 3: Merge sort (divide, conquer, merge) and why n log n wins</a><ul>
-<li><a href="#the-merge-step-by-itself">The merge step, by itself</a></li>
-<li><a href="#the-full-recursive-demo-on-eight-numbers">The full recursive demo, on eight numbers</a></li>
-<li><a href="#deriving-n-log-n">Deriving Θ(n log n)</a></li>
-<li><a href="#seeing-it-with-music">Seeing it, with music</a></li>
-</ul>
-</li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: Recursive Mario and Merge Sort</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-a-recursive-countdown-foundational">Exercise 1: A recursive countdown (foundational)</a></li>
-<li><a href="#exercise-2-trace-a-different-list-intermediate">Exercise 2: Trace a different list (intermediate)</a></li>
-<li><a href="#exercise-3-count-the-comparisons-advanced">Exercise 3: Count the comparisons (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="16-recursion-merge-sort.html" class="cur" title="Start here">1</a><a href="16-recursion-merge-sort-2.html" class="" title="Parts 2–3">2</a><a href="16-recursion-merge-sort-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="16-recursion-merge-sort-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>A recursive function solves a problem by calling itself on a smaller version of that same problem until it reaches a <strong>base case</strong> simple enough to answer directly, and merge sort turns that one idea into a sorting algorithm (sort the left half, sort the right half, merge the two sorted halves) that runs in Θ(n log n) time, a decisive step down from the Θ(n²) selection sort and bubble sort you measured in the previous lesson.</p>
 <blockquote>
@@ -385,362 +379,9 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <p>"Google's asking me, did I mean recursion? And if I click on that, I just get the same ha ha page." (David Malan)</p>
 </blockquote>
 <p>Try it yourself: search "recursion" and click the "Did you mean: recursion" suggestion. You'll land back on the same search results, a small joke that only makes sense once you know what recursion is, and a fun way to remember it: a recursive search for "recursion" never bottoms out, because the joke <em>is</em> the missing base case.</p>
-<hr />
-<h2 id="part-2-recursion-in-code-the-mario-pyramid-twice">Part 2: Recursion in code (the Mario pyramid, twice)</h2>
-<p>The clearest way to see recursion is to build the exact same thing two ways: once with loops (<strong>iteration</strong>), once by having a function call itself. Malan uses the half-pyramid from Problem Set 1 (the same shape from Super Mario Brothers) because it has a wonderfully simple recursive definition:</p>
-<blockquote>
-<p>"A pyramid of height 4 is really just a pyramid of height 3 plus one more row." (David Malan)</p>
-</blockquote>
-<p>Keep asking "well, what's a pyramid of height 3... height 2... height 1?" and you eventually bottom out:</p>
-<blockquote>
-<p>"What's a pyramid of height 1? A single brick on the screen." (David Malan)</p>
-</blockquote>
-<p>That single brick is the base case in plain English. Everything taller is "a smaller pyramid, plus one more row": the recursive case.</p>
-<h3 id="the-iterative-version-first">The iterative version first</h3>
-<p>Here is a reconstruction of the loop-based <code>draw</code> function Malan writes first, in a file called <code>iteration.c</code>:</p>
-<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cs50.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
-
-<span class="kt">void</span><span class="w"> </span><span class="nf">draw</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">);</span>
-
-<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_int</span><span class="p">(</span><span class="s">&quot;Height: &quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="n">draw</span><span class="p">(</span><span class="n">height</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="c1">// draw a pyramid of height n, one row at a time, using nested loops</span>
-<span class="kt">void</span><span class="w"> </span><span class="nf">draw</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w">          </span><span class="c1">// for each row</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w">  </span><span class="c1">// for each column in that row</span>
-<span class="w">        </span><span class="p">{</span>
-<span class="w">            </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;#&quot;</span><span class="p">);</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>Run with a height of 4, this prints a four-row pyramid. Nothing here is recursive: it is two nested loops, counting rows and, within each row, counting bricks.</p>
-<h3 id="the-recursive-version">The recursive version</h3>
-<p>Now Malan rewrites <code>draw</code> so that it is defined the same way he described the pyramid in English: a smaller pyramid, plus one more row.</p>
-<blockquote>
-<p>❌ <strong>The trap, live in lecture.</strong> Malan's first attempt at the recursive version has no base case at all: just "draw a pyramid one shorter, then print one more row," forever. The compiler refuses to build it, flagging that every path through the function calls itself again with no way out. That error is the compiler protecting you from a function that would never stop calling itself.</p>
-</blockquote>
-<p>Adding the missing base case fixes it:</p>
-<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cs50.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
-
-<span class="kt">void</span><span class="w"> </span><span class="nf">draw</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">);</span>
-
-<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_int</span><span class="p">(</span><span class="s">&quot;Height: &quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="n">draw</span><span class="p">(</span><span class="n">height</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="kt">void</span><span class="w"> </span><span class="nf">draw</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="c1">// base case: nothing left to draw</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="k">return</span><span class="p">;</span>
-<span class="w">    </span><span class="p">}</span>
-
-<span class="w">    </span><span class="c1">// recursive case: draw a pyramid one row shorter first...</span>
-<span class="w">    </span><span class="n">draw</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
-
-<span class="w">    </span><span class="c1">// ...then print this row&#39;s own bricks</span>
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;#&quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>Malan deliberately guards with <code>n &lt;= 0</code> rather than just <code>n == 0</code>, so that an accidental negative height still stops cleanly instead of recursing forever. Run with a height of 4, this produces the <em>exact same output</em> as the iterative version, but the logic is now "smaller pyramid, then one more row" instead of "two nested loops."</p>
-<blockquote>
-<p>✅ <strong>What to do about it:</strong> whenever you write a recursive function, write the base case <em>first</em> and ask yourself, out loud, "does every recursive call get a strictly smaller problem than the call before it?" If the answer isn't an obvious yes, you likely have an infinite recursion waiting to happen.</p>
-</blockquote>
-<h3 id="the-stack-overflow-teaser">The stack-overflow teaser</h3>
-<p>Out of curiosity, Malan then tries a very large height, and the program crashes, rather than just running slowly. He flags this as a preview of next lesson's territory:</p>
-<blockquote>
-<p>"Each time I call Draw, I'm using a little more memory, a little more memory, and my computer only has so much memory." (David Malan)</p>
-<p>"This program in its current form is using too much memory." (David Malan)</p>
-</blockquote>
-<p>Notably, the <em>iterative</em> version of the same pyramid does not crash this way at very large heights. That asymmetry is your first hint that a recursive call isn't "free": each unfinished call to <code>draw</code> has to be remembered somewhere while it waits for its own recursive call to <code>draw(n - 1)</code> to finish, and that "somewhere" is a limited region of memory called the <strong>call stack</strong>. Run out of it, and the crash you get is called a <strong>stack overflow</strong>. The next lesson (Module 5, on memory addresses) is where that idea gets made concrete. For now, just remember: recursion trades a little elegance for a little memory, on every single call.</p>
-<hr />
-<h2 id="part-3-merge-sort-divide-conquer-merge-and-why-n-log-n-wins">Part 3: Merge sort (divide, conquer, merge) and why n log n wins</h2>
-<p>With recursion established, Malan turns it loose on the sorting problem from the previous lesson. Here is merge sort's entire pseudocode:</p>
-<div class="codehilite"><pre><span></span><code>function sort(list):
-    if list has 0 or 1 elements:
-        return list                # base case: already sorted
-    sort the left half of list     # recursive case
-    sort the right half of list    # recursive case
-    merge the two sorted halves    # the one truly new idea
-</code></pre></div>
-
-<p>The base case is refreshingly simple: a list of one element is trivially already sorted, so there is nothing to do. Everything else, "sort the left half, sort the right half," is just recursion, this same algorithm called again on smaller pieces. The genuinely new idea is the third line: <strong>merging</strong> two lists that are each already sorted.</p>
-<h3 id="the-merge-step-by-itself">The merge step, by itself</h3>
-<p>Suppose you already have two sorted lists of four numbers each: <code>1 3 4 6</code> on the left and <code>0 2 5 7</code> on the right. To merge them, point at the front of each list and, at every step, take whichever front value is smaller, then advance only that pointer:</p>
-<table>
-<thead>
-<tr>
-<th>Step</th>
-<th>Left pointer sees</th>
-<th>Right pointer sees</th>
-<th>Take</th>
-<th>Merged output so far</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>1</td>
-<td>0</td>
-<td>0 (right)</td>
-<td>0</td>
-</tr>
-<tr>
-<td>2</td>
-<td>1</td>
-<td>2</td>
-<td>1 (left)</td>
-<td>0 1</td>
-</tr>
-<tr>
-<td>3</td>
-<td>3</td>
-<td>2</td>
-<td>2 (right)</td>
-<td>0 1 2</td>
-</tr>
-<tr>
-<td>4</td>
-<td>3</td>
-<td>5</td>
-<td>3 (left)</td>
-<td>0 1 2 3</td>
-</tr>
-<tr>
-<td>5</td>
-<td>4</td>
-<td>5</td>
-<td>4 (left)</td>
-<td>0 1 2 3 4</td>
-</tr>
-<tr>
-<td>6</td>
-<td>6</td>
-<td>5</td>
-<td>5 (right)</td>
-<td>0 1 2 3 4 5</td>
-</tr>
-<tr>
-<td>7</td>
-<td>6</td>
-<td>7</td>
-<td>6 (left)</td>
-<td>0 1 2 3 4 5 6</td>
-</tr>
-<tr>
-<td>8</td>
-<td>(empty)</td>
-<td>7</td>
-<td>7 (only one left)</td>
-<td>0 1 2 3 4 5 6 7</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>"What I just did is what I mean by merge the sorted halves." (David Malan)</p>
-</blockquote>
-<p>Notice what's absent: no back-and-forth. Every pointer only ever moves forward, and each of the eight numbers is looked at exactly once. That is the whole reason merging is fast: it costs exactly n steps to merge two sorted lists totaling n elements.</p>
-<h3 id="the-full-recursive-demo-on-eight-numbers">The full recursive demo, on eight numbers</h3>
-<p>Malan then applies all three steps (sort left, sort right, merge) to the unsorted list <code>6 3 4 1 5 2 7 0</code>, all the way down to single elements and back up. Drawn as a tree, splitting downward and merging upward, it looks like this:</p>
-<div class="codehilite"><pre><span></span><code>                       [6 3 4 1 5 2 7 0]
-                      /                  \
-              [6 3 4 1]                  [5 2 7 0]
-              /       \                  /       \
-          [6 3]       [4 1]          [5 2]       [7 0]
-          /   \        /   \          /   \        /   \
-        [6]   [3]    [4]   [1]      [5]   [2]    [7]   [0]
-          \   /        \   /          \   /        \   /
-         [3 6]        [1 4]          [2 5]        [0 7]
-              \        /                  \        /
-              [1 3 4 6]                  [0 2 5 7]
-                      \                  /
-                       [0 1 2 3 4 5 6 7]
-</code></pre></div>
-
-<p>Reading the diagram top to bottom is the <em>recursive</em> half (sort left, sort right, splitting down to single elements, the base case). Reading it bottom to top is the <em>merging</em> half: the exact same "compare fronts, take the smaller" process from the table above, just applied at three different levels.</p>
-<blockquote>
-<p>🔑 <strong>The single most important takeaway of this part.</strong> Merge sort never compares the same pair of numbers over and over the way bubble sort and selection sort do. It splits the problem down to base cases, then merges pairs of already-sorted lists back together, doing a clean n steps of comparisons at <em>each level</em> of the tree.</p>
-</blockquote>
-<h3 id="deriving-n-log-n">Deriving Θ(n log n)</h3>
-<p>Count the levels in that tree: eight elements split down to one-element lists takes exactly 3 levels of splitting (8 → 4 → 2 → 1), and merging climbs back up through those same 3 levels. That number, 3, is not a coincidence: it's log₂(8), because repeatedly halving 8 hits 1 after exactly 3 halvings.</p>
-<blockquote>
-<p>"The big O running time of merge sort is apparently not n squared, but it's log n times n, or more conventionally, n times log n." (David Malan)</p>
-<p>"In big O notation we would say that merge sort is on the order of N log N." (David Malan)</p>
-</blockquote>
-<p>So merge sort's running time is <strong>Big O of n log n</strong>: at each of the log₂(n) levels of the tree, merging touches every element exactly once, which costs n steps per level: n steps, log n times, or n log n total.</p>
-<p>What about the <em>lower</em> bound (Big Omega)? Bubble sort had an optimization that let it finish early on an already-sorted list, earning it Ω(n) in the best case. Merge sort's pseudocode has no equivalent shortcut: it always splits all the way down and merges all the way back up, no matter how the input started. So its lower bound is also Ω(n log n). When Big O and Big Omega match, you get to use the tighter <strong>Θ(n log n)</strong>: merge sort behaves this way in the best case, the worst case, and everything in between.</p>
-<table>
-<thead>
-<tr>
-<th>Algorithm</th>
-<th>Big O (upper bound)</th>
-<th>Big Ω (lower bound)</th>
-<th>Θ (tight bound)?</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Selection sort</td>
-<td>O(n²)</td>
-<td>Ω(n²)</td>
-<td>Θ(n²)</td>
-</tr>
-<tr>
-<td>Bubble sort</td>
-<td>O(n²)</td>
-<td>Ω(n)</td>
-<td>not defined (O and Ω differ)</td>
-</tr>
-<tr>
-<td>Merge sort</td>
-<td>O(n log n)</td>
-<td>Ω(n log n)</td>
-<td>Θ(n log n)</td>
-</tr>
-</tbody>
-</table>
-<h3 id="seeing-it-with-music">Seeing it, with music</h3>
-<p>To close the lecture, Malan cues up a side-by-side visualization: selection sort on top, bubble sort on the bottom, and merge sort in the middle, all racing to sort the same randomized bars, scored to music. Merge sort visibly finishes while the other two are still grinding through comparisons: the same gap the Θ(n²) versus Θ(n log n) numbers predict, just made visible.</p>
-<blockquote>
-<p>"The music just makes sorting more fun, but that's it for today. We will see you next time." (David Malan)</p>
-</blockquote>
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong>A recursive function calls itself, on a smaller problem, until a base case stops it.</strong> No base case (or one that doesn't actually shrink the problem) means the function never stops calling itself.</li>
-<li><strong>Recursion isn't free.</strong> Each unfinished call sits on the call stack using real memory; enough of them (as with an unbounded pyramid height) crashes the program with a stack overflow.</li>
-<li><strong>Merge sort is "sort left, sort right, merge."</strong> The two recursive calls are the divide-and-conquer half; the merge step, walking two sorted lists front-to-back, taking the smaller each time, is the one genuinely new idea.</li>
-<li><strong>Merging is cheap: exactly n steps per level.</strong> Because pointers only ever move forward, merging two sorted halves touches each element once.</li>
-<li><strong>Θ(n log n) beats Θ(n²) as n grows.</strong> For 8 elements the gap looks small; for millions of elements it is the difference between practical and unusable.</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ Writing a recursive function with no base case, or a base case that never actually gets reached: the classic symptom is a compiler warning ("all paths through this function will call itself") or a runtime crash after the program seems to hang.</li>
-<li>❌ Writing a recursive case that doesn't shrink the problem (for example, calling <code>draw(n)</code> instead of <code>draw(n - 1)</code>): this compiles fine and still recurses forever, because nothing guarantees you'll ever reach the base case.</li>
-<li>❌ Assuming "sort left, sort right, merge" means there's nothing to actually build: the recursive calls are almost free to write; the merge step is where the real logic (and the real code) lives.</li>
-<li>❌ Thinking Θ(n log n) is <em>always</em> faster in wall-clock time than a Θ(n²) sort: for very small lists (a handful of elements), the overhead of all those recursive calls can make merge sort no faster, or even slightly slower, in practice. The asymptotic win only dominates once n is large.</li>
-<li>❌ Forgetting that merge sort needs extra space for the halves and the merged output: unlike selection sort and bubble sort, which rearrange the original array in place, merge sort's clean version needs roughly double the memory.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: Recursive Mario and Merge Sort</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. You'll rebuild something you already know how to write (a Mario pyramid) using recursion instead of loops, trace merge sort entirely on paper, and then implement it for real: proving to yourself that "sort left, sort right, merge" actually works, not just watching Malan act it out.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>Three small, connected artifacts on cs50.dev: a recursive pyramid-drawer, a hand-drawn merge sort trace, and a working <code>merge_sort.c</code>. The habit of mind you build here (solve a smaller version of the exact same problem, then combine the results) is the same recursive thinking you'll lean on much later in this course, when your north-star database-backed web app needs to walk a nested structure (like threaded comments or categories) inside a single query.</p>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in the Capstone</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Base case / recursive case (Parts 1-2)</td>
-<td>Milestone 2: <code>draw()</code> calling itself needs a correct, shrinking base case or it will crash.</td>
-</tr>
-<tr>
-<td>"Sort left, sort right, merge" (Part 3)</td>
-<td>Milestone 3: your hand-drawn tree shows the split down to base cases and the merge back up.</td>
-</tr>
-<tr>
-<td>The merge step (Part 3)</td>
-<td>Milestone 4: the <code>merge()</code> helper inside your C implementation.</td>
-</tr>
-<tr>
-<td>Θ(n log n) derivation (Part 3)</td>
-<td>Stretch goal: counting your own program's comparisons to see the growth rate for yourself.</td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>Build the iterative pyramid.</strong> On cs50.dev, write <code>iteration.c</code>: ask for a height with <code>get_int</code>, then use two nested loops to print that many rows of a half-pyramid (each row <code>i</code> has <code>i + 1</code> hash marks). Confirm it prints a correct 4-row pyramid before moving on.</li>
-<li><strong>Convert it to recursion.</strong> Copy it to <code>recursion.c</code>. Replace the loop over rows with a <code>draw</code> function that calls itself: base case <code>if (n &lt;= 0) return;</code>, recursive case <code>draw(n - 1);</code> followed by printing that row's own hashes. Run it with the same heights as Milestone 1 and confirm the output is character-for-character identical.</li>
-<li><strong>Trace merge sort by hand.</strong> On paper (or in a text file), trace merge sort on these eight numbers: <code>5 2 8 1 9 3 7 4</code>. Draw the full split/merge tree the way this lesson did (splitting down to single elements, then merging pairs back together level by level) until you reach the fully sorted list. This milestone needs no computer at all.</li>
-<li><strong>Implement merge sort in C.</strong> Write <code>merge_sort.c</code>: a <code>merge_sort(int arr[], int n)</code> function that copies the left and right halves into temporary arrays, recursively sorts each half, and then merges them back into <code>arr</code> (the same left-pointer/right-pointer process from Part 3). Test it on the same eight numbers from Milestone 3 and confirm the program's printed output matches your hand trace exactly, number for number.</li>
-<li><strong>Stretch goals.</strong> (a) Add a counter that increments on every comparison inside <code>merge</code>, print the total after sorting, and compare it against <code>n</code> × log₂(<code>n</code>) for a few different array sizes. (b) Feed your program an array that already contains duplicate values and confirm it still sorts correctly. (c) Generate an array of 1,000 random integers, time your <code>merge_sort</code> against a selection sort you wrote in Lesson 15, and note which one finishes first.</li>
-</ol>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ <code>iteration.c</code> and <code>recursion.c</code> both compile cleanly and produce identical pyramid output for the same height.</li>
-<li>✅ Your hand-drawn tree for <code>5 2 8 1 9 3 7 4</code> shows every split down to single elements and every merge back up, ending in a fully sorted list.</li>
-<li>✅ <code>merge_sort.c</code> compiles, runs, and sorts <code>5 2 8 1 9 3 7 4</code> into an order that matches your hand trace from Milestone 3.</li>
-<li>✅ You can explain out loud, without notes, why merge sort is Θ(n log n) and why that is faster than Θ(n²) once the input is large.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> don't skip straight to Milestone 4's code. The value of Milestone 3 is that your hand trace becomes the answer key you check your C program against: if they disagree, you've found a bug in one of them, and you'll know exactly where to look.</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-a-recursive-countdown-foundational">Exercise 1: A recursive countdown (foundational)</h3>
-<p>Write a recursive C function <code>void countdown(int n)</code> that prints <code>n</code>, then <code>n - 1</code>, and so on down to <code>1</code>, then prints <code>"Liftoff!"</code>. Identify, in a comment above each part of the function, which lines are the base case and which are the recursive case.</p>
-<h3 id="exercise-2-trace-a-different-list-intermediate">Exercise 2: Trace a different list (intermediate)</h3>
-<p>Trace merge sort by hand on the four numbers <code>9 1 6 3</code>, drawing the split/merge tree the same way this lesson did for eight numbers. Since four elements split down to one-element lists in exactly 2 levels, confirm for yourself that log₂(4) = 2.</p>
-<h3 id="exercise-3-count-the-comparisons-advanced">Exercise 3: Count the comparisons (advanced)</h3>
-<p>Take your <code>merge_sort.c</code> from the Capstone and add a global counter that increments once per comparison inside <code>merge</code>. Run it on random arrays of size 10, 100, and 1,000, printing the counter each time. Compare the growth of that counter against <code>n</code> × log₂(<code>n</code>) for each size, and write one sentence describing how closely they track.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>RECURSION
-  Recursive function  -&gt; a function that calls itself
-  Base case            -&gt; stops the recursion; answer directly, no further self-call
-  Recursive case        -&gt; does a little work, then calls itself on a SMALLER problem
-  No shrinking base case -&gt; infinite recursion -&gt; eventually a STACK OVERFLOW (out of memory)
-
-MARIO PYRAMID, RECURSIVELY
-  draw(n):
-      if n &lt;= 0: return                 # base case
-      draw(n - 1)                       # recursive case: smaller pyramid first...
-      print one row of n hashes         # ...then this row
-
-MERGE SORT
-  sort(list):
-      if list has 0 or 1 elements: return list     # base case
-      sort the left half                            # recursive case
-      sort the right half                           # recursive case
-      merge the two sorted halves                   # the new idea: n steps, pointers only move forward
-
-RUNNING TIME
-  Selection sort   Θ(n²)
-  Bubble sort      O(n²), Ω(n)  (no tight theta)
-  Merge sort       Θ(n log n)   &lt;- wins decisively as n grows
-
-  n log n derivation: log2(n) levels of splitting/merging x n steps of merging per level = n log n total
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 4 · Lesson 15 (Sorting, the slow way):</strong> gave you Big O, Big Omega, and Big Theta notation, plus selection sort and bubble sort at Θ(n²), the baseline this lesson's Θ(n log n) is measured against.</li>
-<li><strong>Next, Module 5 (Pixels, hexadecimal, and memory addresses):</strong> the stack-overflow crash you triggered in Part 2, running out of memory as unfinished recursive calls pile up, is your first hint that every variable and function call lives at an actual memory address, which the next lesson makes explicit.</li>
-<li><strong>Later, Module 6 · Lesson 23:</strong> looking up a value in a binary search tree is this same base-case/recursive-case pattern made permanent: instead of an array you throw away after sorting, the tree <em>is</em> the sorted structure, and searching it means recursing into the left or right subtree exactly the way you recursed into the left or right half here.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 3 - Algorithms" by David J. Malan, Harvard University (CS50x 2026). Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+<hr /><div class="pager bottom"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="16-recursion-merge-sort.html" class="cur" title="Start here">1</a><a href="16-recursion-merge-sort-2.html" class="" title="Parts 2–3">2</a><a href="16-recursion-merge-sort-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="16-recursion-merge-sort-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="16" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="15-selection-bubble-sort.html"><span class="dir">&#8592; Previous</span><b>Sorting, the Slow Way: Selection and Bubble Sort</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="../module-5-memory/17-pixels-hex-addresses.html"><span class="dir">Next &#8594;</span><b>Pixels, Hexadecimal, and Memory Addresses</b></a></nav>
+    <div class="ls-marker" data-lesson-id="16" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="15-selection-bubble-sort.html"><span class="dir">&#8592; Previous lesson</span><b>Sorting, the Slow Way: Selection and Bubble Sort</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 

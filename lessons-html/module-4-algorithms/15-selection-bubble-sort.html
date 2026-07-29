@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 4 · Lesson 15: Sorting, the Slow Way: Selection and Bubble Sort | Self-Paced CS50x</title>
+<title>Module 4 · Lesson 15: Sorting, the Slow Way: Selection and Bubble Sort (p1/3) | Self-Paced CS50x</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -49,6 +49,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -140,13 +163,13 @@ code{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.86em;b
 .copy-btn.done{background:var(--teal);color:#04231c;border-color:var(--teal)}
 
 /* callouts */
-blockquote{margin:24px 0;padding:16px 20px;border-radius:14px;background:var(--soft);border:1px solid var(--line);border-left:5px solid var(--teal)}
+blockquote{margin:24px 0;padding:18px 22px;border-radius:14px;background:var(--soft);border:1px solid var(--line);box-shadow:var(--shadow)}
 blockquote p{margin:7px 0}blockquote p:first-child{margin-top:0}blockquote p:last-child{margin-bottom:0}
-blockquote.cl-key{background:var(--k-bg);border-left-color:var(--k);border-color:transparent}
-blockquote.cl-tip{background:var(--tip-bg);border-left-color:var(--tip);border-color:transparent}
-blockquote.cl-ok{background:var(--ok-bg);border-left-color:var(--ok);border-color:transparent}
-blockquote.cl-no{background:var(--no-bg);border-left-color:var(--no);border-color:transparent}
-blockquote.cl-goal{background:var(--goal-bg);border-left-color:var(--goal);border-color:transparent}
+blockquote.cl-key{background:var(--k-bg);border-color:transparent}
+blockquote.cl-tip{background:var(--tip-bg);border-color:transparent}
+blockquote.cl-ok{background:var(--ok-bg);border-color:transparent}
+blockquote.cl-no{background:var(--no-bg);border-color:transparent}
+blockquote.cl-goal{background:var(--goal-bg);border-color:transparent}
 
 /* capstone banner */
 h2.capstone-h{background:linear-gradient(115deg,var(--navy),var(--navy-3));color:#fff;border-radius:20px;padding:30px 28px 26px;margin-top:64px;box-shadow:0 20px 50px rgba(10,26,47,.3);overflow:hidden;position:relative}
@@ -212,7 +235,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
   <div class="navlinks">
     <a href="../index.html">All lessons</a>
     <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="15-selection-bubble-sort-3.html#capstone">Capstone</a>
   </div>
   <div class="nav-cta">
     <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
@@ -251,7 +274,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="15-selection-bubble-sort-3.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -271,33 +294,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <li><a href="#prerequisites">Prerequisites</a></li>
 <li><a href="#part-1-selection-sort-repeatedly-pick-the-smallest">Part 1: Selection sort: repeatedly pick the smallest</a></li>
 <li><a href="#part-2-how-slow-is-selection-sort-on2-n2-n2">Part 2: How slow is selection sort? O(n²), Ω(n²), Θ(n²)</a></li>
-<li><a href="#part-3-bubble-sort-repeatedly-swap-out-of-order-neighbors">Part 3: Bubble sort: repeatedly swap out-of-order neighbors</a></li>
-<li><a href="#part-4-the-early-exit-trick-why-bubble-sorts-best-case-is-only-n">Part 4: The early-exit trick: why bubble sort's best case is only Ω(n)</a></li>
-<li><a href="#part-5-watching-it-happen-the-bar-chart-race">Part 5: Watching it happen: the bar-chart race</a></li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: Race Your Own Sorts</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-hand-trace-it-on-paper-foundational">Exercise 1: Hand-trace it on paper (foundational)</a></li>
-<li><a href="#exercise-2-swap-counts-on-shaped-inputs-intermediate">Exercise 2: Swap counts on shaped inputs (intermediate)</a></li>
-<li><a href="#exercise-3-comparisons-vs-swaps-advanced">Exercise 3: Comparisons vs. swaps (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="15-selection-bubble-sort.html" class="cur" title="Start here">1</a><a href="15-selection-bubble-sort-2.html" class="" title="Parts 3–5">2</a><a href="15-selection-bubble-sort-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="15-selection-bubble-sort-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>Selection sort and bubble sort are two honest, straightforward ways to put a jumbled array in order: one by repeatedly hunting for the smallest remaining value, the other by repeatedly swapping neighbors that are out of order, and both cost you O(n²) steps in the worst case, though bubble sort has a trick that drops its best case all the way down to Ω(n).</p>
 <blockquote>
@@ -443,246 +446,9 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <blockquote>
 <p>✅ <strong>What to do about it:</strong> don't reach for selection sort when you expect your data to already be mostly sorted: its running time doesn't reward that. Bubble sort, next, can be taught to notice.</p>
 </blockquote>
-<hr />
-<h2 id="part-3-bubble-sort-repeatedly-swap-out-of-order-neighbors">Part 3: Bubble sort: repeatedly swap out-of-order neighbors</h2>
-<p>Malan's second approach starts the volunteers back at <code>7 2 5 4 1 6 0 3</code> and takes a narrower, more local view: compare only two <em>adjacent</em> people at a time, and swap them immediately if they're out of order.</p>
-<blockquote>
-<p>"Let's compare 7 and 2. They're obviously out of order, so let's just immediately swap you two... 7 and 5, clearly out of order... 7 and 4... 7 and 1... 7 and 6... 7 and 0... 7 and 3." (David Malan)</p>
-</blockquote>
-<p>Because 7 was the largest value and lost every single comparison as Malan walked left to right, it ends up all the way at the far right end of the row by the end of just one pass:</p>
-<blockquote>
-<p>"Precious has essentially bubbled her way up to the end of the list. And indeed that's going to be the operative term here. Another algorithm... is called bubble sort, whereby the goal is to get the biggest elements to just bubble their way up to the top of, or the end of, the list one at a time." (David Malan)</p>
-</blockquote>
-<p>Tracing a single pass over the volunteers' starting order:</p>
-<table>
-<thead>
-<tr>
-<th>Comparing</th>
-<th>Out of order?</th>
-<th>Array after this step</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>start</td>
-<td>N/A</td>
-<td><code>7 2 5 4 1 6 0 3</code></td>
-</tr>
-<tr>
-<td>(7, 2)</td>
-<td>yes, swap</td>
-<td><code>2 7 5 4 1 6 0 3</code></td>
-</tr>
-<tr>
-<td>(7, 5)</td>
-<td>yes, swap</td>
-<td><code>2 5 7 4 1 6 0 3</code></td>
-</tr>
-<tr>
-<td>(7, 4)</td>
-<td>yes, swap</td>
-<td><code>2 5 4 7 1 6 0 3</code></td>
-</tr>
-<tr>
-<td>(7, 1)</td>
-<td>yes, swap</td>
-<td><code>2 5 4 1 7 6 0 3</code></td>
-</tr>
-<tr>
-<td>(7, 6)</td>
-<td>yes, swap</td>
-<td><code>2 5 4 1 6 7 0 3</code></td>
-</tr>
-<tr>
-<td>(7, 0)</td>
-<td>yes, swap</td>
-<td><code>2 5 4 1 6 0 7 3</code></td>
-</tr>
-<tr>
-<td>(7, 3)</td>
-<td>yes, swap</td>
-<td><code>2 5 4 1 6 0 3 7</code></td>
-</tr>
-</tbody>
-</table>
-<p>One full pass over 8 elements, and exactly one value (the biggest) has "bubbled" all the way to its final resting place. Malan's pseudocode:</p>
-<div class="codehilite"><pre><span></span><code>repeat n times:
-    for i from 0 to n - 2:
-        if numbers[i] and numbers[i + 1] are out of order:
-            swap them
-</code></pre></div>
-
-<p>The inner loop stops at <code>n - 2</code>, not <code>n - 1</code>, because it always looks one slot ahead of itself (<code>i</code> and <code>i + 1</code>): going any further would compare against a slot past the end of the array, which doesn't exist. Repeating that inner pass n times bubbles up the largest, then the second-largest, then the third-largest, and so on, one per pass, which is the same nested-loop shape as selection sort, just organized differently:</p>
-<blockquote>
-<p>"This is ultimately going to be on the order of big O of N squared... Bubble sort, based on this analysis, is also on the order of N squared." (David Malan)</p>
-</blockquote>
-<p>So on the worst case, bubble sort is exactly as slow as selection sort: <strong>O(n²)</strong>.</p>
-<hr />
-<h2 id="part-4-the-early-exit-trick-why-bubble-sorts-best-case-is-only-n">Part 4: The early-exit trick: why bubble sort's best case is only Ω(n)</h2>
-<p>Here's where bubble sort earns its keep over selection sort. Its pseudocode, as written above, has the same blind spot: it repeats the full pass n times no matter what, even against an already-sorted array. But bubble sort's structure makes it easy to add a check that selection sort's doesn't offer as naturally: <em>did any swap happen at all on this pass?</em></p>
-<blockquote>
-<p>"Here's an enhancement to bubble sort that selection sort didn't really have room for. I can say after one pass of this inner loop walking from left to right, if I made no swaps, quit... because there's no more work clearly to be done." (David Malan)</p>
-</blockquote>
-<p>If a full left-to-right pass makes zero swaps, every adjacent pair is already in order, which means the <em>entire array</em> is sorted, and there is nothing left to gain by repeating the outer loop. That single check changes bubble sort's best-case running time dramatically:</p>
-<blockquote>
-<p>"The lower bound of bubble sort's running time would be said to be an omega... of N... because I'm minimally going to need to make one pass through the list. You can't possibly claim that the list is sorted unless you actually check it once... So bubble sort can be said to be an omega of N." (David Malan)</p>
-</blockquote>
-<p>That's Ω(n): on an already-sorted array, one single pass (n − 1 comparisons, zero swaps) is enough to both verify the array is sorted <em>and</em> finish the algorithm. Compare that to selection sort's Ω(n²): no shortcut exists there, because its pseudocode always searches the entire remaining unsorted region for the minimum, whether or not it needs to.</p>
-<div class="codehilite"><pre><span></span><code>repeat n times:
-    swapped = false
-    for i from 0 to n - 2:
-        if numbers[i] and numbers[i + 1] are out of order:
-            swap them
-            swapped = true
-    if not swapped:
-        quit
-</code></pre></div>
-
-<blockquote>
-<p>✅ <strong>What to do about it:</strong> when you expect your data to arrive mostly sorted (a very common real-world situation: think of a leaderboard that's re-sorted after just one new score), bubble sort with the early-exit check can be dramatically cheaper than its worst-case O(n²) suggests. Selection sort, as taught here, cannot offer you that same guarantee.</p>
-</blockquote>
-<hr />
-<h2 id="part-5-watching-it-happen-the-bar-chart-race">Part 5: Watching it happen: the bar-chart race</h2>
-<p>Numbers on a page are one thing; watching the work happen is another. Malan closes this section with an animated visualization: a row of vertical bars, one per value, height proportional to size, with two buttons to trigger selection sort or bubble sort on the same randomized data.</p>
-<p>For selection sort:</p>
-<blockquote>
-<p>"What you'll see from left to right is in pink the current smallest element that's been discovered... you'll see clearly... the smallest element ended up over here, but it might take some time for [the largest]... to end up all the way over on the right, because with each pass we're really just fixing one problem at a time." (David Malan)</p>
-</blockquote>
-<p>For bubble sort:</p>
-<blockquote>
-<p>"The pink bars work a little differently. It connotes which two numbers are being compared at that moment in time... the biggest elements... are indeed bubbling their way up to the top one after the other. But... this is where n squared is sort of visualizable: we're touching these elements or looking at them so many times again and again. We are making so many darn comparisons. This is taking frustratingly long." (David Malan)</p>
-</blockquote>
-<p>Watching the bars, the difference between the two algorithms' <em>style</em> is obvious: selection sort's pink marker sweeps the whole remaining bar chart looking for a minimum before making one confident swap, while bubble sort's marker takes small local steps, swapping constantly but locally, but their overall <em>pace</em> looks about the same, because both are quadratic. That visual "this is taking frustratingly long" feeling is exactly what O(n²) looks like when n gets into the dozens or hundreds, and it's the motivation for Lesson 16's very different approach.</p>
-<div class="codehilite"><pre><span></span><code>selection sort:  [scan the whole unsorted region] -&gt; [one confident swap]   x (n-1) passes
-bubble sort:      [compare-and-maybe-swap neighbor] x (n-1)                 x n passes
-                  (unless the early-exit check fires first)
-</code></pre></div>
-
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong>Selection sort: find the minimum, then swap it into place.</strong> One confident swap per pass, always scanning the entire unsorted remainder: O(n²), Ω(n²), Θ(n²).</li>
-<li><strong>Bubble sort: compare and swap neighbors, repeatedly.</strong> The largest remaining value bubbles to the end each pass: O(n²) in the worst case, same as selection sort.</li>
-<li><strong>Bubble sort's early-exit check is the difference-maker.</strong> If a pass makes zero swaps, the array is already sorted and you can stop, giving bubble sort Ω(n), a best case selection sort (as taught) does not share.</li>
-<li><strong>Θ means "no lucky input helps."</strong> Selection sort is Θ(n²): its best and worst case grow at the same rate. Bubble sort is not Θ of anything simple, because its O(n²) and Ω(n) differ.</li>
-<li><strong>Both are teaching tools, not production sorts.</strong> Their value is that they're easy to reason about by hand: real code almost always reaches for something faster (Lesson 16's merge sort, or a database's built-in sort in Module 8).</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ Forgetting selection sort's inner search has to scan <em>the entire remaining unsorted region</em> every single pass, even when the array is already sorted: that's exactly why its Ω is n², not n.</li>
-<li>❌ Writing bubble sort's inner loop to <code>n - 1</code> instead of <code>n - 2</code>: since it always compares <code>numbers[i]</code> against <code>numbers[i + 1]</code>, going to <code>i = n - 1</code> would read past the end of the array.</li>
-<li>❌ Adding the early-exit check but forgetting to reset the <code>swapped</code> flag to <code>false</code> at the start of every outer pass: if you only set it once outside the loop, the algorithm will falsely think it never made a swap and quit early, even mid-array.</li>
-<li>❌ Assuming the early-exit optimization also helps selection sort "for free." It doesn't: selection sort's structure doesn't produce a natural "did anything change?" signal the way a pairwise-swap pass does.</li>
-<li>❌ Confusing "fewer swaps" with "faster." Bubble sort with early exit still does the same number of <em>comparisons</em> as unoptimized bubble sort on a scrambled array: the savings only show up when the data is nearly sorted.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: Race Your Own Sorts</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. You'll implement both algorithms in C over the same small array, print its evolution pass by pass, and then prove (with a swap counter, not just a claim) that bubble sort's early-exit trick actually pays off.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>A single C program on cs50.dev, <code>sorts.c</code>, that sorts a small hardcoded array of integers two different ways and reports how much work each way did. Pieces, each mapped to a lesson idea:</p>
-<ul>
-<li>A <code>print_array</code> helper, so you can literally watch the array change pass by pass (Parts 1 and 3).</li>
-<li>A selection sort implementation with a swap counter (Parts 1-2).</li>
-<li>A bubble sort implementation with a swap counter (Parts 3-4).</li>
-<li>Bubble sort's early-exit optimization, and a side-by-side comparison of swap counts on scrambled vs. nearly-sorted input (Part 4).</li>
-</ul>
-<p>This is also your first hands-on taste of a question you'll meet again at the very end of this course: when your north-star database-backed web app grows to thousands of rows, its <code>ORDER BY</code> clause (Module 8) is running a sorting algorithm under the hood, and now you'll actually know, from having counted your own swaps, roughly what that costs.</p>
-<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in Race Your Own Sorts</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Selection sort pseudocode (Part 1)</td>
-<td>Milestone 2: implement it, printing the array after every pass.</td>
-</tr>
-<tr>
-<td>O(n²)/Ω(n²)/Θ(n²) analysis (Part 2)</td>
-<td>Milestone 3: a swap counter that stays roughly the same size regardless of input order.</td>
-</tr>
-<tr>
-<td>Bubble sort pseudocode (Part 3)</td>
-<td>Milestone 4: implement it, printing the array after every pass.</td>
-</tr>
-<tr>
-<td>Early-exit optimization, Ω(n) (Part 4)</td>
-<td>Milestones 5-6: add the <code>swapped</code> flag and watch the swap counter crash on nearly-sorted input.</td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>Set up the array and a print helper.</strong> In <code>sorts.c</code>, include <code>cs50.h</code> and <code>stdio.h</code>, declare <code>int numbers[] = {7, 2, 5, 4, 1, 6, 0, 3};</code> with <code>int n = 8;</code>, and write a <code>print_array</code> function that prints all <code>n</code> values space-separated on one line. Call it once before sorting anything and confirm it prints <code>7 2 5 4 1 6 0 3</code>.</li>
-<li><strong>Implement selection sort, printing every pass.</strong> For each <code>i</code> from <code>0</code> to <code>n - 2</code>, scan <code>numbers[i..n-1]</code> to find the index of the smallest value, swap it into position <code>i</code>, and call <code>print_array</code> right after the swap. Run it and confirm you see the array evolve exactly like the Part 1 trace table, ending fully sorted.</li>
-<li><strong>Add a swap counter to selection sort.</strong> Declare <code>int swaps = 0;</code> before the loop, increment it every time you perform the three-line swap (even if the "smallest" index equals <code>i</code>, for simplicity), and print the total after sorting. Run it once and note the number.</li>
-<li><strong>Implement bubble sort, printing every pass, with its own swap counter.</strong> Using a fresh copy of the original array, repeat <code>n</code> times: walk <code>i</code> from <code>0</code> to <code>n - 2</code>, swap <code>numbers[i]</code> and <code>numbers[i+1]</code> whenever they're out of order, incrementing a <code>swaps</code> counter each time. Print the array after every full outer pass.</li>
-<li><strong>Add the early-exit optimization.</strong> Introduce a <code>bool swapped</code> (from <code>cs50.h</code> or <code>stdbool.h</code>), set it to <code>false</code> at the start of each outer pass, set it to <code>true</code> whenever you swap, and <code>break</code> out of the outer loop if a pass ends with <code>swapped</code> still <code>false</code>. Re-run on the original scrambled array and confirm the final sorted output and swap count are unchanged (the array wasn't sorted early, so this shouldn't fire yet).</li>
-<li><strong>Prove the early exit pays off on nearly-sorted data.</strong> Change the array to something nearly sorted, like <code>{0, 1, 2, 3, 4, 5, 7, 6}</code> (just one pair out of place), and run both sorts again. Selection sort's swap count should barely change from its worst-case shape, while bubble sort's early exit should let it quit after very few passes: print and compare both swap counts side by side.</li>
-<li><strong>Stretch goals.</strong> Add a separate <em>comparison</em> counter (distinct from the swap counter) to both algorithms, and check whether it behaves the way Part 2 and Part 4 predict: does selection sort's comparison count stay essentially the same regardless of input order? Does bubble-sort-with-early-exit's comparison count shrink close to <code>n - 1</code> on the nearly-sorted array? For an extra visual stretch, replace <code>print_array</code>'s numbers with rows of <code>#</code> characters (bar-chart style) so each pass prints something closer to the visualization from Part 5.</li>
-</ol>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ <code>sorts.c</code> compiles cleanly with <code>make sorts</code> and runs both algorithms without crashing.</li>
-<li>✅ Running selection sort on <code>{7, 2, 5, 4, 1, 6, 0, 3}</code> prints the array after every pass and ends sorted as <code>0 1 2 3 4 5 6 7</code>.</li>
-<li>✅ Running bubble sort on the same array also ends sorted, and its swap count is reported.</li>
-<li>✅ On the nearly-sorted input <code>{0, 1, 2, 3, 4, 5, 7, 6}</code>, bubble sort's swap count (and number of passes before its early exit fires) is visibly, measurably lower than on the scrambled input: you can point to the actual printed numbers as proof, not just recite the theory.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> don't just trust that the early exit "should" help: print the pass count or swap count for both the scrambled and nearly-sorted runs and put the numbers side by side. If the nearly-sorted run doesn't show fewer passes, your <code>swapped</code> flag isn't wired up correctly.</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-hand-trace-it-on-paper-foundational">Exercise 1: Hand-trace it on paper (foundational)</h3>
-<p>Take the array <code>[5, 3, 8, 1]</code> and, without writing any code, hand-trace selection sort pass by pass the way the Part 1 table does: write down the array's contents after each swap. Then do the same for one full bubble sort pass over the same starting array. Compare: which value ends up in its final position first under each algorithm, and why?</p>
-<h3 id="exercise-2-swap-counts-on-shaped-inputs-intermediate">Exercise 2: Swap counts on shaped inputs (intermediate)</h3>
-<p>Using your Capstone's selection sort (with its swap counter), run it on three different 8-element arrays: already sorted (<code>0</code> through <code>7</code>), reverse sorted (<code>7</code> down to <code>0</code>), and randomly scrambled. Record the swap count each time. Are the counts close to each other? Explain, in terms of Ω(n²), why selection sort's swap count doesn't meaningfully reward an already-sorted input the way bubble sort's does.</p>
-<h3 id="exercise-3-comparisons-vs-swaps-advanced">Exercise 3: Comparisons vs. swaps (advanced)</h3>
-<p>Add a <em>comparison</em> counter (separate from the swap counter) to both your selection sort and your early-exit bubble sort. Run both on the same reverse-sorted, random, and already-sorted 8-element arrays, and tabulate all four numbers (selection comparisons, selection swaps, bubble comparisons, bubble swaps) for each input. Which counter changes the most across input shapes, and which barely changes at all? Explain your results using the O(n²), Ω(n²), and Ω(n) claims from Parts 2 and 4.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>SELECTION SORT
-  for i from 0 to n-1:
-      find the smallest value in numbers[i..n-1]
-      swap it into numbers[i]
-  Big O:    O(n^2)   -- always scans the full unsorted remainder
-  Omega:    Omega(n^2) -- no shortcut for an already-sorted array
-  Theta:    Theta(n^2) -- best case and worst case grow at the same rate
-
-BUBBLE SORT
-  repeat n times:
-      swapped = false
-      for i from 0 to n-2:
-          if numbers[i] and numbers[i+1] out of order: swap them; swapped = true
-      if not swapped: quit   &lt;- the early-exit optimization
-  Big O:    O(n^2)   -- worst case, e.g. reverse-sorted input
-  Omega:    Omega(n) -- WITH early exit: one clean pass proves an already-sorted array
-
-RULE OF THUMB
-  Expect mostly-sorted data ariving repeatedly?  -&gt; bubble sort (with early exit) can be cheap.
-  No such guarantee, or a one-off sort?           -&gt; selection sort costs the same either way,
-                                                      so its simplicity doesn&#39;t buy you anything extra.
-  Either way, both are O(n^2) -- see Lesson 16 for something genuinely faster.
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 4 · Lesson 14 (Searching arrays in C):</strong> binary search needed sorted data to work its O(log n) magic: this lesson is where that sorted data actually comes from, and what it costs to produce.</li>
-<li><strong>Next, Module 4 · Lesson 16 (Recursion and merge sort):</strong> merge sort divides the array in half, sorts each half, and merges them: an O(n log n) algorithm that makes selection and bubble sort's O(n²) look, in Malan's words, "frustratingly long" by comparison.</li>
-<li><strong>Later, Module 8:</strong> when you write <code>ORDER BY</code> in SQL for your database-backed capstone web app, the database engine is running a sorting algorithm on your behalf: after this lesson, you'll actually understand what kind of cost that hides, and why database engineers care so much about not reaching for an O(n²) sort at scale.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 3 - Algorithms" by David J. Malan, Harvard University (CS50x 2026). Quotes are transcribed from the talk; obvious auto-transcription artifacts (e.g., "ton" for "to n", "fader" for "theta") have been silently corrected for readability while preserving Malan's exact wording and meaning. Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+<hr /><div class="pager bottom"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="15-selection-bubble-sort.html" class="cur" title="Start here">1</a><a href="15-selection-bubble-sort-2.html" class="" title="Parts 3–5">2</a><a href="15-selection-bubble-sort-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="15-selection-bubble-sort-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="15" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="14-searching.html"><span class="dir">&#8592; Previous</span><b>Searching Arrays in C</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="16-recursion-merge-sort.html"><span class="dir">Next &#8594;</span><b>Recursion and Merge Sort</b></a></nav>
+    <div class="ls-marker" data-lesson-id="15" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="14-searching.html"><span class="dir">&#8592; Previous lesson</span><b>Searching Arrays in C</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 

@@ -29,12 +29,32 @@ LESSONS = ROOT / "lessons"
 CFG_PATH = ROOT / "course.json"
 
 cfg = json.loads(CFG_PATH.read_text(encoding="utf-8")) if CFG_PATH.exists() else {}
+
+# Favicon tags, shared with the lesson pages so both depths stay in step. The
+# index sits at lessons-html/index.html, so its prefix is ".".
+import build_lesson as _bl  # noqa: E402
+ICONS = (_bl.icon_links(".") + "\n") if (ROOT / "assets" / "favicon.svg").exists() else ""
 COURSE = cfg.get("title", "The Course")
 ACCENT = cfg.get("accent_word", "")            # a word in the title to color coral
 TAGLINE = cfg.get("tagline", "A hands-on, self-paced course.")
 FOOTER_NOTE = cfg.get("footer_note", "A self-paced course.")
+TITLE_SUFFIX = cfg.get("title_suffix", "A self-paced course")   # browser tab only
 START_HERE = cfg.get("start_here", "")          # optional path to an orientation page
 MODULES = {int(k): v for k, v in cfg.get("modules", {}).items()}
+_labels = cfg.get("unit_labels", {})
+GROUP = _labels.get("group", "Module")
+ITEM = _labels.get("item", "Lesson")
+
+# Hero eyebrow and the one-paragraph instruction above the cards. Both default
+# to the course wording, with the unit labels substituted in, so a course that
+# renames Module/Lesson does not end up with "Phase" cards under a paragraph
+# talking about lessons.
+EYEBROW = cfg.get("eyebrow", "Self-paced course")
+INTRO_HTML = cfg.get("intro", (
+    f"Tick a {ITEM.lower()} when you finish it, or use the &ldquo;Mark complete&rdquo; "
+    f"button on the {ITEM.lower()} itself. Your progress shows here and on every "
+    f"{ITEM.lower()} page. Work top to bottom, or jump to the {GROUP.lower()} that fits you."
+))
 
 # Headline = course title with the accent word (if any) colored.
 if ACCENT and ACCENT in COURSE:
@@ -45,7 +65,7 @@ else:
 lessons = []
 for md in sorted(LESSONS.glob("*/*.md")):
     text = md.read_text(encoding="utf-8")
-    m = re.match(r"#\s+Module\s+(\d+)\s+·\s+Lesson\s+(\d+):\s+(.+)", text)
+    m = re.match(rf"#\s+{GROUP}\s+(\d+)\s+·\s+{ITEM}\s+(\d+):\s+(.+)", text)
     if not m:
         continue
     mod, num, title = int(m.group(1)), int(m.group(2)), m.group(3).strip()
@@ -53,7 +73,9 @@ for md in sorted(LESSONS.glob("*/*.md")):
     speaker = sm.group(1).strip() if sm else ""
     tm = re.search(r"\*\*Estimated time:?\*\*\s*(.+)", text)
     time = re.sub(r"\s*\(.*\)", "", tm.group(1)).strip() if tm else ""
-    href = str(md.relative_to(LESSONS)).replace(".md", ".html")  # index sits inside lessons-html
+    # index sits inside lessons-html. as_posix() so the href uses "/" on Windows too,
+    # otherwise every link 404s once the site is served over HTTP.
+    href = md.relative_to(LESSONS).as_posix().replace(".md", ".html")
     lessons.append((mod, num, title, speaker, time, href))
 
 lessons.sort(key=lambda x: x[1])
@@ -74,7 +96,7 @@ for mod in sorted(by_mod):
         items += (
             f'<div class="lesson" data-n="{num}">'
             f'<span class="box" data-n="{num}" role="checkbox" aria-checked="false" tabindex="0" '
-            f'aria-label="Mark lesson {num} complete">&#10003;</span>'
+            f'aria-label="Mark {ITEM.lower()} {num} complete">&#10003;</span>'
             f'<a class="lbody" href="{html.escape(href)}">'
             f'<span class="num">{num:02d}</span>'
             f'<span class="ltext"><span class="lt">{html.escape(title)}</span>'
@@ -86,7 +108,7 @@ for mod in sorted(by_mod):
         )
     mname = MODULES.get(mod, {}).get("name", f"Module {mod}")
     mblurb = MODULES.get(mod, {}).get("blurb", "")
-    mtag = "Optional" if is_optional(mod) else f"Module {mod}"
+    mtag = "Optional" if is_optional(mod) else f"{GROUP} {mod}"
     cards.append(
         f'<section class="modcard"><div class="modhead">'
         f'<div class="modrow"><span class="modtag">{mtag}</span>'
@@ -105,12 +127,35 @@ start_btn = (f'<div style="margin-top:30px"><a href="{html.escape(START_HERE)}" 
              f'font-weight:600;border-radius:999px;padding:13px 26px;text-decoration:none;font-family:Inter">'
              f'New here? Start with the orientation &#8594;</a></div>') if START_HERE else ""
 
+# Optional row of companion links under the hero, e.g. a plan or a tracker
+# that lives outside the rendered lesson set. Config: "resources": [
+#   {"label": "The 30-day plan", "href": "https://..."}, ...]
+RESOURCES = cfg.get("resources", [])
+res_links = "".join(
+    f'<a href="{html.escape(r["href"])}" target="_blank" rel="noopener" '
+    f'style="display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(255,255,255,.22);'
+    f'color:#dfe7f5;border-radius:999px;padding:9px 18px;text-decoration:none;'
+    f'font-family:Inter;font-size:14px;font-weight:500">'
+    f'{html.escape(r["label"])} &#8599;</a>'
+    for r in RESOURCES if r.get("href") and r.get("label"))
+res_row = (f'<div style="margin-top:22px;display:flex;gap:10px;flex-wrap:wrap;'
+           f'justify-content:center">{res_links}</div>') if res_links else ""
+
 # ---- shared course data for the per-lesson progress bar --------------------
 optional_ids = sorted(n for (mod, n, *_ ) in lessons if is_optional(mod))
 course_data = {
     "course": COURSE,
     "coreTotal": core_lessons,
     "optionalIds": optional_ids,
+    # Wording for the fixed progress strip. Defaults keep the course's own
+    # phrasing; a renamed course supplies its own so the strip does not say
+    # "Course progress" on a page that calls everything a session.
+    "progressLabel": cfg.get("progress_label", "Course progress"),
+    "progressCta": cfg.get("progress_cta", "View tracker"),
+    # Which sync backend the client should use. "firebase" needs a Google
+    # sign-in; "cloudflare" needs none, because Cloudflare Access has already
+    # authenticated anyone who can load the page.
+    "sync": cfg.get("sync", {}),
 }
 (ROOT / "lessons-html" / "assets").mkdir(parents=True, exist_ok=True)
 (ROOT / "lessons-html" / "assets" / "course-data.js").write_text(
@@ -163,6 +208,14 @@ main{padding:0 0 100px}
 .tile.accent .big{color:var(--teal)} .tile.streak .big{color:var(--gold)}
 .tile.finish .big{font-size:1.1rem;padding-top:7px}
 .barwrap{background:var(--navy-3);border:1px solid #1e3a5a;border-radius:999px;height:15px;overflow:hidden;margin:10px 0 4px}
+/* compact variant: one slim strip instead of the tile grid */
+.progress-panel.compact{display:flex;align-items:center;gap:16px;padding:13px 20px;border-radius:14px;box-shadow:0 14px 34px rgba(8,19,31,.28);flex-wrap:wrap}
+.progress-panel.compact .cp-label{color:var(--teal);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.7rem;white-space:nowrap}
+.progress-panel.compact .barwrap{flex:1 1 180px;height:9px;margin:0;min-width:120px}
+.progress-panel.compact .cp-pct{font-family:Poppins;font-weight:700;font-size:1.15rem;white-space:nowrap}
+.progress-panel.compact .cp-count{color:#9fb3c8;font-size:.82rem;white-space:nowrap}
+.progress-panel.compact .actions{margin-left:auto}
+@media(max-width:560px){.progress-panel.compact{gap:11px;padding:11px 14px}.progress-panel.compact .cp-label{display:none}}
 #bar{height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--green));transition:width .4s ease}
 .barrow{display:flex;justify-content:space-between;color:#9fb3c8;font-size:.8rem}
 .pace{display:flex;align-items:center;gap:9px;margin:18px 0 2px;flex-wrap:wrap}
@@ -212,28 +265,74 @@ dialog button{background:var(--navy-3);color:#e8eef6;border:1px solid #1e3a5a;bo
 @media(max-width:700px){.hero h1{font-size:34px}.hero{padding:56px 0 72px}.hstats{gap:22px}.stats{grid-template-columns:repeat(2,1fr)}main.wrap{padding-bottom:64px}}
 """
 
-PANEL = """
-<section class="progress-panel">
-  <div class="pp-head">
-    <span class="pp-title">&#10022; Your progress</span>
-    <div class="account" id="account"><span class="dot"></span><span id="acct-msg">Starting up&hellip;</span><button id="acct-btn" style="display:none"></button></div>
-  </div>
-  <div class="stats">
-    <div class="tile accent"><div class="big" id="s-count">0/0</div><div class="lbl">core lessons done</div></div>
-    <div class="tile"><div class="big" id="s-pct">0%</div><div class="lbl">of the course</div></div>
-    <div class="tile streak"><div class="big" id="s-streak">0</div><div class="lbl">day streak</div></div>
-    <div class="tile finish"><div class="big" id="s-finish">set a pace</div><div class="lbl">projected finish</div></div>
-  </div>
+# ---- optional tracker chrome. Flags default to True, so existing courses
+# render exactly as before. Opt out with "chrome": {"streak": false, ...}
+_ch = cfg.get("chrome", {})
+def _on(k):
+    return _ch.get(k, True)
+
+_tiles = ""
+if _on("tile_count"):
+    _tiles += ('<div class="tile accent"><div class="big" id="s-count">0/0</div>'
+               f'<div class="lbl">core {ITEM.lower()}s done</div></div>')
+_tiles += '<div class="tile"><div class="big" id="s-pct">0%</div><div class="lbl">of the course</div></div>'
+if _on("streak"):
+    _tiles += '<div class="tile streak"><div class="big" id="s-streak">0</div><div class="lbl">day streak</div></div>'
+if _on("projected_finish"):
+    _tiles += '<div class="tile finish"><div class="big" id="s-finish">set a pace</div><div class="lbl">projected finish</div></div>'
+
+_actions = ('  <div class="actions"><button id="backup">Back up my progress</button>'
+            '<button id="restore">Restore from backup</button>'
+            '<button class="danger" id="reset">Reset all</button></div>') if _on("backup_actions") else ""
+_barrow = ('  <div class="barrow"><span id="b-left"></span>'
+           '<span id="b-week">0 done in the last 7 days</span></div>') if _on("barrow") else ""
+_pace = ('  <div class="pace"><span>My pace:</span>'
+         '<button data-p="1">1 / day</button><button data-p="2">2 / day</button>'
+         '<button data-p="3">3 / day</button><button data-p="5">5 / day</button>'
+         '<span id="pace-note"></span></div>') if _on("pace") else ""
+_account = ('    <div class="account" id="account"><span class="dot"></span>'
+            '<span id="acct-msg">Starting up&hellip;</span>'
+            '<button id="acct-btn" style="display:none"></button></div>') if _on("account_strip") else ""
+
+# The compact panel is one slim horizontal strip instead of the tile grid: a
+# label, a thin track, and the percentage. It exists because a tracker with a
+# single tile in it reads as an empty dashboard rather than as a progress bar.
+# Opt in with "chrome": {"compact_progress": true}; defaults to the tile panel.
+# NOTE: _on() defaults to True because the chrome flags are opt-OUT. This one
+# is opt-IN, so it reads the dict directly with a False default. Using _on()
+# here silently switched the course's own tracker to the compact strip.
+if _ch.get("compact_progress", False):
+    PANEL = """
+<section class="progress-panel compact" data-progress-home>
+  <span class="cp-label">&#10022; Your progress</span>
   <div class="barwrap"><div id="bar"></div></div>
-  <div class="barrow"><span id="b-left"></span><span id="b-week">0 done in the last 7 days</span></div>
-  <div class="pace"><span>My pace:</span>
-    <button data-p="1">1 / day</button><button data-p="2">2 / day</button>
-    <button data-p="3">3 / day</button><button data-p="5">5 / day</button>
-    <span id="pace-note"></span>
-  </div>
-  <div class="actions"><button id="backup">Back up my progress</button><button id="restore">Restore from backup</button><button class="danger" id="reset">Reset all</button></div>
+  <span class="cp-pct" id="s-pct">0%</span>
+  <span class="cp-count" id="s-count"></span>
+{{ACCOUNT}}
+{{ACTIONS}}
 </section>
 """
+else:
+    PANEL = """
+<section class="progress-panel" data-progress-home>
+  <div class="pp-head">
+    <span class="pp-title">&#10022; Your progress</span>
+{{ACCOUNT}}
+  </div>
+  <div class="stats">{{TILES}}</div>
+  <div class="barwrap"><div id="bar"></div></div>
+{{BARROW}}
+{{PACE}}
+{{ACTIONS}}
+</section>
+"""
+
+PANEL = (PANEL.replace("{{TILES}}", _tiles)
+                 .replace("{{ACTIONS}}", _actions)
+                 .replace("{{BARROW}}", _barrow)
+                 .replace("{{ACCOUNT}}", _account)
+                 .replace("{{PACE}}", _pace))
+
 
 DIALOG = """
 <dialog id="dlg">
@@ -268,25 +367,27 @@ function render(){
 }
 function updateStats(){
   const s=CS.stats();
-  document.getElementById("s-count").textContent=s.done+"/"+s.total;
+  var _sc=document.getElementById("s-count"); if(_sc) _sc.textContent=s.done+"/"+s.total;
   document.getElementById("s-pct").textContent=s.pct+"%";
   document.getElementById("bar").style.width=s.pct+"%";
   const left=s.total-s.done;
-  document.getElementById("b-left").textContent=left===0?"All core lessons complete \\u{1F389}":left+" lesson"+(left===1?"":"s")+" to go";
-  document.getElementById("s-streak").textContent=s.streak;
-  document.getElementById("b-week").textContent=s.week+" done in the last 7 days";
+  var _bl=document.getElementById("b-left"); if(_bl) _bl.textContent=left===0?"All core lessons complete \\u{1F389}":left+" lesson"+(left===1?"":"s")+" to go";
+  var _st=document.getElementById("s-streak"); if(_st) _st.textContent=s.streak;
+  var _bw=document.getElementById("b-week"); if(_bw) _bw.textContent=s.week+" done in the last 7 days";
   const fin=document.getElementById("s-finish"), pace=CS.state().pace||1;
-  if(left===0){ fin.textContent="Done!"; document.getElementById("pace-note").textContent=""; }
+  if(!fin) return;   // projected-finish tile switched off
+  if(left===0){ fin.textContent="Done!"; var _pn=document.getElementById("pace-note"); if(_pn) _pn.textContent=""; }
   else{ const days=Math.ceil(left/pace); const d=new Date(); d.setDate(d.getDate()+days);
     fin.textContent=d.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"});
-    document.getElementById("pace-note").textContent="at "+pace+"/day, about "+days+" day"+(days===1?"":"s")+" left"; }
+    var _p2=document.getElementById("pace-note"); if(_p2) _p2.textContent="at "+pace+"/day, about "+days+" day"+(days===1?"":"s")+" left"; }
 }
 function paintPace(){ document.querySelectorAll(".pace button").forEach(b=>b.classList.toggle("on",+b.dataset.p===(CS.state().pace||1))); }
 function paintAccount(){
   const box=document.getElementById("account"), msg=document.getElementById("acct-msg"), btn=document.getElementById("acct-btn");
+  if(!box||!msg||!btn) return;   // account strip switched off for this course
   const u=CS.user();
   box.classList.toggle("on",!!u);
-  if(!CS.configured()){ msg.textContent="Progress is saved in this browser. Set up sync to follow you across devices."; btn.style.display="none"; }
+  if(!msg||!btn){ } else if(!CS.configured()){ msg.textContent="Progress is saved in this browser. Set up sync to follow you across devices."; btn.style.display="none"; }
   else if(u){ msg.textContent="Synced as "+(u.name||u.email||"you")+"."; btn.style.display=""; btn.textContent="Sign out"; btn.className="ghost"; }
   else{ msg.textContent="Sign in to sync across your laptop and phone."; btn.style.display=""; btn.textContent="Sign in with Google"; btn.className=""; }
 }
@@ -297,21 +398,26 @@ document.querySelectorAll(".box").forEach(b=>{
   b.addEventListener("keydown",e=>{ if(e.key===" "||e.key==="Enter"){ e.preventDefault(); CS.toggleLesson(n); } });
 });
 document.querySelectorAll(".pace button").forEach(b=>b.addEventListener("click",()=>CS.setPace(+b.dataset.p)));
-document.getElementById("acct-btn").addEventListener("click",()=>{ CS.user()?CS.signOut():CS.signIn(); });
+// Every optional piece of chrome may be absent. An unguarded
+// addEventListener on a missing node throws and aborts the rest of this
+// script, including the render() call at the bottom. That failure is
+// silent: the page looks correct at 0% and never updates again.
+function on$(id, ev, fn){ const el=document.getElementById(id); if(el) el.addEventListener(ev, fn); }
+on$("acct-btn","click",()=>{ CS.user()?CS.signOut():CS.signIn(); });
 
 const dlg=document.getElementById("dlg"), dtext=document.getElementById("dlg-text"),
       dmsg=document.getElementById("dlg-msg"), dok=document.getElementById("dlg-ok");
-document.getElementById("backup").addEventListener("click",()=>{
+on$("backup","click",()=>{
   dmsg.textContent="Copy this and keep it safe. Paste it back with Restore to recover your progress.";
   dtext.value=CS.exportData(); dtext.readOnly=true; dok.style.display="none"; dlg.showModal(); dtext.select();
 });
-document.getElementById("restore").addEventListener("click",()=>{
+on$("restore","click",()=>{
   dmsg.textContent="Paste a backup here and press Restore. This replaces your current progress.";
   dtext.value=""; dtext.readOnly=false; dok.style.display=""; dlg.showModal();
 });
-dok.addEventListener("click",()=>{ if(CS.importData(dtext.value.trim())) dlg.close(); else alert("That does not look like a valid backup."); });
-document.getElementById("dlg-cancel").addEventListener("click",()=>dlg.close());
-document.getElementById("reset").addEventListener("click",()=>{ if(confirm("Clear all progress? Back it up first if you want a copy.")) CS.reset(); });
+if(dok) dok.addEventListener("click",()=>{ if(CS.importData(dtext.value.trim())) dlg.close(); else alert("That does not look like a valid backup."); });
+on$("dlg-cancel","click",()=>dlg.close());
+on$("reset","click",()=>{ if(confirm("Clear all progress? Back it up first if you want a copy.")) CS.reset(); });
 
 CS.onChange(render);
 render();
@@ -320,27 +426,29 @@ render();
 PAGE = (
     "<!doctype html>\n<html lang=\"en\"><head>\n"
     "<meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n"
-    f"<title>{html.escape(COURSE)} | A self-paced course</title>\n"
-    '<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iIzBhMWEyZiIvPjx0ZXh0IHg9IjE2IiB5PSIyMiIgZm9udC1mYW1pbHk9InVpLW1vbm9zcGFjZSxNZW5sbyxDb25zb2xhcyxtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjZjI0ZDYzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj4mZ3Q7XzwvdGV4dD48L3N2Zz4=">\n'
-    "<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n"
+    f"<title>{html.escape(COURSE)} | {html.escape(TITLE_SUFFIX)}</title>\n"
+    + ICONS
+    + "<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n"
     "<link href=\"https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n"
     "<style>" + CSS + "</style></head>\n<body>\n"
     "<header class=\"hero\"><span class=\"blob t\"></span><span class=\"blob c\"></span>\n"
     "  <div class=\"in wrap\">\n"
-    "    <span class=\"eyebrow\">&#10022; Self-paced course</span>\n"
+    f"    <span class=\"eyebrow\">&#10022; {html.escape(EYEBROW)}</span>\n"
     f"    <h1>{head_html}</h1>\n"
     f"    <p>{html.escape(TAGLINE)}</p>\n"
     "    <div class=\"hstats\">\n"
-    f"      <div class=\"hstat\"><div class=\"n\">{core_modules}</div><div class=\"l\">modules</div></div>\n"
-    f"      <div class=\"hstat\"><div class=\"n\">{core_lessons}</div><div class=\"l\">lessons</div></div>\n"
-    f"      <div class=\"hstat\"><div class=\"n\">{core_lessons}</div><div class=\"l\">hands-on capstones</div></div>\n"
+    f"      <div class=\"hstat\"><div class=\"n\">{core_modules}</div><div class=\"l\">{html.escape(GROUP.lower())}s</div></div>\n"
+    f"      <div class=\"hstat\"><div class=\"n\">{core_lessons}</div><div class=\"l\">{html.escape(ITEM.lower())}s</div></div>\n"
+    + (f"      <div class=\"hstat\"><div class=\"n\">{core_lessons}</div><div class=\"l\">hands-on capstones</div></div>\n"
+       if _on("capstone_count") else "") +
     "    </div>\n"
     f"    {start_btn}\n"
+    f"    {res_row}\n"
     "  </div>\n"
     "</header>\n"
     "<div class=\"panel-wrap\">" + PANEL + "</div>\n"
     "<main class=\"wrap\">\n"
-    "  <div class=\"intro\">Tick a lesson when you finish it &mdash; or use the &ldquo;Mark complete&rdquo; button on the lesson itself. Your progress shows here and on every lesson page. Work top to bottom, or jump to the module that fits you.</div>\n"
+    f"  <div class=\"intro\">{INTRO_HTML}</div>\n"
     "  " + "".join(cards) + "\n"
     "</main>\n"
     f"<footer><div class=\"logo\">{html.escape(COURSE)}<span class=\"d\">.</span></div>\n"

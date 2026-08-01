@@ -3,9 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 10 · Lesson 35: HTTP and the Browser | Self-Paced CS50x</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iIzBhMWEyZiIvPjx0ZXh0IHg9IjE2IiB5PSIyMiIgZm9udC1mYW1pbHk9InVpLW1vbm9zcGFjZSxNZW5sbyxDb25zb2xhcyxtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjZjI0ZDYzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj4mZ3Q7XzwvdGV4dD48L3N2Zz4=">
-
+<title>Module 10 · Lesson 35: HTTP and the Browser (p1/4) | Self-Paced CS50x</title>
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="shortcut icon" href="../assets/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -51,6 +53,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -142,13 +167,13 @@ code{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.86em;b
 .copy-btn.done{background:var(--teal);color:#04231c;border-color:var(--teal)}
 
 /* callouts */
-blockquote{margin:24px 0;padding:16px 20px;border-radius:14px;background:var(--soft);border:1px solid var(--line);border-left:5px solid var(--teal)}
+blockquote{margin:24px 0;padding:18px 22px;border-radius:14px;background:var(--soft);border:1px solid var(--line);box-shadow:var(--shadow)}
 blockquote p{margin:7px 0}blockquote p:first-child{margin-top:0}blockquote p:last-child{margin-bottom:0}
-blockquote.cl-key{background:var(--k-bg);border-left-color:var(--k);border-color:transparent}
-blockquote.cl-tip{background:var(--tip-bg);border-left-color:var(--tip);border-color:transparent}
-blockquote.cl-ok{background:var(--ok-bg);border-left-color:var(--ok);border-color:transparent}
-blockquote.cl-no{background:var(--no-bg);border-left-color:var(--no);border-color:transparent}
-blockquote.cl-goal{background:var(--goal-bg);border-left-color:var(--goal);border-color:transparent}
+blockquote.cl-key{background:var(--k-bg);border-color:transparent}
+blockquote.cl-tip{background:var(--tip-bg);border-color:transparent}
+blockquote.cl-ok{background:var(--ok-bg);border-color:transparent}
+blockquote.cl-no{background:var(--no-bg);border-color:transparent}
+blockquote.cl-goal{background:var(--goal-bg);border-color:transparent}
 
 /* capstone banner */
 h2.capstone-h{background:linear-gradient(115deg,var(--navy),var(--navy-3));color:#fff;border-radius:20px;padding:30px 28px 26px;margin-top:64px;box-shadow:0 20px 50px rgba(10,26,47,.3);overflow:hidden;position:relative}
@@ -203,42 +228,27 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <body>
 <div id="progress"></div>
 
-<div class="topbar"><div class="wrap">
-  <div>&#10024; Welcome to <b>Self-Paced CS50x</b> &middot; a self-paced course</div>
-  <div class="right"><span>CS50x 2026 · Harvard University · David J. Malan</span></div>
-</div></div>
+<div class="topbar"><div class="wrap"><div>&#10024; Welcome to <b>Self-Paced CS50x</b> &middot; a self-paced course</div><div class="right"><span>CS50x 2026 · Harvard University · David J. Malan</span></div></div></div>
 
 <nav class="bar"><div class="wrap">
   <button class="btn btn-outline" id="menuBtn" style="padding:8px 14px">&#9776;</button>
   <a class="logo" href="../index.html">Self-Paced CS50x<span class="dot">.</span></a>
   <div class="navlinks">
-    <a href="../index.html">All lessons</a>
-    <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="../index.html">All lessons</a><a href="#overview">Overview</a><a href="35-http-and-the-browser-4.html#capstone">Capstone</a>
   </div>
-  <div class="nav-cta">
-    <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
-  </div>
+<div class="nav-cta"><a class="btn btn-primary" href="#start">Start the lesson &#8594;</a></div>
 </div></nav>
 
 <header class="hero">
   <span class="blob t"></span><span class="blob c"></span>
-  <svg class="squiggle" style="top:120px;left:46%;" width="90" height="26" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#18c4a0" stroke-width="4" stroke-linecap="round"/></svg>
-  <svg class="squiggle" style="bottom:60px;right:40%;" width="70" height="22" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#f24d63" stroke-width="4" stroke-linecap="round"/></svg>
+<svg class="squiggle" style="top:120px;left:46%;" width="90" height="26" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#18c4a0" stroke-width="4" stroke-linecap="round"/></svg><svg class="squiggle" style="bottom:60px;right:40%;" width="70" height="22" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#f24d63" stroke-width="4" stroke-linecap="round"/></svg>
   <div class="wrap" id="overview">
     <div>
       <span class="eyebrow">&#10022; Module 10 · Lesson 35</span>
       <h1>HTTP and the <span class="accent">Browser</span></h1>
       <p class="lead">Every time a browser loads a page it sends a small text message (a request, usually GET or POST) to a server named in the URL, and gets back a text message of its own (a status code like 200, 301, or 404, plus headers and content), and you can read both halves of that conversation yourself with a one-line terminal command or your browser&#x27;s own DevTools.</p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
-        <a class="play" href="https://www.youtube.com/watch?v=yYst7puZXjw" target="_blank" rel="noopener"><span class="circ">&#9654;</span> Watch the talk</a>
-      </div>
-      <div class="chips">
-        <span class="chip">&#127908; <b>David J. Malan</b></span>
-        <span class="chip">&#9201; <b>45 minutes</b></span>
-        <span class="chip">&#128296; <b>Hands-on capstone</b></span>
-      </div>
+<div class="hero-actions"><a class="btn btn-primary" href="#start">Start the lesson &#8594;</a><a class="play" href="https://www.youtube.com/watch?v=yYst7puZXjw" target="_blank" rel="noopener"><span class="circ">&#9654;</span> Watch the talk</a></div>
+<div class="chips"><span class="chip">&#127908; <b>David J. Malan</b></span><span class="chip">&#9201; <b>45 minutes</b></span><span class="chip">&#128296; <b>Hands-on capstone</b></span></div>
     </div>
     <div style="position:relative">
       <div class="hero-card">
@@ -253,7 +263,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="35-http-and-the-browser-4.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -273,37 +283,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <li><a href="#prerequisites">Prerequisites</a></li>
 <li><a href="#part-1-reading-a-url-like-a-browser-does">Part 1: Reading a URL like a browser does</a></li>
 <li><a href="#part-2-get-vs-post-the-two-verbs-behind-almost-everything-you-click">Part 2: GET vs POST (the two verbs behind almost everything you click)</a></li>
-<li><a href="#part-3-status-codes-the-servers-one-line-verdict">Part 3: Status codes (the server's one-line verdict)</a></li>
-<li><a href="#part-4-devtools-watching-every-request-and-touching-the-page-itself">Part 4: DevTools (watching every request, and touching the page itself)</a><ul>
-<li><a href="#the-network-tab-every-request-laid-out">The Network tab: every request, laid out</a></li>
-<li><a href="#the-elements-tab-the-live-page-and-your-own-copy-of-it">The Elements tab: the live page, and your own copy of it</a></li>
-</ul>
-</li>
-<li><a href="#part-5-how-the-pieces-combine">Part 5: How the pieces combine</a></li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: Status-Code Safari</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-take-a-url-apart-foundational">Exercise 1: Take a URL apart (foundational)</a></li>
-<li><a href="#exercise-2-predict-then-check-intermediate">Exercise 2: Predict, then check (intermediate)</a></li>
-<li><a href="#exercise-3-full-request-inventory-advanced">Exercise 3: Full request inventory (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 4 &middot; Start here</span><div class="seg"><a href="35-http-and-the-browser.html" class="cur" title="Start here">1</a><a href="35-http-and-the-browser-2.html" class="" title="Parts 3-5">2</a><a href="35-http-and-the-browser-3.html" class="" title="Common pitfalls">3</a><a href="35-http-and-the-browser-4.html" class="" title="Capstone &amp; wrap-up">4</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="35-http-and-the-browser-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>Every time a browser loads a page it sends a small text message (a request, usually <strong>GET</strong> or <strong>POST</strong>) to a server named in the URL, and gets back a text message of its own (a <strong>status code</strong> like 200, 301, or 404, plus headers and content), and you can read both halves of that conversation yourself with a one-line terminal command or your browser's own DevTools.</p>
 <blockquote>
@@ -426,294 +412,9 @@ Host: www.harvard.edu
 <p>You'll meet POST properly, and build a real form that uses it, in Lesson 39. For now, the important thing is knowing that GET and POST exist, and that "just loading a page" and "submitting something" are, underneath, two different kinds of message.</p>
 <blockquote>
 <p>✅ <strong>What to do about it:</strong> whenever you're not sure what a button or a link on a page actually does, remember that a plain click is (almost always) a GET, and a submitted form is (almost always) a POST: you'll be able to confirm exactly which, for real, in Part 4.</p>
-</blockquote>
-<h2 id="part-3-status-codes-the-servers-one-line-verdict">Part 3: Status codes (the server's one-line verdict)</h2>
-<p>Every HTTP response starts with a three-digit <strong>status code</strong>: the server's own summary of what just happened, before you even get to the content. You can see these yourself, from a terminal, using a program called <code>curl</code>:</p>
-<blockquote>
-<p>"Curl... stands for Connect URL... it's a headless browser that allows you to pretend to be a browser and grab the response from a server." (David Malan)</p>
-</blockquote>
-<p>Adding the <code>-I</code> flag (capital <code>i</code>) asks <code>curl</code> to show <em>only</em> the response's status line and headers, not the page itself:</p>
-<blockquote>
-<p>"Curl -I... is only going to show me the headers, the text that we were just talking about, and it's not going to send any of the contents of Harvard's website." (David Malan)</p>
-<p>💡 <strong>A small technical nuance.</strong> <code>curl -I</code> doesn't quite send the same request a browser sends when loading a page: it uses a request method called <code>HEAD</code>, which explicitly asks the server for "headers only, skip the body." That's why it comes back instantly even for a huge page: the server never bothers assembling the content at all.</p>
-</blockquote>
-<p>Here's what a handful of real demos reveal:</p>
-<p><strong>A healthy page returns <code>200 OK</code></strong>: the best possible outcome, meaning "here's exactly what you asked for":</p>
-<div class="codehilite"><pre><span></span><code>$ curl -I https://www.harvard.edu
-HTTP/2 200
-content-type: text/html; charset=UTF-8
-...
-</code></pre></div>
-
-<p><strong>An insecure URL often returns <code>301 Moved Permanently</code></strong>: a redirect. Requesting the plain <code>http://</code> (not <code>https://</code>) version of Harvard's site doesn't return the page at all:</p>
-<div class="codehilite"><pre><span></span><code>$ curl -I http://www.harvard.edu
-HTTP/1.1 301 Moved Permanently
-Location: https://www.harvard.edu/
-</code></pre></div>
-
-<p>Malan explains exactly what that number means:</p>
-<blockquote>
-<p>"If a server responds to a browser with a numeric code of 301, that means that the browser is supposed to go to this location instead. It's sort of like putting a detour sign on the server that says there's nothing for you here." (David Malan)</p>
-</blockquote>
-<p>That's why you and I never have to type <code>https://</code> by hand anymore: the server itself insists on it via a 301.</p>
-<p><strong>A page that doesn't exist returns <code>404 Not Found</code></strong>: file not found, full stop:</p>
-<div class="codehilite"><pre><span></span><code>$ curl -I https://www.harvard.edu/cats
-HTTP/2 404
-</code></pre></div>
-
-<blockquote>
-<p>"404 is a weirdly public, arcane... status code that just means file not found... most everyone in this room is probably familiar with 404, even though its origin is this very low level arcane status code buried in the HTTP headers." (David Malan)</p>
-</blockquote>
-<p><strong>And then there's <code>418</code>,</strong> which is not a real, serious status code at all:</p>
-<blockquote>
-<p>"We included 418, which is not actually a thing, but it was a fun, sort of April Fool's joke years ago where a bunch of humans thought it would be funny to write up a whole specification for what it means for a server to respond with a number of 418." (David Malan)</p>
-</blockquote>
-<p>The specification in question is real, even if the joke is the point: it's called the "Hyper Text Coffee Pot Control Protocol," and 418 officially means <strong>"I'm a teapot."</strong> Because it's a joke, almost no real production website returns it on purpose: you'll need a server built specifically to demonstrate it, and the Capstone points you to one.</p>
-<p>Malan also uses <code>curl -I</code> to demonstrate one of the internet's oldest pranks: a domain called <code>safetyschool.org</code>:</p>
-<blockquote>
-<p>"For years now, someone has been paying for... the following behavior." (David Malan)</p>
-<p>"Oh my goodness, look at where we are." (David Malan)</p>
-</blockquote>
-<p>Visiting it sends back a 301, not to anywhere related to "safety schools," but to Yale's biggest rival application essay topic:</p>
-<blockquote>
-<p>"For like 20 years, presumably some Harvard alum has been paying the bill to rent this domain name just to have this trick implemented such that 301 moved permanently is directing people ever since to yale.edu." (David Malan)</p>
-</blockquote>
-<p>Nothing about that trick is secret or hidden: it's just a redirect, sitting in plain text in the response headers, waiting for anyone curious enough to run <code>curl -I</code> and look.</p>
-<table>
-<thead>
-<tr>
-<th>Code</th>
-<th>Name</th>
-<th>What it means</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>200</strong></td>
-<td>OK</td>
-<td>Here's exactly what you asked for.</td>
-</tr>
-<tr>
-<td><strong>301</strong></td>
-<td>Moved Permanently</td>
-<td>Go here instead, a redirect.</td>
-</tr>
-<tr>
-<td><strong>404</strong></td>
-<td>Not Found</td>
-<td>The server exists, but this specific path doesn't.</td>
-</tr>
-<tr>
-<td><strong>418</strong></td>
-<td>I'm a Teapot</td>
-<td>An intentional April Fools' joke status code, not a real error.</td>
-</tr>
-<tr>
-<td><em>(400s in general)</em></td>
-<td>Client error</td>
-<td>You (or your code) asked for something wrong.</td>
-</tr>
-<tr>
-<td><em>(500s in general)</em></td>
-<td>Server error</td>
-<td>The server itself is broken or crashed.</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>🔑 <strong>The single most important takeaway of this part.</strong> A status code is the server's one-line verdict, sent before any content, and you never have to guess at it. <code>curl -I &lt;url&gt;</code> shows it to you directly, in plain text, for any website in the world.</p>
-</blockquote>
-<h2 id="part-4-devtools-watching-every-request-and-touching-the-page-itself">Part 4: DevTools (watching every request, and touching the page itself)</h2>
-<p><code>curl</code> is a terminal tool. Your browser has the exact same X-ray vision built in, under <strong>DevTools</strong>, usually opened by right-clicking anywhere on a page and choosing <strong>Inspect</strong>, or a menu option under the browser's settings:</p>
-<blockquote>
-<p>"Most any browser nowadays has the ability to give you developer tools natively." (David Malan)</p>
-</blockquote>
-<p>DevTools has several tabs; this lesson focuses on two of them.</p>
-<h3 id="the-network-tab-every-request-laid-out">The Network tab: every request, laid out</h3>
-<p>The <strong>Network</strong> tab lists every request the current page makes, not just the main page itself, but every image, script, and stylesheet it pulled in along the way:</p>
-<blockquote>
-<p>"I can also see the network connections the browser is making to the server, and that's where I thought we'd start our attention here." (David Malan)</p>
-</blockquote>
-<p>Loading a single page can trigger dozens of these. Visiting <code>safetyschool.org</code> alone, for instance:</p>
-<blockquote>
-<p>"Notice that bottom left here, just going to safetyschool.org resulted in 61 HTTP requests, in effect, 61 envelopes going back and forth." (David Malan)</p>
-</blockquote>
-<p>Click on any single row and the same information <code>curl -I</code> gave you in text shows up here too, plus the exact request headers your browser sent and the exact response headers it got back:</p>
-<blockquote>
-<p>"The message that came back was 301 moved permanently. The protocol, or the verb, being used was GET." (David Malan)</p>
-<p>💡 <strong>Two settings worth turning on immediately.</strong> Check <strong>Preserve log</strong> (so the list doesn't clear when a page redirects or navigates away) and <strong>Disable cache</strong> (so you always see a fresh request instead of a stale, saved one), both are checkboxes right in the Network panel's toolbar.</p>
-</blockquote>
-<h3 id="the-elements-tab-the-live-page-and-your-own-copy-of-it">The Elements tab: the live page, and your own copy of it</h3>
-<p>The <strong>Elements</strong> tab shows the page's actual HTML, not as a downloaded file, but as it exists right now, live, in the browser's memory. Malan opens Stanford's homepage to show it off:</p>
-<blockquote>
-<p>"Here is all of this HTML that some humans, or software, at Stanford wrote in order to create Stanford's homepage." (David Malan)</p>
-</blockquote>
-<p>This works because of something genuinely different about how the web works, compared to code you've run in earlier modules:</p>
-<blockquote>
-<p>"Inside of those envelopes are literally copies of what's on the server being sent to the browser, and so it's your browser, the so-called client, that's actually reading that code, HTML in this case, top to bottom, left to right, and figuring out how to display it. It's not executed on the server per se." (David Malan)</p>
-</blockquote>
-<p>You received your own copy. That copy is yours to poke at. Right-click any element on a real page (the word "Stanford" in their logo, say) and choose <strong>Inspect</strong>, and DevTools jumps straight to the line of HTML responsible for it:</p>
-<blockquote>
-<p>"It's going to jump to the very line of code that created that Stanford brand name in the middle of the web page, and this is a wonderful teaching and learning tool." (David Malan)</p>
-</blockquote>
-<p>From there, you can edit it (live, in the panel) and watch the page change instantly:</p>
-<blockquote>
-<p>"I can change it to Harvard, hit enter, and now Stanford's website looks like we've been there and rather hacked it. Of course it's not that easy to hack Stanford's website... I've changed my local copy of that particular website, so if I just click on the reload icon, I'll actually see that Stanford's website, for better or for worse, still looks like that." (David Malan)</p>
-</blockquote>
-<p>That last sentence is the whole lesson in miniature: <strong>you edited your browser's private, in-memory copy of the page, not the file sitting on Stanford's server.</strong> Nobody else sees your edit, and it survives exactly as long as you leave that tab open without reloading. This is precisely the "not executed on the server" idea from a moment ago, made visible: what's on the screen is a local rendering of downloaded text, and downloaded text is yours to change.</p>
-<blockquote>
-<p>❌ <strong>The trap:</strong> it's tempting to think you've "hacked" a site the first time you do this. You haven't touched their server at all: you've only edited the copy sitting in your own computer's memory, and a reload (or anyone else opening the same page) proves it.</p>
-</blockquote>
-<h2 id="part-5-how-the-pieces-combine">Part 5: How the pieces combine</h2>
-<p><code>curl -I</code> and DevTools' Network tab are two windows onto the exact same conversation: one from a terminal, one from a browser. Once you can read either, you can read both:</p>
-<div class="codehilite"><pre><span></span><code>   your terminal                       your browser (DevTools)
- ┌──────────────────────┐            ┌──────────────────────────┐
- │ $ curl -I https://... │            │ Network tab               │
- │ HTTP/2 301             │  ═══════  │  Status: 301              │
- │ Location: https://...  │   same    │  Response Headers:        │
- │                        │  request/  │   location: https://...   │
- │                        │  response  │                            │
- └──────────────────────┘   cycle    └──────────────────────────┘
-                                              │
-                                              ▼
-                                     Elements tab: the HTML body
-                                     that came back, now rendered
-                                     as a live, editable tree
-</code></pre></div>
-
-<p><code>curl -I</code> gives you the status line and headers as raw text, fast, with no rendering at all. The Network tab gives you the exact same status line and headers, plus a GUI to click through requests one by one. The Elements tab picks up where both leave off, showing you what the browser <em>did</em> with the body of that response: turned it into the page on your screen, and left it fully editable in your own copy.</p>
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong>A URL is a structured address, not a blob of text.</strong> Scheme, host name, domain, TLD, and path each mean something specific to the server reading it.</li>
-<li><strong>GET asks for something; POST sends something.</strong> Nearly everything you click is a GET; submitting a form is typically a POST.</li>
-<li><strong>Status codes are the server's one-line verdict</strong>, sent before the content: 200 (OK), 301 (moved, go here instead), 404 (not found), and the joke one, 418 (I'm a teapot).</li>
-<li><strong><code>curl -I &lt;url&gt;</code> reads a response's status and headers instantly</strong>, from any terminal, without downloading or rendering the actual page.</li>
-<li><strong>DevTools' Network tab shows every request/response pair a page makes</strong>; the Elements tab shows the live HTML tree the browser built from the response, and lets you edit your own copy of it.</li>
-<li><strong>Editing a page in DevTools only changes what's in your browser's memory.</strong> Reload the tab, or open the page on any other computer, and the real, unchanged page is exactly as it was.</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ Believing you've changed a real website after editing it in the Elements tab: you've only changed your local, in-memory copy; a reload proves nothing was actually touched on the server.</li>
-<li>❌ Assuming the Network tab is "broken" because it looks empty: usually this means <strong>Preserve log</strong> wasn't checked before a redirect or navigation cleared the list.</li>
-<li>❌ Treating every error as the same kind of problem: a 404 means <em>you</em> (or your code) asked for something that isn't there; a 500 means the <em>server itself</em> is broken. The fix is completely different depending on which one you see.</li>
-<li>❌ Being surprised by a 301 when typing <code>http://</code> instead of <code>https://</code> for a site: that's not a glitch, it's the server intentionally forcing you onto the secure version.</li>
-<li>❌ Expecting to find a real, live 418 on an ordinary website: it's an April Fools' joke status code by design, so most production sites never return it on purpose.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: Status-Code Safari</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. You will go collect real HTTP status codes from real websites using <code>curl -I</code>, then use DevTools to inspect a live request and live-edit a page, proving to yourself, hands-on, that everything in this lesson is something you can see for yourself, on any site, at any time.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>A short written log (a text file or notes doc is fine) recording:</p>
-<ul>
-<li>Three or more real <code>curl -I</code> results, including at least one 200, one 301, and one 404.</li>
-<li>Your best attempt at finding (or deliberately triggering) a 418.</li>
-<li>One request's method, status code, and two response headers, read from DevTools' Network tab.</li>
-<li>A screenshot or written note of a live-edited headline in DevTools' Elements tab, plus one sentence explaining why the edit isn't permanent.</li>
-</ul>
-<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in the Capstone</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>URL anatomy (Part 1)</td>
-<td>Choosing and reading the URLs you test.</td>
-</tr>
-<tr>
-<td>Status codes + <code>curl -I</code> (Part 3)</td>
-<td>Milestones 1 and 2, collecting 200/301/404/418.</td>
-</tr>
-<tr>
-<td>DevTools Network tab (Part 4)</td>
-<td>Milestone 3, reading a request's method, status, and headers.</td>
-</tr>
-<tr>
-<td>DevTools Elements tab (Part 4)</td>
-<td>Milestone 4, the live edit, and explaining why it resets.</td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>Collect a 200 and a 301.</strong> Open a terminal (cs50.dev or your own machine) and run <code>curl -I</code> against two or three real sites: try one plain <code>http://</code> URL for a well-known site to see if it redirects to <code>https://</code> on its own. Record the status code from each. Done when you have at least one clean <code>200 OK</code> and one <code>301 Moved Permanently</code> (note the <code>Location:</code> header it points to).</li>
-<li><strong>Collect a 404, and try for a 418.</strong> Run <code>curl -I</code> against a URL you're confident doesn't exist (append something like <code>/this-page-does-not-exist</code> to a real domain) to get a 404. Then try <code>curl -I https://httpbin.org/status/418</code>, a public test server built specifically to hand back joke status codes on demand. Done when you have a 404 from a real site and a 418 from anywhere.</li>
-<li><strong>Read one request in the Network tab.</strong> Open DevTools on any website, check <strong>Preserve log</strong>, reload the page, and click on the very first request in the list (the page itself). Write down its <strong>method</strong> (GET or otherwise), its <strong>status code</strong>, and two headers you can find (for example <code>content-type</code> and <code>date</code>). Done when you can point to all four values on your own screen.</li>
-<li><strong>Live-edit a headline in the Elements tab.</strong> On any real website, right-click a heading or piece of text and choose <strong>Inspect</strong>. Double-click the text in the Elements panel and change it to something else. Watch the page update. Then reload the page and note what happens. Done when you can explain, in your own words, why the edit disappeared.</li>
-</ol>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ You have real <code>curl -I</code> output showing a 200, a 301 (with its <code>Location:</code> header), and a 404.</li>
-<li>✅ You have a 418, from <code>httpbin.org</code> or elsewhere.</li>
-<li>✅ You can name one request's method, status code, and two headers straight off your own Network tab.</li>
-<li>✅ You can explain in one sentence why editing HTML in the Elements tab doesn't survive a reload.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> don't just read the status codes in this lesson. Run the commands yourself. The entire point of this lesson is that none of this is hidden; it's plain text, sitting one command or one click away, on every website you already use.</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-take-a-url-apart-foundational">Exercise 1: Take a URL apart (foundational)</h3>
-<p>Write down the scheme, host name, domain, TLD, and path for each of these: <code>https://cs50.harvard.edu/x/2026/</code>, <code>http://safetyschool.org</code>, and <code>https://www.bbc.co.uk/news</code>. (Hint: the last one has a two-part TLD: <code>.co.uk</code>.)</p>
-<h3 id="exercise-2-predict-then-check-intermediate">Exercise 2: Predict, then check (intermediate)</h3>
-<p>Pick three real websites you use often. Before running anything, guess whether typing <code>http://</code> (not <code>https://</code>) in front of each will return a 301 redirect. Then run <code>curl -I http://&lt;site&gt;</code> for each and see whether you were right. Note the <code>Location:</code> header for any that redirect.</p>
-<h3 id="exercise-3-full-request-inventory-advanced">Exercise 3: Full request inventory (advanced)</h3>
-<p>Open DevTools' Network tab, load a content-heavy page (a news homepage or online store works well), and find: the single largest request by size, the total number of requests the page made to fully load, and any response that returned something other than 200. For each, note its method and status code, and explain in a sentence what you think that request was for.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>URL ANATOMY
-  https :// www . harvard . edu / admissions
-  scheme    host   domain   TLD      path
-
-HTTP VERBS
-  GET   &quot;send me this&quot;      - clicking a link, loading a page
-  POST  &quot;here&#39;s data&quot;       - submitting a form
-
-STATUS CODES
-  200  OK                   here&#39;s exactly what you asked for
-  301  Moved Permanently    go here instead (see Location: header)
-  404  Not Found            server&#39;s fine, this path isn&#39;t
-  418  I&#39;m a Teapot         April Fools&#39; joke code, not a real error
-  4xx  (general)            you/your code asked for something wrong
-  5xx  (general)            the server itself is broken
-
-CURL
-  curl -I &lt;url&gt;             show status + headers only, no page body
-                            (uses a HEAD request, instant, even on huge pages)
-
-DEVTOOLS
-  Right-click → Inspect            opens DevTools on the clicked element
-  Network tab                      every request/response the page made
-    ☑ Preserve log                 keep the list across redirects/reloads
-    ☑ Disable cache                always fetch fresh, not a saved copy
-  Elements tab                     the live HTML tree, editable in place
-    (edits are LOCAL ONLY: reload restores the real page)
-
-GOLDEN RULE
-  Nothing here is hidden. curl -I and DevTools show you, in plain text,
-  exactly what your browser asked for and exactly what it was told back.
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 10 · Lesson 34: How the internet works:</strong> IP addresses, ports, and DNS got a packet to the right server at all. This lesson opened that envelope and read the HTTP conversation written inside it.</li>
-<li><strong>Next, Module 10 · Lesson 36: Building pages with HTML:</strong> you've spent this whole lesson inspecting the <em>outside</em> of a response: status, headers, verbs. The response body itself, the actual HTML that DevTools' Elements tab was rendering, is what you'll learn to write by hand starting next lesson.</li>
-<li><strong>Later, Module 10 · Lesson 39:</strong> you'll build a real HTML form and choose, deliberately, whether it should submit with GET or POST, the same two verbs you only read about today.</li>
-<li><strong>Later still, this course's capstone:</strong> the database-backed web app you build at the end of the course will have its own routes, its own status codes, and its own request headers. In Module 11, you will debug that app's routes with <code>curl</code> and DevTools' Network tab, the exact same tools, pointed at code you wrote yourself.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 8 - HTML, CSS, JavaScript" by David J. Malan, Harvard University (CS50x 2026). Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+</blockquote><div class="pager bottom"><span class="pcount">Page 1 of 4 &middot; Start here</span><div class="seg"><a href="35-http-and-the-browser.html" class="cur" title="Start here">1</a><a href="35-http-and-the-browser-2.html" class="" title="Parts 3-5">2</a><a href="35-http-and-the-browser-3.html" class="" title="Common pitfalls">3</a><a href="35-http-and-the-browser-4.html" class="" title="Capstone &amp; wrap-up">4</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="35-http-and-the-browser-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="35" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="34-how-the-internet-works.html"><span class="dir">&#8592; Previous</span><b>How the Internet Works</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="36-html.html"><span class="dir">Next &#8594;</span><b>Building Pages with HTML</b></a></nav>
+    <div class="ls-marker" data-lesson-id="35" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="34-how-the-internet-works.html"><span class="dir">&#8592; Previous lesson</span><b>How the Internet Works</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 
@@ -831,13 +532,16 @@ document.querySelectorAll('.codehilite, pre').forEach(block=>{
 const map={'\u{1F511}':'cl-key','\u{1F4A1}':'cl-tip','✅':'cl-ok','❌':'cl-no','\u{1F3AF}':'cl-goal','\u{1F6E0}':'cl-goal'};
 document.querySelectorAll('blockquote').forEach(q=>{const t=(q.textContent||'').trim();for(const e in map){if(t.startsWith(e)){q.classList.add(map[e]);break}}});
 // check-off
+function wireList(el){if(el.dataset.wired)return;el.dataset.wired='1';el.classList.add('checkable');
+  el.querySelectorAll(':scope>li').forEach(li=>{const key='cwc:'+location.pathname+':'+li.textContent.slice(0,60);
+    if(localStorage.getItem(key))li.classList.add('checked');
+    li.addEventListener('click',ev=>{if(ev.target.tagName==='A')return;li.classList.toggle('checked');
+      li.classList.contains('checked')?localStorage.setItem(key,'1'):localStorage.removeItem(key)});});}
 function makeCheckable(rx){document.querySelectorAll('h2,h3').forEach(h=>{if(!rx.test(h.textContent))return;let el=h.nextElementSibling;
-  while(el&&!/^H[1-3]$/.test(el.tagName)){if(el.tagName==='OL'||el.tagName==='UL'){el.classList.add('checkable');
-    el.querySelectorAll(':scope>li').forEach(li=>{const key='cwc:'+location.pathname+':'+li.textContent.slice(0,60);
-      if(localStorage.getItem(key))li.classList.add('checked');
-      li.addEventListener('click',ev=>{if(ev.target.tagName==='A')return;li.classList.toggle('checked');
-        li.classList.contains('checked')?localStorage.setItem(key,'1'):localStorage.removeItem(key)});});}el=el.nextElementSibling;}});}
-makeCheckable(/learning objectives|milestones/i);
+  while(el&&!/^H[1-3]$/.test(el.tagName)){if(el.tagName==='OL'||el.tagName==='UL')wireList(el);el=el.nextElementSibling;}});}
+makeCheckable(/learning objectives|milestones|done when/i);
+// lists written as `- [ ] thing` are check-off lists wherever they appear
+document.querySelectorAll('ul.checkable,ol.checkable').forEach(wireList);
 // scrollspy
 const links=[...document.querySelectorAll('.toc a')];
 const heads=links.map(a=>a.getAttribute('href')).filter(h=>h&&h.startsWith('#')).map(h=>document.getElementById(h.slice(1))).filter(Boolean);

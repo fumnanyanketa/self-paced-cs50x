@@ -3,9 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 8 · Lesson 29: SQL Fundamentals: CRUD | Self-Paced CS50x</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iIzBhMWEyZiIvPjx0ZXh0IHg9IjE2IiB5PSIyMiIgZm9udC1mYW1pbHk9InVpLW1vbm9zcGFjZSxNZW5sbyxDb25zb2xhcyxtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjZjI0ZDYzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj4mZ3Q7XzwvdGV4dD48L3N2Zz4=">
-
+<title>Module 8 · Lesson 29: SQL Fundamentals: CRUD (p1/3) | Self-Paced CS50x</title>
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="shortcut icon" href="../assets/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -51,6 +53,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -142,13 +167,13 @@ code{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.86em;b
 .copy-btn.done{background:var(--teal);color:#04231c;border-color:var(--teal)}
 
 /* callouts */
-blockquote{margin:24px 0;padding:16px 20px;border-radius:14px;background:var(--soft);border:1px solid var(--line);border-left:5px solid var(--teal)}
+blockquote{margin:24px 0;padding:18px 22px;border-radius:14px;background:var(--soft);border:1px solid var(--line);box-shadow:var(--shadow)}
 blockquote p{margin:7px 0}blockquote p:first-child{margin-top:0}blockquote p:last-child{margin-bottom:0}
-blockquote.cl-key{background:var(--k-bg);border-left-color:var(--k);border-color:transparent}
-blockquote.cl-tip{background:var(--tip-bg);border-left-color:var(--tip);border-color:transparent}
-blockquote.cl-ok{background:var(--ok-bg);border-left-color:var(--ok);border-color:transparent}
-blockquote.cl-no{background:var(--no-bg);border-left-color:var(--no);border-color:transparent}
-blockquote.cl-goal{background:var(--goal-bg);border-left-color:var(--goal);border-color:transparent}
+blockquote.cl-key{background:var(--k-bg);border-color:transparent}
+blockquote.cl-tip{background:var(--tip-bg);border-color:transparent}
+blockquote.cl-ok{background:var(--ok-bg);border-color:transparent}
+blockquote.cl-no{background:var(--no-bg);border-color:transparent}
+blockquote.cl-goal{background:var(--goal-bg);border-color:transparent}
 
 /* capstone banner */
 h2.capstone-h{background:linear-gradient(115deg,var(--navy),var(--navy-3));color:#fff;border-radius:20px;padding:30px 28px 26px;margin-top:64px;box-shadow:0 20px 50px rgba(10,26,47,.3);overflow:hidden;position:relative}
@@ -203,42 +228,27 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <body>
 <div id="progress"></div>
 
-<div class="topbar"><div class="wrap">
-  <div>&#10024; Welcome to <b>Self-Paced CS50x</b> &middot; a self-paced course</div>
-  <div class="right"><span>CS50x 2026 · Harvard University · David J. Malan</span></div>
-</div></div>
+<div class="topbar"><div class="wrap"><div>&#10024; Welcome to <b>Self-Paced CS50x</b> &middot; a self-paced course</div><div class="right"><span>CS50x 2026 · Harvard University · David J. Malan</span></div></div></div>
 
 <nav class="bar"><div class="wrap">
   <button class="btn btn-outline" id="menuBtn" style="padding:8px 14px">&#9776;</button>
   <a class="logo" href="../index.html">Self-Paced CS50x<span class="dot">.</span></a>
   <div class="navlinks">
-    <a href="../index.html">All lessons</a>
-    <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="../index.html">All lessons</a><a href="#overview">Overview</a><a href="29-sql-fundamentals-3.html#capstone">Capstone</a>
   </div>
-  <div class="nav-cta">
-    <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
-  </div>
+<div class="nav-cta"><a class="btn btn-primary" href="#start">Start the lesson &#8594;</a></div>
 </div></nav>
 
 <header class="hero">
   <span class="blob t"></span><span class="blob c"></span>
-  <svg class="squiggle" style="top:120px;left:46%;" width="90" height="26" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#18c4a0" stroke-width="4" stroke-linecap="round"/></svg>
-  <svg class="squiggle" style="bottom:60px;right:40%;" width="70" height="22" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#f24d63" stroke-width="4" stroke-linecap="round"/></svg>
+<svg class="squiggle" style="top:120px;left:46%;" width="90" height="26" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#18c4a0" stroke-width="4" stroke-linecap="round"/></svg><svg class="squiggle" style="bottom:60px;right:40%;" width="70" height="22" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#f24d63" stroke-width="4" stroke-linecap="round"/></svg>
   <div class="wrap" id="overview">
     <div>
       <span class="eyebrow">&#10022; Module 8 · Lesson 29</span>
       <h1>SQL Fundamentals: <span class="accent">CRUD</span></h1>
       <p class="lead">Instead of writing loops and dictionaries to parse a CSV file by hand, SQL lets you load that same data into a real database once and then get any answer you want (a count, a filter, a ranking, or a change) just by declaring the question, not the steps to answer it.</p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
-        <a class="play" href="https://www.youtube.com/watch?v=oqRU2So6Z2Y" target="_blank" rel="noopener"><span class="circ">&#9654;</span> Watch the talk</a>
-      </div>
-      <div class="chips">
-        <span class="chip">&#127908; <b>David J. Malan</b></span>
-        <span class="chip">&#9201; <b>60 minutes</b></span>
-        <span class="chip">&#128296; <b>Hands-on capstone</b></span>
-      </div>
+<div class="hero-actions"><a class="btn btn-primary" href="#start">Start the lesson &#8594;</a><a class="play" href="https://www.youtube.com/watch?v=oqRU2So6Z2Y" target="_blank" rel="noopener"><span class="circ">&#9654;</span> Watch the talk</a></div>
+<div class="chips"><span class="chip">&#127908; <b>David J. Malan</b></span><span class="chip">&#9201; <b>60 minutes</b></span><span class="chip">&#128296; <b>Hands-on capstone</b></span></div>
     </div>
     <div style="position:relative">
       <div class="hero-card">
@@ -253,7 +263,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="29-sql-fundamentals-3.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -273,34 +283,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <li><a href="#prerequisites">Prerequisites</a></li>
 <li><a href="#part-1-crud-and-why-a-flat-file-wasnt-enough">Part 1: CRUD, and why a "flat file" wasn't enough</a></li>
 <li><a href="#part-2-setting-up-sqlite-from-csv-to-favoritesdb">Part 2: Setting up SQLite (from CSV to favorites.db)</a></li>
-<li><a href="#part-3-select-basics-reading-data-your-way">Part 3: SELECT basics (reading data your way)</a></li>
-<li><a href="#part-4-shaping-results-group-by-order-by-aliases-and-limit">Part 4: Shaping results (GROUP BY, ORDER BY, aliases, and LIMIT)</a></li>
-<li><a href="#part-5-the-rest-of-crud-insert-null-delete-update-drop">Part 5: The rest of CRUD (INSERT, NULL, DELETE, UPDATE, DROP)</a></li>
-<li><a href="#part-6-how-the-pieces-combine">Part 6: How the pieces combine</a></li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: Query and Change Your Own Database</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-one-column-one-filter-foundational">Exercise 1: One column, one filter (foundational)</a></li>
-<li><a href="#exercise-2-rank-from-the-bottom-intermediate">Exercise 2: Rank from the bottom (intermediate)</a></li>
-<li><a href="#exercise-3-full-crud-on-a-scratch-copy-advanced">Exercise 3: Full CRUD on a scratch copy (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="29-sql-fundamentals.html" class="cur" title="Start here">1</a><a href="29-sql-fundamentals-2.html" class="" title="Parts 3-6">2</a><a href="29-sql-fundamentals-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="29-sql-fundamentals-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>Instead of writing loops and dictionaries to parse a CSV file by hand, SQL lets you load that same data into a real database once and then get any answer you want (a count, a filter, a ranking, or a change) just by declaring the question, not the steps to answer it.</p>
 <blockquote>
@@ -433,291 +422,9 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <blockquote>
 <p>✅ <strong>What to do about it:</strong> whenever you're handed a CSV and a SQL prompt, your first three commands are almost always <code>sqlite3 &lt;name&gt;.db</code>, <code>.mode csv</code>, then <code>.import &lt;file&gt;.csv &lt;table-name&gt;</code>, followed immediately by <code>.schema</code> to confirm what you actually got.</p>
 </blockquote>
-<hr />
-<h2 id="part-3-select-basics-reading-data-your-way">Part 3: <code>SELECT</code> basics (reading data your way)</h2>
-<p>With <code>favorites</code> loaded, you can start asking questions. The simplest is "show me everything":</p>
-<div class="codehilite"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">favorites</span><span class="p">;</span>
-</code></pre></div>
-
-<p>The <code>*</code> here is a <strong>wildcard</strong> meaning "all columns." If you only care about specific columns, name them instead:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">language</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">favorites</span><span class="p">;</span>
-<span class="k">SELECT</span><span class="w"> </span><span class="k">language</span><span class="p">,</span><span class="w"> </span><span class="n">problem</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">favorites</span><span class="p">;</span>
-</code></pre></div>
-
-<p>SQLite also ships with built-in functions, much like a spreadsheet's formulas. Two of the most useful:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">favorites</span><span class="p">;</span><span class="w">                 </span><span class="c1">-- 272 rows submitted</span>
-<span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w"> </span><span class="k">language</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">favorites</span><span class="p">;</span><span class="w">          </span><span class="c1">-- unique languages seen</span>
-<span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="k">DISTINCT</span><span class="w"> </span><span class="k">language</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">favorites</span><span class="p">;</span><span class="w">   </span><span class="c1">-- how many distinct languages: 3</span>
-</code></pre></div>
-
-<p><code>COUNT(*)</code> counts rows; <code>DISTINCT</code> collapses duplicates so you see each unique value once. Combine them (<code>COUNT(DISTINCT ...)</code>) to count how many <em>unique</em> values exist.</p>
-<p>To filter rows instead of just picking columns, add <code>WHERE</code>, logically similar to an <code>if</code> condition, but written inside the query itself:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">favorites</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="k">language</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;C&#39;</span><span class="p">;</span><span class="w">                         </span><span class="c1">-- 58</span>
-<span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">favorites</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="k">language</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;C&#39;</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">problem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;hello world&#39;</span><span class="p">;</span><span class="w">  </span><span class="c1">-- 5</span>
-</code></pre></div>
-
-<p>Notice the single quotes around text values, and <code>AND</code> to combine conditions. You can stack as many as you need.</p>
-<p>Now suppose the text itself contains an apostrophe, like the problem name "hello, it's me." A bare single quote there would confuse SQLite about where the string ends. The fix is to double it:</p>
-<blockquote>
-<p>"In SQLite what you instead do is doubly single quote it. So putting two single quotes is the convention for escaping a single quote." (David Malan)</p>
-</blockquote>
-<div class="codehilite"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">favorites</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="k">language</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;C&#39;</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">problem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;hello, it&#39;&#39;s me&#39;</span><span class="p">;</span>
-</code></pre></div>
-
-<p>Finally, <code>LIKE</code> lets you match a <em>pattern</em> instead of an exact string, using <code>%</code> as its own wildcard:</p>
-<blockquote>
-<p>"In SQL you say percent sign to represent zero or more characters." (David Malan)</p>
-</blockquote>
-<div class="codehilite"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">favorites</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="k">language</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;C&#39;</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">problem</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;hello%&#39;</span><span class="p">;</span>
-</code></pre></div>
-
-<p>This matches "hello world," "hello, it's me," or anything else starting with "hello", in one query instead of an <code>OR</code>-ed list of exact strings.</p>
-<blockquote>
-<p>❌ <strong>The trap:</strong> <code>*</code> and <code>%</code> are both called "wildcards," but they are not interchangeable. <code>*</code> only ever means "every column" and only appears right after <code>SELECT</code>. <code>%</code> only ever means "zero or more characters" and only appears inside a <code>LIKE</code> pattern string.</p>
-</blockquote>
-<hr />
-<h2 id="part-4-shaping-results-group-by-order-by-aliases-and-limit">Part 4: Shaping results (<code>GROUP BY</code>, <code>ORDER BY</code>, aliases, and <code>LIMIT</code>)</h2>
-<p>Counting one language at a time with repeated <code>WHERE</code> queries doesn't scale. <code>GROUP BY</code> answers "how many of each?" in a single line, clustering rows that share a value, then applying an aggregate function (like <code>COUNT</code>) to each cluster:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">language</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">favorites</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">language</span><span class="p">;</span>
-</code></pre></div>
-
-<table>
-<thead>
-<tr>
-<th>language</th>
-<th>COUNT(*)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>C</td>
-<td>58</td>
-</tr>
-<tr>
-<td>Python</td>
-<td>190</td>
-</tr>
-<tr>
-<td>Scratch</td>
-<td>24</td>
-</tr>
-</tbody>
-</table>
-<p>That's the same answer the loop-and-dictionary Python program worked twenty lines to produce, in one statement. To control the order the rows come back in, add <code>ORDER BY</code>:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">language</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">favorites</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">language</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">DESC</span><span class="p">;</span>
-</code></pre></div>
-
-<p>Repeating <code>COUNT(*)</code> is a mouthful, so SQL supports <strong>aliases</strong>, a temporary name for a column, using <code>AS</code>:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">language</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">favorites</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">language</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">DESC</span><span class="p">;</span>
-</code></pre></div>
-
-<p>And if you only want the top result (or top few), <code>LIMIT</code> caps how many rows come back:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">language</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">favorites</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">language</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">DESC</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-</code></pre></div>
-
-<div class="codehilite"><pre><span></span><code>Python | 190
-</code></pre></div>
-
-<p>One row, the answer to "what's the single most popular language?": Python, with 190 votes out of 272 responses. <code>LIMIT 3</code> instead of <code>LIMIT 1</code> would give you a top-3 ranking the same way.</p>
-<blockquote>
-<p>🔑 <strong>The single most important takeaway of this part.</strong> Every <code>SELECT</code> returns a <em>temporary</em> table that exists only in the moment you ask for it: nothing is saved to disk just by reading it. <code>GROUP BY</code> clusters, <code>ORDER BY</code> sorts, <code>AS</code> renames, and <code>LIMIT</code> trims. Stack all four and you can turn raw rows into a ranked, readable answer in one line.</p>
-</blockquote>
-<hr />
-<h2 id="part-5-the-rest-of-crud-insert-null-delete-update-drop">Part 5: The rest of CRUD (<code>INSERT</code>, <code>NULL</code>, <code>DELETE</code>, <code>UPDATE</code>, <code>DROP</code>)</h2>
-<p>So far this lesson has only <em>read</em> data. The other three letters of CRUD change it.</p>
-<p><strong>Create a row with <code>INSERT</code>:</strong></p>
-<div class="codehilite"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">favorites</span><span class="w"> </span><span class="p">(</span><span class="k">language</span><span class="p">,</span><span class="w"> </span><span class="n">problem</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;SQL&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;50ville&#39;</span><span class="p">);</span>
-</code></pre></div>
-
-<p>You name the table, the columns you're supplying values for (you can skip columns you don't have data for), then the matching values. Selecting the table afterward shows the new row, but the <code>timestamp</code> column, which you didn't supply, isn't blank. It's <code>NULL</code>:</p>
-<blockquote>
-<p>"There's our old friend null, which is not a null pointer, it's the same word, literally NULL, and it refers explicitly to the absence of data." (David Malan)</p>
-<p>"Null signifies the conscious omission of data. It's not just a missing value, it's consciously not there." (David Malan)</p>
-</blockquote>
-<p>That distinction matters: <code>NULL</code> is not zero, and it is not an empty string <code>''</code>. It means <em>this cell deliberately has nothing in it</em>, and SQL gives you a special way to test for it: <code>IS NULL</code> (not <code>= NULL</code>, which never matches anything).</p>
-<p><strong>Delete rows with <code>DELETE</code></strong>, always scoped by <code>WHERE</code>:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">favorites</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="k">timestamp</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NULL</span><span class="p">;</span>
-</code></pre></div>
-
-<p>This removes only the row(s) matching the condition. Now watch what happens without a <code>WHERE</code>:</p>
-<blockquote>
-<p>"Be very, very, very careful with delete statements." (David Malan)</p>
-</blockquote>
-<div class="codehilite"><pre><span></span><code><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">favorites</span><span class="p">;</span><span class="w">   </span><span class="c1">-- DANGER: no WHERE means every row, gone</span>
-</code></pre></div>
-
-<blockquote>
-<p>"These are very destructive commands and just like in the real world if you don't have backups or versions of these same tables, the data can indeed be lost." (David Malan)</p>
-</blockquote>
-<p><strong>Update rows with <code>UPDATE</code></strong>, which has exactly the same danger:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">UPDATE</span><span class="w"> </span><span class="n">favorites</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="k">language</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;SQL&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">problem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;50ville&#39;</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="k">language</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;C&#39;</span><span class="p">;</span>
-</code></pre></div>
-
-<p>Leave off the <code>WHERE</code> and every row in the table gets overwritten with the same values:</p>
-<blockquote>
-<p>"There is no going back to the previous version of the table unless I quit out of this and I import the whole CSV again." (David Malan)</p>
-</blockquote>
-<p><strong>Drop a whole table with <code>DROP TABLE</code></strong>, which removes the table's structure entirely, not just its rows:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">DROP</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">favorites</span><span class="p">;</span>
-</code></pre></div>
-
-<blockquote>
-<p>"That's an even worse command to run unless you know and intend what you're doing." (David Malan)</p>
-<p>❌ <strong>The trap:</strong> <code>DELETE FROM table;</code> and <code>UPDATE table SET ...;</code> are syntactically <em>valid</em> SQL with no <code>WHERE</code> at all: SQLite will not stop you. The only thing standing between "change one row" and "change every row in the table" is whether you remembered to type <code>WHERE</code>.</p>
-<p>✅ <strong>What to do about it:</strong> before running any <code>UPDATE</code> or <code>DELETE</code>, run the exact same <code>WHERE</code> clause as a <code>SELECT</code> first, read back the rows it would touch, and only then swap <code>SELECT *</code> for <code>UPDATE</code>/<code>DELETE</code>.</p>
-</blockquote>
-<hr />
-<h2 id="part-6-how-the-pieces-combine">Part 6: How the pieces combine</h2>
-<p>Put together, this lesson's whole workflow looks like this:</p>
-<div class="codehilite"><pre><span></span><code>favorites.csv (flat file, from Lesson 28)
-        │
-        │  sqlite3 favorites.db
-        │  .mode csv
-        │  .import favorites.csv favorites
-        ▼
-favorites.db  →  table &quot;favorites&quot; (timestamp, language, problem)
-        │
-        │  SELECT ... WHERE ... GROUP BY ... ORDER BY ... AS ... LIMIT ...   -&gt; Read
-        │  INSERT INTO favorites (...) VALUES (...)                          -&gt; Create
-        │  UPDATE favorites SET ... WHERE ...                                -&gt; Update
-        │  DELETE FROM favorites WHERE ...                                   -&gt; Delete
-        ▼
-   an answer (from SELECT), or a changed table (from the other three),
-   never both, and never without a WHERE you already checked
-</code></pre></div>
-
-<p>Everything from here through the rest of the course, joining multiple tables (next lesson), and eventually a whole web app, is built on exactly this same small set of verbs.</p>
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong>CRUD is the whole language.</strong> Every SQL statement is one of four things: Create (<code>INSERT</code>), Read (<code>SELECT</code>), Update (<code>UPDATE</code>), or Delete (<code>DELETE</code>/<code>DROP</code>).</li>
-<li><strong>SQL is declarative, not procedural.</strong> You declare the question (<code>SELECT ... WHERE ...</code>); the database decides how to loop, filter, and fetch. No loop of your own required.</li>
-<li><strong><code>.mode csv</code> + <code>.import</code> turn a spreadsheet into a queryable table in two commands.</strong> Dot-commands are SQLite-specific; everything without a leading dot is portable SQL.</li>
-<li><strong><code>COUNT</code>, <code>DISTINCT</code>, <code>WHERE</code>, and <code>LIKE '%...'</code> answer precise questions without a single loop</strong>, and doubling a quote (<code>''</code>) is how you escape an apostrophe inside a string.</li>
-<li><strong><code>GROUP BY</code> + <code>ORDER BY</code> + <code>AS</code> + <code>LIMIT</code> turn raw rows into a ranked answer</strong>, exactly what a spreadsheet's pie chart is doing behind the scenes.</li>
-<li><strong><code>NULL</code> means "consciously absent," never zero or blank</strong>, and <code>DELETE</code>/<code>UPDATE</code> without <code>WHERE</code> are, in Malan's words, "very destructive" with no undo.</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ Forgetting the <code>WHERE</code> clause on <code>DELETE</code> or <code>UPDATE</code>: it will silently match every row, and there is no undo short of re-importing the original CSV.</li>
-<li>❌ Confusing <code>*</code> (the column wildcard in <code>SELECT *</code>) with <code>%</code> (the pattern wildcard in <code>LIKE</code>): they look similar but do unrelated jobs.</li>
-<li>❌ Writing a raw apostrophe inside a string literal (<code>'hello, it's me'</code>) instead of escaping it (<code>'hello, it''s me'</code>): SQLite reads the first quote as ending the string early.</li>
-<li>❌ Testing for missing data with <code>WHERE column = NULL</code>: this never matches anything; the correct form is <code>WHERE column IS NULL</code>.</li>
-<li>❌ Running <code>UPDATE</code>/<code>DELETE</code> straight away instead of first running the identical <code>WHERE</code> as a <code>SELECT</code> to confirm exactly which rows it will touch.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: Query and Change Your Own Database</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. You will rebuild the exact <code>favorites.csv</code> from Lesson 28 as a real SQLite database, answer five genuine questions about it in SQL, and then practice every write operation (insert, update, delete) the safe way, always with <code>WHERE</code>. <code>favorites.db</code> is small, but it's the same relational pattern, a table queried and modified with SQL, that will sit underneath the database-backed web app you build as this course's final project.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>A <code>favorites.db</code> SQLite database on cs50.dev, imported from your own <code>favorites.csv</code>, plus a running log of the SQL queries you used to answer five questions and to insert, update, and delete one row of your own.</p>
-<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in the Capstone</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>sqlite3</code>, <code>.mode csv</code>, <code>.import</code>, <code>.schema</code> (Part 2)</td>
-<td>Rebuilding <code>favorites.db</code> from <code>favorites.csv</code> and confirming its structure.</td>
-</tr>
-<tr>
-<td><code>COUNT</code>, <code>DISTINCT</code>, <code>WHERE</code>, <code>LIKE</code> (Part 3)</td>
-<td>Answering questions 1-3.</td>
-</tr>
-<tr>
-<td><code>GROUP BY</code>, <code>ORDER BY</code>, <code>AS</code>, <code>LIMIT</code> (Part 4)</td>
-<td>Answering questions 4-5.</td>
-</tr>
-<tr>
-<td><code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>, always with <code>WHERE</code> (Part 5)</td>
-<td>The CRUD-practice milestone.</td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>Rebuild the database.</strong> On cs50.dev, put your <code>favorites.csv</code> from Lesson 28 in a folder, then run <code>sqlite3 favorites.db</code>, <code>.mode csv</code>, <code>.import favorites.csv favorites</code>, and confirm the result with <code>.schema</code>. Done when <code>.schema</code> shows one table with your three columns.</li>
-<li><strong>Answer with <code>COUNT</code>.</strong> Write one query answering: "How many total responses are in the file?" Done when it returns a single number.</li>
-<li><strong>Answer with <code>DISTINCT</code>.</strong> Write one query answering: "Which languages actually appear, and how many distinct ones are there?" Done when you have both the list and the count.</li>
-<li><strong>Answer with <code>LIKE</code>.</strong> Write one query answering: "How many favorite problems start with a specific word or phrase of your choosing (e.g., 'hello')?" Done when you can explain, in one sentence, what <code>%</code> did in your pattern.</li>
-<li><strong>Answer with a <code>GROUP BY</code> ranking.</strong> Write one query answering: "Which language is most popular, ranked from most to least chosen?" using <code>GROUP BY</code>, an alias (<code>AS n</code>), and <code>ORDER BY n DESC</code>. Done when the most popular language is on top.</li>
-<li><strong>Answer with <code>LIMIT</code>.</strong> Extend the previous query with <code>LIMIT 3</code> to answer: "What are the top 3 most popular languages?" Done when exactly three rows come back.</li>
-<li><strong>Practice full CRUD, safely.</strong> <code>INSERT</code> one new row for yourself (any language and problem you like); confirm it with a <code>SELECT ... WHERE</code> that matches only your row; <code>UPDATE</code> just that row (change the problem, say) using the same targeted <code>WHERE</code>; confirm again; then <code>DELETE</code> just that row with <code>WHERE</code>, and confirm with a final <code>SELECT</code> that it's gone and nothing else changed. Done when all four confirmations show exactly what you expect: no more, no less.</li>
-<li><strong>Stretch goal: feel the danger, safely.</strong> On a throwaway <em>copy</em> of <code>favorites.db</code> (never your working copy), run a <code>DELETE FROM favorites;</code> or <code>UPDATE favorites SET ...;</code> with no <code>WHERE</code> at all, then <code>SELECT * FROM favorites;</code> to see the damage for yourself. Restore your real database afterward by re-running <code>.mode csv</code> and <code>.import</code> from the original CSV.</li>
-</ol>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ <code>.schema</code> shows a <code>favorites</code> table with the same columns as your original CSV.</li>
-<li>✅ You have five saved queries, one per question, each returning the correct single answer (not just "some rows").</li>
-<li>✅ You inserted, updated, and deleted exactly one row of your own, each time with a <code>WHERE</code> that targeted only that row, and can show the confirming <code>SELECT</code> after each step.</li>
-<li>✅ You can explain out loud why <code>DELETE FROM favorites;</code> with no <code>WHERE</code> is different in kind, not just degree, from <code>DELETE FROM favorites WHERE ...;</code>.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> before every <code>UPDATE</code> or <code>DELETE</code> in this Capstone, run the identical <code>WHERE</code> as a <code>SELECT</code> first and actually read the row(s) back. Only run the destructive version once you've confirmed, with your own eyes, that it targets exactly the row you mean.</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-one-column-one-filter-foundational">Exercise 1: One column, one filter (foundational)</h3>
-<p>Write a single <code>SELECT</code> that lists only the <code>problem</code> column, for every row where <code>language</code> equals 'Python'. Then change it to use <code>LIKE</code> instead of <code>=</code>, matching any language containing the letter "y" (hint: <code>'%y%'</code>), and see how the results change.</p>
-<h3 id="exercise-2-rank-from-the-bottom-intermediate">Exercise 2: Rank from the bottom (intermediate)</h3>
-<p>Write a <code>GROUP BY</code> query that counts rows per <code>problem</code> instead of per <code>language</code>, orders the results ascending (least popular first) with an alias, and uses <code>LIMIT 1</code> to surface the single least-popular problem in the file.</p>
-<h3 id="exercise-3-full-crud-on-a-scratch-copy-advanced">Exercise 3: Full CRUD on a scratch copy (advanced)</h3>
-<p>On a throwaway copy of your database, run three separate <code>INSERT</code> statements to add three new rows. Then write one <code>UPDATE</code> whose <code>WHERE</code> clause uses <code>LIKE</code> to match all three at once (for example, by a shared problem name) and changes their <code>language</code> in a single statement. Finally, <code>DELETE</code> only two of the three, using a <code>WHERE</code> with <code>AND</code> precise enough to leave the third untouched, confirming with a <code>SELECT</code> after each step.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>SETUP (once per CSV)
-  sqlite3 &lt;name&gt;.db          open or create a database file
-  .mode csv                  tell SQLite the next import is comma-separated
-  .import &lt;file&gt;.csv &lt;table&gt;  load the CSV into a new table
-  .schema [table]             show table structure (columns, types)
-  .quit                       leave the SQLite prompt
-
-READ (SELECT)
-  SELECT * FROM t;                        every column, every row
-  SELECT col1, col2 FROM t;               only these columns
-  SELECT COUNT(*) FROM t;                 how many rows
-  SELECT DISTINCT col FROM t;             unique values only
-  SELECT COUNT(DISTINCT col) FROM t;      how many unique values
-  ... WHERE col = &#39;value&#39;;                filter rows (string equality)
-  ... WHERE col = &#39;it&#39;&#39;s&#39;;                escape a quote by doubling it
-  ... WHERE col LIKE &#39;hello%&#39;;            % = zero or more characters
-  ... GROUP BY col;                       cluster rows by shared value
-  ... GROUP BY col ORDER BY n DESC;       sort a grouped result
-  ... AS n                                alias a column (temp rename)
-  ... LIMIT k;                            cap the number of rows returned
-
-WRITE (CRUD&#39;s other three letters)
-  INSERT INTO t (col1, col2) VALUES (v1, v2);   Create: missing cols become NULL
-  UPDATE t SET col = v WHERE ...;               Update: DANGEROUS with no WHERE
-  DELETE FROM t WHERE ...;                       Delete (rows): DANGEROUS with no WHERE
-  DROP TABLE t;                                  Delete (whole table, no undo)
-
-NULL
-  IS NULL / IS NOT NULL      the only correct way to test for NULL (never = NULL)
-  NULL means &quot;deliberately absent,&quot; never 0 or &#39;&#39;
-
-GOLDEN RULE
-  Before UPDATE or DELETE: run the same WHERE as a SELECT first. Read it back. Then act.
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 7 · Lesson 28:</strong> the loop-and-dictionary CSV parsing you wrote there is exactly the pain this lesson's <code>SELECT</code>, <code>GROUP BY</code>, and <code>COUNT</code> replace. You rebuild the same <code>favorites.csv</code> here as <code>favorites.db</code>.</li>
-<li><strong>Next, Module 8 · Lesson 30: Relational design and JOINs:</strong> one table only gets you so far. The next lesson introduces primary keys, foreign keys, and <code>JOIN</code> so you can split data across multiple tables (like IMDb's shows, people, and ratings) without redundancy, and still ask one question across all of them.</li>
-<li><strong>Later, capstone:</strong> the database-backed web app you design at the end of this course stores its data in tables exactly like <code>favorites</code>, read and changed with the same four CRUD verbs you practiced here.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 7 - SQL" by David J. Malan, Harvard University (CS50x 2026). Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+<hr /><div class="pager bottom"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="29-sql-fundamentals.html" class="cur" title="Start here">1</a><a href="29-sql-fundamentals-2.html" class="" title="Parts 3-6">2</a><a href="29-sql-fundamentals-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="29-sql-fundamentals-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="29" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="28-files-to-python.html"><span class="dir">&#8592; Previous</span><b>From Flat Files to Python Dictionaries</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="30-relational-design-joins.html"><span class="dir">Next &#8594;</span><b>Relational Design and JOINs</b></a></nav>
+    <div class="ls-marker" data-lesson-id="29" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="28-files-to-python.html"><span class="dir">&#8592; Previous lesson</span><b>From Flat Files to Python Dictionaries</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 
@@ -835,13 +542,16 @@ document.querySelectorAll('.codehilite, pre').forEach(block=>{
 const map={'\u{1F511}':'cl-key','\u{1F4A1}':'cl-tip','✅':'cl-ok','❌':'cl-no','\u{1F3AF}':'cl-goal','\u{1F6E0}':'cl-goal'};
 document.querySelectorAll('blockquote').forEach(q=>{const t=(q.textContent||'').trim();for(const e in map){if(t.startsWith(e)){q.classList.add(map[e]);break}}});
 // check-off
+function wireList(el){if(el.dataset.wired)return;el.dataset.wired='1';el.classList.add('checkable');
+  el.querySelectorAll(':scope>li').forEach(li=>{const key='cwc:'+location.pathname+':'+li.textContent.slice(0,60);
+    if(localStorage.getItem(key))li.classList.add('checked');
+    li.addEventListener('click',ev=>{if(ev.target.tagName==='A')return;li.classList.toggle('checked');
+      li.classList.contains('checked')?localStorage.setItem(key,'1'):localStorage.removeItem(key)});});}
 function makeCheckable(rx){document.querySelectorAll('h2,h3').forEach(h=>{if(!rx.test(h.textContent))return;let el=h.nextElementSibling;
-  while(el&&!/^H[1-3]$/.test(el.tagName)){if(el.tagName==='OL'||el.tagName==='UL'){el.classList.add('checkable');
-    el.querySelectorAll(':scope>li').forEach(li=>{const key='cwc:'+location.pathname+':'+li.textContent.slice(0,60);
-      if(localStorage.getItem(key))li.classList.add('checked');
-      li.addEventListener('click',ev=>{if(ev.target.tagName==='A')return;li.classList.toggle('checked');
-        li.classList.contains('checked')?localStorage.setItem(key,'1'):localStorage.removeItem(key)});});}el=el.nextElementSibling;}});}
-makeCheckable(/learning objectives|milestones/i);
+  while(el&&!/^H[1-3]$/.test(el.tagName)){if(el.tagName==='OL'||el.tagName==='UL')wireList(el);el=el.nextElementSibling;}});}
+makeCheckable(/learning objectives|milestones|done when/i);
+// lists written as `- [ ] thing` are check-off lists wherever they appear
+document.querySelectorAll('ul.checkable,ol.checkable').forEach(wireList);
 // scrollspy
 const links=[...document.querySelectorAll('.toc a')];
 const heads=links.map(a=>a.getAttribute('href')).filter(h=>h&&h.startsWith('#')).map(h=>document.getElementById(h.slice(1))).filter(Boolean);

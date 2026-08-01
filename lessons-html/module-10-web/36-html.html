@@ -3,9 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 10 · Lesson 36: Building Pages with HTML | Self-Paced CS50x</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iIzBhMWEyZiIvPjx0ZXh0IHg9IjE2IiB5PSIyMiIgZm9udC1mYW1pbHk9InVpLW1vbm9zcGFjZSxNZW5sbyxDb25zb2xhcyxtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjZjI0ZDYzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj4mZ3Q7XzwvdGV4dD48L3N2Zz4=">
-
+<title>Module 10 · Lesson 36: Building Pages with HTML (p1/4) | Self-Paced CS50x</title>
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="shortcut icon" href="../assets/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -51,6 +53,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -142,13 +167,13 @@ code{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.86em;b
 .copy-btn.done{background:var(--teal);color:#04231c;border-color:var(--teal)}
 
 /* callouts */
-blockquote{margin:24px 0;padding:16px 20px;border-radius:14px;background:var(--soft);border:1px solid var(--line);border-left:5px solid var(--teal)}
+blockquote{margin:24px 0;padding:18px 22px;border-radius:14px;background:var(--soft);border:1px solid var(--line);box-shadow:var(--shadow)}
 blockquote p{margin:7px 0}blockquote p:first-child{margin-top:0}blockquote p:last-child{margin-bottom:0}
-blockquote.cl-key{background:var(--k-bg);border-left-color:var(--k);border-color:transparent}
-blockquote.cl-tip{background:var(--tip-bg);border-left-color:var(--tip);border-color:transparent}
-blockquote.cl-ok{background:var(--ok-bg);border-left-color:var(--ok);border-color:transparent}
-blockquote.cl-no{background:var(--no-bg);border-left-color:var(--no);border-color:transparent}
-blockquote.cl-goal{background:var(--goal-bg);border-left-color:var(--goal);border-color:transparent}
+blockquote.cl-key{background:var(--k-bg);border-color:transparent}
+blockquote.cl-tip{background:var(--tip-bg);border-color:transparent}
+blockquote.cl-ok{background:var(--ok-bg);border-color:transparent}
+blockquote.cl-no{background:var(--no-bg);border-color:transparent}
+blockquote.cl-goal{background:var(--goal-bg);border-color:transparent}
 
 /* capstone banner */
 h2.capstone-h{background:linear-gradient(115deg,var(--navy),var(--navy-3));color:#fff;border-radius:20px;padding:30px 28px 26px;margin-top:64px;box-shadow:0 20px 50px rgba(10,26,47,.3);overflow:hidden;position:relative}
@@ -203,42 +228,27 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <body>
 <div id="progress"></div>
 
-<div class="topbar"><div class="wrap">
-  <div>&#10024; Welcome to <b>Self-Paced CS50x</b> &middot; a self-paced course</div>
-  <div class="right"><span>CS50x 2026 · Harvard University · David J. Malan</span></div>
-</div></div>
+<div class="topbar"><div class="wrap"><div>&#10024; Welcome to <b>Self-Paced CS50x</b> &middot; a self-paced course</div><div class="right"><span>CS50x 2026 · Harvard University · David J. Malan</span></div></div></div>
 
 <nav class="bar"><div class="wrap">
   <button class="btn btn-outline" id="menuBtn" style="padding:8px 14px">&#9776;</button>
   <a class="logo" href="../index.html">Self-Paced CS50x<span class="dot">.</span></a>
   <div class="navlinks">
-    <a href="../index.html">All lessons</a>
-    <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="../index.html">All lessons</a><a href="#overview">Overview</a><a href="36-html-4.html#capstone">Capstone</a>
   </div>
-  <div class="nav-cta">
-    <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
-  </div>
+<div class="nav-cta"><a class="btn btn-primary" href="#start">Start the lesson &#8594;</a></div>
 </div></nav>
 
 <header class="hero">
   <span class="blob t"></span><span class="blob c"></span>
-  <svg class="squiggle" style="top:120px;left:46%;" width="90" height="26" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#18c4a0" stroke-width="4" stroke-linecap="round"/></svg>
-  <svg class="squiggle" style="bottom:60px;right:40%;" width="70" height="22" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#f24d63" stroke-width="4" stroke-linecap="round"/></svg>
+<svg class="squiggle" style="top:120px;left:46%;" width="90" height="26" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#18c4a0" stroke-width="4" stroke-linecap="round"/></svg><svg class="squiggle" style="bottom:60px;right:40%;" width="70" height="22" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#f24d63" stroke-width="4" stroke-linecap="round"/></svg>
   <div class="wrap" id="overview">
     <div>
       <span class="eyebrow">&#10022; Module 10 · Lesson 36</span>
       <h1>Building Pages with <span class="accent">HTML</span></h1>
       <p class="lead">You are about to write real HTML files by hand (headings, paragraphs, lists, tables, images, video, links, and a form), serve them from your own machine, and check your work with a validator, which is the exact skill that will let you build (and eventually generate) every page your future web apps show people.</p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
-        <a class="play" href="https://www.youtube.com/watch?v=yYst7puZXjw" target="_blank" rel="noopener"><span class="circ">&#9654;</span> Watch the talk</a>
-      </div>
-      <div class="chips">
-        <span class="chip">&#127908; <b>David J. Malan</b></span>
-        <span class="chip">&#9201; <b>60 minutes</b></span>
-        <span class="chip">&#128296; <b>Hands-on capstone</b></span>
-      </div>
+<div class="hero-actions"><a class="btn btn-primary" href="#start">Start the lesson &#8594;</a><a class="play" href="https://www.youtube.com/watch?v=yYst7puZXjw" target="_blank" rel="noopener"><span class="circ">&#9654;</span> Watch the talk</a></div>
+<div class="chips"><span class="chip">&#127908; <b>David J. Malan</b></span><span class="chip">&#9201; <b>60 minutes</b></span><span class="chip">&#128296; <b>Hands-on capstone</b></span></div>
     </div>
     <div style="position:relative">
       <div class="hero-card">
@@ -253,7 +263,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="36-html-4.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -278,47 +288,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <li><a href="#the-dom-html-becomes-a-tree">The DOM: HTML becomes a tree</a></li>
 </ul>
 </li>
-<li><a href="#part-2-the-building-blocks-paragraphs-headings-lists-tables-media">Part 2: The building blocks (paragraphs, headings, lists, tables, media)</a><ul>
-<li><a href="#paragraphs-and-why-whitespace-doesnt-count">Paragraphs, and why whitespace doesn't count</a></li>
-<li><a href="#headings-h1-through-h6">Headings: h1 through h6</a></li>
-<li><a href="#lists-ul-ol-and-li">Lists: ul, ol, and li</a></li>
-<li><a href="#tables-table-tr-td-and-theadtbodyth">Tables: table, tr, td, and thead/tbody/th</a></li>
-<li><a href="#images-img-src-and-alt">Images: img, src, and alt</a></li>
-<li><a href="#video-the-controls-attribute">Video: the controls attribute</a></li>
-</ul>
-</li>
-<li><a href="#part-3-links-forms-and-validation">Part 3: Links, forms, and validation</a><ul>
-<li><a href="#anchor-tags-and-the-phishing-trick-hiding-inside-them">Anchor tags, and the phishing trick hiding inside them</a></li>
-<li><a href="#forms-and-the-get-query-string-build-your-own-google">Forms and the GET query string: build your own Google</a></li>
-<li><a href="#a-crash-course-in-regular-expressions">A crash course in regular expressions</a></li>
-<li><a href="#client-side-validation-pattern-and-typeemail">Client-side validation: pattern and type="email"</a></li>
-<li><a href="#the-w3c-validator">The W3C validator</a></li>
-<li><a href="#why-none-of-this-can-be-trusted">Why none of this can be trusted</a></li>
-</ul>
-</li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: Build Your Personal Home Page</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-hellohtml-from-memory-foundational">Exercise 1: hello.html from memory (foundational)</a></li>
-<li><a href="#exercise-2-structure-a-wall-of-text-intermediate">Exercise 2: structure a wall of text (intermediate)</a></li>
-<li><a href="#exercise-3-a-safer-search-form-advanced">Exercise 3: a safer search form (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 4 &middot; Start here</span><div class="seg"><a href="36-html.html" class="cur" title="Start here">1</a><a href="36-html-2.html" class="" title="Parts 2-3">2</a><a href="36-html-3.html" class="" title="Common pitfalls">3</a><a href="36-html-4.html" class="" title="Capstone &amp; wrap-up">4</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="36-html-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>You are about to write real HTML files by hand (headings, paragraphs, lists, tables, images, video, links, and a form), serve them from your own machine, and check your work with a validator, which is the exact skill that will let you build (and eventually generate) every page your future web apps show people.</p>
 <blockquote>
@@ -421,367 +397,9 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <blockquote>
 <p>🔑 <strong>The single most important takeaway of this part.</strong> HTML is not code that runs. It's a description of a tree. Every tag you open becomes a node; every tag nested inside another becomes that node's child. Get the nesting right, and the tree the browser builds matches what you intended.</p>
 </blockquote>
-<hr />
-<h2 id="part-2-the-building-blocks-paragraphs-headings-lists-tables-media">Part 2: The building blocks (paragraphs, headings, lists, tables, media)</h2>
-<h3 id="paragraphs-and-why-whitespace-doesnt-count">Paragraphs, and why whitespace doesn't count</h3>
-<p>If you paste several paragraphs of plain text into <code>&lt;body&gt;</code> with blank lines between them, the browser ignores all that spacing and runs the text together into one blob. Malan is blunt about why:</p>
-<blockquote>
-<p>"Browsers not really caring about whitespace, you can put all the white space you want there. It's just going to ignore it in this particular case." (David Malan)</p>
-</blockquote>
-<p>HTML has to be told explicitly where each paragraph begins and ends, using the <code>&lt;p&gt;</code> tag:</p>
-<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>This is the first paragraph.<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>This is the second paragraph.<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-</code></pre></div>
-
-<blockquote>
-<p>"Like if you want there to be more paragraphs, you need to tell the browser, Put a paragraph here, put a paragraph there." (David Malan)</p>
-</blockquote>
-<h3 id="headings-h1-through-h6">Headings: h1 through h6</h3>
-<p>For titles and section headings, HTML provides six levels, from most to least important:</p>
-<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Chapter<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Section<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">h3</span><span class="p">&gt;</span>Subsection<span class="p">&lt;/</span><span class="nt">h3</span><span class="p">&gt;</span>
-</code></pre></div>
-
-<blockquote>
-<p>"So you've got H1 through H6 from biggest and boldest to smaller but still bold, and the browser decides on all of those settings for us." (David Malan)</p>
-</blockquote>
-<p>The browser decides exactly how big and bold each level looks, but the <em>order</em> carries meaning too: an <code>&lt;h1&gt;</code> signals the single most important heading on the page, and everything nested under lower headings reads as supporting material: a hierarchy, not just a font-size shortcut.</p>
-<h3 id="lists-ul-ol-and-li">Lists: ul, ol, and li</h3>
-<p>A bulleted list needs <code>&lt;ul&gt;</code> (unordered list) wrapped around one or more <code>&lt;li&gt;</code> (list item) elements:</p>
-<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">ul</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>foo<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>bar<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>baz<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
-</code></pre></div>
-
-<p>Swap <code>&lt;ul&gt;</code> for <code>&lt;ol&gt;</code> (ordered list) and the exact same items become an automatically-numbered list instead: the browser does the counting, so inserting an item in the middle never means renumbering everything else by hand.</p>
-<h3 id="tables-table-tr-td-and-theadtbodyth">Tables: table, tr, td, and thead/tbody/th</h3>
-<p>Tabular data (rows and columns) uses <code>&lt;table&gt;</code>, with one <code>&lt;tr&gt;</code> (table row) per row and one <code>&lt;td&gt;</code> (table data) per cell:</p>
-<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">table</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">td</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;&lt;</span><span class="nt">td</span><span class="p">&gt;</span>2<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;&lt;</span><span class="nt">td</span><span class="p">&gt;</span>3<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">td</span><span class="p">&gt;</span>4<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;&lt;</span><span class="nt">td</span><span class="p">&gt;</span>5<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;&lt;</span><span class="nt">td</span><span class="p">&gt;</span>6<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">table</span><span class="p">&gt;</span>
-</code></pre></div>
-
-<p>For a table with column headings, add a <code>&lt;thead&gt;</code> section using <code>&lt;th&gt;</code> (table heading) cells, and wrap the data rows in <code>&lt;tbody&gt;</code>:</p>
-<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">table</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">thead</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>Timestamp<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;&lt;</span><span class="nt">th</span><span class="p">&gt;</span>Language<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;&lt;</span><span class="nt">th</span><span class="p">&gt;</span>Problem<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
-        <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">thead</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">tbody</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;&lt;</span><span class="nt">td</span><span class="p">&gt;</span>...<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;&lt;</span><span class="nt">td</span><span class="p">&gt;</span>...<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;&lt;</span><span class="nt">td</span><span class="p">&gt;</span>...<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">tbody</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">table</span><span class="p">&gt;</span>
-</code></pre></div>
-
-<h3 id="images-img-src-and-alt">Images: img, src, and alt</h3>
-<p>An image is embedded with <code>&lt;img&gt;</code> and a <code>src</code> (source) attribute pointing at the file:</p>
-<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;bridge.png&quot;</span> <span class="na">alt</span><span class="o">=</span><span class="s">&quot;Harvard University&quot;</span><span class="p">&gt;</span>
-</code></pre></div>
-
-<p>Notice there's no closing <code>&lt;/img&gt;</code> tag, and that's intentional, not a mistake:</p>
-<blockquote>
-<p>"Some tags just don't require an end tag if it's sort of obvious to the browser that the image should go there." (David Malan)</p>
-</blockquote>
-<p>The <code>alt</code> (alternative text) attribute is not optional in practice. It's what a screen reader recites to a visually impaired visitor, and it's what shows up if the image is slow to load or simply broken:</p>
-<blockquote>
-<p>"If the image is slow to load or if someone is visually impaired and doesn't know what they're looking at, it would be nice to have some alternative text that something like screen reader software could recite." (David Malan)</p>
-</blockquote>
-<h3 id="video-the-controls-attribute">Video: the controls attribute</h3>
-<p>Video works similarly, but supports multiple source files (for different formats) and its own attributes:</p>
-<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">video</span> <span class="na">controls</span> <span class="na">muted</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">source</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;video.mp4&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;video/mp4&quot;</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">video</span><span class="p">&gt;</span>
-</code></pre></div>
-
-<p>Without the <code>controls</code> attribute, a visitor has no play/pause/scrub bar at all:</p>
-<blockquote>
-<p>"It turns out you can put an HTML attribute on the video tag literally called controls that will enable those." (David Malan)</p>
-</blockquote>
-<p>Notice <code>controls</code> and <code>muted</code> don't need a value: their mere presence is the signal. That's a small but real exception to the usual <code>key="value"</code> attribute pattern.</p>
-<blockquote>
-<p>✅ <strong>What to do about it:</strong> treat <code>alt</code> on every image and <code>controls</code> on every video as non-negotiable defaults, not afterthoughts: they cost one attribute and they are the difference between a page that works for everyone and one that doesn't.</p>
-</blockquote>
-<hr />
-<h2 id="part-3-links-forms-and-validation">Part 3: Links, forms, and validation</h2>
-<h3 id="anchor-tags-and-the-phishing-trick-hiding-inside-them">Anchor tags, and the phishing trick hiding inside them</h3>
-<p>A clickable hyperlink uses the anchor tag, <code>&lt;a&gt;</code>, with an <code>href</code> (hyperreference) attribute holding the destination URL, and the visible text placed between the open and close tags:</p>
-<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;https://www.harvard.edu/&quot;</span><span class="p">&gt;</span>Visit Harvard<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
-</code></pre></div>
-
-<blockquote>
-<p>"If you want to have a tag, a link here to Harvard's website, you use open bracket A for anchor, H for hyperreference, set that equal to the URL to which you want to link, close the tag, and then in between the open tag and the close tag, put the actual word you want to link to." (David Malan)</p>
-</blockquote>
-<p>The visible text and the actual <code>href</code> destination are completely independent: you can make text that says "harvard.edu" point anywhere at all. That's a convenient feature. It's also, unmodified, an attack:</p>
-<blockquote>
-<p>"It's all too easy to wage what are called phishing attacks, P H I S H I N G, which means to lead someone to what looks like the real site but is not, typically to get their username, their password, their credit card information, or something else." (David Malan)</p>
-<p>❌ <strong>The trap:</strong> never trust link text at face value, yours or anyone else's. Hover over a link (or check the status bar / long-press on mobile) to see the real destination before you click, especially on anything asking for a password or payment details.</p>
-</blockquote>
-<h3 id="forms-and-the-get-query-string-build-your-own-google">Forms and the GET query string: build your own Google</h3>
-<p>Recall from Lesson 35 that a <code>GET</code> request can carry input as a <strong>query string</strong>: the part of a URL after <code>?</code>, made of <code>key=value</code> pairs. A <code>&lt;form&gt;</code> with <code>method="get"</code> is simply a way to <em>build</em> that query string by filling in a box, instead of typing a URL by hand:</p>
-<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">form</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;https://www.google.com/search&quot;</span> <span class="na">method</span><span class="o">=</span><span class="s">&quot;get&quot;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;q&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;search&quot;</span> <span class="na">placeholder</span><span class="o">=</span><span class="s">&quot;Query&quot;</span> <span class="na">autocomplete</span><span class="o">=</span><span class="s">&quot;off&quot;</span> <span class="na">autofocus</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;submit&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;Google Search&quot;</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-</code></pre></div>
-
-<p>Submitting this form sends the browser to <code>https://www.google.com/search?q=cats</code>, the exact URL Google's own search box produces. The <code>name="q"</code> attribute is what becomes the key in that query string; whatever the visitor types becomes the value. As Malan puts it while building exactly this example:</p>
-<blockquote>
-<p>"The front end is what the user sees. The back end is what provides data to the front end." (David Malan)</p>
-</blockquote>
-<p>Your form is a front end only: pointing <code>action</code> at Google's real search URL borrows <em>their</em> back end. Point <code>action</code> at your own server instead (something Module 11's Flask routes will do), and you own both halves.</p>
-<h3 id="a-crash-course-in-regular-expressions">A crash course in regular expressions</h3>
-<p>Before you can validate what someone typed into a form field, you need a way to describe a <em>pattern</em> of acceptable text, not one exact string, but a shape. That's what <strong>regular expressions</strong> (regex, for short) are for:</p>
-<blockquote>
-<p>"There exists in computing what are called regular expressions ... a way of describing patterns which are quite useful when you want to validate input." (David Malan)</p>
-</blockquote>
-<p>A handful of symbols cover most of what you'll need:</p>
-<table>
-<thead>
-<tr>
-<th>Symbol</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>.</code></td>
-<td>any single character</td>
-</tr>
-<tr>
-<td><code>*</code></td>
-<td>zero or more of whatever came before it</td>
-</tr>
-<tr>
-<td><code>+</code></td>
-<td>one or more of whatever came before it</td>
-</tr>
-<tr>
-<td><code>?</code></td>
-<td>zero or one of whatever came before it</td>
-</tr>
-<tr>
-<td><code>{n}</code></td>
-<td>exactly <code>n</code> times</td>
-</tr>
-<tr>
-<td><code>[abc]</code></td>
-<td>any one character from the set <code>a</code>, <code>b</code>, or <code>c</code></td>
-</tr>
-<tr>
-<td><code>\d</code></td>
-<td>any digit</td>
-</tr>
-<tr>
-<td><code>\D</code></td>
-<td>anything that is <em>not</em> a digit</td>
-</tr>
-<tr>
-<td><code>\.</code></td>
-<td>a literal period (the backslash "escapes" the dot's special meaning)</td>
-</tr>
-</tbody>
-</table>
-<p>Regex syntax isn't unique to HTML: you'll meet the same symbols in Python and in most other languages, and they're just as useful for finding data in a document as they are for validating it.</p>
-<h3 id="client-side-validation-pattern-and-typeemail">Client-side validation: pattern and type="email"</h3>
-<p>An <code>&lt;input&gt;</code> can carry a <code>pattern</code> attribute, a regular expression the browser checks before it will submit the form:</p>
-<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">input</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;email&quot;</span> <span class="na">placeholder</span><span class="o">=</span><span class="s">&quot;email&quot;</span> <span class="na">pattern</span><span class="o">=</span><span class="s">&quot;.+@.+\.edu&quot;</span><span class="p">&gt;</span>
-</code></pre></div>
-
-<p>Roughly: one-or-more characters, an <code>@</code>, one-or-more characters, a literal period, then a TLD. Typing anything that doesn't match blocks submission with a "please match the requested format" message. There's also a shorthand that skips writing your own pattern:</p>
-<blockquote>
-<p>"There is actually an input of type email which just does all of that pattern matching for you, but the scary thing is that it's actually pretty involved to validate email addresses." (David Malan)</p>
-</blockquote>
-<p><code>&lt;input type="email"&gt;</code> uses the browser's own, far more thorough built-in pattern: proof that even something as familiar as "is this an email address" is a genuinely hard pattern to get exactly right by hand.</p>
-<h3 id="the-w3c-validator">The W3C validator</h3>
-<p>Once you've written a page, you want a way to check that every tag you opened is actually closed, and that you haven't made some other structural mistake. That's exactly what the W3C's validator does:</p>
-<blockquote>
-<p>"There's a bunch of ways, but one tool that's worth knowing about is this one here at validator.w3.org is a website by the group that essentially standardizes this and other languages." (David Malan)</p>
-</blockquote>
-<p>Paste your HTML into <a href="https://validator.w3.org/#validate_by_input">validator.w3.org</a>, click check, and it reports every unclosed tag, missing attribute, or other structural error, a second pair of eyes before you ever ship a page.</p>
-<h3 id="why-none-of-this-can-be-trusted">Why none of this can be trusted</h3>
-<p>Here's the twist that matters most: the <code>pattern</code> and <code>type="email"</code> checks above run entirely inside the visitor's own browser, on a copy of your HTML that you have already handed them. Using the browser's own developer tools, anyone can open that copy and simply delete the attribute doing the checking:</p>
-<blockquote>
-<p>"Even though you will encounter not just today but over the coming weeks as you play with HTML, certain features, they are not to be trusted in general when it comes to security." (David Malan)</p>
-<p>"The point now is just not to trust the user's input at all." (David Malan)</p>
-</blockquote>
-<p>This is the same lesson as SQL injection from earlier in the course, wearing a different hat: whatever validation happens on the page the visitor controls is a convenience for well-meaning visitors, never a security boundary. Module 11's Flask routes will need to check everything again, on the server, where the visitor can't reach in and delete the check.</p>
-<blockquote>
-<p>❌ <strong>The trap:</strong> shipping a form with <code>pattern</code> or <code>type="email"</code> and calling the input "validated." It isn't: not until the server checks it too.</p>
-</blockquote>
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong>HTML describes a tree, it doesn't run.</strong> Two terms of art (tags and attributes) and no loops, conditionals, or variables. Every element you write becomes a node in the browser's DOM.</li>
-<li><strong>The browser ignores whitespace; you must be explicit.</strong> Paragraphs, line breaks, and spacing in your source file mean nothing until you mark them with the right tag (<code>&lt;p&gt;</code>, etc.).</li>
-<li><strong>Each building block is verb-first.</strong> <code>&lt;p&gt;</code>, <code>&lt;h1&gt;</code>-<code>&lt;h6&gt;</code>, <code>&lt;ul&gt;</code>/<code>&lt;ol&gt;</code>/<code>&lt;li&gt;</code>, <code>&lt;table&gt;</code>, <code>&lt;img&gt;</code>, <code>&lt;video&gt;</code> each tell the browser what kind of content is coming, and some (like <code>&lt;img&gt;</code>) never need a closing tag.</li>
-<li><strong>A link's visible text and its real destination are independent.</strong> That's what makes hyperlinks convenient, and what makes phishing possible.</li>
-<li><strong>A GET form just builds a query string.</strong> Filling in <code>&lt;input name="q"&gt;</code> and submitting is the same as typing <code>?q=...</code> into the URL bar yourself.</li>
-<li><strong>Client-side validation (<code>pattern</code>, <code>type="email"</code>) is a convenience, not security.</strong> Anyone can delete it in their own browser copy of your page before submitting.</li>
-<li><strong>The W3C validator is a free second pair of eyes.</strong> Run every page you write through it before you consider it done.</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ Forgetting a closing tag and assuming it's fine because the page "looks okay": the DOM the browser actually built may not match what you intended, and the validator will catch it even when your eyes don't.</li>
-<li>❌ Relying on blank lines or extra spaces in your HTML source to create visual separation: use <code>&lt;p&gt;</code>, headings, or (in the next lesson) CSS instead.</li>
-<li>❌ Shipping an <code>&lt;img&gt;</code> with no <code>alt</code> attribute: it's invisible to screen readers and to anyone whose connection is too slow to load the image.</li>
-<li>❌ Trusting <code>pattern</code> or <code>type="email"</code> as your only validation: it must be checked again on the server, which you'll start doing in Module 11.</li>
-<li>❌ Clicking a link based on its visible text alone: check the actual <code>href</code> destination first, especially for anything requesting a password or payment information.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: Build Your Personal Home Page</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. You'll build a single-file personal home page from scratch on cs50.dev, serve it with <code>http-server</code>, and get it to pass the W3C validator with zero errors, proving to yourself, in a green checkmark, that you can write structurally correct HTML by hand.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>One file, <code>home.html</code>, served locally with <code>http-server</code> on port 8080. It will contain, at minimum: a heading structure, a list, a table, an image with <code>alt</code> text, a working hyperlink, and a search form that <code>GET</code>s to Google with a named input: every building block from this lesson, in one page.</p>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in this Capstone</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Doctype, <code>html</code>/<code>head</code>/<code>body</code> (Part 1)</td>
-<td>The skeleton every milestone below builds inside of.</td>
-</tr>
-<tr>
-<td><code>http-server</code> on port 8080 (Part 1)</td>
-<td>How you actually view <code>home.html</code> in a browser tab.</td>
-</tr>
-<tr>
-<td>Headings, paragraphs (Part 2)</td>
-<td>Your name, a short bio, and section titles.</td>
-</tr>
-<tr>
-<td>Lists (Part 2)</td>
-<td>A bulleted or numbered list of interests, courses, or goals.</td>
-</tr>
-<tr>
-<td>Tables (Part 2)</td>
-<td>A small table of structured facts about yourself (favorites, a schedule, whatever fits).</td>
-</tr>
-<tr>
-<td>Images with <code>alt</code> (Part 2)</td>
-<td>A photo or graphic with real alternative text.</td>
-</tr>
-<tr>
-<td>Anchor tags (Part 3)</td>
-<td>At least one working link to a real site you'd recommend.</td>
-</tr>
-<tr>
-<td>Forms and GET (Part 3)</td>
-<td>A search box that submits to Google with <code>name="q"</code>.</td>
-</tr>
-<tr>
-<td>W3C validator (Part 3)</td>
-<td>The finish line: zero errors before you call it done.</td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>Scaffold the file.</strong> On cs50.dev, create <code>home.html</code> with the doctype, <code>&lt;html lang="en"&gt;</code>, a <code>&lt;head&gt;</code> with a <code>&lt;title&gt;</code>, and an empty <code>&lt;body&gt;</code>. Run <code>http-server</code>, open the green "Open in Browser" link (or the Ports tab), and confirm you see a blank but correctly-titled page.</li>
-<li><strong>Add your headings and a short bio.</strong> Add an <code>&lt;h1&gt;</code> with your name, one or two <code>&lt;p&gt;</code> paragraphs about yourself, and at least one <code>&lt;h2&gt;</code> subheading dividing the page into sections.</li>
-<li><strong>Add a list.</strong> Under an appropriate heading, add a <code>&lt;ul&gt;</code> or <code>&lt;ol&gt;</code> of at least three items: interests, favorite courses, goals, anything real.</li>
-<li><strong>Add a table.</strong> Build a small <code>&lt;table&gt;</code> (ideally with <code>&lt;thead&gt;</code>/<code>&lt;th&gt;</code> for column labels) showing some structured fact about yourself: a weekly schedule, a list of favorites with categories, or similar.</li>
-<li><strong>Add an image with real alt text.</strong> Embed an <code>&lt;img&gt;</code> (a photo, a logo, anything you have rights to use) with a <code>src</code> and a genuinely descriptive <code>alt</code> attribute, not a placeholder like <code>"image"</code>.</li>
-<li><strong>Add a hyperlink.</strong> Add an <code>&lt;a&gt;</code> tag linking to a real site, with visible text that honestly describes the destination, the opposite of the phishing trick from Part 3.</li>
-<li><strong>Add a search form.</strong> Add a <code>&lt;form&gt;</code> with <code>action="https://www.google.com/search"</code>, <code>method="get"</code>, and an <code>&lt;input name="q"&gt;</code> plus a submit button. Confirm that typing a query and submitting lands you on a real Google results page.</li>
-<li><strong>Validate.</strong> Copy your full <code>home.html</code> into <a href="https://validator.w3.org/#validate_by_input">validator.w3.org</a> and fix every error it reports (missing closing tags, missing <code>alt</code>, anything else) until it shows zero errors.</li>
-<li><strong>Stretch goals.</strong> Add a nested list (a sub-list inside one <code>&lt;li&gt;</code>), embed a <code>&lt;video&gt;</code> with <code>controls</code>, or add a second form field using <code>pattern</code> to validate an email address, then open developer tools and delete the <code>pattern</code> attribute yourself, to see the client-side trust warning from Part 3 firsthand.</li>
-</ol>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ <code>http-server</code> serves <code>home.html</code> from cs50.dev, and you can open it in a browser tab and read every section.</li>
-<li>✅ The page contains at least one heading, one list, one table, one image with non-empty <code>alt</code> text, one working hyperlink, and one working search form.</li>
-<li>✅ Submitting the search form actually lands you on a real Google search results page.</li>
-<li>✅ Pasting your HTML into validator.w3.org shows <strong>zero errors</strong>.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> don't just eyeball your HTML for correctness: actually run it through the validator. Passing on sight and passing validation are two different things, and only one of them is objective.</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-hellohtml-from-memory-foundational">Exercise 1: hello.html from memory (foundational)</h3>
-<p>Without copying an existing file, type out <code>hello.html</code> from scratch: doctype, <code>&lt;html lang="en"&gt;</code>, a <code>&lt;head&gt;</code> with a <code>&lt;title&gt;</code>, and a <code>&lt;body&gt;</code> with one line of text. Serve it with <code>http-server</code> and confirm the title shows correctly in the browser tab. Then delete the closing <code>&lt;/html&gt;</code> tag on purpose and paste the file into validator.w3.org to see exactly what error message a missing closing tag produces.</p>
-<h3 id="exercise-2-structure-a-wall-of-text-intermediate">Exercise 2: structure a wall of text (intermediate)</h3>
-<p>Take three unstructured paragraphs of text (write your own, or generate some placeholder text), and turn them into a properly tagged page: an <code>&lt;h1&gt;</code> title, an <code>&lt;h2&gt;</code> for each paragraph's topic, the paragraph itself in <code>&lt;p&gt;</code>, and a <code>&lt;ul&gt;</code> list summarizing the three topics at the bottom. Validate the result.</p>
-<h3 id="exercise-3-a-safer-search-form-advanced">Exercise 3: a safer search form (advanced)</h3>
-<p>Build the mini Google clone from Part 3 (<code>&lt;form method="get" action="https://www.google.com/search"&gt;</code> with <code>&lt;input name="q"&gt;</code>), then add a second, separate form with an email field using <code>pattern=".+@.+\..+"</code>. Confirm the pattern blocks bad input. Then open developer tools, find the <code>&lt;input&gt;</code> in the Elements panel, and delete the <code>pattern</code> attribute directly in your browser's copy of the page. Submit again with obviously-invalid text and confirm it now goes through: direct, hands-on proof that client-side validation is not a security boundary.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>MINIMAL HTML5 BOILERPLATE
-  &lt;!DOCTYPE html&gt;
-  &lt;html lang=&quot;en&quot;&gt;
-      &lt;head&gt;&lt;title&gt;...&lt;/title&gt;&lt;/head&gt;
-      &lt;body&gt;...&lt;/body&gt;
-  &lt;/html&gt;
-
-TERMS OF ART
-  tag       = &lt;p&gt; or &lt;/p&gt;              -- the bracketed marker
-  element   = &lt;p&gt;text&lt;/p&gt;              -- open tag + contents + close tag
-  attribute = lang=&quot;en&quot;                -- key=&quot;value&quot; inside an opening tag
-  DOM       = the tree the browser builds in memory from your HTML
-
-SERVE IT LOCALLY (cs50.dev)
-  http-server            -- serves current folder over HTTP on port 8080
-                          -- (80 / 443 are already used by cs50.dev itself)
-
-BUILDING BLOCKS
-  &lt;p&gt;...&lt;/p&gt;                       paragraph (whitespace alone does NOT create one)
-  &lt;h1&gt;...&lt;/h1&gt; ... &lt;h6&gt;...&lt;/h6&gt;    headings, biggest/most-important to smallest
-  &lt;ul&gt;&lt;li&gt;...&lt;/li&gt;&lt;/ul&gt;            bulleted list
-  &lt;ol&gt;&lt;li&gt;...&lt;/li&gt;&lt;/ol&gt;            numbered list
-  &lt;table&gt;&lt;tr&gt;&lt;td&gt;...&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;   rows (tr) of cells (td)
-  &lt;thead&gt;&lt;tr&gt;&lt;th&gt;...&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;   column headings
-  &lt;img src=&quot;...&quot; alt=&quot;...&quot;&gt;        image -- no closing tag; alt is not optional
-  &lt;video controls&gt;&lt;source src=&quot;...&quot; type=&quot;video/mp4&quot;&gt;&lt;/video&gt;
-
-LINKS AND FORMS
-  &lt;a href=&quot;https://example.com&quot;&gt;visible text&lt;/a&gt;    -- text and href are independent!
-  &lt;form action=&quot;URL&quot; method=&quot;get&quot;&gt;
-      &lt;input name=&quot;q&quot; type=&quot;search&quot;&gt;
-      &lt;input type=&quot;submit&quot; value=&quot;Go&quot;&gt;
-  &lt;/form&gt;                                            -- GET = builds a ?key=value query string
-
-REGEX QUICK REFERENCE
-  .   any character        *  0 or more     +  1 or more     ?  0 or 1
-  [abc]  one of a/b/c       \d digit         \D not-a-digit    \. literal period
-
-VALIDATE
-  https://validator.w3.org/#validate_by_input   -- paste HTML, fix every error, zero left = done
-
-THE ONE RULE THAT MATTERS MOST
-  Anything checked only in the browser (pattern, type=&quot;email&quot;, JS) can be deleted
-  by the visitor before they submit. Never trust it as security -- only the server can enforce that.
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 10 · Lesson 35 (HTTP and the browser):</strong> gave you the envelope: verbs, status codes, headers; this lesson opened it and showed you what's actually inside: the HTML file itself.</li>
-<li><strong>Earlier callback, Module 6 · Lesson 23 (Trees, hash tables, and tries):</strong> you already built a tree by hand out of nodes and pointers; today you saw the browser build one automatically from your HTML, called the DOM.</li>
-<li><strong>Next, Module 10 · Lesson 37 (CSS and JavaScript):</strong> styles the exact same HTML you just wrote, and then teaches you to reach into the DOM tree and change it live, without reloading the page.</li>
-<li><strong>Later, Module 10/11 · Lesson 39:</strong> the form you built here to <code>GET</code> a Google search will <code>POST</code> instead, to a real route on a server you wrote yourself: no more borrowing someone else's back end.</li>
-<li><strong>North star:</strong> every template your Flask application renders in Module 11 is, underneath whatever Python generates it, exactly the HTML you learned to write by hand in this lesson.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 8 - HTML, CSS, JavaScript" by David J. Malan, Harvard University (CS50x 2026). Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+<hr /><div class="pager bottom"><span class="pcount">Page 1 of 4 &middot; Start here</span><div class="seg"><a href="36-html.html" class="cur" title="Start here">1</a><a href="36-html-2.html" class="" title="Parts 2-3">2</a><a href="36-html-3.html" class="" title="Common pitfalls">3</a><a href="36-html-4.html" class="" title="Capstone &amp; wrap-up">4</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="36-html-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="36" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="35-http-and-the-browser.html"><span class="dir">&#8592; Previous</span><b>HTTP and the Browser</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="37-css-and-javascript.html"><span class="dir">Next &#8594;</span><b>CSS and JavaScript</b></a></nav>
+    <div class="ls-marker" data-lesson-id="36" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="35-http-and-the-browser.html"><span class="dir">&#8592; Previous lesson</span><b>HTTP and the Browser</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 
@@ -899,13 +517,16 @@ document.querySelectorAll('.codehilite, pre').forEach(block=>{
 const map={'\u{1F511}':'cl-key','\u{1F4A1}':'cl-tip','✅':'cl-ok','❌':'cl-no','\u{1F3AF}':'cl-goal','\u{1F6E0}':'cl-goal'};
 document.querySelectorAll('blockquote').forEach(q=>{const t=(q.textContent||'').trim();for(const e in map){if(t.startsWith(e)){q.classList.add(map[e]);break}}});
 // check-off
+function wireList(el){if(el.dataset.wired)return;el.dataset.wired='1';el.classList.add('checkable');
+  el.querySelectorAll(':scope>li').forEach(li=>{const key='cwc:'+location.pathname+':'+li.textContent.slice(0,60);
+    if(localStorage.getItem(key))li.classList.add('checked');
+    li.addEventListener('click',ev=>{if(ev.target.tagName==='A')return;li.classList.toggle('checked');
+      li.classList.contains('checked')?localStorage.setItem(key,'1'):localStorage.removeItem(key)});});}
 function makeCheckable(rx){document.querySelectorAll('h2,h3').forEach(h=>{if(!rx.test(h.textContent))return;let el=h.nextElementSibling;
-  while(el&&!/^H[1-3]$/.test(el.tagName)){if(el.tagName==='OL'||el.tagName==='UL'){el.classList.add('checkable');
-    el.querySelectorAll(':scope>li').forEach(li=>{const key='cwc:'+location.pathname+':'+li.textContent.slice(0,60);
-      if(localStorage.getItem(key))li.classList.add('checked');
-      li.addEventListener('click',ev=>{if(ev.target.tagName==='A')return;li.classList.toggle('checked');
-        li.classList.contains('checked')?localStorage.setItem(key,'1'):localStorage.removeItem(key)});});}el=el.nextElementSibling;}});}
-makeCheckable(/learning objectives|milestones/i);
+  while(el&&!/^H[1-3]$/.test(el.tagName)){if(el.tagName==='OL'||el.tagName==='UL')wireList(el);el=el.nextElementSibling;}});}
+makeCheckable(/learning objectives|milestones|done when/i);
+// lists written as `- [ ] thing` are check-off lists wherever they appear
+document.querySelectorAll('ul.checkable,ol.checkable').forEach(wireList);
 // scrollspy
 const links=[...document.querySelectorAll('.toc a')];
 const heads=links.map(a=>a.getAttribute('href')).filter(h=>h&&h.startsWith('#')).map(h=>document.getElementById(h.slice(1))).filter(Boolean);

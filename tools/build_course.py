@@ -41,12 +41,64 @@ if not LESSONS.exists():
 
 cfg = bl.load_cfg(str(CFG_PATH))
 
+# When course.json enables the progress tracker ("sync" block), scaffold the
+# tracker engine into lessons-html/assets/. The engine (sync.js) is refreshed on
+# every build so courses pick up fixes; sync-config.js (which holds the user's
+# Firebase keys) is written only if absent, so a filled-in config is never lost.
+if cfg.get("sync"):
+    import shutil
+    bundled = pathlib.Path(__file__).resolve().parent / "assets"
+    dest = OUT_ROOT / "assets"
+    dest.mkdir(parents=True, exist_ok=True)
+    if (bundled / "sync.js").exists():
+        shutil.copyfile(bundled / "sync.js", dest / "sync.js")
+    if (bundled / "sync-config.js").exists() and not (dest / "sync-config.js").exists():
+        shutil.copyfile(bundled / "sync-config.js", dest / "sync-config.js")
+        print("scaffolded assets/sync-config.js (fill in Firebase keys to enable cross-device sync)")
+
+# Course-supplied static files. A course may keep its own assets/ directory
+# (favicons, images, anything the pages link to) beside course.json; those are
+# copied verbatim into lessons-html/assets/ on every build. This is the only
+# supported way to get a hand-made file into the generated site, since
+# lessons-html/ is wiped and rewritten and must never be hand-edited.
+_src_assets = ROOT / "assets"
+if _src_assets.is_dir():
+    import shutil
+    dest = OUT_ROOT / "assets"
+    dest.mkdir(parents=True, exist_ok=True)
+    _copied = 0
+    for f in sorted(_src_assets.iterdir()):
+        if f.is_file() and not f.name.startswith("."):
+            shutil.copyfile(f, dest / f.name)
+            _copied += 1
+    if _copied:
+        print(f"copied {_copied} course asset(s) from assets/")
+
+# Only emit favicon tags when the course actually ships one, so a course without
+# icons does not serve four 404s on every page load.
+if (_src_assets / "favicon.svg").exists():
+    cfg["_icons"] = True
+
+def relhref(target, start):
+    """Relative link with forward slashes, so pages work when served over HTTP.
+
+    os.path.relpath emits backslashes on Windows, which a web server treats as a
+    literal character rather than a path separator, so every link 404s.
+    """
+    return os.path.relpath(target, start).replace(os.sep, "/")
+
+
+# Vocabulary. Defaults keep every existing course working unchanged.
+_labels = cfg.get("unit_labels", {})
+GROUP = _labels.get("group", "Module")
+ITEM = _labels.get("item", "Lesson")
+
 items = []
 for md in LESSONS.glob("*/*.md"):
     text = md.read_text(encoding="utf-8")
-    m = re.match(r"#\s+Module\s+\d+\s+·\s+Lesson\s+(\d+):\s+(.+)", text)
+    m = re.match(rf"#\s+{GROUP}\s+\d+\s+·\s+{ITEM}\s+(\d+):\s+(.+)", text)
     if not m:
-        print("skip (no 'Module N · Lesson M: Title' H1):", md)
+        print(f"skip (no '{GROUP} N · {ITEM} M: Title' H1):", md)
         continue
     num = int(m.group(1))
     title = m.group(2).strip()
@@ -60,11 +112,11 @@ for i, it in enumerate(items):
     prev = nxt = None
     if i > 0:
         p = items[i - 1]
-        prev = {"title": p["title"], "href": os.path.relpath(p["out"], it["out"].parent)}
+        prev = {"title": p["title"], "href": relhref(p["out"], it["out"].parent)}
     if i < len(items) - 1:
         n = items[i + 1]
-        nxt = {"title": n["title"], "href": os.path.relpath(n["out"], it["out"].parent)}
-    home = os.path.relpath(OUT_ROOT / "index.html", it["out"].parent)
+        nxt = {"title": n["title"], "href": relhref(n["out"], it["out"].parent)}
+    home = relhref(OUT_ROOT / "index.html", it["out"].parent)
     bl.convert(str(it["md"]), str(it["out"]), cfg=cfg, home=home, prev=prev, nxt=nxt)
 
 print(f"rendered {len(items)} lessons")

@@ -3,9 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 8 · Lesson 31: Indexes, Injection, and Race Conditions | Self-Paced CS50x</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iIzBhMWEyZiIvPjx0ZXh0IHg9IjE2IiB5PSIyMiIgZm9udC1mYW1pbHk9InVpLW1vbm9zcGFjZSxNZW5sbyxDb25zb2xhcyxtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjZjI0ZDYzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj4mZ3Q7XzwvdGV4dD48L3N2Zz4=">
-
+<title>Module 8 · Lesson 31: Indexes, Injection, and Race Conditions (p1/5) | Self-Paced CS50x</title>
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="shortcut icon" href="../assets/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -51,6 +53,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -142,13 +167,13 @@ code{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.86em;b
 .copy-btn.done{background:var(--teal);color:#04231c;border-color:var(--teal)}
 
 /* callouts */
-blockquote{margin:24px 0;padding:16px 20px;border-radius:14px;background:var(--soft);border:1px solid var(--line);border-left:5px solid var(--teal)}
+blockquote{margin:24px 0;padding:18px 22px;border-radius:14px;background:var(--soft);border:1px solid var(--line);box-shadow:var(--shadow)}
 blockquote p{margin:7px 0}blockquote p:first-child{margin-top:0}blockquote p:last-child{margin-bottom:0}
-blockquote.cl-key{background:var(--k-bg);border-left-color:var(--k);border-color:transparent}
-blockquote.cl-tip{background:var(--tip-bg);border-left-color:var(--tip);border-color:transparent}
-blockquote.cl-ok{background:var(--ok-bg);border-left-color:var(--ok);border-color:transparent}
-blockquote.cl-no{background:var(--no-bg);border-left-color:var(--no);border-color:transparent}
-blockquote.cl-goal{background:var(--goal-bg);border-left-color:var(--goal);border-color:transparent}
+blockquote.cl-key{background:var(--k-bg);border-color:transparent}
+blockquote.cl-tip{background:var(--tip-bg);border-color:transparent}
+blockquote.cl-ok{background:var(--ok-bg);border-color:transparent}
+blockquote.cl-no{background:var(--no-bg);border-color:transparent}
+blockquote.cl-goal{background:var(--goal-bg);border-color:transparent}
 
 /* capstone banner */
 h2.capstone-h{background:linear-gradient(115deg,var(--navy),var(--navy-3));color:#fff;border-radius:20px;padding:30px 28px 26px;margin-top:64px;box-shadow:0 20px 50px rgba(10,26,47,.3);overflow:hidden;position:relative}
@@ -203,42 +228,27 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <body>
 <div id="progress"></div>
 
-<div class="topbar"><div class="wrap">
-  <div>&#10024; Welcome to <b>Self-Paced CS50x</b> &middot; a self-paced course</div>
-  <div class="right"><span>CS50x 2026 · Harvard University · David J. Malan</span></div>
-</div></div>
+<div class="topbar"><div class="wrap"><div>&#10024; Welcome to <b>Self-Paced CS50x</b> &middot; a self-paced course</div><div class="right"><span>CS50x 2026 · Harvard University · David J. Malan</span></div></div></div>
 
 <nav class="bar"><div class="wrap">
   <button class="btn btn-outline" id="menuBtn" style="padding:8px 14px">&#9776;</button>
   <a class="logo" href="../index.html">Self-Paced CS50x<span class="dot">.</span></a>
   <div class="navlinks">
-    <a href="../index.html">All lessons</a>
-    <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="../index.html">All lessons</a><a href="#overview">Overview</a><a href="31-indexes-injection-transactions-5.html#capstone">Capstone</a>
   </div>
-  <div class="nav-cta">
-    <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
-  </div>
+<div class="nav-cta"><a class="btn btn-primary" href="#start">Start the lesson &#8594;</a></div>
 </div></nav>
 
 <header class="hero">
   <span class="blob t"></span><span class="blob c"></span>
-  <svg class="squiggle" style="top:120px;left:46%;" width="90" height="26" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#18c4a0" stroke-width="4" stroke-linecap="round"/></svg>
-  <svg class="squiggle" style="bottom:60px;right:40%;" width="70" height="22" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#f24d63" stroke-width="4" stroke-linecap="round"/></svg>
+<svg class="squiggle" style="top:120px;left:46%;" width="90" height="26" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#18c4a0" stroke-width="4" stroke-linecap="round"/></svg><svg class="squiggle" style="bottom:60px;right:40%;" width="70" height="22" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#f24d63" stroke-width="4" stroke-linecap="round"/></svg>
   <div class="wrap" id="overview">
     <div>
       <span class="eyebrow">&#10022; Module 8 · Lesson 31</span>
       <h1>Indexes, Injection, and Race <span class="accent">Conditions</span></h1>
       <p class="lead">A database only feels instant if you help it: build an index so it can search like O(log n) binary search instead of checking every row, call SQL from Python with the cs50 library&#x27;s db.execute() so you get the best of both languages, always hand user input to that function as a ? placeholder instead of pasting it into the query string yourself (or an attacker can rewrite your query for you), and wrap any multi-step update in a transaction so two things happening &quot;at the same time&quot; can never corrupt your data.</p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
-        <a class="play" href="https://www.youtube.com/watch?v=oqRU2So6Z2Y" target="_blank" rel="noopener"><span class="circ">&#9654;</span> Watch the talk</a>
-      </div>
-      <div class="chips">
-        <span class="chip">&#127908; <b>David J. Malan</b></span>
-        <span class="chip">&#9201; <b>60 minutes</b></span>
-        <span class="chip">&#128296; <b>Hands-on capstone</b></span>
-      </div>
+<div class="hero-actions"><a class="btn btn-primary" href="#start">Start the lesson &#8594;</a><a class="play" href="https://www.youtube.com/watch?v=oqRU2So6Z2Y" target="_blank" rel="noopener"><span class="circ">&#9654;</span> Watch the talk</a></div>
+<div class="chips"><span class="chip">&#127908; <b>David J. Malan</b></span><span class="chip">&#9201; <b>60 minutes</b></span><span class="chip">&#128296; <b>Hands-on capstone</b></span></div>
     </div>
     <div style="position:relative">
       <div class="hero-card">
@@ -253,7 +263,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="31-indexes-injection-transactions-5.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -271,56 +281,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <li><a href="#why-this-lesson-matters">Why this lesson matters</a></li>
 <li><a href="#learning-objectives">Learning objectives</a></li>
 <li><a href="#prerequisites">Prerequisites</a></li>
-<li><a href="#part-1-indexes-and-b-trees-making-search-fast-on-purpose">Part 1: Indexes and B-trees (making search fast on purpose)</a><ul>
-<li><a href="#timing-a-query-with-timer">Timing a query with .timer</a></li>
-<li><a href="#create-index-telling-the-database-what-to-optimize-for">CREATE INDEX: telling the database what to optimize for</a></li>
-<li><a href="#what-an-index-actually-is-a-b-tree">What an index actually is: a B-tree</a></li>
-</ul>
-</li>
-<li><a href="#part-2-calling-sql-from-python-the-cs50-librarys-dbexecute">Part 2: Calling SQL from Python (the cs50 library's db.execute())</a><ul>
-<li><a href="#the-problem-with-doing-it-all-in-python">The problem with doing it all in Python</a></li>
-<li><a href="#bridging-the-two-languages">Bridging the two languages</a></li>
-</ul>
-</li>
-<li><a href="#part-3-sql-injection-never-trust-user-input">Part 3: SQL injection (never trust user input)</a><ul>
-<li><a href="#where-this-goes-wrong-an-f-string-query">Where this goes wrong: an f-string query</a></li>
-<li><a href="#the-comment-character">The -- comment character</a></li>
-<li><a href="#the-github-login-example-a-hypothetical-not-a-real-vulnerability">The GitHub login example (a hypothetical, not a real vulnerability)</a></li>
-<li><a href="#the-famous-version-of-this-bug-bobby-tables">The famous version of this bug: Bobby Tables</a></li>
-<li><a href="#the-fix-placeholders-not-string-building">The fix: placeholders, not string-building</a></li>
-</ul>
-</li>
-<li><a href="#part-4-race-conditions-and-transactions-when-timing-itself-is-the-bug">Part 4: Race conditions and transactions (when timing itself is the bug)</a><ul>
-<li><a href="#the-dorm-fridge-milk-problem">The dorm-fridge milk problem</a></li>
-<li><a href="#the-same-bug-at-scale-instagram-likes">The same bug at scale: Instagram likes</a></li>
-<li><a href="#transactions-making-multi-step-updates-atomic">Transactions: making multi-step updates atomic</a></li>
-</ul>
-</li>
-<li><a href="#part-5-how-the-four-ideas-fit-together">Part 5: How the four ideas fit together</a></li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: Optimize and Defend Your Database</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-predict-the-speedup-foundational">Exercise 1: Predict the speedup (foundational)</a></li>
-<li><a href="#exercise-2-spot-the-injection-intermediate">Exercise 2: Spot the injection (intermediate)</a></li>
-<li><a href="#exercise-3-design-a-transaction-advanced">Exercise 3: Design a transaction (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 5 &middot; Start here</span><div class="seg"><a href="31-indexes-injection-transactions.html" class="cur" title="Start here">1</a><a href="31-indexes-injection-transactions-2.html" class="" title="Parts 1-2">2</a><a href="31-indexes-injection-transactions-3.html" class="" title="Parts 3-4">3</a><a href="31-indexes-injection-transactions-4.html" class="" title="Part 5">4</a><a href="31-indexes-injection-transactions-5.html" class="" title="Capstone &amp; wrap-up">5</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="31-indexes-injection-transactions-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>A database only feels instant if you help it: build an index so it can search like <code>O(log n)</code> binary search instead of checking every row, call SQL from Python with the cs50 library's <code>db.execute()</code> so you get the best of both languages, always hand user input to that function as a <code>?</code> placeholder instead of pasting it into the query string yourself (or an attacker can rewrite your query for you), and wrap any multi-step update in a transaction so two things happening "at the same time" can never corrupt your data.</p>
 <blockquote>
@@ -385,352 +352,9 @@ section, then come back.</p>
 <li>Helpful context, not required to re-read: <strong>Module 4 · Lesson 14</strong> (binary search and <code>O(log n)</code>) and <strong>Module 3 · Lesson 12</strong> (never trust input), both are called back to directly below.</li>
 <li>A cs50.dev codespace with <code>sqlite3</code> installed, and the <code>favorites.db</code> and <code>shows.db</code> files from Lessons 29-30 (or recreate them with <code>.mode csv</code> / <code>.import</code>, as in Lesson 29).</li>
 </ul>
-<hr />
-<h2 id="part-1-indexes-and-b-trees-making-search-fast-on-purpose">Part 1: Indexes and B-trees (making search fast on purpose)</h2>
-<h3 id="timing-a-query-with-timer">Timing a query with <code>.timer</code></h3>
-<p>Every SQL keyword you've used so far describes <em>what</em> you want, never <em>how</em> the database should find it. By default, SQLite finds it the dumbest possible way: checking every row from the top, exactly like linear search. You can watch this cost in real time with a SQLite-specific command, <code>.timer</code>, which prints how long each subsequent command actually takes:</p>
-<div class="codehilite"><pre><span></span><code><span class="p">.</span><span class="n">timer</span><span class="w"> </span><span class="k">on</span>
-<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">shows</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;The Office&#39;</span><span class="p">;</span>
-</code></pre></div>
-
-<p>Against the 250,000-plus-row <code>shows</code> table from Lesson 30, Malan runs this and reports:</p>
-<blockquote>
-<p>"That query took, let's say in real terms 0.042 seconds. That's crazy fast." (David Malan)</p>
-</blockquote>
-<p>0.042 seconds is imperceptible to one person clicking search once. But Malan immediately reframes why it's still worth shaving down:</p>
-<blockquote>
-<p>"It makes for happier customers and users because you're getting them the answer faster... it saves you money because presumably if you've spent $1000 for a server and that server has a certain amount of RAM, a certain speed CPU... it can only do so many searches per unit of time... so you can handle not 1000 users at once but 2000 users or 5000 users all with the same hardware." (David Malan)</p>
-</blockquote>
-<h3 id="create-index-telling-the-database-what-to-optimize-for"><code>CREATE INDEX</code>: telling the database what to optimize for</h3>
-<p>A relational database, unlike a spreadsheet, lets you plan ahead for the searches you know you'll run often. The command is <code>CREATE INDEX</code>, and it names three things: the index (whatever name you like), the table, and the column(s) to optimize:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">title_index</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">shows</span><span class="p">(</span><span class="n">title</span><span class="p">);</span>
-</code></pre></div>
-
-<p>Running it takes a moment up front: SQLite has to build that structure once, and after that it has to keep the index updated on every insert, update, or delete to that column. In exchange, rerunning the <em>exact same</em> query as before:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">shows</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;The Office&#39;</span><span class="p">;</span>
-</code></pre></div>
-
-<p>comes back in 0.001 seconds instead of 0.042. Malan does the arithmetic out loud:</p>
-<blockquote>
-<p>"Orders of magnitude faster, so I can handle 42 times as many users on the same database, so to speak, than I could have previously just by building this index." (David Malan)</p>
-</blockquote>
-<h3 id="what-an-index-actually-is-a-b-tree">What an index actually is: a B-tree</h3>
-<p>An index isn't magic. It's a specific, well-known data structure:</p>
-<blockquote>
-<p>"An index in a database is very often created using what's called a B-tree. This is not a binary tree. ... The tree is its own distinct structure that's very similar in spirit in that it's fairly shallow because most of the nodes have children, but it doesn't necessarily have two children. It might have more children, and in fact, the more children the nodes have, the sort of higher up you can pull all of the leaf nodes and the shorter you can make the height of the tree." (David Malan)</p>
-</blockquote>
-<p>The payoff is the same shape as Lesson 14's binary search, just generalized to nodes with more than two children each:</p>
-<blockquote>
-<p>"When I am now searching for titles like The Office, the database doesn't have to do the default behavior, which is start at the top and use linear search all the way to the bottom. If it has proactively built up an index in memory... it now has a tree-like structure storing those titles that allows it to find in some logarithmic time... the same data much more quickly, and that's how we went from 0.042 to 0.001 second instead." (David Malan)</p>
-</blockquote>
-<p>An index trades a little extra storage and slightly slower writes for a query that scales like <code>O(log n)</code> instead of <code>O(n)</code>, precisely the trade that made binary search worth having a sorted array for in Lesson 14, now applied to a database table instead of an in-memory array.</p>
-<blockquote>
-<p>🔑 <strong>The single most important takeaway of this part.</strong> <code>CREATE INDEX</code> builds a B-tree on a column so the database can search it in roughly logarithmic time instead of checking every row, the exact same <code>O(log n)</code> win as binary search, now working for you automatically on every future query against that column.</p>
-</blockquote>
-<h2 id="part-2-calling-sql-from-python-the-cs50-librarys-dbexecute">Part 2: Calling SQL from Python (the cs50 library's <code>db.execute()</code>)</h2>
-<h3 id="the-problem-with-doing-it-all-in-python">The problem with doing it all in Python</h3>
-<p>Back in Lesson 29's <code>favorites.py</code>, sorting the language counts required real work: <code>sorted(counts)</code> sorts by key, <code>sorted(counts, key=counts.get)</code> sorts by value but ascending, and getting descending order takes a third named argument, <code>reverse=True</code>. Malan lands on the same frustration that motivated switching to SQL in the first place:</p>
-<blockquote>
-<p>"This is just very annoying to have to use that amount of code to actually answer relatively simple questions, and this is why we did transition for much of today to a declarative language like SQL that just let me select what I care about in that data." (David Malan)</p>
-</blockquote>
-<p>Meanwhile, the equivalent SQL is one line:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">language</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">favorites</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">language</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">DESC</span><span class="p">;</span>
-</code></pre></div>
-
-<p>The natural next question: why choose? A real application usually needs both: Python's <code>input()</code>, loops, and web-framework glue, <em>and</em> SQL's declarative power over stored data.</p>
-<h3 id="bridging-the-two-languages">Bridging the two languages</h3>
-<p>The cs50 library for Python ships a small SQL module for exactly this. You open a connection once, then call one method every time you need data:</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">cs50</span><span class="w"> </span><span class="kn">import</span> <span class="n">SQL</span>
-
-<span class="n">db</span> <span class="o">=</span> <span class="n">SQL</span><span class="p">(</span><span class="s2">&quot;sqlite:///favorites.db&quot;</span><span class="p">)</span>
-
-<span class="n">rows</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT language, COUNT(*) AS n FROM favorites GROUP BY language ORDER BY n DESC&quot;</span><span class="p">)</span>
-
-<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;language&quot;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">])</span>
-</code></pre></div>
-
-<p><code>"sqlite:///favorites.db"</code> is a URI (a structured way of naming a resource) telling the library which SQLite database file to open, the same <code>favorites.db</code> you were opening manually with <code>sqlite3 favorites.db</code> all lesson.</p>
-<p><code>db.execute()</code> is, in Malan's words, the one function that matters here:</p>
-<blockquote>
-<p>"The only function that's useful in the CS 50 library for SQL is this execute function, which allows me to write literally a line of SQL." (David Malan)</p>
-</blockquote>
-<p>And the shape of what comes back matters just as much as the call itself:</p>
-<blockquote>
-<p>"It returns by design a list of rows. Each of those rows is a dictionary of key value pairs." (David Malan)</p>
-</blockquote>
-<p>That's why <code>row["language"]</code> and <code>row["n"]</code> work inside the loop: each <code>row</code> is a dictionary, indexed by the column name (or alias, like <code>n</code> for <code>COUNT(*)</code>) you chose in the <code>SELECT</code>. Run this version and you get the exact same three numbers Lesson 29's twenty-line dictionary-and-loop version produced, sorted, correctly, in one query.</p>
-<blockquote>
-<p>✅ <strong>What to do about it:</strong> reach for SQL to do the sorting, filtering, and counting it's built for (<code>GROUP BY</code>, <code>ORDER BY</code>, <code>WHERE</code>), and reach for Python for everything around it: taking input, looping over results, building a web page. Let each language do what it's good at.</p>
-</blockquote>
-<h2 id="part-3-sql-injection-never-trust-user-input">Part 3: SQL injection (never trust user input)</h2>
-<h3 id="where-this-goes-wrong-an-f-string-query">Where this goes wrong: an f-string query</h3>
-<p>Suppose your Python program asks a user for their favorite problem, then looks up how many people share that answer. The tempting first draft uses an f-string to build the query directly:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">favorite</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Favorite problem: &quot;</span><span class="p">)</span>
-<span class="n">rows</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SELECT COUNT(*) AS n FROM favorites WHERE problem = &#39;</span><span class="si">{</span><span class="n">favorite</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;n&quot;</span><span class="p">])</span>
-</code></pre></div>
-
-<p>This works fine for ordinary input like <code>Hello, world</code>. Malan asks the room what happens with an answer like <code>hello, it's me</code>, a string that itself contains a single quote:</p>
-<blockquote>
-<p>"If I inputted the other problem we played with, hello, it's me, where it was IT apostrophe S, that if interpolated right here is clearly going to confuse the single quotes such that who knows what's going to come back." (David Malan)</p>
-</blockquote>
-<p>The apostrophe in the user's own text closes the quote early, and whatever text follows it is now interpreted as SQL syntax, not as data. In the best case, that just breaks the query with a confusing error. In the worst case, Malan explains, a deliberately crafted answer can do far more:</p>
-<blockquote>
-<p>"What if the user types something crazy like the word delete or drop or update or any of those destructive commands that we saw earlier and somehow tricks your code into executing maybe the select, but then eventually an additional query like a delete... This is the biggest threat to taking user input and trusting it in the context of databases, and it's called... a SQL injection attack." (David Malan)</p>
-</blockquote>
-<h3 id="the-comment-character">The <code>--</code> comment character</h3>
-<p>One tool that makes injection especially dangerous is SQL's comment syntax:</p>
-<blockquote>
-<p>"It turns out that [<code>--</code>] in SQL is the comment character. So it's like hash in Python or slash slash [in] C. This in SQL means ignore everything to the right." (David Malan)</p>
-<p><em>(The transcript's speech-to-text has a gap right where Malan says the symbol aloud; <code>--</code> is filled in from context: it's the only SQL comment marker discussed anywhere in the lecture, and the sentence structure needs a subject there.)</em></p>
-</blockquote>
-<p>Anything after <code>--</code> on that line is simply discarded by the database, including, as you're about to see, the rest of a query the programmer wrote on purpose.</p>
-<h3 id="the-github-login-example-a-hypothetical-not-a-real-vulnerability">The GitHub login example (a hypothetical, not a real vulnerability)</h3>
-<p>To make the danger concrete, Malan poses a hypothetical using a login form everyone recognizes:</p>
-<blockquote>
-<p>"Here for instance is like the login screen to GitHub.com... suppose for the sake of discussion GitHub is using SQL Lite, which they're not using because it's not meant for massive, large data sets like this, but suppose they are." (David Malan)</p>
-</blockquote>
-<p>This is explicitly a teaching hypothetical, not a claim that GitHub or any real site is built this way. Imagine the server-side code, written with an f-string instead of a placeholder, looks like this:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">query</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;SELECT * FROM users WHERE username = &#39;</span><span class="si">{</span><span class="n">username</span><span class="si">}</span><span class="s2">&#39; AND password = &#39;</span><span class="si">{</span><span class="n">password</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
-<span class="n">rows</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
-</code></pre></div>
-
-<p>A well-behaved user typing a normal email and password produces exactly the query the programmer intended. Now imagine the <em>username</em> field receives this instead:</p>
-<div class="codehilite"><pre><span></span><code>malan@harvard.edu&#39; --
-</code></pre></div>
-
-<p>Substituted into the f-string, the resulting query text becomes:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">users</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;malan@harvard.edu&#39;</span><span class="w"> </span><span class="c1">--&#39; AND password = &#39;anything&#39;</span>
-</code></pre></div>
-
-<p>The single quote right after the real email closes the string early (exactly the apostrophe problem from <code>hello, it's me</code>), and <code>--</code> then comments out everything after it, including the entire password check:</p>
-<blockquote>
-<p>"This would seem to finish the thought prematurely, and then it says [<code>--</code>], and so that just means ignore everything else. So what GitHub ends up doing accidentally in this case is selecting star from users where username is malan@harvard.edu irrespective of what his password actually is." (David Malan)</p>
-</blockquote>
-<p>No password was ever needed. The attacker's input didn't just supply a value: it rewrote the query's logic.</p>
-<h3 id="the-famous-version-of-this-bug-bobby-tables">The famous version of this bug: Bobby Tables</h3>
-<p>This exact category of bug is famous enough in software culture to have its own name, from a well-known <a href="https://xkcd.com/">xkcd</a> comic by Randall Munroe: a parent named their child something like <code>Robert'); DROP TABLE Students;--</code>, quietly wiping out a school's database the first time it was inserted into a query without a placeholder. Malan closes the lecture on that same joke, and the transcript also mentions a real-world echo of it, someone who registered a license plate reading literally <code>NULL</code>, which confused automated toll-booth systems that read plates straight into a database query without sanitizing them first. Both examples exist purely to make the <em>defensive</em> lesson land: any system that pastes untrusted text into a query is exposed, whether the text comes from a login form, a search box, or a camera reading a license plate.</p>
-<h3 id="the-fix-placeholders-not-string-building">The fix: placeholders, not string-building</h3>
-<p>The fix is not "write cleverer escaping code yourself." Malan is direct about this:</p>
-<blockquote>
-<p>"The solution then is to use a library, almost always use a library. This is not a wheel you should reinvent yourself." (David Malan)</p>
-</blockquote>
-<p>Concretely, that means replacing the f-string with a <code>?</code> placeholder, and handing the real value to <code>db.execute()</code> as a separate argument:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">favorite</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Favorite problem: &quot;</span><span class="p">)</span>
-<span class="n">rows</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT COUNT(*) AS n FROM favorites WHERE problem = ?&quot;</span><span class="p">,</span> <span class="n">favorite</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;n&quot;</span><span class="p">])</span>
-</code></pre></div>
-
-<p>The <code>?</code> is not CS50-specific: it's a common convention across SQL libraries in many languages. Here's what changes underneath:</p>
-<blockquote>
-<p>"If you instead use a library like CS50's, and you don't just use F strings... you use question marks. What will happen is this: when the user goes and types in [something with] a single quote, that's fine. Let them put weird scary characters like single quotes in their input. The library will take charge of escaping user input, so anything dangerous in their input will be changed from one single quote to two." (David Malan)</p>
-</blockquote>
-<p>With the placeholder version, typing <code>malan@harvard.edu' --</code> as a username no longer breaks anything out of the string: the library treats the entire value, apostrophe and all, as <em>data</em>, never as SQL syntax. The query still runs; it just correctly finds no matching username, because no username actually contains a literal apostrophe and two dashes.</p>
-<blockquote>
-<p>✅ <strong>What to do about it:</strong> never build a SQL query by pasting a variable directly into the string (with an f-string, <code>.format()</code>, or <code>+</code> concatenation). Always write a <code>?</code> in the query text and pass the real value as a separate argument to <code>db.execute()</code>.</p>
-</blockquote>
-<h2 id="part-4-race-conditions-and-transactions-when-timing-itself-is-the-bug">Part 4: Race conditions and transactions (when timing itself is the bug)</h2>
-<h3 id="the-dorm-fridge-milk-problem">The dorm-fridge milk problem</h3>
-<p>Even a perfectly written, injection-safe query can still corrupt data if it collides with another query at just the wrong moment. Malan introduces this with a simple story: you and a roommate share a dorm fridge. You check it, see no milk, and walk to a store to buy some. Meanwhile, before you're back, your roommate checks the same fridge, also sees no milk, and walks to a different store. You both come home with milk: now you have too much.</p>
-<blockquote>
-<p>"Why did we find ourselves in a situation where we ended up with too much milk? ... We inspected the state of a variable that was in the process of being updated by someone else." (David Malan)</p>
-</blockquote>
-<p>That's a <strong>race condition</strong> end to end: two processes (you and your roommate) both read a piece of shared state (the fridge is empty), both decide independently what to do based on that stale read, and both act, and because neither knew what the other was doing, the combined result is wrong. Malan's proposed fix is exactly the database's fix, just physical:</p>
-<blockquote>
-<p>"Maybe dramatically lock the refrigerator somehow, and in fact that's a term of art in databases: to actually use a database lock, so that if you are in the process of updating the value in the database, lock it so that no one else can inspect the value of that database and potentially make a poor decision." (David Malan)</p>
-</blockquote>
-<h3 id="the-same-bug-at-scale-instagram-likes">The same bug at scale: Instagram likes</h3>
-<p>The milk story is contrived on purpose; the real version happens constantly on any popular website. Malan's example is a single Instagram post receiving hundreds of thousands of near-simultaneous likes, served by many web servers all talking to the same underlying data. The naive Python-plus-SQL logic to increment a like count takes two steps:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">rows</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT likes FROM posts WHERE id = ?&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="p">)</span>
-<span class="n">likes</span> <span class="o">=</span> <span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;likes&quot;</span><span class="p">]</span>
-<span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;UPDATE posts SET likes = ? WHERE id = ?&quot;</span><span class="p">,</span> <span class="n">likes</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">id</span><span class="p">)</span>
-</code></pre></div>
-
-<p>Note that both queries already use <code>?</code> placeholders: this code is safe from injection. It is not, however, safe from timing. Malan walks through exactly how it breaks:</p>
-<blockquote>
-<p>"Maybe there's 100 likes at this point in the story. And then just by chance, another server... it too gets the same answer, there's currently 100 likes. Meanwhile, the first server... updates the number of likes from 100 to 101. But because the other server was essentially running the same code in parallel, it's going to make the same mathematical decision and update the number of likes from 100 to [101]. But at this point in the story, the number of likes should obviously be [102], so we've lost data." (David Malan)</p>
-<p><em>(Bracketed numbers correct two evident speech-to-text typos in the raw transcript, "1001" and "10. 2", where the recording clearly means 101 and 102.)</em></p>
-</blockquote>
-<p>Both servers read <code>100</code> before either one wrote anything back. Both, correctly, computed <code>100 + 1 = 101</code>. The post ends up recording 101 likes when it should record 102: a like silently vanished, not because either query was wrong on its own, but because they overlapped in time.</p>
-<h3 id="transactions-making-multi-step-updates-atomic">Transactions: making multi-step updates atomic</h3>
-<p>The database-level fix is a <strong>transaction</strong>, a way of telling the database "treat everything between these two points as one indivisible step":</p>
-<blockquote>
-<p>"You would use commands in SQL like begin transaction, and then execute the lines of code that you want, and then when you're ready to commit it, that is save it, you use a commit command. But if something goes wrong or you get interrupted, you can actually roll back the whole thing." (David Malan)</p>
-</blockquote>
-<p>In SQL, that looks like:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">BEGIN</span><span class="w"> </span><span class="k">TRANSACTION</span><span class="p">;</span>
-
-<span class="k">SELECT</span><span class="w"> </span><span class="n">likes</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">posts</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">123456</span><span class="p">;</span>
-<span class="k">UPDATE</span><span class="w"> </span><span class="n">posts</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">likes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">101</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">123456</span><span class="p">;</span>
-
-<span class="k">COMMIT</span><span class="p">;</span>
-</code></pre></div>
-
-<p>While a transaction is open, the database locks the row(s) involved so that a second, concurrent transaction touching the same row has to wait its turn instead of reading a value that's mid-update. If anything goes wrong partway through (an error, a lost connection), <code>ROLLBACK</code> undoes everything since <code>BEGIN TRANSACTION</code>, so the database is never left half-updated:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">BEGIN</span><span class="w"> </span><span class="k">TRANSACTION</span><span class="p">;</span>
-
-<span class="k">UPDATE</span><span class="w"> </span><span class="n">posts</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">likes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">101</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">123456</span><span class="p">;</span>
-<span class="c1">-- something goes wrong here</span>
-
-<span class="k">ROLLBACK</span><span class="p">;</span><span class="w">  </span><span class="c1">-- posts.likes is back to 100, as if nothing happened</span>
-</code></pre></div>
-
-<p>Malan's summary of what this buys you:</p>
-<blockquote>
-<p>"You can ensure that those... two database queries inside will either both be executed or not at all. They will not be interrupted, and that's the fundamental solution to this problem, analogous to putting a lock on the fridge, or by leaving a note, or calling your roommate, preventing them from making the same decision themselves." (David Malan)</p>
-<p>🔑 <strong>The single most important takeaway of this part.</strong> A race condition happens when two processes read shared data, decide what to do, and write back, all without knowing about each other. A transaction (<code>BEGIN TRANSACTION</code> ... <code>COMMIT</code>, with <code>ROLLBACK</code> as the escape hatch) is how you tell the database "lock this, do all these steps as one unit, and let no one else in until I'm done."</p>
-</blockquote>
-<h2 id="part-5-how-the-four-ideas-fit-together">Part 5: How the four ideas fit together</h2>
-<p>Every idea in this lesson answers a different question about the same underlying worry: <em>what happens to my database once real, unpredictable users start hitting it?</em></p>
-<div class="codehilite"><pre><span></span><code>QUESTION                          TOOL                     WHY IT WORKS
-&quot;Is this query fast enough        .timer, CREATE INDEX     Builds a B-tree so search is
- at real scale?&quot;                                            O(log n), not O(n) (Lesson 14&#39;s
-                                                             binary search, generalized)
-
-&quot;Can I use SQL&#39;s power without    cs50&#39;s SQL class,        One line of declarative SQL
- giving up Python&#39;s glue?&quot;        db.execute()              instead of loops + dictionaries
-
-&quot;Can a user&#39;s own typed input     ? placeholders,           The library treats the value as
- rewrite my query?&quot;               never f-strings           data, never as SQL syntax
-
-&quot;Can two requests at once         BEGIN TRANSACTION /       Locks the row(s) so no one reads
- corrupt shared data?&quot;            COMMIT / ROLLBACK          a value mid-update
-</code></pre></div>
-
-<p>A production-grade query in your eventual capstone project combines all four: it runs against an indexed column, it's called from Python through <code>db.execute()</code>, every user-supplied value arrives as a <code>?</code> placeholder, and any multi-step update is wrapped in a transaction. None of the four is optional once real users are involved: they solve four genuinely different failure modes, and a database that only handles three of them will still break in production.</p>
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong>An index trades storage and write time for read speed.</strong> <code>CREATE INDEX name ON table(column)</code> builds a B-tree so lookups on that column run in roughly <code>O(log n)</code> time instead of <code>O(n)</code>, the same win as binary search over linear search.</li>
-<li><strong><code>.timer on</code> turns "it feels fast" into a number.</strong> Measure before you optimize, and measure again after, so you know the index actually helped.</li>
-<li><strong><code>db.execute()</code> returns a list of dictionaries.</strong> Each row is indexed by column name (or <code>AS</code> alias), which is why <code>row["language"]</code> works after a <code>SELECT language, ...</code>.</li>
-<li><strong>Never build a query by pasting a value into the string.</strong> An f-string, <code>.format()</code>, or string concatenation with a raw value lets that value change the query's meaning: that's what a SQL injection attack exploits.</li>
-<li><strong>A <code>?</code> placeholder is the fix, not a nicety.</strong> Pass the query as a template with <code>?</code> in it and the real values as separate arguments; the library escapes them so they can only ever be data.</li>
-<li><strong>A race condition needs no attacker at all</strong>: it's two ordinary, correct-looking operations overlapping in time and silently losing data, like the dorm-fridge milk or an Instagram like count.</li>
-<li><strong>A transaction makes multiple statements atomic.</strong> <code>BEGIN TRANSACTION</code> ... <code>COMMIT</code> guarantees all-or-nothing execution; <code>ROLLBACK</code> undoes an in-progress transaction cleanly if something goes wrong.</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ <strong>Adding an index to every column "just in case."</strong> Each index costs extra space and slows down every future insert/update/delete on that column: index the columns you actually search or join on often, not all of them.</li>
-<li>❌ <strong>Building a SQL query with an f-string because it "works in testing."</strong> It works right up until a user's input contains a quote, a <code>--</code>, or a semicolon: test with exactly that kind of input before trusting any query.</li>
-<li>❌ <strong>Assuming placeholders are only about avoiding typos with quotes.</strong> They're a security boundary: the library escapes the value so it can never be interpreted as SQL syntax, no matter what it contains.</li>
-<li>❌ <strong>Believing "my code ran fine once" means it's race-condition-free.</strong> Race conditions are timing-dependent: code can pass every manual test and still fail the moment two requests genuinely overlap in production.</li>
-<li>❌ <strong>Wrapping a transaction around only one query.</strong> Transactions matter when a <em>sequence</em> of statements (read-then-write, like the like-count example) needs to happen as one unit. A single, standalone statement rarely needs one.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: Optimize and Defend Your Database</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. On cs50.dev, you'll measure a real speedup from an index, call SQL from Python the safe way, work out an injection attack entirely on paper (never against a live target), and make a multi-step update atomic with a transaction. Together these four moves are exactly what your eventual north-star web app needs from every query it runs.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>Using the <code>shows.db</code> and <code>favorites.db</code> files from Lessons 29-30 on your cs50.dev codespace:</p>
-<ul>
-<li>A timed, then indexed, query against <code>shows.db</code>, with both timings recorded.</li>
-<li>A small Python script, <code>lookup.py</code>, that safely queries <code>favorites.db</code> using cs50's <code>SQL</code> class and a <code>?</code> placeholder.</li>
-<li>A plain-text file, <code>injection_notes.txt</code>, that reconstructs (on paper only) an unsafe f-string query, a malicious input for it, and the safe placeholder rewrite.</li>
-<li>A short transaction demo that wraps a two-step "increment a count" update in <code>BEGIN TRANSACTION</code> / <code>COMMIT</code>, plus one deliberate <code>ROLLBACK</code>.</li>
-</ul>
-<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in the capstone</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>.timer</code> and <code>CREATE INDEX</code> (Part 1)</td>
-<td>Milestones 1-2: measure, then eliminate, a real linear-search cost on <code>shows.db</code>.</td>
-</tr>
-<tr>
-<td>cs50's <code>db.execute()</code> (Part 2)</td>
-<td>Milestone 3: <code>lookup.py</code> queries <code>favorites.db</code> from Python.</td>
-</tr>
-<tr>
-<td>Placeholders vs. f-strings (Part 3)</td>
-<td>Milestones 3-4: the script uses <code>?</code> for real; the notes file shows on paper why the f-string version wouldn't have been safe.</td>
-</tr>
-<tr>
-<td>Transactions (Part 4)</td>
-<td>Milestone 5: a two-step update made atomic with <code>BEGIN TRANSACTION</code> / <code>COMMIT</code> / <code>ROLLBACK</code>.</td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>Time the baseline query.</strong> On cs50.dev, open <code>sqlite3 shows.db</code>, run <code>.timer on</code>, then run <code>SELECT * FROM shows WHERE title = 'The Office';</code> a couple of times. Write down the reported time.</li>
-<li><strong>Index it, then re-time it.</strong> Run <code>CREATE INDEX title_index ON shows(title);</code>, then rerun the <em>exact same</em> <code>SELECT</code> from Milestone 1. Write down the new time and compute the speedup as a ratio (yours may not be exactly 42x: record whatever you actually observe, and note whether it's a bigger or smaller jump than Malan's).</li>
-<li><strong>Write <code>lookup.py</code>.</strong> Using <code>from cs50 import SQL</code>, open <code>favorites.db</code>, use Python's <code>input()</code> to ask for a language, and run <code>SELECT COUNT(*) AS n FROM favorites WHERE language = ?</code> with that input passed as the placeholder's value. Print the count. Confirm it works for ordinary input like <code>Python</code> or <code>C</code>.</li>
-<li><strong>Write <code>injection_notes.txt</code>, on paper only, never run this against anything.</strong> By hand, write out: (a) the <em>unsafe</em> version of Milestone 3's query built with an f-string instead of a placeholder; (b) one example input containing a single quote and <code>--</code> that would change what that unsafe query does; (c) the exact resulting SQL text after substitution, with the part <code>--</code> comments out marked; (d) one sentence explaining why the placeholder version from Milestone 3 is immune to that same input. Do not point any of this at a real website, form, or database you don't own: the point is understanding the mechanism, not attacking anything.</li>
-<li><strong>Make a two-step update atomic.</strong> In <code>favorites.db</code> (or a small scratch table you create), pick any integer column you can safely increment (or add one, e.g. <code>views INTEGER DEFAULT 0</code>). Wrap a <code>SELECT</code> of the current value followed by an <code>UPDATE</code> that adds one inside <code>BEGIN TRANSACTION</code> / <code>COMMIT</code>. Then run a second attempt where you deliberately stop before <code>COMMIT</code> and issue <code>ROLLBACK</code> instead: confirm with a fresh <code>SELECT</code> that the value reverted to what it was before that transaction.</li>
-<li><strong>Stretch goals.</strong> (a) Run <code>EXPLAIN QUERY PLAN</code> before and after Milestone 2's index to see SQLite describe the change from a full table scan to an index search, in its own words. (b) Add a second index on a different column and time a query that benefits from it. (c) Rewrite <code>lookup.py</code> so every one of its queries (not just the lookup) runs inside a single transaction.</li>
-</ol>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ You have two recorded timings for the identical query (one before, one after <code>CREATE INDEX</code>) and the "after" number is meaningfully smaller.</li>
-<li>✅ <code>lookup.py</code> runs correctly for at least two different inputs, using a <code>?</code> placeholder, never an f-string, for the user-supplied value.</li>
-<li>✅ <code>injection_notes.txt</code> contains all four parts from Milestone 4, and the malicious input you chose really would change the unsafe query's behavior if it were (hypothetically) run.</li>
-<li>✅ Your transaction demo shows both outcomes: one <code>COMMIT</code> that keeps the change, and one <code>ROLLBACK</code> that discards it, confirmed by a <code>SELECT</code> afterward.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> if Milestone 4's malicious input doesn't actually break the sentence structure of the unsafe query when you trace through it by hand, character by character, you haven't found a real injection: go back to the <code>--</code>-comment example in Part 3 and match its shape exactly.</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-predict-the-speedup-foundational">Exercise 1: Predict the speedup (foundational)</h3>
-<p>Without running anything, look at the <code>stars</code> table from Lesson 30 (many rows, no index on <code>person_id</code>). Would <code>CREATE INDEX person_index ON stars(person_id);</code> help the query <code>SELECT show_id FROM stars WHERE person_id = ?</code> run faster? Explain your answer in one or two sentences using the words "B-tree" and "linear search."</p>
-<h3 id="exercise-2-spot-the-injection-intermediate">Exercise 2: Spot the injection (intermediate)</h3>
-<p>Here is a query built with an f-string: <code>f"SELECT * FROM shows WHERE title = '{title}'"</code>. Write down a value for <code>title</code> that would make this query return every row in the table, and trace through, character by character, why it works. Then rewrite the query safely with a placeholder.</p>
-<h3 id="exercise-3-design-a-transaction-advanced">Exercise 3: Design a transaction (advanced)</h3>
-<p>Sketch (in plain English or pseudocode, no need to run it) the two SQL statements you'd need to transfer "5 points" from one row's <code>score</code> column to another row's <code>score</code> column in a single table. Explain, in a sentence, what could go wrong if two such transfers overlapped without a transaction, and how <code>BEGIN TRANSACTION</code> / <code>COMMIT</code> prevents it.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>INDEXES
-  .timer on                                   -- print how long each command takes
-  CREATE INDEX name ON table(column);          -- build a B-tree index on that column
-  Full table scan: O(n).  Indexed lookup: O(log n) -- same win as binary search.
-
-PYTHON + SQL (cs50 library)
-  from cs50 import SQL
-  db = SQL(&quot;sqlite:///file.db&quot;)
-  rows = db.execute(&quot;SELECT ... WHERE col = ?&quot;, value)   -- rows: list of dicts
-  rows[0][&quot;column_name&quot;]                                  -- read a value back
-
-SQL INJECTION -- NEVER DO THIS
-  f&quot;SELECT * FROM users WHERE username = &#39;{username}&#39;&quot;    -- unsafe: value can
-                                                            -- rewrite the query
-  --  is SQL&#39;s comment character: everything after it on the line is ignored
-
-SQL INJECTION -- DO THIS INSTEAD
-  db.execute(&quot;SELECT * FROM users WHERE username = ?&quot;, username)
-  -- the library escapes the value; it can only ever be data, never SQL syntax
-
-RACE CONDITIONS AND TRANSACTIONS
-  Race condition: two reads-then-writes of shared data overlap in time,
-                  and the last write silently loses the other one&#39;s update.
-  BEGIN TRANSACTION;
-    SELECT ...;      -- read
-    UPDATE ...;       -- write, based on what you just read
-  COMMIT;             -- both happen, atomically -- or, on error:
-  ROLLBACK;           -- neither happens; back to before BEGIN TRANSACTION
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 8 · Lesson 30:</strong> "Relational design and JOINs" gave you <code>shows.db</code>'s schema and the queries this lesson times and secures: you can't optimize or defend a query you don't already know how to write.</li>
-<li><strong>Earlier still, Module 4 · Lesson 14 and Module 3 · Lesson 12:</strong> an index is Lesson 14's binary search, grown into a database (<code>O(log n)</code> instead of <code>O(n)</code>); the injection section is Lesson 12's "never trust input" thread, now applied to SQL specifically.</li>
-<li><strong>Next, Module 9 · Lesson 32:</strong> "Using AI well: prompts and copilots" is a self-contained detour (no SQL required) before Module 10 returns to building with the web.</li>
-<li><strong>Later, Module 11 · Lesson 40:</strong> the capstone project's own database layer calls <code>db.execute()</code> with a <code>?</code> placeholder for every single query it runs, with no exceptions: this lesson is why.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 7 - SQL" by David J. Malan, Harvard University (CS50x 2026). Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+<hr /><div class="pager bottom"><span class="pcount">Page 1 of 5 &middot; Start here</span><div class="seg"><a href="31-indexes-injection-transactions.html" class="cur" title="Start here">1</a><a href="31-indexes-injection-transactions-2.html" class="" title="Parts 1-2">2</a><a href="31-indexes-injection-transactions-3.html" class="" title="Parts 3-4">3</a><a href="31-indexes-injection-transactions-4.html" class="" title="Part 5">4</a><a href="31-indexes-injection-transactions-5.html" class="" title="Capstone &amp; wrap-up">5</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="31-indexes-injection-transactions-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="31" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="30-relational-design-joins.html"><span class="dir">&#8592; Previous</span><b>Relational Design and JOINs</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="../module-9-ai/32-using-ai-well.html"><span class="dir">Next &#8594;</span><b>Using AI Well: Prompts and Copilots</b></a></nav>
+    <div class="ls-marker" data-lesson-id="31" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="30-relational-design-joins.html"><span class="dir">&#8592; Previous lesson</span><b>Relational Design and JOINs</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 
@@ -848,13 +472,16 @@ document.querySelectorAll('.codehilite, pre').forEach(block=>{
 const map={'\u{1F511}':'cl-key','\u{1F4A1}':'cl-tip','✅':'cl-ok','❌':'cl-no','\u{1F3AF}':'cl-goal','\u{1F6E0}':'cl-goal'};
 document.querySelectorAll('blockquote').forEach(q=>{const t=(q.textContent||'').trim();for(const e in map){if(t.startsWith(e)){q.classList.add(map[e]);break}}});
 // check-off
+function wireList(el){if(el.dataset.wired)return;el.dataset.wired='1';el.classList.add('checkable');
+  el.querySelectorAll(':scope>li').forEach(li=>{const key='cwc:'+location.pathname+':'+li.textContent.slice(0,60);
+    if(localStorage.getItem(key))li.classList.add('checked');
+    li.addEventListener('click',ev=>{if(ev.target.tagName==='A')return;li.classList.toggle('checked');
+      li.classList.contains('checked')?localStorage.setItem(key,'1'):localStorage.removeItem(key)});});}
 function makeCheckable(rx){document.querySelectorAll('h2,h3').forEach(h=>{if(!rx.test(h.textContent))return;let el=h.nextElementSibling;
-  while(el&&!/^H[1-3]$/.test(el.tagName)){if(el.tagName==='OL'||el.tagName==='UL'){el.classList.add('checkable');
-    el.querySelectorAll(':scope>li').forEach(li=>{const key='cwc:'+location.pathname+':'+li.textContent.slice(0,60);
-      if(localStorage.getItem(key))li.classList.add('checked');
-      li.addEventListener('click',ev=>{if(ev.target.tagName==='A')return;li.classList.toggle('checked');
-        li.classList.contains('checked')?localStorage.setItem(key,'1'):localStorage.removeItem(key)});});}el=el.nextElementSibling;}});}
-makeCheckable(/learning objectives|milestones/i);
+  while(el&&!/^H[1-3]$/.test(el.tagName)){if(el.tagName==='OL'||el.tagName==='UL')wireList(el);el=el.nextElementSibling;}});}
+makeCheckable(/learning objectives|milestones|done when/i);
+// lists written as `- [ ] thing` are check-off lists wherever they appear
+document.querySelectorAll('ul.checkable,ol.checkable').forEach(wireList);
 // scrollspy
 const links=[...document.querySelectorAll('.toc a')];
 const heads=links.map(a=>a.getAttribute('href')).filter(h=>h&&h.startsWith('#')).map(h=>document.getElementById(h.slice(1))).filter(Boolean);

@@ -25,14 +25,56 @@ import sys
 import markdown
 from pygments.formatters import HtmlFormatter
 
+LEAD_HEADING = "In one sentence"  # overridden per course by cfg["lead_heading"]
+ITEM_LABEL = "Lesson"             # overridden per course by cfg["unit_labels"]["item"]
+
+HERO_CARD_HTML = """    <div style="position:relative">
+      <div class="hero-card">
+        <div class="ring">
+          <svg width="74" height="74"><circle cx="37" cy="37" r="31" stroke="#eef2f5" stroke-width="7" fill="none"/><circle cx="37" cy="37" r="31" stroke="#18c4a0" stroke-width="7" fill="none" stroke-linecap="round" stroke-dasharray="195" stroke-dashoffset="40"/></svg>
+          <span class="lab">&#10022;</span>
+        </div>
+        <h3>What you&#39;ll get</h3>
+        <ul>
+          <li><span class="ic">&#9989;</span><span>Plain-language teaching with every term defined</span></li>
+          <li><span class="ic">&#128221;</span><span>Code snippets pulled from the talk</span></li>
+          <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
+          <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
+        </ul>
+        <a class="btn btn-coral" href="{{CAPSTONE_HREF}}" style="width:100%;justify-content:center">Jump to the project</a>
+      </div>
+    </div>"""
+
+
+def icon_links(prefix):
+    """Favicon and home-screen icon tags, resolved against the site root.
+
+    `prefix` is the relative path from the page to lessons-html/ ("." for the
+    index, ".." for a lesson page), so one helper serves both depths. The course
+    supplies the files in its own assets/ directory; build_course.py copies them
+    and sets cfg["_icons"] only when assets/favicon.svg is actually present.
+
+    Four tags rather than one because no single format covers everything: SVG is
+    the crisp modern default, the 32px PNG is what browsers that ignore SVG take,
+    apple-touch-icon is what iOS uses when a page is added to the home screen,
+    and the .ico is the last-resort fallback some tools still probe for at /.
+    """
+    p = (prefix or ".").rstrip("/")
+    return (
+        f'<link rel="icon" href="{p}/assets/favicon.svg" type="image/svg+xml">\n'
+        f'<link rel="icon" href="{p}/assets/favicon-32.png" sizes="32x32" type="image/png">\n'
+        f'<link rel="apple-touch-icon" href="{p}/assets/apple-touch-icon.png">\n'
+        f'<link rel="shortcut icon" href="{p}/assets/favicon.ico">'
+    )
+
+
 TEMPLATE = r'''<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{TITLE}} | {{COURSE}}</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iIzBhMWEyZiIvPjx0ZXh0IHg9IjE2IiB5PSIyMiIgZm9udC1mYW1pbHk9InVpLW1vbm9zcGFjZSxNZW5sbyxDb25zb2xhcyxtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjZjI0ZDYzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj4mZ3Q7XzwvdGV4dD48L3N2Zz4=">
-
+{{ICONS}}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -78,6 +120,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -169,13 +234,13 @@ code{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.86em;b
 .copy-btn.done{background:var(--teal);color:#04231c;border-color:var(--teal)}
 
 /* callouts */
-blockquote{margin:24px 0;padding:16px 20px;border-radius:14px;background:var(--soft);border:1px solid var(--line);border-left:5px solid var(--teal)}
+blockquote{margin:24px 0;padding:18px 22px;border-radius:14px;background:var(--soft);border:1px solid var(--line);box-shadow:var(--shadow)}
 blockquote p{margin:7px 0}blockquote p:first-child{margin-top:0}blockquote p:last-child{margin-bottom:0}
-blockquote.cl-key{background:var(--k-bg);border-left-color:var(--k);border-color:transparent}
-blockquote.cl-tip{background:var(--tip-bg);border-left-color:var(--tip);border-color:transparent}
-blockquote.cl-ok{background:var(--ok-bg);border-left-color:var(--ok);border-color:transparent}
-blockquote.cl-no{background:var(--no-bg);border-left-color:var(--no);border-color:transparent}
-blockquote.cl-goal{background:var(--goal-bg);border-left-color:var(--goal);border-color:transparent}
+blockquote.cl-key{background:var(--k-bg);border-color:transparent}
+blockquote.cl-tip{background:var(--tip-bg);border-color:transparent}
+blockquote.cl-ok{background:var(--ok-bg);border-color:transparent}
+blockquote.cl-no{background:var(--no-bg);border-color:transparent}
+blockquote.cl-goal{background:var(--goal-bg);border-color:transparent}
 
 /* capstone banner */
 h2.capstone-h{background:linear-gradient(115deg,var(--navy),var(--navy-3));color:#fff;border-radius:20px;padding:30px 28px 26px;margin-top:64px;box-shadow:0 20px 50px rgba(10,26,47,.3);overflow:hidden;position:relative}
@@ -230,59 +295,29 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <body>
 <div id="progress"></div>
 
-<div class="topbar"><div class="wrap">
-  <div>&#10024; Welcome to <b>{{COURSE}}</b> &middot; a self-paced course</div>
-  <div class="right"><span>{{SOURCE_LABEL}}</span></div>
-</div></div>
+{{TOPBAR}}
 
 <nav class="bar"><div class="wrap">
   <button class="btn btn-outline" id="menuBtn" style="padding:8px 14px">&#9776;</button>
   <a class="logo" href="{{HOME}}">{{COURSE}}<span class="dot">.</span></a>
   <div class="navlinks">
-    <a href="{{HOME}}">All lessons</a>
-    <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="{{HOME}}">{{HOME_LABEL}}</a>{{NAV_EXTRA}}
   </div>
-  <div class="nav-cta">
-    <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
-  </div>
+{{NAV_CTA}}
 </div></nav>
 
 <header class="hero">
   <span class="blob t"></span><span class="blob c"></span>
-  <svg class="squiggle" style="top:120px;left:46%;" width="90" height="26" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#18c4a0" stroke-width="4" stroke-linecap="round"/></svg>
-  <svg class="squiggle" style="bottom:60px;right:40%;" width="70" height="22" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#f24d63" stroke-width="4" stroke-linecap="round"/></svg>
+{{SQUIGGLES}}
   <div class="wrap" id="overview">
     <div>
       <span class="eyebrow">&#10022; {{EYEBROW}}</span>
       <h1>{{HERO_TITLE}}</h1>
       <p class="lead">{{LEAD}}</p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
-        {{WATCH}}
-      </div>
-      <div class="chips">
-        <span class="chip">&#127908; <b>{{SPEAKER}}</b></span>
-        <span class="chip">&#9201; <b>{{TIME}}</b></span>
-        <span class="chip">&#128296; <b>Hands-on capstone</b></span>
-      </div>
+{{HERO_ACTIONS}}
+{{CHIPS}}
     </div>
-    <div style="position:relative">
-      <div class="hero-card">
-        <div class="ring">
-          <svg width="74" height="74"><circle cx="37" cy="37" r="31" stroke="#eef2f5" stroke-width="7" fill="none"/><circle cx="37" cy="37" r="31" stroke="#18c4a0" stroke-width="7" fill="none" stroke-linecap="round" stroke-dasharray="195" stroke-dashoffset="40"/></svg>
-          <span class="lab">&#10022;</span>
-        </div>
-        <h3>What you&#39;ll get</h3>
-        <ul>
-          <li><span class="ic">&#9989;</span><span>Plain-language teaching with every term defined</span></li>
-          <li><span class="ic">&#128221;</span><span>Code snippets pulled from the talk</span></li>
-          <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
-          <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
-        </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
-      </div>
-    </div>
+{{HERO_CARD}}
   </div>
 </header>
 
@@ -330,13 +365,16 @@ document.querySelectorAll('.codehilite, pre').forEach(block=>{
 const map={'\u{1F511}':'cl-key','\u{1F4A1}':'cl-tip','✅':'cl-ok','❌':'cl-no','\u{1F3AF}':'cl-goal','\u{1F6E0}':'cl-goal'};
 document.querySelectorAll('blockquote').forEach(q=>{const t=(q.textContent||'').trim();for(const e in map){if(t.startsWith(e)){q.classList.add(map[e]);break}}});
 // check-off
+function wireList(el){if(el.dataset.wired)return;el.dataset.wired='1';el.classList.add('checkable');
+  el.querySelectorAll(':scope>li').forEach(li=>{const key='cwc:'+location.pathname+':'+li.textContent.slice(0,60);
+    if(localStorage.getItem(key))li.classList.add('checked');
+    li.addEventListener('click',ev=>{if(ev.target.tagName==='A')return;li.classList.toggle('checked');
+      li.classList.contains('checked')?localStorage.setItem(key,'1'):localStorage.removeItem(key)});});}
 function makeCheckable(rx){document.querySelectorAll('h2,h3').forEach(h=>{if(!rx.test(h.textContent))return;let el=h.nextElementSibling;
-  while(el&&!/^H[1-3]$/.test(el.tagName)){if(el.tagName==='OL'||el.tagName==='UL'){el.classList.add('checkable');
-    el.querySelectorAll(':scope>li').forEach(li=>{const key='cwc:'+location.pathname+':'+li.textContent.slice(0,60);
-      if(localStorage.getItem(key))li.classList.add('checked');
-      li.addEventListener('click',ev=>{if(ev.target.tagName==='A')return;li.classList.toggle('checked');
-        li.classList.contains('checked')?localStorage.setItem(key,'1'):localStorage.removeItem(key)});});}el=el.nextElementSibling;}});}
-makeCheckable(/learning objectives|milestones/i);
+  while(el&&!/^H[1-3]$/.test(el.tagName)){if(el.tagName==='OL'||el.tagName==='UL')wireList(el);el=el.nextElementSibling;}});}
+makeCheckable(/learning objectives|milestones|done when/i);
+// lists written as `- [ ] thing` are check-off lists wherever they appear
+document.querySelectorAll('ul.checkable,ol.checkable').forEach(wireList);
 // scrollspy
 const links=[...document.querySelectorAll('.toc a')];
 const heads=links.map(a=>a.getAttribute('href')).filter(h=>h&&h.startsWith('#')).map(h=>document.getElementById(h.slice(1))).filter(Boolean);
@@ -364,6 +402,86 @@ def load_cfg(course_json=None):
     return cfg
 
 
+# Long lessons are split into several short, linked pages. A page break can
+# only fall between whole `## ` sections (never mid-section, so no content is
+# altered); sections are packed greedily up to PAGE_WORDS reading-words, and the
+# Capstone always starts a fresh page. One page for short lessons.
+PAGE_WORDS = 1900
+
+
+def _split_sections(body_src):
+    """Split lesson markdown (after the meta block) into (heading, chunk) at H2."""
+    out = []
+    for p in re.split(r"(?m)^(?=## )", body_src):
+        if not p.strip():
+            continue
+        hm = re.match(r"##\s+(.+)", p)
+        out.append((hm.group(1).strip() if hm else "", p))
+    return out
+
+
+_TASK_LI = re.compile(r"<li>\s*\[([ xX])\]\s*")
+
+
+def _task_lists(body_html):
+    """Turn GitHub-style task lists into check-off lists.
+
+    python-markdown has no task-list extension enabled, so `- [ ] thing`
+    renders as the literal text "[ ] thing". Any list whose items carry the
+    marker is instead stripped of the markers and tagged `checkable`, which
+    the page script wires up and persists in localStorage. Lists without the
+    marker are untouched, so existing courses render exactly as before.
+    """
+    def fix(m):
+        tag, attrs, inner = m.group(1), m.group(2), m.group(3)
+        if not _TASK_LI.search(inner):
+            return m.group(0)
+        inner = _TASK_LI.sub(
+            lambda t: '<li class="checked">' if t.group(1) in "xX" else "<li>", inner)
+        if "checkable" not in attrs:
+            attrs = (attrs + ' class="checkable"') if "class=" not in attrs else \
+                re.sub(r'class="', 'class="checkable ', attrs, count=1)
+        return f"<{tag}{attrs}>{inner}</{tag}>"
+
+    return re.sub(r"<(ul|ol)([^>]*)>(.*?)</\1>", fix, body_html, flags=re.S)
+
+
+def _wc(text):
+    """Rough reading-word count, ignoring fenced code blocks."""
+    return len(re.findall(r"\w+", re.sub(r"```.*?```", "", text, flags=re.S)))
+
+
+def _plan_pages(sections):
+    """Greedy-pack sections into pages by word budget; force a break at Capstone."""
+    pages, cur, cur_w = [], [], 0
+    for heading, chunk in sections:
+        is_capstone = "capstone" in heading.lower()
+        w = _wc(chunk)
+        if cur and (is_capstone or cur_w + w > PAGE_WORDS):
+            pages.append(cur)
+            cur, cur_w = [], 0
+        cur.append((heading, chunk))
+        cur_w += w
+    if cur:
+        pages.append(cur)
+    return pages or [[]]
+
+
+def _page_label(sections):
+    """Short human label for a page, from its section headings."""
+    heads = [h for h, _ in sections]
+    if any(LEAD_HEADING in h for h in heads):
+        return "Start here"
+    if any("capstone" in h.lower() for h in heads):
+        return "Capstone & wrap-up"
+    nums = [int(pm.group(1)) for h in heads for pm in [re.match(r"Part\s+(\d+)", h)] if pm]
+    if nums:
+        return f"Part {nums[0]}" if len(nums) == 1 else f"Parts {nums[0]}-{nums[-1]}"
+    if any("Key takeaways" in h for h in heads):
+        return "Wrap-up"
+    return (heads[0][:22] if heads else "")
+
+
 def convert(md_path, out_path, cfg=None, home="../index.html", prev=None, nxt=None):
     cfg = cfg or dict(DEFAULT_CFG)
     raw = pathlib.Path(md_path).read_text(encoding="utf-8")
@@ -379,11 +497,18 @@ def convert(md_path, out_path, cfg=None, home="../index.html", prev=None, nxt=No
         meta_block = bm.group(1)
         body_src = body_src[bm.end():]
 
+    global LEAD_HEADING, ITEM_LABEL
+    LEAD_HEADING = cfg.get("lead_heading", "In one sentence")
+    ITEM_LABEL = cfg.get("unit_labels", {}).get("item", "Lesson")
+
     def field(label):
         mm = re.search(r"\*\*" + label + r":?\*\*\s*(.+)", meta_block)
         return mm.group(1).strip() if mm else ""
 
-    speaker = field("Speaker").split(",")[0].strip() or "Instructor"
+    # Optional. Courses that do not credit a speaker per lesson simply omit the chip.
+    speaker = field("Speaker").split(",")[0].strip()
+    speaker_chip = (f'<span class="chip">&#127908; <b>{html.escape(speaker)}</b></span>'
+                    if speaker else "")
     time_raw = field("Estimated time")
     time_short = re.sub(r"\s*\(.*\)", "", time_raw).strip() or "45 to 60 min"
     yt = re.search(r"\((https?://[^)]*(?:youtube\.com|youtu\.be)[^)]*)\)", meta_block)
@@ -398,9 +523,11 @@ def convert(md_path, out_path, cfg=None, home="../index.html", prev=None, nxt=No
     hero_title_html = (html.escape(bits[0]) + ' <span class="accent">' + html.escape(bits[1]) + "</span>") \
         if len(bits) == 2 else html.escape(hero_title)
 
-    # Lead = first paragraph under "## In one sentence".
+    # Lead = first paragraph under the configured lead heading ("In one
+    # sentence" by default, "Where you are" for the protocol).
     lead = ""
-    lm = re.search(r"##\s+In one sentence\s*\n+([^\n#]+(?:\n[^\n#]+)*)", body_src)
+    lm = re.search(r"##\s+" + re.escape(LEAD_HEADING) + r"\s*\n+([^\n#]+(?:\n[^\n#]+)*)",
+                   body_src)
     if lm:
         lead = re.sub(r"\s+", " ", lm.group(1)).strip()
         # The lead is placed into the hero as plain text, so strip inline
@@ -412,90 +539,189 @@ def convert(md_path, out_path, cfg=None, home="../index.html", prev=None, nxt=No
         lead = re.sub(r"`([^`]+)`", r"\1", lead)                 # `code`
         lead = re.sub(r"(?<![\w*])\*(?!\s)([^*]+?)(?<!\s)\*(?!\w)", r"\1", lead)  # *italic*
 
-    md = markdown.Markdown(
-        extensions=["fenced_code", "tables", "toc", "sane_lists", "attr_list", "codehilite"],
-        extension_configs={
-            "codehilite": {"guess_lang": False, "css_class": "codehilite"},
-            "toc": {"toc_depth": "2-3"},
-        },
-    )
-    body_html = md.convert(body_src)
-    toc_html = md.toc
+    # ---- paginate into short, linked pages --------------------------------
+    sections = _split_sections(body_src)
+    pages = _plan_pages(sections)
+    n = len(pages)
+    labels = [_page_label(pg) for pg in pages]
 
-    # Give the Capstone heading a stable id ("capstone") so nav and hero button
-    # always reach it, and point its TOC link there too.
-    body_html = re.sub(r'<h2 id="[^"]*"(>\s*(?:\U0001F6E0️?\s*)?Capstone)', r'<h2 id="capstone" class="capstone-h"\1', body_html)
-    toc_html = re.sub(r'<a href="#[^"]*"(>\s*(?:\U0001F6E0️?\s*)?Capstone)', r'<a href="#capstone" class="toc-capstone"\1', toc_html)
+    out_path = pathlib.Path(out_path)
+    stem, suf = out_path.stem, out_path.suffix
 
-    # Watch-the-talk button only when there is a real video URL.
+    def page_file(i):
+        return out_path.name if i == 1 else f"{stem}-{i}{suf}"
+
+    first_file, last_file = page_file(1), page_file(n)
+
+    # Remove stale extra pages from any previous build with more pages.
+    for old in out_path.parent.glob(f"{stem}-*{suf}"):
+        if re.fullmatch(rf"{re.escape(stem)}-\d+{re.escape(suf)}", old.name):
+            old.unlink()
+
+    # The unit number out of the H1, used as the sync id. Keyed off the
+    # configured item label, so "Phase 1 · Session 7" yields 7 exactly as
+    # "Module 2 · Lesson 7" does. Hardcoding "Lesson" here silently disabled
+    # the mark-complete button and the progress strip on every protocol page.
+    lm2 = re.search(re.escape(ITEM_LABEL) + r"\s+(\d+)", title_full)
+    lesson_num = lm2.group(1) if lm2 else ""
+
+    home_fwd = home.replace("\\", "/")
+    base = home_fwd.rsplit("/", 1)[0] if "/" in home_fwd else "."
+
+    pyg_css = HtmlFormatter(style="one-dark").get_style_defs(".codehilite")
     if yt_url:
         watch = (f'<a class="play" href="{html.escape(yt_url)}" target="_blank" rel="noopener">'
                  f'<span class="circ">&#9654;</span> Watch the talk</a>')
     else:
         watch = ""
 
-    # Previous / next / home navigation so every lesson is interlinked.
-    nav = '<nav class="lessonnav">'
-    if prev:
-        nav += (f'<a class="ln prev" href="{html.escape(prev["href"])}">'
-                f'<span class="dir">&#8592; Previous</span><b>{html.escape(prev["title"])}</b></a>')
-    nav += f'<a class="ln home" href="{html.escape(home)}"><b>All lessons</b></a>'
-    if nxt:
-        nav += (f'<a class="ln next" href="{html.escape(nxt["href"])}">'
-                f'<span class="dir">Next &#8594;</span><b>{html.escape(nxt["title"])}</b></a>')
-    nav += '</nav>'
+    def pager(i, where):
+        if n < 2:
+            return ""
+        seg = '<div class="seg">' + "".join(
+            f'<a href="{html.escape(page_file(j))}" class="{"cur" if j == i else ""}" '
+            f'title="{html.escape(labels[j - 1])}">{j}</a>' for j in range(1, n + 1)) + '</div>'
+        count = f'<span class="pcount">Page {i} of {n} &middot; {html.escape(labels[i - 1])}</span>'
+        prev_c = "disabled" if i == 1 else ""
+        next_c = "disabled" if i == n else ""
+        prev_h = "#" if i == 1 else html.escape(page_file(i - 1))
+        next_h = "#" if i == n else html.escape(page_file(i + 1))
+        btns = (f'<div class="pbtns">'
+                f'<a class="pbtn prev {prev_c}" href="{prev_h}">&#8592; Prev</a>'
+                f'<a class="pbtn next {next_c}" href="{next_h}">Next &#8594;</a></div>')
+        return f'<div class="pager {where}">{count}{seg}{btns}</div>'
 
-    pyg_css = HtmlFormatter(style="one-dark").get_style_defs(".codehilite")
+    for i, page in enumerate(pages, 1):
+        page_md = "\n".join(chunk for _, chunk in page)
+        md = markdown.Markdown(
+            extensions=["fenced_code", "tables", "toc", "sane_lists", "attr_list", "codehilite"],
+            extension_configs={
+                "codehilite": {"guess_lang": False, "css_class": "codehilite"},
+                "toc": {"toc_depth": "2-3"},
+            },
+        )
+        body_html = _task_lists(md.convert(page_md))
+        toc_html = md.toc
 
-    out = (TEMPLATE
-           .replace("{{TITLE}}", html.escape(title_full))
-           .replace("{{COURSE}}", html.escape(cfg.get("title", DEFAULT_CFG["title"])))
-           .replace("{{SOURCE_LABEL}}", html.escape(cfg.get("source_label", DEFAULT_CFG["source_label"])))
-           .replace("{{FOOTER_NOTE}}", html.escape(cfg.get("footer_note", DEFAULT_CFG["footer_note"])))
-           .replace("{{EYEBROW}}", html.escape(eyebrow))
-           .replace("{{HERO_TITLE}}", hero_title_html)
-           .replace("{{LEAD}}", html.escape(lead))
-           .replace("{{SPEAKER}}", html.escape(speaker))
-           .replace("{{TIME}}", html.escape(time_short))
-           .replace("{{WATCH}}", watch)
-           .replace("{{HOME}}", html.escape(home))
-           .replace("{{NAV}}", nav)
-           .replace("{{TOC}}", toc_html)
-           .replace("{{BODY}}", body_html)
-           .replace("{{PYGMENTS_CSS}}", pyg_css))
+        # Stable "capstone" id so nav/hero buttons and the TOC link always reach it.
+        body_html = re.sub(r'<h2 id="[^"]*"(>\s*(?:\U0001F6E0️?\s*)?Capstone)',
+                           r'<h2 id="capstone" class="capstone-h"\1', body_html)
+        toc_html = re.sub(r'<a href="#[^"]*"(>\s*(?:\U0001F6E0️?\s*)?Capstone)',
+                          r'<a href="#capstone" class="toc-capstone"\1', toc_html)
 
-    # Optional cross-device progress sync: when course.json has a "sync" block,
-    # inject a per-lesson "mark complete" button and the shared sync script.
-    # All storage/auth logic lives in assets/sync.js; this only places the hook.
-    if cfg.get("sync"):
-        lm2 = re.search(r"Lesson\s+(\d+)", title_full)
-        if lm2:
-            num = lm2.group(1)
-            # home is relative to the lessons-html root (e.g. "../index.html");
-            # normalize Windows backslashes before taking its directory.
-            home_fwd = home.replace("\\", "/")
-            base = home_fwd.rsplit("/", 1)[0] if "/" in home_fwd else "."
-            block = (
-                f'<section class="lesson-sync" data-lesson-id="{num}" data-home="{base}/index.html">'
-                '<div class="ls-inner">'
-                '<button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button>'
-                '<span class="ls-status" data-sync-status></span>'
-                '</div>'
-                f'<a class="ls-track" href="{base}/index.html">Your progress &#8594;</a>'
-                '</section>'
+        # Between-lesson cards: previous lesson only on page 1, next only on last.
+        nav = '<nav class="lessonnav">'
+        if i == 1 and prev:
+            nav += (f'<a class="ln prev" href="{html.escape(prev["href"])}">'
+                    f'<span class="dir">&#8592; Previous {ITEM_LABEL.lower()}</span><b>{html.escape(prev["title"])}</b></a>')
+        nav += f'<a class="ln home" href="{html.escape(home)}"><b>All {ITEM_LABEL.lower()}s</b></a>'
+        if i == n and nxt:
+            nav += (f'<a class="ln next" href="{html.escape(nxt["href"])}">'
+                    f'<span class="dir">Next {ITEM_LABEL.lower()} &#8594;</span><b>{html.escape(nxt["title"])}</b></a>')
+        nav += '</nav>'
+
+        overview_href = "#overview" if i == 1 else html.escape(first_file) + "#overview"
+        capstone_href = "#capstone" if i == n else html.escape(last_file) + "#capstone"
+        body_with_pager = pager(i, "top") + body_html + pager(i, "bottom")
+
+        # Full hero on page 1; compact header strip on later pages.
+        template = TEMPLATE
+        if i > 1:
+            compact = (
+                '<header class="lp-head"><div class="wrap">'
+                f'<span class="eyebrow">&#10022; {html.escape(eyebrow)}</span>'
+                f'<h1>{hero_title_html}</h1>'
+                f'<p class="part">Part {i} of {n} &middot; {html.escape(labels[i - 1])}</p>'
+                '</div></header>'
             )
-            # course-data.js (generated, classic script) must load before the
-            # sync module so window.COURSE_DATA is set when the bar renders.
+            template = re.sub(r'<header class="hero">.*?</header>', compact, template, flags=re.S)
+
+        # ---- optional chrome -----------------------------------------------
+        # Every flag defaults to True, so existing courses render exactly as
+        # before. A course opts out with "chrome": {"topbar": false, ...}.
+        ch = cfg.get("chrome", {})
+        def on(k):
+            return ch.get(k, True)
+        plural = ITEM_LABEL.lower() + "s"
+        topbar_html = ('<div class="topbar"><div class="wrap">'
+                       '<div>&#10024; Welcome to <b>' + html.escape(cfg.get("title", "")) + '</b> &middot; a self-paced course</div>'
+                       '<div class="right"><span>' + html.escape(cfg.get("source_label", "")) + '</span></div>'
+                       '</div></div>') if on("topbar") else ""
+        nav_extra = ('<a href="{{OVERVIEW_HREF}}">Overview</a>'
+                     '<a href="{{CAPSTONE_HREF}}">Capstone</a>') if on("nav_links") else ""
+        nav_cta = ('<div class="nav-cta"><a class="btn btn-primary" href="#start">Start the '
+                   + ITEM_LABEL.lower() + ' &#8594;</a></div>') if on("start_button") else ""
+        squiggles = ('<svg class="squiggle" style="top:120px;left:46%;" width="90" height="26" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#18c4a0" stroke-width="4" stroke-linecap="round"/></svg>'
+                     '<svg class="squiggle" style="bottom:60px;right:40%;" width="70" height="22" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#f24d63" stroke-width="4" stroke-linecap="round"/></svg>') if on("squiggles") else ""
+        hero_actions = ('<div class="hero-actions"><a class="btn btn-primary" href="#start">Start the '
+                        + ITEM_LABEL.lower() + ' &#8594;</a>' + watch + '</div>') if on("hero_actions") else ""
+        chips_html = ('<div class="chips">' + speaker_chip
+                      + '<span class="chip">&#9201; <b>' + html.escape(time_short) + '</b></span>'
+                      + ('<span class="chip">&#128296; <b>Hands-on capstone</b></span>' if on("capstone_chip") else "")
+                      + '</div>') if on("chips") else ""
+        hero_card = HERO_CARD_HTML if on("hero_card") else ""
+
+        out = (template
+               .replace("{{TITLE}}", html.escape(title_full) + ("" if n < 2 else f" (p{i}/{n})"))
+               .replace("{{COURSE}}", html.escape(cfg.get("title", DEFAULT_CFG["title"])))
+               .replace("{{SOURCE_LABEL}}", html.escape(cfg.get("source_label", DEFAULT_CFG["source_label"])))
+               .replace("{{FOOTER_NOTE}}", html.escape(cfg.get("footer_note", DEFAULT_CFG["footer_note"])))
+               .replace("{{EYEBROW}}", html.escape(eyebrow))
+               .replace("{{HERO_TITLE}}", hero_title_html)
+               .replace("{{LEAD}}", html.escape(lead))
+               .replace("{{SPEAKER_CHIP}}", speaker_chip)
+               .replace("{{TOPBAR}}", topbar_html)
+               .replace("{{HOME_LABEL}}", "All " + plural)
+               .replace("{{NAV_EXTRA}}", nav_extra)
+               .replace("{{NAV_CTA}}", nav_cta)
+               .replace("{{SQUIGGLES}}", squiggles)
+               .replace("{{HERO_ACTIONS}}", hero_actions)
+               .replace("{{CHIPS}}", chips_html)
+               .replace("{{HERO_CARD}}", hero_card)
+               .replace("{{TIME}}", html.escape(time_short))
+               .replace("{{WATCH}}", watch)
+               # The newline is part of the match so a course with no icons
+               # loses the whole line rather than leaving a blank one.
+               .replace("{{ICONS}}\n", icon_links(base) + "\n" if cfg.get("_icons") else "")
+               .replace("{{HOME}}", html.escape(home))
+               .replace("{{OVERVIEW_HREF}}", overview_href)
+               .replace("{{CAPSTONE_HREF}}", capstone_href)
+               .replace("{{NAV}}", nav)
+               .replace("{{TOC}}", toc_html)
+               .replace("{{BODY}}", body_with_pager)
+               .replace("{{PYGMENTS_CSS}}", pyg_css))
+
+        # Progress sync: bottom bar on every page; "mark complete" only on the
+        # last page (one lesson = one tracked unit). Non-last pages carry an
+        # invisible marker so the fixed progress bar still renders.
+        if cfg.get("sync") and lesson_num:
+            if i == n:
+                hook = (
+                    f'<section class="lesson-sync" data-lesson-id="{lesson_num}" data-home="{base}/index.html">'
+                    '<div class="ls-inner">'
+                    '<button type="button" class="ls-btn" data-lesson-complete>'
+                    f'Mark this {ITEM_LABEL.lower()} complete</button>'
+                    '<span class="ls-status" data-sync-status></span>'
+                    '</div>'
+                    f'<a class="ls-track" href="{base}/index.html">Your progress &#8594;</a>'
+                    '</section>'
+                )
+            else:
+                hook = (f'<div class="ls-marker" data-lesson-id="{lesson_num}" '
+                        f'data-home="{base}/index.html" style="display:none"></div>')
             script = (f'<script src="{base}/assets/course-data.js"></script>'
                       f'<script type="module" src="{base}/assets/sync.js"></script>')
             if '<nav class="lessonnav">' in out:
-                out = out.replace('<nav class="lessonnav">', block + '<nav class="lessonnav">', 1)
+                out = out.replace('<nav class="lessonnav">', hook + '<nav class="lessonnav">', 1)
             else:
-                out = out.replace("</body>", block + "</body>", 1)
+                out = out.replace("</body>", hook + "</body>", 1)
             out = out.replace("</body>", script + "</body>", 1)
 
-    pathlib.Path(out_path).write_text(out, encoding="utf-8")
-    print(f"wrote {out_path} ({len(out)//1024} KB)")
+        dest = out_path if i == 1 else out_path.with_name(page_file(i))
+        dest.write_text(out, encoding="utf-8")
+
+    total_kb = sum(out_path.with_name(page_file(i)).stat().st_size for i in range(1, n + 1)) // 1024
+    print(f"wrote {out_path} + {n - 1} more page(s) [{n} pages, {total_kb} KB]")
 
 
 if __name__ == "__main__":

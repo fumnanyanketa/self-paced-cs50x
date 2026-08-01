@@ -3,9 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 7 · Lesson 27: Lists, Dictionaries, and the pip Ecosystem | Self-Paced CS50x</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iIzBhMWEyZiIvPjx0ZXh0IHg9IjE2IiB5PSIyMiIgZm9udC1mYW1pbHk9InVpLW1vbm9zcGFjZSxNZW5sbyxDb25zb2xhcyxtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjZjI0ZDYzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj4mZ3Q7XzwvdGV4dD48L3N2Zz4=">
-
+<title>Module 7 · Lesson 27: Lists, Dictionaries, and the pip Ecosystem (p1/3) | Self-Paced CS50x</title>
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="shortcut icon" href="../assets/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -51,6 +53,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -142,13 +167,13 @@ code{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.86em;b
 .copy-btn.done{background:var(--teal);color:#04231c;border-color:var(--teal)}
 
 /* callouts */
-blockquote{margin:24px 0;padding:16px 20px;border-radius:14px;background:var(--soft);border:1px solid var(--line);border-left:5px solid var(--teal)}
+blockquote{margin:24px 0;padding:18px 22px;border-radius:14px;background:var(--soft);border:1px solid var(--line);box-shadow:var(--shadow)}
 blockquote p{margin:7px 0}blockquote p:first-child{margin-top:0}blockquote p:last-child{margin-bottom:0}
-blockquote.cl-key{background:var(--k-bg);border-left-color:var(--k);border-color:transparent}
-blockquote.cl-tip{background:var(--tip-bg);border-left-color:var(--tip);border-color:transparent}
-blockquote.cl-ok{background:var(--ok-bg);border-left-color:var(--ok);border-color:transparent}
-blockquote.cl-no{background:var(--no-bg);border-left-color:var(--no);border-color:transparent}
-blockquote.cl-goal{background:var(--goal-bg);border-left-color:var(--goal);border-color:transparent}
+blockquote.cl-key{background:var(--k-bg);border-color:transparent}
+blockquote.cl-tip{background:var(--tip-bg);border-color:transparent}
+blockquote.cl-ok{background:var(--ok-bg);border-color:transparent}
+blockquote.cl-no{background:var(--no-bg);border-color:transparent}
+blockquote.cl-goal{background:var(--goal-bg);border-color:transparent}
 
 /* capstone banner */
 h2.capstone-h{background:linear-gradient(115deg,var(--navy),var(--navy-3));color:#fff;border-radius:20px;padding:30px 28px 26px;margin-top:64px;box-shadow:0 20px 50px rgba(10,26,47,.3);overflow:hidden;position:relative}
@@ -203,42 +228,27 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <body>
 <div id="progress"></div>
 
-<div class="topbar"><div class="wrap">
-  <div>&#10024; Welcome to <b>Self-Paced CS50x</b> &middot; a self-paced course</div>
-  <div class="right"><span>CS50x 2026 · Harvard University · David J. Malan</span></div>
-</div></div>
+<div class="topbar"><div class="wrap"><div>&#10024; Welcome to <b>Self-Paced CS50x</b> &middot; a self-paced course</div><div class="right"><span>CS50x 2026 · Harvard University · David J. Malan</span></div></div></div>
 
 <nav class="bar"><div class="wrap">
   <button class="btn btn-outline" id="menuBtn" style="padding:8px 14px">&#9776;</button>
   <a class="logo" href="../index.html">Self-Paced CS50x<span class="dot">.</span></a>
   <div class="navlinks">
-    <a href="../index.html">All lessons</a>
-    <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="../index.html">All lessons</a><a href="#overview">Overview</a><a href="27-lists-dicts-pip-3.html#capstone">Capstone</a>
   </div>
-  <div class="nav-cta">
-    <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
-  </div>
+<div class="nav-cta"><a class="btn btn-primary" href="#start">Start the lesson &#8594;</a></div>
 </div></nav>
 
 <header class="hero">
   <span class="blob t"></span><span class="blob c"></span>
-  <svg class="squiggle" style="top:120px;left:46%;" width="90" height="26" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#18c4a0" stroke-width="4" stroke-linecap="round"/></svg>
-  <svg class="squiggle" style="bottom:60px;right:40%;" width="70" height="22" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#f24d63" stroke-width="4" stroke-linecap="round"/></svg>
+<svg class="squiggle" style="top:120px;left:46%;" width="90" height="26" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#18c4a0" stroke-width="4" stroke-linecap="round"/></svg><svg class="squiggle" style="bottom:60px;right:40%;" width="70" height="22" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#f24d63" stroke-width="4" stroke-linecap="round"/></svg>
   <div class="wrap" id="overview">
     <div>
       <span class="eyebrow">&#10022; Module 7 · Lesson 27</span>
       <h1>Lists, Dictionaries, and the pip <span class="accent">Ecosystem</span></h1>
       <p class="lead">Python&#x27;s built-in list and dict types replace the array and the hand-built hash table you coded in C, the csv module reads and writes real data files in a few lines instead of hundreds, and a single pip install pulls in code that other people already wrote and tested: three upgrades that turn a script into something that behaves like a real, data-driven application.</p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
-        <a class="play" href="https://www.youtube.com/watch?v=Rl0ludWTLxs" target="_blank" rel="noopener"><span class="circ">&#9654;</span> Watch the talk</a>
-      </div>
-      <div class="chips">
-        <span class="chip">&#127908; <b>David J. Malan</b></span>
-        <span class="chip">&#9201; <b>45-60 minutes</b></span>
-        <span class="chip">&#128296; <b>Hands-on capstone</b></span>
-      </div>
+<div class="hero-actions"><a class="btn btn-primary" href="#start">Start the lesson &#8594;</a><a class="play" href="https://www.youtube.com/watch?v=Rl0ludWTLxs" target="_blank" rel="noopener"><span class="circ">&#9654;</span> Watch the talk</a></div>
+<div class="chips"><span class="chip">&#127908; <b>David J. Malan</b></span><span class="chip">&#9201; <b>45-60 minutes</b></span><span class="chip">&#128296; <b>Hands-on capstone</b></span></div>
     </div>
     <div style="position:relative">
       <div class="hero-card">
@@ -253,7 +263,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="27-lists-dicts-pip-3.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -278,42 +288,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <li><a href="#from-one-dictionary-to-a-list-of-dictionaries">From one dictionary to a list of dictionaries</a></li>
 </ul>
 </li>
-<li><a href="#part-3-the-sys-module-and-readingwriting-csv-files">Part 3: The sys module and reading/writing CSV files</a><ul>
-<li><a href="#command-line-arguments-and-exit-codes-without-main">Command-line arguments and exit codes, without main</a></li>
-<li><a href="#writing-a-csv-file-with-csvwriter">Writing a CSV file with csv.writer</a></li>
-<li><a href="#letting-python-close-the-file-for-you-with-open">Letting Python close the file for you: with open(...)</a></li>
-<li><a href="#writing-self-describing-rows-with-csvdictwriter">Writing self-describing rows with csv.DictWriter</a></li>
-</ul>
-</li>
-<li><a href="#part-4-pip-and-the-third-party-ecosystem">Part 4: pip and the third-party ecosystem</a><ul>
-<li><a href="#modules-packages-and-what-pip-actually-does">Modules, packages, and what pip actually does</a></li>
-<li><a href="#same-idea-bigger-payoff-text-to-speech-and-qr-codes">Same idea, bigger payoff: text-to-speech and QR codes</a></li>
-</ul>
-</li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: Persistent Phonebook + QR Code Finale</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-grade-calculator-foundational">Exercise 1: Grade calculator (foundational)</a></li>
-<li><a href="#exercise-2-contact-card-lookup-intermediate">Exercise 2: Contact card lookup (intermediate)</a></li>
-<li><a href="#exercise-3-command-line-greeter-with-exit-codes-advanced">Exercise 3: Command-line greeter with exit codes (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="27-lists-dicts-pip.html" class="cur" title="Start here">1</a><a href="27-lists-dicts-pip-2.html" class="" title="Parts 3-4">2</a><a href="27-lists-dicts-pip-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="27-lists-dicts-pip-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>Python's built-in <code>list</code> and <code>dict</code> types replace the array and the hand-built hash table you coded in C, the <code>csv</code> module reads and writes real data files in a few lines instead of hundreds, and a single <code>pip install</code> pulls in code that other people already wrote and tested: three upgrades that turn a script into something that behaves like a real, data-driven application.</p>
 <blockquote>
@@ -463,300 +444,9 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <blockquote>
 <p>✅ <strong>What to do about it:</strong> reach for a plain dictionary when you have one fixed record of named fields (one contact, one config). Reach for a list of dictionaries the moment you have <em>many</em> records that share the same fields (a phonebook, a roster, rows read from a file).</p>
 </blockquote>
-<hr />
-<h2 id="part-3-the-sys-module-and-readingwriting-csv-files">Part 3: The <code>sys</code> module and reading/writing CSV files</h2>
-<h3 id="command-line-arguments-and-exit-codes-without-main">Command-line arguments and exit codes, without <code>main</code></h3>
-<p>Dropping <code>int main(void)</code> also dropped <code>argc</code>/<code>argv</code>, but that functionality didn't disappear, it just moved into a library you now have to import explicitly: <code>sys</code>.</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">sys</span><span class="w"> </span><span class="kn">import</span> <span class="n">argv</span>
-
-<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello, world&quot;</span><span class="p">)</span>
-</code></pre></div>
-
-<p><code>argv</code> is a list of the words typed at the command line, and <code>argv[0]</code> is always the script's own name. Malan clarifies exactly what gets counted:</p>
-<blockquote>
-<p>"...the only things that are being counted are the words after the Python interpreter itself." (David Malan)</p>
-</blockquote>
-<p>So running <code>python greet.py David</code> gives you <code>argv == ["greet.py", "David"]</code>, and <code>len(argv) == 2</code>. You can also exit a program with a specific status code the same way you returned <code>0</code> or <code>1</code> from <code>main</code> in C, except now it's a function call from the <code>sys</code> library, <code>sys.exit()</code>:</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
-
-<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Missing command-line argument&quot;</span><span class="p">)</span>
-    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-</code></pre></div>
-
-<p><code>sys.exit(1)</code> signals failure, <code>sys.exit(0)</code> signals success: the same convention <code>check50</code> and other automated tools rely on, just spelled differently than C's <code>return 1;</code> inside <code>main</code>.</p>
-<h3 id="writing-a-csv-file-with-csvwriter">Writing a CSV file with <code>csv.writer</code></h3>
-<p>Recall Module 5 · Lesson 20, where you persisted a phonebook to disk in C using <code>fopen</code>, <code>fprintf</code>, and manual comma-placement. Python's built-in <code>csv</code> module removes almost all of that ceremony:</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
-
-<span class="n">name</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Name: &quot;</span><span class="p">)</span>
-<span class="n">number</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Number: &quot;</span><span class="p">)</span>
-
-<span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;phonebook.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span>
-<span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-<span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="n">name</span><span class="p">,</span> <span class="n">number</span><span class="p">])</span>
-<span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</code></pre></div>
-
-<p><code>open("phonebook.csv", "a")</code> opens the file in <strong>append mode</strong>: new runs add rows rather than erasing old ones. <code>csv.writer(file)</code> wraps that open file so it knows how to format rows as proper CSV; <code>writer.writerow([...])</code> takes a list of values and writes them out, comma-separated, with a newline at the end, so you never have to type a comma yourself. As Malan puts it:</p>
-<blockquote>
-<p>"Write row is a method, aka function associated with this writer object, and I know that only because I did actually read the documentation for the CSV library." (David Malan)</p>
-</blockquote>
-<p>That habit, reading the actual documentation for a library instead of guessing, is worth adopting for every new module you touch, not just this one.</p>
-<h3 id="letting-python-close-the-file-for-you-with-open">Letting Python close the file for you: <code>with open(...)</code></h3>
-<p>Forgetting to call <code>file.close()</code> in C risked a memory or resource leak you'd only catch by running Valgrind. Python's <code>with</code> statement removes the risk by closing the file for you automatically, the moment its indented block ends:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;phonebook.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-    <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-    <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="n">name</span><span class="p">,</span> <span class="n">number</span><span class="p">])</span>
-</code></pre></div>
-
-<p>Malan draws the comparison to C directly:</p>
-<blockquote>
-<p>"This just helps us avoid ... stupid mistakes we've made in C because you forget to close a file that you have to open and you don't necessarily notice unless you run Valgrind or something on it." (David Malan)</p>
-</blockquote>
-<p><code>with</code> is Python's <strong>context manager</strong> syntax: "open the following file, run this indented code, then close the file for me, even if something goes wrong in between." You'll see this same pattern reused constantly, well beyond files.</p>
-<h3 id="writing-self-describing-rows-with-csvdictwriter">Writing self-describing rows with <code>csv.DictWriter</code></h3>
-<p>A bare <code>csv.writer</code> assumes you'll always remember that column 0 is the name and column 1 is the number. That's fragile: if the columns ever get reordered, the code silently writes the wrong thing into the wrong place. <code>csv.DictWriter</code> fixes this by writing a header row and matching each value to a named field instead of a position:</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
-
-<span class="n">name</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Name: &quot;</span><span class="p">)</span>
-<span class="n">number</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Number: &quot;</span><span class="p">)</span>
-
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;phonebook.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-    <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">fieldnames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;number&quot;</span><span class="p">])</span>
-    <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">({</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="s2">&quot;number&quot;</span><span class="p">:</span> <span class="n">number</span><span class="p">})</span>
-</code></pre></div>
-
-<p><code>fieldnames=["name", "number"]</code> tells the writer what columns exist and in what order to write the header; <code>writerow({...})</code> then takes a dictionary, the same shape you already used for a single contact in Part 2, and places each value under its matching column, regardless of the order you list the keys in. (In practice you'd write the header line once, before your program starts appending, so it doesn't get duplicated on every run.)</p>
-<blockquote>
-<p>🔑 <strong>The single most important takeaway of this part.</strong> <code>with open(...)</code> closes files for you automatically; <code>csv.writer</code> writes plain rows by position; <code>csv.DictWriter</code> writes self-describing rows by field name, using the exact same dictionary shape you already use to model one record in memory.</p>
-</blockquote>
-<div class="codehilite"><pre><span></span><code>list of dicts (in memory)              csv.DictWriter (on disk, phonebook.csv)
-[{&quot;name&quot;: &quot;Kelly&quot;, &quot;number&quot;: &quot;...&quot;},        name,number
- {&quot;name&quot;: &quot;David&quot;, &quot;number&quot;: &quot;...&quot;},   --&gt;   Kelly,+16174951000
- {&quot;name&quot;: &quot;John&quot;,  &quot;number&quot;: &quot;...&quot;}]         David,+16174951000
-                                              John,+19494682750
-</code></pre></div>
-
-<hr />
-<h2 id="part-4-pip-and-the-third-party-ecosystem">Part 4: pip and the third-party ecosystem</h2>
-<h3 id="modules-packages-and-what-pip-actually-does">Modules, packages, and what pip actually does</h3>
-<p>Malan draws the vocabulary distinction early in this lecture:</p>
-<blockquote>
-<p>"Python uses somewhat different vernacular whereby Python has what are called modules and packages, and a package is just a collection of modules ... a module is just a library using Python Speak, so to speak." (David Malan)</p>
-</blockquote>
-<p>Some modules (<code>sys</code>, <code>csv</code>) ship with Python itself; you still have to <code>import</code> them, but nothing needs installing. Others are <strong>third-party</strong>: written and published by someone else, and not present until you fetch them yourself. That's what <code>pip</code> is for:</p>
-<blockquote>
-<p>"You can use a program called PIP to install Python packages into your own code space ... if those libraries are freely available as open source online." (David Malan)</p>
-</blockquote>
-<p>If you try to <code>import</code> a package that isn't installed yet, Python raises <code>ModuleNotFoundError</code>, exactly the situation Malan demonstrates on purpose with <code>cowsay</code> (a library that prints an ASCII-art cow saying whatever text you give it):</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">cowsay</span>
-
-<span class="n">cowsay</span><span class="o">.</span><span class="n">cow</span><span class="p">(</span><span class="s2">&quot;This is CS50&quot;</span><span class="p">)</span>
-</code></pre></div>
-
-<p>Running that before installing the package fails with <code>ModuleNotFoundError: No module named 'cowsay'</code>. The fix is a single terminal command:</p>
-<div class="codehilite"><pre><span></span><code>pip install cowsay
-</code></pre></div>
-
-<p>Once that finishes, the exact same <code>import cowsay</code> line above works: no code changes needed, because the library now actually exists in your project.</p>
-<h3 id="same-idea-bigger-payoff-text-to-speech-and-qr-codes">Same idea, bigger payoff: text-to-speech and QR codes</h3>
-<p>Malan runs the same <code>pip install</code> pattern twice more, each time with a package that does something a beginner would never build from scratch in a single lecture. First, text-to-speech, on his own computer rather than cs50.dev (cloud codespaces are browser-based, so audio has nowhere to play):</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">pyttsx3</span>
-
-<span class="n">engine</span> <span class="o">=</span> <span class="n">pyttsx3</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
-<span class="n">engine</span><span class="o">.</span><span class="n">say</span><span class="p">(</span><span class="s2">&quot;This is CS50&quot;</span><span class="p">)</span>
-<span class="n">engine</span><span class="o">.</span><span class="n">runAndWait</span><span class="p">()</span>
-</code></pre></div>
-
-<p>Then, generating an actual scannable QR code image, the finale of the whole lecture:</p>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">qrcode</span>
-
-<span class="n">image</span> <span class="o">=</span> <span class="n">qrcode</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s2">&quot;https://www.youtube.com/watch?v=Rl0ludWTLxs&quot;</span><span class="p">)</span>
-<span class="n">image</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;qr.png&quot;</span><span class="p">)</span>
-</code></pre></div>
-
-<p><code>qrcode.make(...)</code> builds the code from whatever text or URL you give it, and <code>.save("qr.png")</code> writes it out as an actual image file you can open and scan with your phone. Neither <code>pyttsx3</code> nor <code>qrcode</code> comes with Python: both required a <code>pip install</code> first, exactly like <code>cowsay</code> did. The pattern never changes: <code>pip install &lt;name&gt;</code> once, then <code>import &lt;name&gt;</code> in your code, forever after.</p>
-<blockquote>
-<p>✅ <strong>What to do about it:</strong> whenever you hit <code>ModuleNotFoundError</code>, resist the urge to rewrite your code around it. Check the spelling of the package name, run <code>pip install &lt;name&gt;</code>, and try the exact same <code>import</code> again.</p>
-</blockquote>
-<p>Zoom out, and this lesson's three ideas are one pipeline: a <strong>list of dictionaries</strong> holds your data in memory, <code>csv.DictWriter</code> inside a <code>with</code> block makes that data survive a restart, and <code>pip</code> lets you reach past what you or Python's standard library provide, straight into code the rest of the world has already written. That combination (structured records, a durable file, and borrowed tools) is the entire shape of your Capstone below, and, not coincidentally, the entire shape of the north-star web app this course is building you toward.</p>
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong>Lists are arrays that manage themselves.</strong> <code>.append()</code> grows a list, <code>len()</code> reports its size, <code>sum()</code> totals it: no manual capacity tracking required.</li>
-<li><strong>Dictionaries are hash tables you don't have to build.</strong> Look up a value with a string key (<code>person["name"]</code>) instead of a numeric index; check for a key's presence with <code>in</code>.</li>
-<li><strong>A list of dictionaries models a table.</strong> One dictionary is one record (one row); a list of them is the whole table: the same shape a spreadsheet or a database uses.</li>
-<li><strong><code>for...else</code> reports "didn't find it" without an extra variable.</strong> The <code>else</code> block runs only if the loop finishes without a <code>break</code>.</li>
-<li><strong><code>sys.argv</code> and <code>sys.exit()</code> replace <code>argc</code>/<code>argv</code> and <code>return</code> from <code>main</code>.</strong> <code>argv[0]</code> is always the script's own name.</li>
-<li><strong><code>with open(...)</code> closes files automatically</strong>, the way you always meant to in C but sometimes forgot.</li>
-<li><strong><code>csv.writer</code> writes rows by position; <code>csv.DictWriter</code> writes rows by field name</strong>, using a header row so column order can never silently get scrambled.</li>
-<li><strong><code>pip install &lt;package&gt;</code> turns a <code>ModuleNotFoundError</code> into a working <code>import</code>.</strong> The exact same two-step pattern (install once, then import) works for every third-party package, whether it prints a cow or generates a QR code.</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ Assuming <code>name in some_dict</code> checks the <em>values</em>: it checks the <strong>keys</strong>. Looking for a phone number this way will always come back <code>False</code>, even if that number exists as a value somewhere in the dictionary.</li>
-<li>❌ Opening a CSV file with mode <code>"w"</code> instead of <code>"a"</code>: <code>"w"</code> truncates the file and erases every previous row before writing the new one. Use <code>"a"</code> to append.</li>
-<li>❌ Passing a plain list to <code>csv.DictWriter.writerow()</code>, or a dictionary to <code>csv.writer.writerow()</code>: each writer expects its own shape, and mixing them raises an error or silently writes garbage columns.</li>
-<li>❌ Forgetting that <code>for...else</code>'s <code>else</code> runs when the loop completes <em>without</em> <code>break</code>: it is easy to misread it as running every time the loop finishes, <code>break</code> or not.</li>
-<li>❌ Mistyping a package name in <code>pip install</code> (or forgetting to run it at all) and then debugging your own code for several minutes before rereading the <code>ModuleNotFoundError</code> message, which already named the exact missing module.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: Persistent Phonebook + QR Code Finale</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. You'll build a phonebook that stores real contacts as a list of dictionaries, prove that it survives being closed and reopened by saving it to a CSV file, and finish by installing a package you've never used before to generate your own scannable QR code. Build it on <strong>cs50.dev</strong>.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>Two small Python programs:</p>
-<ol>
-<li><strong><code>phonebook.py</code></strong>: lets you add a contact (name and number) to an in-memory list of dictionaries, look up a contact by name, and saves every contact to <code>phonebook.csv</code> with <code>csv.DictWriter</code> so the phonebook is still there the next time you run the program.</li>
-<li><strong><code>qr.py</code></strong>: installs and uses the third-party <code>qrcode</code> package to generate a QR code image linking to anything you like.</li>
-</ol>
-<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in this Capstone</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Lists with <code>.append()</code></td>
-<td>Growing your in-memory list of contacts one <code>add</code> at a time.</td>
-</tr>
-<tr>
-<td>Dictionaries + list of dicts</td>
-<td>Each contact is a <code>{"name": ..., "number": ...}</code> dictionary, stored in a list.</td>
-</tr>
-<tr>
-<td><code>for...else</code></td>
-<td>Reporting "not found" for a lookup only when the loop finishes without a <code>break</code>.</td>
-</tr>
-<tr>
-<td><code>with open(...)</code> + <code>csv.DictWriter</code></td>
-<td>Appending one self-describing row per contact to <code>phonebook.csv</code>.</td>
-</tr>
-<tr>
-<td>Reading a file back with plain string methods</td>
-<td>Reloading existing contacts from <code>phonebook.csv</code> when the program starts.</td>
-</tr>
-<tr>
-<td><code>pip install</code></td>
-<td>Installing <code>qrcode</code> (and, if you like, <code>cowsay</code> or <code>pyttsx3</code>) into your codespace.</td>
-</tr>
-<tr>
-<td><code>sys.argv</code> / <code>sys.exit()</code></td>
-<td>Stretch goal: a command-line lookup mode with a proper exit status.</td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>In-memory add and lookup.</strong> Write <code>phonebook.py</code> with <code>contacts = []</code>. Let the user type <code>add</code> to append a <code>{"name": ..., "number": ...}</code> dictionary to <code>contacts</code>, or <code>search</code> to look up a name using a <code>for...else</code> loop that prints the number if found and <code>"Not found"</code> otherwise. Smallest working version: it works correctly for one program run, even though everything disappears when you quit.</li>
-<li><strong>Persist every add to CSV.</strong> Inside your <code>add</code> flow, open <code>phonebook.csv</code> in append mode with <code>with open("phonebook.csv", "a") as file:</code> and write each new contact with <code>csv.DictWriter(file, fieldnames=["name", "number"])</code>. Write the header row (<code>name,number</code>) once, by hand, the first time you create the file. Add two or three contacts and confirm the rows appear correctly in <code>phonebook.csv</code>.</li>
-<li><strong>Reload contacts on startup.</strong> Before your program does anything else, check whether <code>phonebook.csv</code> already exists and, if it does, read it back into <code>contacts</code> so your phonebook survives quitting and rerunning the program. Because you haven't learned <code>csv.reader</code> yet (Module 8 · Lesson 28 covers that), do it the plain way: read the file's lines, skip the header row, and split each remaining line on the comma yourself. For example:
-   <code>python
-   contacts = []
-   try:
-       with open("phonebook.csv", "r") as file:
-           rows = file.read().splitlines()
-       for row in rows[1:]:  # skip the header row
-           name, number = row.split(",")
-           contacts.append({"name": name, "number": number})
-   except FileNotFoundError:
-       pass  # no file yet: start with an empty phonebook</code></li>
-<li><strong>Generate a QR code.</strong> In a separate file, <code>qr.py</code>, run <code>pip install qrcode</code> in your terminal, then write three lines: <code>import qrcode</code>, <code>image = qrcode.make("...")</code> with any URL or text you like, and <code>image.save("qr.png")</code>. Open <code>qr.png</code> and scan it with your phone to confirm it works.</li>
-<li><strong>Stretch goal: command-line lookup.</strong> Modify <code>phonebook.py</code> so that running <code>python phonebook.py David</code> looks up <code>David</code> immediately using <code>sys.argv</code>, instead of prompting interactively. If the user gives the wrong number of arguments, print a usage message and <code>sys.exit(1)</code>.</li>
-<li><strong>Stretch goal: give your phonebook a voice.</strong> <code>pip install cowsay</code> (or <code>pyttsx3</code>, if you're running Python on your own computer rather than cs50.dev) and have your program print (or speak) "Contact added" whenever <code>add</code> succeeds.</li>
-</ol>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ Adding a contact, quitting the program, and rerunning it still shows that contact when you search, proving persistence actually works, not just appending.</li>
-<li>✅ Searching for a name that doesn't exist prints "Not found" using a <code>for...else</code> loop, with no extra tracking variable.</li>
-<li>✅ <code>phonebook.csv</code> opens correctly in a spreadsheet app, with a <code>name,number</code> header row followed by one row per contact.</li>
-<li>✅ <code>pip install qrcode</code> completed without errors, and <code>qr.png</code> opens as a real, scannable QR code linking to something you chose.</li>
-<li>✅ You can explain, in one sentence, why a list of dictionaries already looks like a spreadsheet or a database table.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> delete <code>phonebook.csv</code> once and rerun your program from a clean slate. If it still works correctly with an empty file, you've actually tested "reload on start", not just "append to a file that already had data in it."</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-grade-calculator-foundational">Exercise 1: Grade calculator (foundational)</h3>
-<p>Write a program that starts with <code>scores = []</code>, asks the user for 5 quiz scores one at a time using <code>input()</code> and <code>int()</code>, appending each one with <code>.append()</code>. Then print the total (<code>sum()</code>), the count (<code>len()</code>), and the average, using an f-string.</p>
-<h3 id="exercise-2-contact-card-lookup-intermediate">Exercise 2: Contact card lookup (intermediate)</h3>
-<p>Build a list of dictionaries for at least three friends, each with <code>"name"</code> and <code>"email"</code> keys. Ask the user for a name and, using a <code>for...else</code> loop (not the <code>in</code> shortcut), print that person's email if found, or <code>"Not found"</code> otherwise.</p>
-<h3 id="exercise-3-command-line-greeter-with-exit-codes-advanced">Exercise 3: Command-line greeter with exit codes (advanced)</h3>
-<p>Write <code>greet.py</code> using <code>sys.argv</code> and <code>sys.exit()</code>. If the user runs it with exactly one command-line argument, print <code>Hello, &lt;name&gt;</code>. If they run it with any other number of arguments, print a usage message like <code>Usage: python greet.py NAME</code> and exit with status <code>1</code>. Test both cases from the terminal.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>LISTS
-  scores = []                          start empty
-  scores.append(72)                    add to the end
-  len(scores)                          how many elements
-  sum(scores)                          add every element together (numeric lists)
-  value in some_list                    True/False membership test
-
-DICTIONARIES
-  person = {&quot;name&quot;: &quot;David&quot;, &quot;number&quot;: &quot;+16174951000&quot;}
-  person[&quot;name&quot;]                       look up by string key -&gt; &quot;David&quot;
-  &quot;name&quot; in person                      True/False: is this KEY present?
-  people = [ {...}, {...}, {...} ]      list of dicts = one row per record (a table!)
-
-FOR...ELSE
-  for item in some_list:
-      if item == target:
-          print(&quot;found&quot;)
-          break
-  else:
-      print(&quot;not found&quot;)               runs ONLY if the loop finished without break
-
-SYS MODULE
-  import sys
-  sys.argv                             list of command-line words; argv[0] is the script name
-  len(sys.argv)                        how many words were typed (script name included)
-  sys.exit(0)                          exit, success
-  sys.exit(1)                          exit, error
-
-CSV FILES
-  import csv
-  with open(&quot;phonebook.csv&quot;, &quot;a&quot;) as file:
-      writer = csv.writer(file)
-      writer.writerow([&quot;David&quot;, &quot;+16174951000&quot;])
-
-  with open(&quot;phonebook.csv&quot;, &quot;a&quot;) as file:
-      writer = csv.DictWriter(file, fieldnames=[&quot;name&quot;, &quot;number&quot;])
-      writer.writerow({&quot;name&quot;: &quot;David&quot;, &quot;number&quot;: &quot;+16174951000&quot;})
-
-PIP
-  pip install cowsay                   installs a third-party package into THIS project
-  import cowsay                        then import and use it like any built-in module
-  cowsay.cow(&quot;hi&quot;)
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 7 · Lesson 26:</strong> the <code>for</code>/<code>while</code> loops and <code>try</code>/<code>except</code> you learned there are exactly what this lesson's <code>for...else</code> and file-handling build on.</li>
-<li><strong>Earlier, Module 6 · Lesson 23:</strong> you hand-built a hash table in C; this lesson's <code>dict</code> is Python doing that same job for you, and Malan says so directly when he calls dictionaries "the Swiss Army knives of data structures."</li>
-<li><strong>Earlier, Module 5 · Lesson 20:</strong> you hand-wrote a <code>phonebook.csv</code> in C with <code>fopen</code>/<code>fprintf</code>, character by character; this lesson does the same job in a fraction of the code with <code>csv.DictWriter</code> and <code>with open(...)</code>.</li>
-<li><strong>Next, Module 8 · Lesson 28:</strong> "From flat files to Python dictionaries" picks up this exact <code>phonebook.csv</code> thread and teaches <code>csv.reader</code>/<code>csv.DictReader</code>: the proper replacement for the brute-force reload you built by hand in the Capstone.</li>
-<li><strong>Later, Module 8:</strong> SQL fundamentals replace "list of dicts held in memory, backed by a CSV file" with a real, persistent, queryable database: the list of dicts you built today is a database table in miniature.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 6 - Python" by David J. Malan, Harvard University (CS50x 2026). Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+<hr /><div class="pager bottom"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="27-lists-dicts-pip.html" class="cur" title="Start here">1</a><a href="27-lists-dicts-pip-2.html" class="" title="Parts 3-4">2</a><a href="27-lists-dicts-pip-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="27-lists-dicts-pip-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="27" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="26-loops-functions-exceptions.html"><span class="dir">&#8592; Previous</span><b>Loops, Functions, and Exceptions</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="../module-8-sql/28-files-to-python.html"><span class="dir">Next &#8594;</span><b>From Flat Files to Python Dictionaries</b></a></nav>
+    <div class="ls-marker" data-lesson-id="27" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="26-loops-functions-exceptions.html"><span class="dir">&#8592; Previous lesson</span><b>Loops, Functions, and Exceptions</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 
@@ -874,13 +564,16 @@ document.querySelectorAll('.codehilite, pre').forEach(block=>{
 const map={'\u{1F511}':'cl-key','\u{1F4A1}':'cl-tip','✅':'cl-ok','❌':'cl-no','\u{1F3AF}':'cl-goal','\u{1F6E0}':'cl-goal'};
 document.querySelectorAll('blockquote').forEach(q=>{const t=(q.textContent||'').trim();for(const e in map){if(t.startsWith(e)){q.classList.add(map[e]);break}}});
 // check-off
+function wireList(el){if(el.dataset.wired)return;el.dataset.wired='1';el.classList.add('checkable');
+  el.querySelectorAll(':scope>li').forEach(li=>{const key='cwc:'+location.pathname+':'+li.textContent.slice(0,60);
+    if(localStorage.getItem(key))li.classList.add('checked');
+    li.addEventListener('click',ev=>{if(ev.target.tagName==='A')return;li.classList.toggle('checked');
+      li.classList.contains('checked')?localStorage.setItem(key,'1'):localStorage.removeItem(key)});});}
 function makeCheckable(rx){document.querySelectorAll('h2,h3').forEach(h=>{if(!rx.test(h.textContent))return;let el=h.nextElementSibling;
-  while(el&&!/^H[1-3]$/.test(el.tagName)){if(el.tagName==='OL'||el.tagName==='UL'){el.classList.add('checkable');
-    el.querySelectorAll(':scope>li').forEach(li=>{const key='cwc:'+location.pathname+':'+li.textContent.slice(0,60);
-      if(localStorage.getItem(key))li.classList.add('checked');
-      li.addEventListener('click',ev=>{if(ev.target.tagName==='A')return;li.classList.toggle('checked');
-        li.classList.contains('checked')?localStorage.setItem(key,'1'):localStorage.removeItem(key)});});}el=el.nextElementSibling;}});}
-makeCheckable(/learning objectives|milestones/i);
+  while(el&&!/^H[1-3]$/.test(el.tagName)){if(el.tagName==='OL'||el.tagName==='UL')wireList(el);el=el.nextElementSibling;}});}
+makeCheckable(/learning objectives|milestones|done when/i);
+// lists written as `- [ ] thing` are check-off lists wherever they appear
+document.querySelectorAll('ul.checkable,ol.checkable').forEach(wireList);
 // scrollspy
 const links=[...document.querySelectorAll('.toc a')];
 const heads=links.map(a=>a.getAttribute('href')).filter(h=>h&&h.startsWith('#')).map(h=>document.getElementById(h.slice(1))).filter(Boolean);

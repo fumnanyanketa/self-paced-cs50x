@@ -3,9 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 1 · Lesson 4: Programming in Scratch | Self-Paced CS50x</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iIzBhMWEyZiIvPjx0ZXh0IHg9IjE2IiB5PSIyMiIgZm9udC1mYW1pbHk9InVpLW1vbm9zcGFjZSxNZW5sbyxDb25zb2xhcyxtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjZjI0ZDYzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj4mZ3Q7XzwvdGV4dD48L3N2Zz4=">
-
+<title>Module 1 · Lesson 4: Programming in Scratch (p1/3) | Self-Paced CS50x</title>
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="shortcut icon" href="../assets/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -51,6 +53,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -142,13 +167,13 @@ code{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.86em;b
 .copy-btn.done{background:var(--teal);color:#04231c;border-color:var(--teal)}
 
 /* callouts */
-blockquote{margin:24px 0;padding:16px 20px;border-radius:14px;background:var(--soft);border:1px solid var(--line);border-left:5px solid var(--teal)}
+blockquote{margin:24px 0;padding:18px 22px;border-radius:14px;background:var(--soft);border:1px solid var(--line);box-shadow:var(--shadow)}
 blockquote p{margin:7px 0}blockquote p:first-child{margin-top:0}blockquote p:last-child{margin-bottom:0}
-blockquote.cl-key{background:var(--k-bg);border-left-color:var(--k);border-color:transparent}
-blockquote.cl-tip{background:var(--tip-bg);border-left-color:var(--tip);border-color:transparent}
-blockquote.cl-ok{background:var(--ok-bg);border-left-color:var(--ok);border-color:transparent}
-blockquote.cl-no{background:var(--no-bg);border-left-color:var(--no);border-color:transparent}
-blockquote.cl-goal{background:var(--goal-bg);border-left-color:var(--goal);border-color:transparent}
+blockquote.cl-key{background:var(--k-bg);border-color:transparent}
+blockquote.cl-tip{background:var(--tip-bg);border-color:transparent}
+blockquote.cl-ok{background:var(--ok-bg);border-color:transparent}
+blockquote.cl-no{background:var(--no-bg);border-color:transparent}
+blockquote.cl-goal{background:var(--goal-bg);border-color:transparent}
 
 /* capstone banner */
 h2.capstone-h{background:linear-gradient(115deg,var(--navy),var(--navy-3));color:#fff;border-radius:20px;padding:30px 28px 26px;margin-top:64px;box-shadow:0 20px 50px rgba(10,26,47,.3);overflow:hidden;position:relative}
@@ -203,42 +228,27 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <body>
 <div id="progress"></div>
 
-<div class="topbar"><div class="wrap">
-  <div>&#10024; Welcome to <b>Self-Paced CS50x</b> &middot; a self-paced course</div>
-  <div class="right"><span>CS50x 2026 · Harvard University · David J. Malan</span></div>
-</div></div>
+<div class="topbar"><div class="wrap"><div>&#10024; Welcome to <b>Self-Paced CS50x</b> &middot; a self-paced course</div><div class="right"><span>CS50x 2026 · Harvard University · David J. Malan</span></div></div></div>
 
 <nav class="bar"><div class="wrap">
   <button class="btn btn-outline" id="menuBtn" style="padding:8px 14px">&#9776;</button>
   <a class="logo" href="../index.html">Self-Paced CS50x<span class="dot">.</span></a>
   <div class="navlinks">
-    <a href="../index.html">All lessons</a>
-    <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="../index.html">All lessons</a><a href="#overview">Overview</a><a href="04-programming-in-scratch-3.html#capstone">Capstone</a>
   </div>
-  <div class="nav-cta">
-    <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
-  </div>
+<div class="nav-cta"><a class="btn btn-primary" href="#start">Start the lesson &#8594;</a></div>
 </div></nav>
 
 <header class="hero">
   <span class="blob t"></span><span class="blob c"></span>
-  <svg class="squiggle" style="top:120px;left:46%;" width="90" height="26" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#18c4a0" stroke-width="4" stroke-linecap="round"/></svg>
-  <svg class="squiggle" style="bottom:60px;right:40%;" width="70" height="22" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#f24d63" stroke-width="4" stroke-linecap="round"/></svg>
+<svg class="squiggle" style="top:120px;left:46%;" width="90" height="26" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#18c4a0" stroke-width="4" stroke-linecap="round"/></svg><svg class="squiggle" style="bottom:60px;right:40%;" width="70" height="22" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#f24d63" stroke-width="4" stroke-linecap="round"/></svg>
   <div class="wrap" id="overview">
     <div>
       <span class="eyebrow">&#10022; Module 1 · Lesson 4</span>
       <h1>Programming in <span class="accent">Scratch</span></h1>
       <p class="lead">In Scratch you build a real, working program (a sprite that talks, listens, repeats itself, and reacts to what&#x27;s touching it) by snapping together color-coded puzzle pieces, and every one of those pieces (functions with arguments, return values, side effects, loops, conditionals, variables, custom blocks) is an idea you will meet again, in text, in every language for the rest of this course.</p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
-        <a class="play" href="https://www.youtube.com/watch?v=UuIEbpQms8o" target="_blank" rel="noopener"><span class="circ">&#9654;</span> Watch the talk</a>
-      </div>
-      <div class="chips">
-        <span class="chip">&#127908; <b>David J. Malan</b></span>
-        <span class="chip">&#9201; <b>60 minutes</b></span>
-        <span class="chip">&#128296; <b>Hands-on capstone</b></span>
-      </div>
+<div class="hero-actions"><a class="btn btn-primary" href="#start">Start the lesson &#8594;</a><a class="play" href="https://www.youtube.com/watch?v=UuIEbpQms8o" target="_blank" rel="noopener"><span class="circ">&#9654;</span> Watch the talk</a></div>
+<div class="chips"><span class="chip">&#127908; <b>David J. Malan</b></span><span class="chip">&#9201; <b>60 minutes</b></span><span class="chip">&#128296; <b>Hands-on capstone</b></span></div>
     </div>
     <div style="position:relative">
       <div class="hero-card">
@@ -253,7 +263,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="04-programming-in-scratch-3.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -273,33 +283,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <li><a href="#prerequisites">Prerequisites</a></li>
 <li><a href="#part-1-touring-the-scratch-interface">Part 1: Touring the Scratch interface</a></li>
 <li><a href="#part-2-say-ask-and-join-arguments-return-values-and-side-effects">Part 2: say, ask, and join (arguments, return values, and side effects)</a></li>
-<li><a href="#part-3-loops-and-a-custom-block-with-a-parameter">Part 3: Loops and a custom block with a parameter</a></li>
-<li><a href="#part-4-conditionals-forever-if-and-a-boolean-question">Part 4: Conditionals (forever, if, and a Boolean question)</a></li>
-<li><a href="#part-5-putting-it-together-oscar-time-and-ivys-hardest-game">Part 5: Putting it together (Oscar Time and Ivy's Hardest Game)</a></li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: Build a small Scratch game</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-ask-and-greet-foundational">Exercise 1: Ask and greet (foundational)</a></li>
-<li><a href="#exercise-2-a-parameterized-custom-block-intermediate">Exercise 2: A parameterized custom block (intermediate)</a></li>
-<li><a href="#exercise-3-react-and-react-again-advanced">Exercise 3: React and react again (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="04-programming-in-scratch.html" class="cur" title="Start here">1</a><a href="04-programming-in-scratch-2.html" class="" title="Parts 3-5">2</a><a href="04-programming-in-scratch-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="04-programming-in-scratch-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>In Scratch you build a real, working program (a sprite that talks, listens, repeats itself, and reacts to what's touching it) by snapping together color-coded puzzle pieces, and every one of those pieces (functions with arguments, return values, side effects, loops, conditionals, variables, custom blocks) is an idea you will meet again, in text, in every language for the rest of this course.</p>
 <blockquote>
@@ -421,209 +411,9 @@ behind why it's built this way does not.</p>
 <p>If you snap <code>ask "What's your name?"</code> followed by <code>say "Hello, "</code> and then a second <code>say [answer]</code>, both messages flash by too fast to read as one: they're on two separate lines, executed one after another, just faster than a human eye can follow. The fix isn't a <code>wait</code> block (that only makes it <em>slower</em>, still two bubbles): it's the <strong>join</strong> block (Operators, green), which takes two arguments and returns one combined value:</p>
 <blockquote>
 <p>✅ <strong>What to do about it:</strong> drag <code>join [hello] [world]</code> into the <code>say</code> block, replace its first slot with your greeting text (mind the trailing space before the comma) and its second slot with the <code>answer</code> variable. Now one <code>say</code> block shows "Hello, David" in a single breath, because you passed the <em>return value</em> of <code>join</code> in as the <em>argument</em> to <code>say</code>.</p>
-</blockquote>
-<h2 id="part-3-loops-and-a-custom-block-with-a-parameter">Part 3: Loops and a custom block with a parameter</h2>
-<p>Suppose you want your sprite to meow three times, with a short pause between each. The naive way is to drag three copies of <strong>play sound "Meow" until done</strong> and three copies of <strong>wait 1 second</strong>, alternating. It works, but it's a trap:</p>
-<blockquote>
-<p>"Generally when you copy paste code or when you duplicate puzzle pieces, [you're] probably doing something wrong... It's better to keep things simple and ideally centralized by factoring out common functionality."</p>
-</blockquote>
-<p>The fix is a <strong>loop</strong> (Control, orange): drag a <strong>repeat 3</strong> block around a single <code>play sound</code> + <code>wait</code> pair. Change the 3, or the wait time, and you only change it in one place.</p>
-<p>Better still, you can invent your own block. Under <strong>My Blocks</strong>, click <strong>Make a Block</strong>, name it <code>meow</code>, and Scratch creates a matching <strong>define meow</strong> script for you:</p>
-<blockquote>
-<p>"Now I have in my code area here a define block, which literally means define meow as follows."</p>
-</blockquote>
-<p>Put your <code>repeat</code> + <code>play sound</code> + <code>wait</code> combination inside that definition, and a new <code>meow</code> puzzle piece appears in the palette, one block that does the work of five. This is a <strong>custom block</strong>: a function you define yourself, the same way MIT's engineers defined <code>say</code> and <code>ask</code> for you.</p>
-<p>You can go one step further and give it a <strong>parameter</strong>, an input the block itself declares, so callers can customize it:</p>
-<blockquote>
-<p>"Let's add an input, otherwise known as an argument to this meow block, and we'll call it maybe N... for the number of times I want it to meow."</p>
-</blockquote>
-<p>Edit the block definition, add an input labeled <code>N</code>, then drag that <code>N</code> into the <code>repeat</code> block's count instead of a hard-coded number. Now <code>meow (3)</code> and <code>meow (10)</code> both work from the <em>same</em> block: no copy-pasting, no editing five places when you change your mind. (A <strong>variable</strong>, note, is the more general version of this idea: a labeled box, like <code>N</code>, or <code>score</code> later on, that holds a value your scripts can read and change.)</p>
-<h2 id="part-4-conditionals-forever-if-and-a-boolean-question">Part 4: Conditionals (<code>forever</code>, <code>if</code>, and a Boolean question)</h2>
-<p>A <strong>conditional</strong> is a fork in the road: do this, or do that, based on a yes/no question. Scratch calls that question a <strong>Boolean expression</strong>:</p>
-<blockquote>
-<p>"A boolean expression is just a question that has a yes or no answer or a true or false answer or a 1 or zero answer. Just it's a binary state, yes or no typically."</p>
-</blockquote>
-<p>Try this: under <strong>Sensing</strong>, grab the puzzle piece shaped like a question, <code>touching mouse-pointer?</code>, and drop it into an <code>if &lt;&gt; then</code> block's diamond slot (Control, orange). Inside the <code>if</code>, put <code>play sound "Meow" until done</code>. Click the green flag: nothing happens, because Scratch checked the question exactly once, at the instant you clicked, and you weren't touching the sprite yet.</p>
-<p>Wrap the whole <code>if</code> inside a <strong>forever</strong> block, and everything changes:</p>
-<blockquote>
-<p>"By using the forever block... this ensures that Scratch is constantly checking the answer to that question." So if and when you do move the cursor onto the sprite, it will actually detect it.</p>
-<p>✅ <strong>What to do about it:</strong> any <code>if</code> that's meant to react to something happening <em>over time</em> (a mouse moving, a key being held, two sprites approaching each other) needs to live inside a <code>forever</code> loop. Without it, Scratch asks the question once, gets an answer, and never asks again.</p>
-</blockquote>
-<h2 id="part-5-putting-it-together-oscar-time-and-ivys-hardest-game">Part 5: Putting it together (Oscar Time and Ivy's Hardest Game)</h2>
-<p>Everything above (sprites, <code>say</code>/<code>ask</code>/<code>join</code>, loops, custom blocks, <code>forever</code>/<code>if</code>, variables) is all a real game needs. Malan walks through two, built layer by layer.</p>
-<p><strong>Oscar Time.</strong> The goal, in Malan's words:</p>
-<blockquote>
-<p>"The goal is to drag as much falling trash as you can to Oscar's trash can before his song ends."</p>
-</blockquote>
-<p>He builds it in versions, each one still a working program:</p>
-<ul>
-<li><strong>Version 0:</strong> just a sprite (a trash can instead of a cat) and a <strong>costume</strong>, the specific image a sprite is currently wearing. No code at all yet.</li>
-<li><strong>Version 1:</strong> the trash-can sprite switches costume (lid closed → lid open) inside a <code>forever</code> <code>if touching mouse-pointer?</code> / <code>else</code>, so hovering over it looks like the lid popping open. Switching costumes quickly is how Scratch fakes animation.</li>
-<li><strong>Version 2:</strong> a trash sprite sets itself draggable, jumps to a random X (between -240 and 240) and Y = 180, the top of the stage, then, in a <code>forever</code> loop, changes its Y by -1 each step so it visibly falls. A second, parallel script says: <code>forever</code>, <code>if touching Oscar?</code>, teleport back to a random spot at the top (i.e., a fresh piece of "falls").</li>
-<li><strong>Version 3:</strong> the repeated "jump to a random X, Y = 180" logic gets factored into one custom block, <code>go to top</code>, used in both scripts instead of being duplicated, exactly the lesson from Part 3.</li>
-<li><strong>Version 4:</strong> a <strong>variable</strong> named <code>score</code> is created, set to 0 at the start, and incremented by 1 each time trash touches Oscar: Scratch displays it as an on-screen scoreboard automatically. Malan's naming advice generalizes well beyond Scratch:</li>
-</ul>
-<blockquote>
-<p>"In computer programming it's best to name things, not silly simple words like X, Y, and Z, but full-fledged words that say what they are, like <code>score</code>."</p>
-</blockquote>
-<p>His advice for building your own version:</p>
-<blockquote>
-<p>"Start by the simple problems and figure out what [bites] can I bite off in order to make progress (baby steps, if you will) to the final solution."</p>
-</blockquote>
-<p><strong>Ivy's Hardest Game.</strong> A Harvard-crest sprite lives on the stage between two walls, controlled with the arrow keys. Two scripts run in parallel: one listens for keyboard, one "feels" for walls:</p>
-<blockquote>
-<p>"If you're touching the left wall, change your X by 1. If you're touching the right wall, change your X by -1", because if you've gone so far right that you're touching the wall, you're already sitting on top of it, so you back up one pixel, as if bouncing off.</p>
-</blockquote>
-<p>Layered on top, one level at a time:</p>
-<ul>
-<li>An enemy sprite (Yale) bounces on its own: <code>forever</code>, <code>if touching a wall then turn 180 degrees, else move (n) steps</code>. Raising the step count from 1 to 10 makes it faster, and harder.</li>
-<li>A second enemy (MIT) hunts you down: <code>forever</code>, <code>point towards Harvard-crest</code>, <code>move (n) steps</code>. Push the step count up too far, though, and it visibly overshoots and doubles back: Malan hits this bug live:</li>
-</ul>
-<blockquote>
-<p>"It's moving so fast that it's sort of going 10 pixels this way, but then... it kind of overshot me, so then it's doubling back to follow me again."</p>
-</blockquote>
-<p>His fix: throttle the step count back down ("make it 5 or 2 or 3 instead of 10") until the motion looks deliberate instead of twitchy.
-- The finished game stacks several of these enemies across multiple levels, with a win condition at the exit sprite.</p>
-<div class="codehilite"><pre><span></span><code>ONE SPRITE&#39;S WORLD, ONE PIECE AT A TIME
-  sprite + costume            → looks like something, does nothing yet
-  + forever/if + touching?    → reacts to one thing (mouse, wall, a wall)
-  + custom block              → repeated logic becomes one reusable piece
-  + variable (score)          → the game remembers something over time
-  + a second/third sprite     → obstacles, enemies, goals
-  = a game
-</code></pre></div>
-
-<blockquote>
-<p>🎯 Notice the shape of this thinking: a sprite waits for an <strong>event</strong> ("when green flag clicked," "forever, if touching X") and <em>reacts</em>. That is the same event-driven habit of mind (wait for a request, react, respond) that your eventual final-project web app will need, just with a browser request standing in for a mouse click.</p>
-</blockquote>
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong>Every block is a function.</strong> The white oval you fill in is an argument; some blocks (<code>say</code>) just produce a visible side effect, others (<code>ask</code>) hand back a return value you can reuse.</li>
-<li><strong>Repetition is a design smell.</strong> Copy-pasted blocks mean every future change has to happen in every copy. A loop fixes "N times"; a custom block (optionally with its own parameter) fixes "this exact sequence, reusably."</li>
-<li><strong><code>forever</code> is what makes <code>if</code> alive.</strong> A condition checked once, at the start, is checked once. Wrapping it in <code>forever</code> is what lets a sprite keep noticing something happening over time.</li>
-<li><strong>A game is not one big idea: it's small pieces layered.</strong> Oscar Time and Ivy's Hardest Game both started as a sprite that did nothing, and grew one working version at a time: costume, then reaction, then custom block, then variable, then a second sprite.</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ Building an <code>if</code> to catch something happening over time (a hover, a key press, a collision) without wrapping it in <code>forever</code>: Scratch checks once and moves on. Wrap it.</li>
-<li>❌ Duplicating blocks (or copy-pasting a whole sequence) instead of building a loop or a custom block: now a "small" change means hunting down every copy.</li>
-<li>❌ Chaining two <code>say</code> blocks to combine text: they'll flash by too fast to read as one message. Use <code>join</code> to combine them into a single <code>say</code>.</li>
-<li>❌ Cranking up a "move N steps" value for difficulty without checking the result: too large a step and a chasing sprite (like MIT chasing you in Ivy's Hardest Game) will overshoot its target and visibly twitch back and forth.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: Build a small Scratch game</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. By the end, you will have a
-small, playable, original game at scratch.mit.edu that you built yourself,
-block by block: proof that "input, algorithm, output" is something you can
-actually construct, not just diagram.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>A short interactive game, in the same spirit as Oscar Time and Ivy's Hardest Game but your own: a sprite that greets the player, reacts to something, repeats an action cleanly via a custom block, keeps score, and ends with a win or lose message.</p>
-<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in the capstone</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>say</code> / argument / side effect</td>
-<td>Milestone 1: your sprite's greeting</td>
-</tr>
-<tr>
-<td><code>ask</code> / return value / <code>join</code></td>
-<td>Milestone 2: responding to the player's input</td>
-</tr>
-<tr>
-<td>Loop + custom block with a parameter</td>
-<td>Milestone 3: an action that repeats cleanly</td>
-</tr>
-<tr>
-<td>Variable</td>
-<td>Milestone 4: keeping score</td>
-</tr>
-<tr>
-<td><code>forever</code> + <code>if</code> + Boolean expression</td>
-<td>Milestones 3-5: reacting continuously, and the win/lose check</td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>Sprite says hello.</strong> Create a free scratch.mit.edu account if you don't have one. New project, one sprite, <code>when green flag clicked</code> → <code>say "Hello!"</code>. Change the text so it says something in your own voice.</li>
-<li><strong>Responds to input.</strong> Add <code>ask "What's your name?" and wait</code>, then use <code>join</code> to combine a greeting with the <code>answer</code> variable in a single <code>say</code>. (Watch the space after the comma.)</li>
-<li><strong>Uses a loop + custom block.</strong> Build your own custom block with a parameter (for example, a <code>cheer (N)</code> block that says "Go!" N times with a short wait between each) and call it from your main script.</li>
-<li><strong>Keeps score with a variable.</strong> Create a <code>score</code> variable, set it to 0 at the start, and increment it by 1 whenever some event happens (touching another sprite, a key press, your choice), inside a <code>forever</code>/<code>if</code>.</li>
-<li><strong>Win/lose condition.</strong> When <code>score</code> reaches some target (or some bad thing happens), <code>say "You win!"</code> (or "Game over") and stop the scripts.</li>
-<li><strong>Stretch goals.</strong> Add a second sprite that moves on its own (bouncing off walls, or chasing your main sprite, like Yale and MIT in Ivy's Hardest Game); add sound timed to an action; add multiple costumes for a simple animation, as Oscar Time does with its trash-can lid.</li>
-</ol>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ Clicking the green flag runs your game from a clean start every time (no leftover state from a previous run).</li>
-<li>✅ You can point to one block in your project and correctly name it as either an argument, a return value, or a side effect.</li>
-<li>✅ At least one repeated action in your project uses a loop or a custom block instead of duplicated puzzle pieces.</li>
-<li>✅ The game has a clear win or lose message that appears at the right moment.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> after every milestone, click the green flag and actually play it: a milestone you haven't clicked doesn't count as built.</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice
-on one idea. Optional and independent; the Capstone already touches all of
-them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-ask-and-greet-foundational">Exercise 1: Ask and greet (foundational)</h3>
-<p>Build the <code>ask</code> → <code>join</code> → <code>say</code> script from Part 2 from scratch (no pun intended), typing your own name in when you test it. Then break it on purpose (remove the <code>join</code> and use two <code>say</code> blocks instead) and watch the bug Malan hit live.</p>
-<h3 id="exercise-2-a-parameterized-custom-block-intermediate">Exercise 2: A parameterized custom block (intermediate)</h3>
-<p>Build a custom block called <code>cheer</code> that takes one parameter, <code>N</code>, and says "Go team!" N times with a half-second wait between each. Call it twice in the same script with two different values of N and confirm both work without touching the block's definition.</p>
-<h3 id="exercise-3-react-and-react-again-advanced">Exercise 3: React and react again (advanced)</h3>
-<p>Add a second sprite to a project. Give it a script that, inside a <code>forever</code> loop, checks <code>if touching [your first sprite]?</code> and does something visible (changes costume, plays a sound, or moves away). Then delete the <code>forever</code> wrapper and observe (and explain in one sentence) why the reaction stops working.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>SCRATCH INTERFACE
-  Blocks palette (left, color-coded)  ·  Code area (middle)
-  Sprite list (bottom right)          ·  Stage (top right, X: -240..240, Y: -180..180)
-
-FUNCTIONS, ARGUMENTS, RETURN VALUES
-  argument   = the input you plug into a block (the white oval)
-  side effect = what a human sees/hears happen (say, play sound)
-  return value = what the computer hands back for reuse (ask -&gt; &quot;answer&quot;)
-  join [a] [b]  -&gt; combines two values into one, for a single say
-
-LOOPS &amp; CUSTOM BLOCKS
-  repeat (n)     -&gt; do the contents n times
-  forever        -&gt; do the contents endlessly (needed to keep an `if` alive)
-  My Blocks &gt; Make a Block -&gt; your own reusable block; add an input for a parameter
-
-CONDITIONALS
-  if &lt;boolean?&gt; then ... [else ...]
-  boolean expression = a yes/no question (e.g. touching mouse-pointer?)
-  RULE: an `if` reacting to something ongoing MUST be wrapped in `forever`
-
-GAME BUILDING, ONE STEP AT A TIME
-  sprite + costume -&gt; looks + change costume -&gt; simple animation
-  + forever/if      -&gt; reacts to one thing
-  + custom block    -&gt; repeated logic, reusable
-  + variable (score)-&gt; the game remembers something
-  + 2nd/3rd sprite  -&gt; obstacles, enemies, a goal
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 1 · Lesson 3:</strong> gave you algorithms, pseudocode, conditionals, and loops on paper. This lesson gave the same ideas a physical, draggable form you could actually run and watch.</li>
-<li><strong>Next, Module 2 · Lesson 5 ("Hello, C: from blocks to code"):</strong> every block you used here has a direct textual twin: <code>say</code> becomes <code>printf</code>, <code>ask</code> becomes reading input, <code>repeat</code>/<code>forever</code> become <code>for</code>/<code>while</code> loops, <code>if</code> stays <code>if</code>, a custom block becomes a function, and a variable stays a variable, just declared with a type.</li>
-<li><strong>Later, Module 2:</strong> as you meet each new C construct, look back here: every one of them maps to a Scratch block you already built and understood first.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 0 - Scratch" by David J. Malan, Harvard University. Code snippets and block descriptions are illustrative reconstructions of the patterns described in the talk. Adapt them to the current Scratch editor.</em></p>
+</blockquote><div class="pager bottom"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="04-programming-in-scratch.html" class="cur" title="Start here">1</a><a href="04-programming-in-scratch-2.html" class="" title="Parts 3-5">2</a><a href="04-programming-in-scratch-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="04-programming-in-scratch-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="4" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="03-first-algorithms.html"><span class="dir">&#8592; Previous</span><b>Your First Algorithms: Search and Pseudocode</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="../module-2-c/05-hello-c.html"><span class="dir">Next &#8594;</span><b>Hello, C: From Blocks to Code</b></a></nav>
+    <div class="ls-marker" data-lesson-id="4" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="03-first-algorithms.html"><span class="dir">&#8592; Previous lesson</span><b>Your First Algorithms: Search and Pseudocode</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 
@@ -741,13 +531,16 @@ document.querySelectorAll('.codehilite, pre').forEach(block=>{
 const map={'\u{1F511}':'cl-key','\u{1F4A1}':'cl-tip','✅':'cl-ok','❌':'cl-no','\u{1F3AF}':'cl-goal','\u{1F6E0}':'cl-goal'};
 document.querySelectorAll('blockquote').forEach(q=>{const t=(q.textContent||'').trim();for(const e in map){if(t.startsWith(e)){q.classList.add(map[e]);break}}});
 // check-off
+function wireList(el){if(el.dataset.wired)return;el.dataset.wired='1';el.classList.add('checkable');
+  el.querySelectorAll(':scope>li').forEach(li=>{const key='cwc:'+location.pathname+':'+li.textContent.slice(0,60);
+    if(localStorage.getItem(key))li.classList.add('checked');
+    li.addEventListener('click',ev=>{if(ev.target.tagName==='A')return;li.classList.toggle('checked');
+      li.classList.contains('checked')?localStorage.setItem(key,'1'):localStorage.removeItem(key)});});}
 function makeCheckable(rx){document.querySelectorAll('h2,h3').forEach(h=>{if(!rx.test(h.textContent))return;let el=h.nextElementSibling;
-  while(el&&!/^H[1-3]$/.test(el.tagName)){if(el.tagName==='OL'||el.tagName==='UL'){el.classList.add('checkable');
-    el.querySelectorAll(':scope>li').forEach(li=>{const key='cwc:'+location.pathname+':'+li.textContent.slice(0,60);
-      if(localStorage.getItem(key))li.classList.add('checked');
-      li.addEventListener('click',ev=>{if(ev.target.tagName==='A')return;li.classList.toggle('checked');
-        li.classList.contains('checked')?localStorage.setItem(key,'1'):localStorage.removeItem(key)});});}el=el.nextElementSibling;}});}
-makeCheckable(/learning objectives|milestones/i);
+  while(el&&!/^H[1-3]$/.test(el.tagName)){if(el.tagName==='OL'||el.tagName==='UL')wireList(el);el=el.nextElementSibling;}});}
+makeCheckable(/learning objectives|milestones|done when/i);
+// lists written as `- [ ] thing` are check-off lists wherever they appear
+document.querySelectorAll('ul.checkable,ol.checkable').forEach(wireList);
 // scrollspy
 const links=[...document.querySelectorAll('.toc a')];
 const heads=links.map(a=>a.getAttribute('href')).filter(h=>h&&h.startsWith('#')).map(h=>document.getElementById(h.slice(1))).filter(Boolean);

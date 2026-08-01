@@ -3,9 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 8 · Lesson 30: Relational Design and JOINs | Self-Paced CS50x</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iIzBhMWEyZiIvPjx0ZXh0IHg9IjE2IiB5PSIyMiIgZm9udC1mYW1pbHk9InVpLW1vbm9zcGFjZSxNZW5sbyxDb25zb2xhcyxtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjZjI0ZDYzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj4mZ3Q7XzwvdGV4dD48L3N2Zz4=">
-
+<title>Module 8 · Lesson 30: Relational Design and JOINs (p1/3) | Self-Paced CS50x</title>
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="shortcut icon" href="../assets/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -51,6 +53,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -142,13 +167,13 @@ code{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.86em;b
 .copy-btn.done{background:var(--teal);color:#04231c;border-color:var(--teal)}
 
 /* callouts */
-blockquote{margin:24px 0;padding:16px 20px;border-radius:14px;background:var(--soft);border:1px solid var(--line);border-left:5px solid var(--teal)}
+blockquote{margin:24px 0;padding:18px 22px;border-radius:14px;background:var(--soft);border:1px solid var(--line);box-shadow:var(--shadow)}
 blockquote p{margin:7px 0}blockquote p:first-child{margin-top:0}blockquote p:last-child{margin-bottom:0}
-blockquote.cl-key{background:var(--k-bg);border-left-color:var(--k);border-color:transparent}
-blockquote.cl-tip{background:var(--tip-bg);border-left-color:var(--tip);border-color:transparent}
-blockquote.cl-ok{background:var(--ok-bg);border-left-color:var(--ok);border-color:transparent}
-blockquote.cl-no{background:var(--no-bg);border-left-color:var(--no);border-color:transparent}
-blockquote.cl-goal{background:var(--goal-bg);border-left-color:var(--goal);border-color:transparent}
+blockquote.cl-key{background:var(--k-bg);border-color:transparent}
+blockquote.cl-tip{background:var(--tip-bg);border-color:transparent}
+blockquote.cl-ok{background:var(--ok-bg);border-color:transparent}
+blockquote.cl-no{background:var(--no-bg);border-color:transparent}
+blockquote.cl-goal{background:var(--goal-bg);border-color:transparent}
 
 /* capstone banner */
 h2.capstone-h{background:linear-gradient(115deg,var(--navy),var(--navy-3));color:#fff;border-radius:20px;padding:30px 28px 26px;margin-top:64px;box-shadow:0 20px 50px rgba(10,26,47,.3);overflow:hidden;position:relative}
@@ -203,42 +228,27 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <body>
 <div id="progress"></div>
 
-<div class="topbar"><div class="wrap">
-  <div>&#10024; Welcome to <b>Self-Paced CS50x</b> &middot; a self-paced course</div>
-  <div class="right"><span>CS50x 2026 · Harvard University · David J. Malan</span></div>
-</div></div>
+<div class="topbar"><div class="wrap"><div>&#10024; Welcome to <b>Self-Paced CS50x</b> &middot; a self-paced course</div><div class="right"><span>CS50x 2026 · Harvard University · David J. Malan</span></div></div></div>
 
 <nav class="bar"><div class="wrap">
   <button class="btn btn-outline" id="menuBtn" style="padding:8px 14px">&#9776;</button>
   <a class="logo" href="../index.html">Self-Paced CS50x<span class="dot">.</span></a>
   <div class="navlinks">
-    <a href="../index.html">All lessons</a>
-    <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="../index.html">All lessons</a><a href="#overview">Overview</a><a href="30-relational-design-joins-3.html#capstone">Capstone</a>
   </div>
-  <div class="nav-cta">
-    <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
-  </div>
+<div class="nav-cta"><a class="btn btn-primary" href="#start">Start the lesson &#8594;</a></div>
 </div></nav>
 
 <header class="hero">
   <span class="blob t"></span><span class="blob c"></span>
-  <svg class="squiggle" style="top:120px;left:46%;" width="90" height="26" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#18c4a0" stroke-width="4" stroke-linecap="round"/></svg>
-  <svg class="squiggle" style="bottom:60px;right:40%;" width="70" height="22" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#f24d63" stroke-width="4" stroke-linecap="round"/></svg>
+<svg class="squiggle" style="top:120px;left:46%;" width="90" height="26" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#18c4a0" stroke-width="4" stroke-linecap="round"/></svg><svg class="squiggle" style="bottom:60px;right:40%;" width="70" height="22" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#f24d63" stroke-width="4" stroke-linecap="round"/></svg>
   <div class="wrap" id="overview">
     <div>
       <span class="eyebrow">&#10022; Module 8 · Lesson 30</span>
       <h1>Relational Design and <span class="accent">JOINs</span></h1>
       <p class="lead">Real-world data almost never fits neatly in one table without wasting space or inviting typos, so this lesson teaches you to split it into several small, normalized tables linked by primary and foreign keys, and then pull the pieces back together on demand with JOINs and nested subqueries: the exact design skill behind every multi-table question a real app ever has to answer.</p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
-        <a class="play" href="https://www.youtube.com/watch?v=oqRU2So6Z2Y" target="_blank" rel="noopener"><span class="circ">&#9654;</span> Watch the talk</a>
-      </div>
-      <div class="chips">
-        <span class="chip">&#127908; <b>David J. Malan</b></span>
-        <span class="chip">&#9201; <b>60 minutes</b></span>
-        <span class="chip">&#128296; <b>Hands-on capstone</b></span>
-      </div>
+<div class="hero-actions"><a class="btn btn-primary" href="#start">Start the lesson &#8594;</a><a class="play" href="https://www.youtube.com/watch?v=oqRU2So6Z2Y" target="_blank" rel="noopener"><span class="circ">&#9654;</span> Watch the talk</a></div>
+<div class="chips"><span class="chip">&#127908; <b>David J. Malan</b></span><span class="chip">&#9201; <b>60 minutes</b></span><span class="chip">&#128296; <b>Hands-on capstone</b></span></div>
     </div>
     <div style="position:relative">
       <div class="hero-card">
@@ -253,7 +263,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="30-relational-design-joins-3.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -278,45 +288,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <li><a href="#from-a-spreadsheet-to-showsdb">From a spreadsheet to shows.db</a></li>
 </ul>
 </li>
-<li><a href="#part-2-meeting-showsdb-data-types-constraints-and-your-first-join">Part 2: Meeting shows.db (data types, constraints, and your first JOIN)</a><ul>
-<li><a href="#reading-a-schema-with-schema">Reading a schema with .schema</a></li>
-<li><a href="#the-five-sqlite-data-types">The five SQLite data types</a></li>
-<li><a href="#not-null-and-unique-constraints-as-built-in-defenses">NOT NULL and UNIQUE: constraints as built-in defenses</a></li>
-<li><a href="#your-first-join-shows-ratings">Your first JOIN: shows + ratings</a></li>
-</ul>
-</li>
-<li><a href="#part-3-one-to-many-and-many-to-many-genres-stars-and-steve-carell">Part 3: One-to-many and many-to-many (genres, stars, and Steve Carell)</a><ul>
-<li><a href="#one-to-many-a-show-and-its-genres">One-to-many: a show and its genres</a></li>
-<li><a href="#many-to-many-the-stars-table">Many-to-many: the stars table</a></li>
-<li><a href="#three-baby-steps-who-starred-in-the-office-2005">Three baby steps: who starred in The Office (2005)?</a></li>
-<li><a href="#the-same-answer-with-joins-explicit-and-implicit">The same answer with JOINs (explicit and implicit)</a></li>
-</ul>
-</li>
-<li><a href="#part-4-how-the-pieces-fit-together">Part 4: How the pieces fit together</a></li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: A Tiny Library Database</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-spot-the-relationship-foundational">Exercise 1: Spot the relationship (foundational)</a></li>
-<li><a href="#exercise-2-same-answer-two-ways-intermediate">Exercise 2: Same answer, two ways (intermediate)</a></li>
-<li><a href="#exercise-3-a-second-many-to-many-advanced">Exercise 3: A second many-to-many (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="30-relational-design-joins.html" class="cur" title="Start here">1</a><a href="30-relational-design-joins-2.html" class="" title="Parts 2-4">2</a><a href="30-relational-design-joins-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="30-relational-design-joins-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>Real-world data almost never fits neatly in one table without wasting space or inviting typos, so this lesson teaches you to split it into several small, normalized tables linked by primary and foreign keys, and then pull the pieces back together on demand with JOINs and nested subqueries: the exact design skill behind every multi-table question a real app ever has to answer.</p>
 <blockquote>
@@ -434,310 +412,9 @@ Cheers     | Shelley Long
 
 <blockquote>
 <p>🔑 <strong>The single most important takeaway of this part.</strong> Normalize by giving every real-world "thing" (a show, a person) its own table with a unique ID, then use that ID everywhere else instead of retyping the name. A few repeated integers are a fair price for eliminating repeated, error-prone text.</p>
-</blockquote>
-<h2 id="part-2-meeting-showsdb-data-types-constraints-and-your-first-join">Part 2: Meeting <code>shows.db</code> (data types, constraints, and your first JOIN)</h2>
-<h3 id="reading-a-schema-with-schema">Reading a schema with <code>.schema</code></h3>
-<p><code>shows.db</code> already exists as a file Malan prepared in advance. Opening it and running the SQLite-specific command <code>.schema shows</code> prints back the exact statement that built the <code>shows</code> table, the same idea as <code>.schema</code> from Lesson 29, just on a richer table:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">shows</span><span class="w"> </span><span class="p">(</span>
-<span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span>
-<span class="w">    </span><span class="n">title</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
-<span class="w">    </span><span class="k">year</span><span class="w"> </span><span class="nb">NUMERIC</span><span class="p">,</span>
-<span class="w">    </span><span class="n">episodes</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span>
-<span class="w">    </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
-<span class="p">);</span>
-</code></pre></div>
-
-<p>Four columns, four different jobs. <code>id</code> is the table's <strong>primary key</strong>: the column SQLite guarantees can be used to look up exactly one row. Malan defines primary and foreign keys together, since neither makes sense without the other:</p>
-<blockquote>
-<p>"A primary key is the unique identifier for a table. It is the column of values that uniquely identify every row... When that same ID appears in another table for cross referencing purposes, you refer to it instead as a foreign key because that same key is over there in another table, thus foreign." (David Malan)</p>
-</blockquote>
-<p>So <code>shows.id</code> is a primary key <em>in the <code>shows</code> table</em>. The exact same integer, sitting in the <code>ratings</code>, <code>genres</code>, or <code>stars</code> table under a name like <code>show_id</code>, is a <strong>foreign key</strong> there: a pointer back to one specific row in <code>shows</code>. Same value, different job, depending on which table it's sitting in.</p>
-<h3 id="the-five-sqlite-data-types">The five SQLite data types</h3>
-<p>Notice <code>shows.title</code> is declared <code>TEXT</code> and <code>shows.year</code> is declared <code>NUMERIC</code>. SQLite supports exactly five data types, far fewer than C's menagerie of <code>int</code>, <code>float</code>, <code>double</code>, <code>char</code>, and friends:</p>
-<div class="codehilite"><pre><span></span><code>INTEGER   whole numbers                     a show&#39;s id, a rating&#39;s vote count
-NUMERIC   a catch-all for things like        the year a show debuted (IMDb&#39;s data
-          dates and other real-world          for this isn&#39;t a pure int or float)
-          numeric-ish data
-REAL      floating-point numbers             a show&#39;s average rating, e.g. 8.4
-TEXT      strings                            a title, a person&#39;s name, a genre
-BLOB      &quot;binary large object&quot; -- raw       rare; storing an actual file (an
-          zeros and ones                     image, etc.) inside the database
-</code></pre></div>
-
-<p>Malan is blunt about how short this list is:</p>
-<blockquote>
-<p>"That's it for SQLite. There are only these 5 types... you have blobs, which is a great name which stands for binary large objects." (David Malan)</p>
-</blockquote>
-<p>Other databases (MySQL, PostgreSQL, Oracle) support more types, but SQLite's five cover almost everything a beginner needs.</p>
-<h3 id="not-null-and-unique-constraints-as-built-in-defenses"><code>NOT NULL</code> and <code>UNIQUE</code>: constraints as built-in defenses</h3>
-<p>A <strong>constraint</strong> is a rule the database enforces on a column for you, so bad data never gets in, no exceptions, no matter which program is doing the inserting. <code>shows.title</code> is marked <code>NOT NULL</code>:</p>
-<blockquote>
-<p>"You can specifically say when creating a table that this column cannot be null. And if I try to insert data into that table with a null value... the insertion will fail." (David Malan)</p>
-</blockquote>
-<p>This is a genuine step up from a spreadsheet, where a blank cell can mean "no data" or "forgot to type it" or "not applicable," and nothing stops you from leaving it blank. In SQL, <code>NULL</code> is not the same as an empty string <code>""</code>: it explicitly and consciously means "no data here," and <code>NOT NULL</code> refuses to let a column ever hold that absence.</p>
-<p>The <code>ratings</code> table adds a second constraint, <code>UNIQUE</code>, on its foreign key:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">ratings</span><span class="w"> </span><span class="p">(</span>
-<span class="w">    </span><span class="n">show_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">UNIQUE</span><span class="p">,</span>
-<span class="w">    </span><span class="n">rating</span><span class="w"> </span><span class="nb">REAL</span><span class="p">,</span>
-<span class="w">    </span><span class="n">votes</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span>
-<span class="w">    </span><span class="k">FOREIGN</span><span class="w"> </span><span class="k">KEY</span><span class="p">(</span><span class="n">show_id</span><span class="p">)</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">shows</span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
-<span class="p">);</span>
-</code></pre></div>
-
-<p><code>UNIQUE</code> says no value may appear twice in that column, which is exactly what enforces a <strong>one-to-one relationship</strong>: every show gets at most one row in <code>ratings</code>, never two.</p>
-<h3 id="your-first-join-shows-ratings">Your first JOIN: shows + ratings</h3>
-<p>Before JOIN, the only way to connect <code>shows</code> and <code>ratings</code> was a nested query: get the good show IDs first, then look up shows matching them:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">title</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">shows</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">show_id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">ratings</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">rating</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">6</span><span class="p">.</span><span class="mi">0</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">10</span><span class="p">);</span>
-</code></pre></div>
-
-<p>That answers "which shows are highly rated," but not "what is each show's actual rating": the rating itself lives in a different table and never comes back. A <code>JOIN</code> solves this by lining the two tables up on their shared column and returning both sides at once:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">title</span><span class="p">,</span><span class="w"> </span><span class="n">rating</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">shows</span>
-<span class="k">JOIN</span><span class="w"> </span><span class="n">ratings</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">shows</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ratings</span><span class="p">.</span><span class="n">show_id</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">rating</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">6</span><span class="p">.</span><span class="mi">0</span>
-<span class="k">LIMIT</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
-</code></pre></div>
-
-<p>Now every row of the result has both a <code>title</code> (from <code>shows</code>) and a <code>rating</code> (from <code>ratings</code>), matched up correctly because <code>shows.id</code> (primary key) was lined up with <code>ratings.show_id</code> (foreign key).</p>
-<blockquote>
-<p>✅ <strong>What to do about it:</strong> give every table a primary key, mark any column that must always have a value <code>NOT NULL</code>, and mark a foreign key <code>UNIQUE</code> whenever the relationship it represents really is one-to-one, as <code>ratings.show_id</code> is here.</p>
-</blockquote>
-<h2 id="part-3-one-to-many-and-many-to-many-genres-stars-and-steve-carell">Part 3: One-to-many and many-to-many (genres, stars, and Steve Carell)</h2>
-<p>Not every relationship is one-to-one. A show can belong to several genres, and a person can star in several shows while a show has several stars. SQL handles both with the same JOIN and subquery tools, just with a little more care.</p>
-<h3 id="one-to-many-a-show-and-its-genres">One-to-many: a show and its genres</h3>
-<p>The <code>genres</code> table has no <code>UNIQUE</code> constraint on <code>show_id</code>, because one show is allowed to appear many times, once per genre:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">genres</span><span class="w"> </span><span class="p">(</span>
-<span class="w">    </span><span class="n">show_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
-<span class="w">    </span><span class="n">genre</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
-<span class="w">    </span><span class="k">FOREIGN</span><span class="w"> </span><span class="k">KEY</span><span class="p">(</span><span class="n">show_id</span><span class="p">)</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">shows</span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
-<span class="p">);</span>
-</code></pre></div>
-
-<p>To find every genre for the 1970 show <em>Cat Weasel</em> (id <code>63881</code>), Malan shows two equivalent approaches. First, a nested subquery: look up the show's ID inside the parentheses, then use that ID in the outer query:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">genre</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">genres</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">show_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">shows</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Cat Weasel&#39;</span><span class="p">);</span>
-</code></pre></div>
-
-<p>Second, a JOIN that lines up the two tables directly:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">title</span><span class="p">,</span><span class="w"> </span><span class="n">genre</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">shows</span>
-<span class="k">JOIN</span><span class="w"> </span><span class="n">genres</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">shows</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">genres</span><span class="p">.</span><span class="n">show_id</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">shows</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">63881</span><span class="p">;</span>
-</code></pre></div>
-
-<p>The JOIN version returns <em>Cat Weasel</em> three times over, once per genre row, because a joined result must have the same number of columns in every row, so the show's title gets duplicated to keep each genre paired with it. That repetition exists only in this temporary answer, never in the stored data itself.</p>
-<h3 id="many-to-many-the-stars-table">Many-to-many: the <code>stars</code> table</h3>
-<p>Genres are one-to-many, but people and shows are a different, third kind of relationship entirely. Malan introduces it while unveiling the <code>stars</code> table:</p>
-<blockquote>
-<p>"We have a third and final type of relationship. A many to many relationship. Why? Because it's certainly the case that one person can be in multiple shows, and it's certainly the case that some shows have multiple people, hence many to many." (David Malan)</p>
-</blockquote>
-<p><code>stars</code> is a <strong>junction table</strong>: just two foreign-key columns, <code>show_id</code> and <code>person_id</code>, and nothing else:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">stars</span><span class="w"> </span><span class="p">(</span>
-<span class="w">    </span><span class="n">show_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
-<span class="w">    </span><span class="n">person_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
-<span class="w">    </span><span class="k">FOREIGN</span><span class="w"> </span><span class="k">KEY</span><span class="p">(</span><span class="n">show_id</span><span class="p">)</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">shows</span><span class="p">(</span><span class="n">id</span><span class="p">),</span>
-<span class="w">    </span><span class="k">FOREIGN</span><span class="w"> </span><span class="k">KEY</span><span class="p">(</span><span class="n">person_id</span><span class="p">)</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">people</span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
-<span class="p">);</span>
-</code></pre></div>
-
-<p>Neither <code>shows</code> nor <code>people</code> mentions the other directly; <code>stars</code> is the only table that knows who was in what.</p>
-<h3 id="three-baby-steps-who-starred-in-the-office-2005">Three baby steps: who starred in The Office (2005)?</h3>
-<p>Rather than write one giant query, Malan builds the answer as a chain of nested subqueries, one small question at a time, and recommends this approach for exactly that reason:</p>
-<blockquote>
-<p>"I think it's quite often easier to just do multiple nested queries because you sort of work your way from the inside out taking sort of baby steps to the problem." (David Malan)</p>
-</blockquote>
-<p>Step 1: find the show's own ID (there are several "Office" shows; year narrows it to one):</p>
-<div class="codehilite"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">shows</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;The Office&#39;</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="k">year</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2005</span><span class="p">;</span>
-<span class="c1">-- 386676</span>
-</code></pre></div>
-
-<p>Step 2: plug that into <code>stars</code> to get every person ID linked to that show:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">person_id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">stars</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">show_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">shows</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;The Office&#39;</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="k">year</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2005</span><span class="p">);</span>
-</code></pre></div>
-
-<p>Step 3: plug <em>that</em> into <code>people</code> to get actual names instead of IDs:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">people</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span>
-<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">person_id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">stars</span>
-<span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">show_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">shows</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;The Office&#39;</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="k">year</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2005</span><span class="p">)</span>
-<span class="p">);</span>
-</code></pre></div>
-
-<p>The same chain runs just as well in reverse. To find every show Steve Carell has starred in, look up his <code>id</code> first, then his shows:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">title</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">shows</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span>
-<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">show_id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">stars</span>
-<span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">person_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">people</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Steve Carell&#39;</span><span class="p">)</span>
-<span class="p">);</span>
-</code></pre></div>
-
-<h3 id="the-same-answer-with-joins-explicit-and-implicit">The same answer with JOINs (explicit and implicit)</h3>
-<p>The nested version above can be rewritten as one JOIN spanning all three tables:</p>
-<div class="codehilite"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">title</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">shows</span>
-<span class="k">JOIN</span><span class="w"> </span><span class="n">stars</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">shows</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stars</span><span class="p">.</span><span class="n">show_id</span>
-<span class="k">JOIN</span><span class="w"> </span><span class="n">people</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">stars</span><span class="p">.</span><span class="n">person_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">people</span><span class="p">.</span><span class="n">id</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Steve Carell&#39;</span><span class="p">;</span>
-</code></pre></div>
-
-<p>There's also an older, more implicit style: list all three tables after <code>FROM</code>, separated by commas, and let the <code>WHERE</code> clause do the work of lining them up:</p>
-<blockquote>
-<p>"This is just a third way to express the exact same idea by doing implicit joins... by selecting data clearly from all three tables as per this comma separated list of table names but telling the database with your predicate, the where clause, how you want to line all of those tables up." (David Malan)</p>
-</blockquote>
-<div class="codehilite"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">title</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">shows</span><span class="p">,</span><span class="w"> </span><span class="n">stars</span><span class="p">,</span><span class="w"> </span><span class="n">people</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">shows</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stars</span><span class="p">.</span><span class="n">show_id</span>
-<span class="k">AND</span><span class="w"> </span><span class="n">people</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stars</span><span class="p">.</span><span class="n">person_id</span>
-<span class="k">AND</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Steve Carell&#39;</span><span class="p">;</span>
-</code></pre></div>
-
-<p>All three versions (nested subqueries, explicit <code>JOIN</code>, implicit comma-join) return exactly the same rows. Nested subqueries tend to be the easiest to reason about while you're learning, because you build the answer from the inside out, one small question at a time. (Malan also notes that in a lot of real production code, a library called an <strong>ORM</strong>, short for object-relational mapper, writes these joins for you once it understands your schema, useful to know exists, but out of scope for this course.)</p>
-<h2 id="part-4-how-the-pieces-fit-together">Part 4: How the pieces fit together</h2>
-<p>Zoom back out to the whole <code>shows.db</code> diagram from Part 1. Every technique in this lesson is really one repeated move: give each real "thing" its own table and a primary key, connect tables with a foreign key column, and choose nested subqueries or a JOIN depending on how many tables you need to cross at once.</p>
-<div class="codehilite"><pre><span></span><code>RELATIONSHIP TYPE     EXAMPLE                  HOW YOU ENFORCE / QUERY IT
-one-to-one              shows &lt;-&gt; ratings        FK marked UNIQUE; JOIN or subquery
-one-to-many              shows &lt;-&gt; genres         plain FK (no UNIQUE); JOIN or subquery
-many-to-many             shows &lt;-&gt; people          junction table (stars) with two FKs;
-                                                   JOIN across 3 tables, or nested subqueries
-</code></pre></div>
-
-<p>This is also, directly, the shape of the Capstone you're about to build: a tiny library where books relate to authors (many-to-many, needing a junction table) and to borrowers (through loan records). Design that schema well up front, and every question you'll ever want to ask it (who wrote this, who has that book out right now) becomes a JOIN or a subquery instead of a mess of repeated text.</p>
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong>Normalize by splitting, not by repeating.</strong> Give each real-world "thing" its own table with a unique primary key, and reference that key elsewhere instead of retyping names or titles.</li>
-<li><strong>Primary and foreign key are the same value, different roles.</strong> A column is a primary key in the table it uniquely identifies, and a foreign key anywhere else it's used to cross-reference that table.</li>
-<li><strong>SQLite has five data types, not fifty.</strong> <code>INTEGER</code>, <code>NUMERIC</code>, <code>REAL</code>, <code>TEXT</code>, <code>BLOB</code>: choose based on what the value actually is, not habit from another language.</li>
-<li><strong>Constraints are defenses, not suggestions.</strong> <code>NOT NULL</code> blocks missing required data at insert time; <code>UNIQUE</code> on a foreign key is what actually makes a relationship one-to-one.</li>
-<li><strong>JOIN lines two (or more) tables up by a shared key.</strong> A one-to-many JOIN duplicates the "one" side's row per match on the "many" side. That's expected, not a bug.</li>
-<li><strong>Many-to-many needs a third table.</strong> A junction table like <code>stars</code> (just two foreign keys) is the only correct way to represent "many of these relate to many of those."</li>
-<li><strong>Nested subqueries and JOINs are interchangeable.</strong> They can answer the exact same question; subqueries are usually easier to reason about first, working from the inside out.</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ <strong>Repeating a name or title across rows "because it's easier for now."</strong> That's exactly the Attempt-2 spreadsheet problem: one typo silently creates a duplicate entity the database can't detect.</li>
-<li>❌ <strong>Forgetting <code>UNIQUE</code> on a foreign key that's supposed to be one-to-one.</strong> Without it, nothing stops a second row from sneaking in and silently turning a one-to-one relationship into one-to-many.</li>
-<li>❌ <strong>Trying to cram a many-to-many relationship into one of the two "real" tables.</strong> A <code>books</code> table with an <code>author_id</code> column only works if every book has exactly one author: the moment a book has two authors, you need a junction table.</li>
-<li>❌ <strong>Being surprised by duplicate rows after a JOIN.</strong> If you join a "one" table to a "many" table, the "one" side's data repeats once per match. That's correct behavior, not a bug in your query.</li>
-<li>❌ <strong>Assuming SQLite's five types are the only path.</strong> Choose <code>NUMERIC</code> for a genuinely ambiguous real-world value (like a year), not just <code>TEXT</code> because it's easiest to insert first and think about later.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: A Tiny Library Database</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. You'll design a small relational schema from scratch (books, authors, and borrowers) with a real many-to-many relationship in it, then prove the design works by answering questions that require exactly the tools this lesson taught: joins and a nested subquery. Designing a schema like this well is precisely the skill your eventual final project depends on.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>A SQLite database, <code>library.db</code>, built on cs50.dev, containing:</p>
-<ul>
-<li>An <strong><code>authors</code></strong> table and a <strong><code>books</code></strong> table (one-to-many isn't quite right here: books can have multiple authors, and authors can write multiple books).</li>
-<li>A <strong><code>book_authors</code></strong> junction table linking them: the many-to-many relationship, modeled the way <code>stars</code> links <code>shows</code> and <code>people</code>.</li>
-<li>A <strong><code>borrowers</code></strong> table and a <strong><code>loans</code></strong> table recording who has (or had) which book checked out.</li>
-<li>A handful of seeded rows, and three answered questions: two that require a <code>JOIN</code>, one that requires a nested subquery.</li>
-</ul>
-<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in the library</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Normalization (Part 1)</td>
-<td>Separate <code>authors</code>, <code>books</code>, and <code>borrowers</code> tables instead of one wide, repetitive sheet.</td>
-</tr>
-<tr>
-<td>Primary/foreign keys, constraints (Part 2)</td>
-<td>Every table gets an <code>id</code> primary key; <code>NOT NULL</code> on required columns.</td>
-</tr>
-<tr>
-<td>Many-to-many via a junction table (Part 3)</td>
-<td><code>book_authors</code> links <code>books</code> and <code>authors</code>, just like <code>stars</code> links <code>shows</code> and <code>people</code>.</td>
-</tr>
-<tr>
-<td>JOIN across tables (Parts 2-3)</td>
-<td>Listing a book's author(s), and listing who currently has which book.</td>
-</tr>
-<tr>
-<td>Nested subquery (Part 3)</td>
-<td>Finding every book by a given author, mirroring the Steve Carell pattern.</td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>Create the tables.</strong> On cs50.dev, run <code>sqlite3 library.db</code> and write <code>CREATE TABLE</code> statements for <code>authors</code> (<code>id</code>, <code>name NOT NULL</code>, <code>birth_year</code>), <code>books</code> (<code>id</code>, <code>title NOT NULL</code>, <code>year</code>), <code>book_authors</code> (<code>book_id</code>, <code>author_id</code>, both <code>NOT NULL</code>, both foreign keys, the junction table), <code>borrowers</code> (<code>id</code>, <code>name NOT NULL</code>, <code>email UNIQUE</code>), and <code>loans</code> (<code>id</code>, <code>book_id</code>, <code>borrower_id</code>, <code>checked_out_on</code>, <code>returned_on</code>, with <code>book_id</code>/<code>borrower_id</code> as foreign keys). Run <code>.schema</code> and confirm all five tables and their constraints exist.</li>
-<li><strong>Seed a few rows.</strong> <code>INSERT</code> at least 3 authors, 4 books, and 3 borrowers. Insert <code>book_authors</code> rows so that <strong>at least one book has two authors</strong>: this is what proves the relationship is genuinely many-to-many, not accidentally one-to-many. Insert a few <code>loans</code> rows, leaving <code>returned_on</code> as <code>NULL</code> for books currently checked out.</li>
-<li><strong>Answer with a JOIN, question 1: "List every book together with the name(s) of everyone who wrote it."</strong> Requires joining <code>books</code>, <code>book_authors</code>, and <code>authors</code>. Confirm the co-authored book from Milestone 2 shows up once per author.</li>
-<li><strong>Answer with a JOIN, question 2: "List every book currently checked out, together with the borrower's name."</strong> Requires joining <code>loans</code>, <code>books</code>, and <code>borrowers</code>, filtered <code>WHERE returned_on IS NULL</code>.</li>
-<li><strong>Answer with a nested subquery, question 3: "List the titles of every book written by a specific author."</strong> Build it in baby steps like the Steve Carell example: first get the author's <code>id</code>, then the matching <code>book_id</code>s from <code>book_authors</code>, then the titles from <code>books</code>, all as one nested query, not a JOIN.</li>
-<li><strong>Stretch goals.</strong> (a) Add a <code>CHECK</code> or extra constraint of your choosing (for example, requiring <code>year</code> to be a plausible number). (b) Rewrite question 3 as an explicit <code>JOIN</code> instead of a nested subquery, and confirm both return identical rows. (c) Using <code>GROUP BY</code> and <code>COUNT</code> from Lesson 29, find which borrower currently has the most books checked out.</li>
-</ol>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ <code>.schema</code> shows five tables, each with a primary key, and foreign keys correctly declared on <code>book_authors</code> and <code>loans</code>.</li>
-<li>✅ At least one book in <code>book_authors</code> has two (or more) author rows: proof the many-to-many relationship is real, not just modeled as one-to-many by accident.</li>
-<li>✅ Both JOIN questions return correct, matched-up results (book + author name; book + current borrower name).</li>
-<li>✅ The nested-subquery question returns the correct book titles for a chosen author, built as parenthetical steps rather than a JOIN.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> after writing the nested-subquery version of question 3, also write it as a JOIN and confirm the two return exactly the same rows. If they don't match, one of your foreign keys is pointing at the wrong column.</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-spot-the-relationship-foundational">Exercise 1: Spot the relationship (foundational)</h3>
-<p>Without writing any SQL, sketch (as a <code>text</code> diagram like Part 1's) a two-table design for "students" and "clubs." Decide: is a student-to-club relationship one-to-one, one-to-many, or many-to-many? Explain your reasoning in a sentence, and note whether you'd need a junction table.</p>
-<h3 id="exercise-2-same-answer-two-ways-intermediate">Exercise 2: Same answer, two ways (intermediate)</h3>
-<p>Using your library database (or <code>shows.db</code>), pick one question and answer it twice: once with a <code>JOIN</code>, once with an equivalent nested subquery. Run both and confirm they return the identical set of rows.</p>
-<h3 id="exercise-3-a-second-many-to-many-advanced">Exercise 3: A second many-to-many (advanced)</h3>
-<p>Add a <code>tags</code> table (e.g., "mystery," "young-adult," "reference") and a <code>book_tags</code> junction table to your library database, modeled on <code>book_authors</code>. Write the query "list every tag for a specific book" three ways: a nested subquery, an explicit <code>JOIN</code>, and an implicit comma-separated join, and confirm all three return the same rows.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>NORMALIZE A SPREADSHEET
-  One table per &quot;thing&quot; (shows, people) + unique integer IDs, not repeated text.
-  Cross-reference tables (stars, book_authors) hold only foreign keys.
-
-KEYS
-  Primary key   = uniquely identifies a row in ITS OWN table.
-  Foreign key   = a primary key value stored in ANOTHER table, for cross-referencing.
-
-DATA TYPES (SQLite has exactly 5)
-  INTEGER  NUMERIC  REAL  TEXT  BLOB
-
-CONSTRAINTS
-  NOT NULL   -- this column may never be empty
-  UNIQUE     -- no value may repeat in this column (this is what makes a
-                foreign key relationship 1-to-1)
-
-RELATIONSHIPS
-  1-to-1        FK marked UNIQUE                  (shows &lt;-&gt; ratings)
-  1-to-many     plain FK, no UNIQUE               (shows &lt;-&gt; genres)
-  many-to-many  junction table, 2 FKs, no PK-per- (shows &lt;-&gt; people via stars)
-                entity meaning of its own
-
-JOIN
-  SELECT ... FROM a JOIN b ON a.id = b.a_id WHERE ...;
-
-NESTED SUBQUERY (build from the inside out)
-  SELECT ... FROM x WHERE col = (SELECT ... FROM y WHERE ...);
-  SELECT ... FROM x WHERE col IN (SELECT ... FROM y WHERE ...);
-
-IMPLICIT JOIN (older style, same result as JOIN)
-  SELECT ... FROM a, b WHERE a.id = b.a_id AND ...;
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 8 · Lesson 29:</strong> "SQL fundamentals: CRUD" gave you <code>SELECT</code>/<code>INSERT</code>/<code>UPDATE</code>/<code>DELETE</code> with <code>WHERE</code>, <code>LIKE</code>, <code>GROUP BY</code>, <code>ORDER BY</code>, and <code>LIMIT</code> on one table. This lesson is what happens the moment your data needs more than one.</li>
-<li><strong>Next, Module 8 · Lesson 31:</strong> "Indexes, injection, and race conditions" picks up right where the JOINs here can get slow at real-world scale. You'll learn to speed them up with an index, and how to call these exact queries safely from Python.</li>
-<li><strong>Later, the north-star project:</strong> designing your own final project's schema (users, posts, orders, whatever your app needs) is exactly this lesson's skill, just with your own tables instead of IMDb's.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 7 - SQL" by David J. Malan, Harvard University (CS50x 2026). Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+</blockquote><div class="pager bottom"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="30-relational-design-joins.html" class="cur" title="Start here">1</a><a href="30-relational-design-joins-2.html" class="" title="Parts 2-4">2</a><a href="30-relational-design-joins-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="30-relational-design-joins-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="30" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="29-sql-fundamentals.html"><span class="dir">&#8592; Previous</span><b>SQL Fundamentals: CRUD</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="31-indexes-injection-transactions.html"><span class="dir">Next &#8594;</span><b>Indexes, Injection, and Race Conditions</b></a></nav>
+    <div class="ls-marker" data-lesson-id="30" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="29-sql-fundamentals.html"><span class="dir">&#8592; Previous lesson</span><b>SQL Fundamentals: CRUD</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 
@@ -855,13 +532,16 @@ document.querySelectorAll('.codehilite, pre').forEach(block=>{
 const map={'\u{1F511}':'cl-key','\u{1F4A1}':'cl-tip','✅':'cl-ok','❌':'cl-no','\u{1F3AF}':'cl-goal','\u{1F6E0}':'cl-goal'};
 document.querySelectorAll('blockquote').forEach(q=>{const t=(q.textContent||'').trim();for(const e in map){if(t.startsWith(e)){q.classList.add(map[e]);break}}});
 // check-off
+function wireList(el){if(el.dataset.wired)return;el.dataset.wired='1';el.classList.add('checkable');
+  el.querySelectorAll(':scope>li').forEach(li=>{const key='cwc:'+location.pathname+':'+li.textContent.slice(0,60);
+    if(localStorage.getItem(key))li.classList.add('checked');
+    li.addEventListener('click',ev=>{if(ev.target.tagName==='A')return;li.classList.toggle('checked');
+      li.classList.contains('checked')?localStorage.setItem(key,'1'):localStorage.removeItem(key)});});}
 function makeCheckable(rx){document.querySelectorAll('h2,h3').forEach(h=>{if(!rx.test(h.textContent))return;let el=h.nextElementSibling;
-  while(el&&!/^H[1-3]$/.test(el.tagName)){if(el.tagName==='OL'||el.tagName==='UL'){el.classList.add('checkable');
-    el.querySelectorAll(':scope>li').forEach(li=>{const key='cwc:'+location.pathname+':'+li.textContent.slice(0,60);
-      if(localStorage.getItem(key))li.classList.add('checked');
-      li.addEventListener('click',ev=>{if(ev.target.tagName==='A')return;li.classList.toggle('checked');
-        li.classList.contains('checked')?localStorage.setItem(key,'1'):localStorage.removeItem(key)});});}el=el.nextElementSibling;}});}
-makeCheckable(/learning objectives|milestones/i);
+  while(el&&!/^H[1-3]$/.test(el.tagName)){if(el.tagName==='OL'||el.tagName==='UL')wireList(el);el=el.nextElementSibling;}});}
+makeCheckable(/learning objectives|milestones|done when/i);
+// lists written as `- [ ] thing` are check-off lists wherever they appear
+document.querySelectorAll('ul.checkable,ol.checkable').forEach(wireList);
 // scrollspy
 const links=[...document.querySelectorAll('.toc a')];
 const heads=links.map(a=>a.getAttribute('href')).filter(h=>h&&h.startsWith('#')).map(h=>document.getElementById(h.slice(1))).filter(Boolean);

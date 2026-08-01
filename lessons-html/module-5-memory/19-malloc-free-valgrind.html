@@ -3,9 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 5 · Lesson 19: malloc, free, and Hunting Memory Bugs | Self-Paced CS50x</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iIzBhMWEyZiIvPjx0ZXh0IHg9IjE2IiB5PSIyMiIgZm9udC1mYW1pbHk9InVpLW1vbm9zcGFjZSxNZW5sbyxDb25zb2xhcyxtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjZjI0ZDYzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj4mZ3Q7XzwvdGV4dD48L3N2Zz4=">
-
+<title>Module 5 · Lesson 19: malloc, free, and Hunting Memory Bugs (p1/3) | Self-Paced CS50x</title>
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="shortcut icon" href="../assets/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -51,6 +53,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -142,13 +167,13 @@ code{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.86em;b
 .copy-btn.done{background:var(--teal);color:#04231c;border-color:var(--teal)}
 
 /* callouts */
-blockquote{margin:24px 0;padding:16px 20px;border-radius:14px;background:var(--soft);border:1px solid var(--line);border-left:5px solid var(--teal)}
+blockquote{margin:24px 0;padding:18px 22px;border-radius:14px;background:var(--soft);border:1px solid var(--line);box-shadow:var(--shadow)}
 blockquote p{margin:7px 0}blockquote p:first-child{margin-top:0}blockquote p:last-child{margin-bottom:0}
-blockquote.cl-key{background:var(--k-bg);border-left-color:var(--k);border-color:transparent}
-blockquote.cl-tip{background:var(--tip-bg);border-left-color:var(--tip);border-color:transparent}
-blockquote.cl-ok{background:var(--ok-bg);border-left-color:var(--ok);border-color:transparent}
-blockquote.cl-no{background:var(--no-bg);border-left-color:var(--no);border-color:transparent}
-blockquote.cl-goal{background:var(--goal-bg);border-left-color:var(--goal);border-color:transparent}
+blockquote.cl-key{background:var(--k-bg);border-color:transparent}
+blockquote.cl-tip{background:var(--tip-bg);border-color:transparent}
+blockquote.cl-ok{background:var(--ok-bg);border-color:transparent}
+blockquote.cl-no{background:var(--no-bg);border-color:transparent}
+blockquote.cl-goal{background:var(--goal-bg);border-color:transparent}
 
 /* capstone banner */
 h2.capstone-h{background:linear-gradient(115deg,var(--navy),var(--navy-3));color:#fff;border-radius:20px;padding:30px 28px 26px;margin-top:64px;box-shadow:0 20px 50px rgba(10,26,47,.3);overflow:hidden;position:relative}
@@ -203,42 +228,27 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <body>
 <div id="progress"></div>
 
-<div class="topbar"><div class="wrap">
-  <div>&#10024; Welcome to <b>Self-Paced CS50x</b> &middot; a self-paced course</div>
-  <div class="right"><span>CS50x 2026 · Harvard University · David J. Malan</span></div>
-</div></div>
+<div class="topbar"><div class="wrap"><div>&#10024; Welcome to <b>Self-Paced CS50x</b> &middot; a self-paced course</div><div class="right"><span>CS50x 2026 · Harvard University · David J. Malan</span></div></div></div>
 
 <nav class="bar"><div class="wrap">
   <button class="btn btn-outline" id="menuBtn" style="padding:8px 14px">&#9776;</button>
   <a class="logo" href="../index.html">Self-Paced CS50x<span class="dot">.</span></a>
   <div class="navlinks">
-    <a href="../index.html">All lessons</a>
-    <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="../index.html">All lessons</a><a href="#overview">Overview</a><a href="19-malloc-free-valgrind-3.html#capstone">Capstone</a>
   </div>
-  <div class="nav-cta">
-    <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
-  </div>
+<div class="nav-cta"><a class="btn btn-primary" href="#start">Start the lesson &#8594;</a></div>
 </div></nav>
 
 <header class="hero">
   <span class="blob t"></span><span class="blob c"></span>
-  <svg class="squiggle" style="top:120px;left:46%;" width="90" height="26" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#18c4a0" stroke-width="4" stroke-linecap="round"/></svg>
-  <svg class="squiggle" style="bottom:60px;right:40%;" width="70" height="22" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#f24d63" stroke-width="4" stroke-linecap="round"/></svg>
+<svg class="squiggle" style="top:120px;left:46%;" width="90" height="26" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#18c4a0" stroke-width="4" stroke-linecap="round"/></svg><svg class="squiggle" style="bottom:60px;right:40%;" width="70" height="22" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#f24d63" stroke-width="4" stroke-linecap="round"/></svg>
   <div class="wrap" id="overview">
     <div>
       <span class="eyebrow">&#10022; Module 5 · Lesson 19</span>
       <h1>malloc, free, and Hunting Memory <span class="accent">Bugs</span></h1>
       <p class="lead">A string is really just an address, so comparing two strings with == compares their addresses instead of their characters, copying a string with a plain assignment gives you two names for the very same characters instead of two independent copies, and Valgrind is the tool that reads your program&#x27;s memory habits back to you, line by line, so you can catch both mistakes, plus leaks and invalid touches, before they ship.</p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
-        <a class="play" href="https://www.youtube.com/watch?v=db0H0U13YsA" target="_blank" rel="noopener"><span class="circ">&#9654;</span> Watch the talk</a>
-      </div>
-      <div class="chips">
-        <span class="chip">&#127908; <b>David J. Malan</b></span>
-        <span class="chip">&#9201; <b>60 minutes</b></span>
-        <span class="chip">&#128296; <b>Hands-on capstone</b></span>
-      </div>
+<div class="hero-actions"><a class="btn btn-primary" href="#start">Start the lesson &#8594;</a><a class="play" href="https://www.youtube.com/watch?v=db0H0U13YsA" target="_blank" rel="noopener"><span class="circ">&#9654;</span> Watch the talk</a></div>
+<div class="chips"><span class="chip">&#127908; <b>David J. Malan</b></span><span class="chip">&#9201; <b>60 minutes</b></span><span class="chip">&#128296; <b>Hands-on capstone</b></span></div>
     </div>
     <div style="position:relative">
       <div class="hero-card">
@@ -253,7 +263,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="19-malloc-free-valgrind-3.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -273,31 +283,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <li><a href="#prerequisites">Prerequisites</a></li>
 <li><a href="#part-1-comparing-strings-why-lies-to-you">Part 1: Comparing strings, why == lies to you</a></li>
 <li><a href="#part-2-copying-strings-the-shallow-copy-trap-and-the-fix">Part 2: Copying strings, the shallow-copy trap, and the fix</a></li>
-<li><a href="#part-3-debugging-memory-errors-valgrind-garbage-values-and-binky">Part 3: Debugging memory errors, Valgrind, garbage values, and Binky</a></li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: The Deep-Copy Fix</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-vs-strcmp-foundational">Exercise 1: == vs. strcmp (foundational)</a></li>
-<li><a href="#exercise-2-write-your-own-deep-copy-function-intermediate">Exercise 2: Write your own deep-copy function (intermediate)</a></li>
-<li><a href="#exercise-3-hunt-an-off-by-one-with-valgrind-advanced">Exercise 3: Hunt an off-by-one with Valgrind (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="19-malloc-free-valgrind.html" class="cur" title="Start here">1</a><a href="19-malloc-free-valgrind-2.html" class="" title="Part 3">2</a><a href="19-malloc-free-valgrind-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="19-malloc-free-valgrind-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>A string is really just an address, so comparing two strings with <code>==</code> compares their addresses instead of their characters, copying a string with a plain assignment gives you two names for the very same characters instead of two independent copies, and Valgrind is the tool that reads your program's memory habits back to you, line by line, so you can catch both mistakes, plus leaks and invalid touches, before they ship.</p>
 <blockquote>
@@ -489,215 +481,9 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <blockquote>
 <p>"What I should always have been doing since week one, but we consciously don't because it adds just too much overhead, is check if S equals equals null, then we should abort the program altogether." (David Malan)</p>
 </blockquote>
-<hr />
-<h2 id="part-3-debugging-memory-errors-valgrind-garbage-values-and-binky">Part 3: Debugging memory errors, Valgrind, garbage values, and Binky</h2>
-<p>Some memory mistakes crash your program immediately. Others (like a leak, or writing one slot past the end of an array) don't crash anything most of the time, so eyeballing the code isn't reliable. That's the gap <strong>Valgrind</strong> fills: it's a separate program, not part of CS50, that runs your compiled code and watches every allocation, read, and write it makes.</p>
-<blockquote>
-<p>"Valgrind ... is a nice complement to something like debug50 and printf and the duck for actually chasing down specifically in this case memory related errors." (David Malan)</p>
-</blockquote>
-<p>Consider a small, deliberately buggy program:</p>
-<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
-
-<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="mi">3</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span><span class="w">   </span><span class="c1">// room for 3 ints: valid indices 0, 1, 2</span>
-<span class="w">    </span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">72</span><span class="p">;</span>
-<span class="w">    </span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">73</span><span class="p">;</span>
-<span class="w">    </span><span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">33</span><span class="p">;</span><span class="w">                          </span><span class="c1">// bug: index 3 doesn&#39;t exist</span>
-<span class="p">}</span><span class="w">                                       </span><span class="c1">// bug: x is never freed</span>
-</code></pre></div>
-
-<p>It compiles cleanly and, most of the time, runs without visibly crashing: the kind of "latent, harder to detect bug" Valgrind exists for. Running <code>valgrind ./memory</code> produces dense output, but two phrases carry almost all the useful information:</p>
-<table>
-<thead>
-<tr>
-<th>Valgrind says</th>
-<th>Plain-language translation</th>
-<th>Where to look</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>Invalid write of size 4</code></td>
-<td>You wrote 4 bytes (an <code>int</code>) somewhere you were never given permission to write</td>
-<td>The line number Valgrind names, usually an off-by-one array index</td>
-</tr>
-<tr>
-<td><code>definitely lost NN bytes in 1 blocks</code></td>
-<td>You <code>malloc</code>'d <code>NN</code> bytes and the program ended without ever <code>free</code>ing them (a leak)</td>
-<td>The line number of the original <code>malloc</code> call, listed further down in the same block</td>
-</tr>
-<tr>
-<td><code>in use at exit: 0 bytes</code> ... <code>0 errors</code></td>
-<td>Everything you allocated, you freed; nothing was touched out of bounds</td>
-<td>Nowhere: this is what "clean" looks like</td>
-</tr>
-</tbody>
-</table>
-<p>The fix here is the same pattern from Part 2: use valid indices, check for <code>NULL</code>, and free what you allocated.</p>
-<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="mi">3</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
-<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">72</span><span class="p">;</span>
-<span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">73</span><span class="p">;</span>
-<span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">33</span><span class="p">;</span>
-<span class="n">free</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
-</code></pre></div>
-
-<p><strong>Garbage values.</strong> Memory the computer gives you is never blank: it's whatever bits were left over from something else that used those bytes before. A program that prints an array without ever putting anything into it makes this visible directly:</p>
-<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">scores</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
-<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%i</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">scores</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span><span class="w">   </span><span class="c1">// prints leftover bits, not real scores</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<blockquote>
-<p>"You have no idea what values are going to be in X and Y unless you yourself put those values there." (David Malan)</p>
-</blockquote>
-<p>A garbage <em>number</em> is merely useless. A garbage <strong>pointer</strong> is dangerous, because dereferencing it means following an address you never chose to somewhere in memory you don't control. This is exactly the scenario in a claymation short, "Pointer Fun with Binky," that Malan's lecture screens at this point: two pointers, <code>x</code> and <code>y</code>, are declared, but only <code>x</code> is ever pointed at real allocated memory (its <strong>pointee</strong>, in the video's term for "the thing a pointer points at"). Binky, the character, tries to dereference the uninitialized <code>y</code> anyway:</p>
-<blockquote>
-<p>"Initially, pointers don't point to anything. The things they point to are called pointees, and setting them up's a separate step." (from the Binky video (Nick Parlante, Stanford CS Education Library), screened during the lecture)</p>
-<p>"I don't think dereferencing Y is a good idea because ... setting up the pointee is a separate step, and I don't think we ever did it." (from the Binky video, screened during the lecture)</p>
-</blockquote>
-<p>Malan draws the moral directly:</p>
-<blockquote>
-<p>"The key detail was that bad things happened to Binky when we did this line of code, dereferencing an invalid pointer that had no true value assigned. It was just some garbage value." (David Malan)</p>
-</blockquote>
-<div class="codehilite"><pre><span></span><code>pointer x  ----&gt;  [ pointee: 42 ]     (after malloc + *x = 42;  -- a real pointee)
-pointer y  ----&gt;  ????                (declared, never malloc&#39;d or assigned -- garbage address)
-
-*y = 13;   --&gt;  undefined behavior: y points somewhere random, possibly invalid, memory
-</code></pre></div>
-
-<p>The video's fix (and the same fix as every <code>NULL</code> check in this lesson) is to never dereference a pointer until you know, concretely, what it points to: either by <code>malloc</code>-ing its own pointee, or by pointing it at something that already has one.</p>
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong>A string is an address, so <code>==</code> compares addresses.</strong> Two strings with identical characters at different addresses will always fail <code>==</code>; use <code>strcmp(s, t) == 0</code> to compare their actual contents.</li>
-<li><strong>Assigning a pointer copies the address, not the data (a shallow copy).</strong> <code>string t = s;</code> gives you a second name for the very same characters; change one, and the other appears to change too.</li>
-<li><strong>A deep copy needs its own memory.</strong> <code>malloc(strlen(s) + 1)</code> reserves room (including the null terminator); <code>strcpy(t, s)</code>, or your own character-by-character loop, actually duplicates the bytes.</li>
-<li><strong>Every successful <code>malloc</code> needs a matching <code>free</code>, or you leak.</strong> As Malan puts it: "If you mallocked it, you must free it." The one exception is <code>get_string</code>'s own memory, which the CS50 library frees for you automatically.</li>
-<li><strong>Check for <code>NULL</code> before you use what a function gave you.</strong> <code>malloc</code> and <code>get_string</code> both return <code>NULL</code> on failure; touching that memory anyway is how Binky's uninitialized pointer went wrong.</li>
-<li><strong>Valgrind reads your program's memory habits back to you.</strong> Its output is dense, but two phrases matter most: "invalid write/read" (you touched memory you don't own) and "definitely lost" (you never freed something you allocated).</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ Comparing strings with <code>if (s == t)</code>: that compares two addresses, not the words inside them. Use <code>strcmp(s, t) == 0</code> instead.</li>
-<li>❌ Writing <code>string t = s;</code> and expecting an independent copy: you only get a second pointer to the same characters. Deep-copy with <code>malloc</code> + <code>strcpy</code> instead.</li>
-<li>❌ Allocating <code>strlen(s)</code> bytes instead of <code>strlen(s) + 1</code>: you'll silently drop room for the null terminator and corrupt whatever memory happens to sit right after your string.</li>
-<li>❌ Calling <code>malloc</code> without ever calling a matching <code>free</code>: a memory leak that Valgrind reports as bytes "definitely lost," and that would slowly degrade a long-running program such as a server.</li>
-<li>❌ Dereferencing a pointer before it has ever been pointed at real memory: like Binky's <code>y</code>, this touches a garbage address and can crash your program.</li>
-<li>❌ Calling <code>free</code> on memory that <code>get_string</code> gave you: CS50's library already frees that memory for you; only <code>free</code> what you yourself <code>malloc</code>'d.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: The Deep-Copy Fix</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. You will deliberately break string copying, watch the bug happen with your own eyes, fix it properly with <code>malloc</code>/<code>strcpy</code>/<code>free</code>, and then use Valgrind, not your own eyeballs, to prove the fix is clean.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>Two small C programs on cs50.dev, each a milestone building on the last, plus a series of Valgrind runs you read and interpret yourself:</p>
-<ul>
-<li><code>copy_bad.c</code>: reproduces the shallow-copy bug on purpose.</li>
-<li><code>copy_good.c</code>: the <code>malloc</code> + <code>strcpy</code> + <code>free</code> fix, first leaked on purpose, then corrected.</li>
-</ul>
-<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in The Deep-Copy Fix</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>==</code> compares addresses, not characters (Part 1)</td>
-<td>Printing both strings' addresses with <code>%p</code> shows you directly why a shallow copy shares one address.</td>
-</tr>
-<tr>
-<td>Shallow vs. deep copy (Part 2)</td>
-<td><code>copy_bad.c</code> is the shallow-copy bug; <code>copy_good.c</code> is the fix.</td>
-</tr>
-<tr>
-<td><code>malloc</code> / <code>free</code> / <code>NULL</code> checks (Part 2)</td>
-<td>Every allocation in <code>copy_good.c</code> is checked and freed (or, on purpose, briefly isn't).</td>
-</tr>
-<tr>
-<td>Reading Valgrind output (Part 3)</td>
-<td>You diagnose your own leak from Valgrind's own words, the same way Malan diagnosed <code>memory.c</code>.</td>
-</tr>
-</tbody>
-</table>
-<p>This same discipline (allocate only what you need, check that it succeeded, free it when you're done) is exactly what keeps a long-running server, such as the database-backed web app you'll ship at the end of this course, from grinding slower and slower under its own memory leaks.</p>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>Reproduce the bug on purpose.</strong> Write <code>copy_bad.c</code>: <code>get_string</code> into <code>s</code>, then <code>string t = s;</code>, then capitalize <code>t[0]</code> with <code>toupper</code>. Print both <code>s</code> and <code>t</code>. Run it and confirm both strings changed: see the bug with your own eyes before you fix it.</li>
-<li><strong>Fix it with malloc + strcpy.</strong> Write <code>copy_good.c</code>: after <code>get_string</code>, allocate <code>strlen(s) + 1</code> bytes with <code>malloc</code>, check the result for <code>NULL</code>, <code>strcpy</code> the source into it, then capitalize only the copy. Print both strings again and confirm only the copy changed.</li>
-<li><strong>Leak on purpose.</strong> In a copy of <code>copy_good.c</code>, delete (or comment out) the <code>free(t);</code> line, recompile, and run <code>valgrind ./copy_good</code>. Find the line reporting bytes "definitely lost," and check that the byte count matches <code>strlen(s) + 1</code>.</li>
-<li><strong>Free it and confirm zero leaks.</strong> Restore the <code>free(t);</code> line, recompile, and re-run <code>valgrind ./copy_good</code>. Confirm Valgrind's "in use at exit" reads 0 bytes and its summary reads 0 errors.</li>
-<li><strong>Stretch goal.</strong> Deliberately allocate one byte too few (<code>malloc(strlen(s))</code> instead of <code>+ 1</code>), rerun Valgrind, and explain in your own words why the missing room for the null terminator produced the error you now see.</li>
-</ol>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ You watched <code>copy_bad.c</code> corrupt both strings, and can explain why in terms of addresses, not "magic."</li>
-<li>✅ <code>copy_good.c</code> capitalizes only the copy; the original string is untouched, confirmed by printing both.</li>
-<li>✅ You have seen Valgrind report a real leak, then seen the very same program report zero leaks after adding <code>free</code> back.</li>
-<li>✅ You can read a Valgrind "definitely lost" line and say, out loud, which <code>malloc</code> call it's blaming.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> don't add <code>free</code> just because this lesson told you to: run Valgrind before and after so the tool confirms the fix, rather than taking it on faith.</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-vs-strcmp-foundational">Exercise 1: <code>==</code> vs. <code>strcmp</code> (foundational)</h3>
-<p>Write a program that <code>get_string</code>s two words from the user and prints <code>"same"</code> or <code>"different"</code> using plain <code>==</code>. Run it and type the exact same word twice: notice it (incorrectly) prints <code>"different"</code>. Now fix it using <code>strcmp</code>, and confirm identical input correctly prints <code>"same"</code>.</p>
-<h3 id="exercise-2-write-your-own-deep-copy-function-intermediate">Exercise 2: Write your own deep-copy function (intermediate)</h3>
-<p>Write a function <code>char *duplicate(string s)</code> that returns a brand-new, independently allocated copy of <code>s</code>: check for <code>NULL</code>, allocate <code>strlen(s) + 1</code> bytes, copy every character including the null terminator, and return the new pointer. Call it from <code>main</code>, capitalize the copy, and print both the original and the copy to prove they're independent. Remember to <code>free</code> whatever <code>duplicate</code> returns once you're done with it.</p>
-<h3 id="exercise-3-hunt-an-off-by-one-with-valgrind-advanced">Exercise 3: Hunt an off-by-one with Valgrind (advanced)</h3>
-<p>Write a program that calls <code>malloc(5 * sizeof(int))</code> for an array of 5 integers, then writes into indices <code>1</code> through <code>5</code> instead of <code>0</code> through <code>4</code> (one index too high). Compile it, run it under Valgrind, and use the "invalid write" line it reports to find and fix the bug. Free the memory and confirm Valgrind reports zero errors.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>COMPARE STRINGS
-  s == t              compares ADDRESSES -- almost always wrong for strings
-  strcmp(s, t) == 0    compares CHARACTERS -- use this instead
-
-COPY STRINGS
-  string t = s;                       SHALLOW copy -- t is just another name for s&#39;s address
-  string t = malloc(strlen(s) + 1);   DEEP copy -- give t its own memory...
-  strcpy(t, s);                       ...then actually copy the bytes into it
-
-MEMORY RULES
-  if (t == NULL) return 1;    check every malloc (and get_string) before using the result
-  free(t);                    every successful malloc needs exactly one matching free
-  (get_string&#39;s own memory frees itself -- don&#39;t call free on it yourself)
-
-VALGRIND
-  valgrind ./program
-  &quot;invalid write/read of size N&quot;          touched memory you don&#39;t own -- usually an off-by-one
-  &quot;definitely lost NN bytes in 1 blocks&quot;   a malloc with no matching free -- a leak
-  &quot;in use at exit: 0 bytes&quot; ... &quot;0 errors&quot;  clean -- everything allocated was freed and valid
-
-GARBAGE VALUES
-  An uninitialized variable or pointer holds leftover bits, not zero.
-  Dereferencing an uninitialized POINTER (not just reading a garbage number) can crash your program.
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 5 · Lesson 18: Pointers, and what strings really are:</strong> gave you <code>&amp;</code>, <code>*</code>, and the fact that a C string is a <code>char *</code> pointing at its first character: this lesson's entire shallow-copy bug only makes sense once you know a string variable holds an address, not the characters themselves.</li>
-<li><strong>Next, Module 5 · Lesson 20: Pass-by-reference and file I/O:</strong> applies the same "give the function an address, not a copy" idea to swap two variables' values, and opens the door to reading and writing files with <code>FILE *</code>.</li>
-<li><strong>Later, Module 6:</strong> the linked list in <code>list.c</code> allocates a new node with <code>malloc</code> and frees it on every insert and delete: the discipline you built in this lesson's capstone (check for <code>NULL</code>, free what you allocate, confirm it with Valgrind) is exactly its safety training.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 4 - Memory" by David J. Malan, Harvard University (CS50x 2026). Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+<hr /><div class="pager bottom"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="19-malloc-free-valgrind.html" class="cur" title="Start here">1</a><a href="19-malloc-free-valgrind-2.html" class="" title="Part 3">2</a><a href="19-malloc-free-valgrind-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="19-malloc-free-valgrind-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="19" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="18-pointers-and-strings.html"><span class="dir">&#8592; Previous</span><b>Pointers, and What Strings Really Are</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="20-pass-by-reference-files.html"><span class="dir">Next &#8594;</span><b>Pass-by-Reference and File I/O</b></a></nav>
+    <div class="ls-marker" data-lesson-id="19" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="18-pointers-and-strings.html"><span class="dir">&#8592; Previous lesson</span><b>Pointers, and What Strings Really Are</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 
@@ -815,13 +601,16 @@ document.querySelectorAll('.codehilite, pre').forEach(block=>{
 const map={'\u{1F511}':'cl-key','\u{1F4A1}':'cl-tip','✅':'cl-ok','❌':'cl-no','\u{1F3AF}':'cl-goal','\u{1F6E0}':'cl-goal'};
 document.querySelectorAll('blockquote').forEach(q=>{const t=(q.textContent||'').trim();for(const e in map){if(t.startsWith(e)){q.classList.add(map[e]);break}}});
 // check-off
+function wireList(el){if(el.dataset.wired)return;el.dataset.wired='1';el.classList.add('checkable');
+  el.querySelectorAll(':scope>li').forEach(li=>{const key='cwc:'+location.pathname+':'+li.textContent.slice(0,60);
+    if(localStorage.getItem(key))li.classList.add('checked');
+    li.addEventListener('click',ev=>{if(ev.target.tagName==='A')return;li.classList.toggle('checked');
+      li.classList.contains('checked')?localStorage.setItem(key,'1'):localStorage.removeItem(key)});});}
 function makeCheckable(rx){document.querySelectorAll('h2,h3').forEach(h=>{if(!rx.test(h.textContent))return;let el=h.nextElementSibling;
-  while(el&&!/^H[1-3]$/.test(el.tagName)){if(el.tagName==='OL'||el.tagName==='UL'){el.classList.add('checkable');
-    el.querySelectorAll(':scope>li').forEach(li=>{const key='cwc:'+location.pathname+':'+li.textContent.slice(0,60);
-      if(localStorage.getItem(key))li.classList.add('checked');
-      li.addEventListener('click',ev=>{if(ev.target.tagName==='A')return;li.classList.toggle('checked');
-        li.classList.contains('checked')?localStorage.setItem(key,'1'):localStorage.removeItem(key)});});}el=el.nextElementSibling;}});}
-makeCheckable(/learning objectives|milestones/i);
+  while(el&&!/^H[1-3]$/.test(el.tagName)){if(el.tagName==='OL'||el.tagName==='UL')wireList(el);el=el.nextElementSibling;}});}
+makeCheckable(/learning objectives|milestones|done when/i);
+// lists written as `- [ ] thing` are check-off lists wherever they appear
+document.querySelectorAll('ul.checkable,ol.checkable').forEach(wireList);
 // scrollspy
 const links=[...document.querySelectorAll('.toc a')];
 const heads=links.map(a=>a.getAttribute('href')).filter(h=>h&&h.startsWith('#')).map(h=>document.getElementById(h.slice(1))).filter(Boolean);

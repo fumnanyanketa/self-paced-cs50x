@@ -3,9 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 5 · Lesson 18: Pointers, and What Strings Really Are | Self-Paced CS50x</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iIzBhMWEyZiIvPjx0ZXh0IHg9IjE2IiB5PSIyMiIgZm9udC1mYW1pbHk9InVpLW1vbm9zcGFjZSxNZW5sbyxDb25zb2xhcyxtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjZjI0ZDYzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj4mZ3Q7XzwvdGV4dD48L3N2Zz4=">
-
+<title>Module 5 · Lesson 18: Pointers, and What Strings Really Are (p1/3) | Self-Paced CS50x</title>
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="shortcut icon" href="../assets/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -51,6 +53,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -142,13 +167,13 @@ code{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.86em;b
 .copy-btn.done{background:var(--teal);color:#04231c;border-color:var(--teal)}
 
 /* callouts */
-blockquote{margin:24px 0;padding:16px 20px;border-radius:14px;background:var(--soft);border:1px solid var(--line);border-left:5px solid var(--teal)}
+blockquote{margin:24px 0;padding:18px 22px;border-radius:14px;background:var(--soft);border:1px solid var(--line);box-shadow:var(--shadow)}
 blockquote p{margin:7px 0}blockquote p:first-child{margin-top:0}blockquote p:last-child{margin-bottom:0}
-blockquote.cl-key{background:var(--k-bg);border-left-color:var(--k);border-color:transparent}
-blockquote.cl-tip{background:var(--tip-bg);border-left-color:var(--tip);border-color:transparent}
-blockquote.cl-ok{background:var(--ok-bg);border-left-color:var(--ok);border-color:transparent}
-blockquote.cl-no{background:var(--no-bg);border-left-color:var(--no);border-color:transparent}
-blockquote.cl-goal{background:var(--goal-bg);border-left-color:var(--goal);border-color:transparent}
+blockquote.cl-key{background:var(--k-bg);border-color:transparent}
+blockquote.cl-tip{background:var(--tip-bg);border-color:transparent}
+blockquote.cl-ok{background:var(--ok-bg);border-color:transparent}
+blockquote.cl-no{background:var(--no-bg);border-color:transparent}
+blockquote.cl-goal{background:var(--goal-bg);border-color:transparent}
 
 /* capstone banner */
 h2.capstone-h{background:linear-gradient(115deg,var(--navy),var(--navy-3));color:#fff;border-radius:20px;padding:30px 28px 26px;margin-top:64px;box-shadow:0 20px 50px rgba(10,26,47,.3);overflow:hidden;position:relative}
@@ -203,42 +228,27 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <body>
 <div id="progress"></div>
 
-<div class="topbar"><div class="wrap">
-  <div>&#10024; Welcome to <b>Self-Paced CS50x</b> &middot; a self-paced course</div>
-  <div class="right"><span>CS50x 2026 · Harvard University · David J. Malan</span></div>
-</div></div>
+<div class="topbar"><div class="wrap"><div>&#10024; Welcome to <b>Self-Paced CS50x</b> &middot; a self-paced course</div><div class="right"><span>CS50x 2026 · Harvard University · David J. Malan</span></div></div></div>
 
 <nav class="bar"><div class="wrap">
   <button class="btn btn-outline" id="menuBtn" style="padding:8px 14px">&#9776;</button>
   <a class="logo" href="../index.html">Self-Paced CS50x<span class="dot">.</span></a>
   <div class="navlinks">
-    <a href="../index.html">All lessons</a>
-    <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="../index.html">All lessons</a><a href="#overview">Overview</a><a href="18-pointers-and-strings-3.html#capstone">Capstone</a>
   </div>
-  <div class="nav-cta">
-    <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
-  </div>
+<div class="nav-cta"><a class="btn btn-primary" href="#start">Start the lesson &#8594;</a></div>
 </div></nav>
 
 <header class="hero">
   <span class="blob t"></span><span class="blob c"></span>
-  <svg class="squiggle" style="top:120px;left:46%;" width="90" height="26" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#18c4a0" stroke-width="4" stroke-linecap="round"/></svg>
-  <svg class="squiggle" style="bottom:60px;right:40%;" width="70" height="22" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#f24d63" stroke-width="4" stroke-linecap="round"/></svg>
+<svg class="squiggle" style="top:120px;left:46%;" width="90" height="26" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#18c4a0" stroke-width="4" stroke-linecap="round"/></svg><svg class="squiggle" style="bottom:60px;right:40%;" width="70" height="22" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#f24d63" stroke-width="4" stroke-linecap="round"/></svg>
   <div class="wrap" id="overview">
     <div>
       <span class="eyebrow">&#10022; Module 5 · Lesson 18</span>
       <h1>Pointers, and What Strings Really <span class="accent">Are</span></h1>
       <p class="lead">A pointer is just a variable that stores a memory address instead of an ordinary value, and once you can hold an address you can finally see the truth that&#x27;s been hidden since week one: a C string is nothing more than a pointer to its first character, sitting in memory next to its neighbors until a null byte says &quot;stop here.&quot;</p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
-        <a class="play" href="https://www.youtube.com/watch?v=db0H0U13YsA" target="_blank" rel="noopener"><span class="circ">&#9654;</span> Watch the talk</a>
-      </div>
-      <div class="chips">
-        <span class="chip">&#127908; <b>David J. Malan</b></span>
-        <span class="chip">&#9201; <b>60 minutes</b></span>
-        <span class="chip">&#128296; <b>Hands-on capstone</b></span>
-      </div>
+<div class="hero-actions"><a class="btn btn-primary" href="#start">Start the lesson &#8594;</a><a class="play" href="https://www.youtube.com/watch?v=db0H0U13YsA" target="_blank" rel="noopener"><span class="circ">&#9654;</span> Watch the talk</a></div>
+<div class="chips"><span class="chip">&#127908; <b>David J. Malan</b></span><span class="chip">&#9201; <b>60 minutes</b></span><span class="chip">&#128296; <b>Hands-on capstone</b></span></div>
     </div>
     <div style="position:relative">
       <div class="hero-card">
@@ -253,7 +263,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="18-pointers-and-strings-3.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -277,37 +287,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <li><a href="#the-mailbox-metaphor">The mailbox metaphor</a></li>
 </ul>
 </li>
-<li><a href="#part-2-dereferencing-using-to-go-to-the-address">Part 2: Dereferencing, using * to go to the address</a></li>
-<li><a href="#part-3-strings-revealed-a-string-is-a-char">Part 3: Strings revealed, a string is a char *</a><ul>
-<li><a href="#the-typedef-behind-the-curtain">The typedef behind the curtain</a></li>
-<li><a href="#printing-s-s-1-and-si-three-ways-to-say-the-same-address">Printing S, S + 1, and &amp;S[i], three ways to say the same address</a></li>
-<li><a href="#pointer-arithmetic-vs-array-syntax-two-spellings-one-answer">Pointer arithmetic vs. array syntax, two spellings, one answer</a></li>
-</ul>
-</li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: The Pointer Field Trip</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-sizeof-roulette-foundational">Exercise 1: sizeof roulette (foundational)</a></li>
-<li><a href="#exercise-2-string-detective-intermediate">Exercise 2: String detective (intermediate)</a></li>
-<li><a href="#exercise-3-write-through-a-pointer-from-a-function-advanced">Exercise 3: Write through a pointer, from a function (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="18-pointers-and-strings.html" class="cur" title="Start here">1</a><a href="18-pointers-and-strings-2.html" class="" title="Parts 2-3">2</a><a href="18-pointers-and-strings-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="18-pointers-and-strings-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>A pointer is just a variable that stores a memory address instead of an ordinary value, and once you can hold an address you can finally see the truth that's been hidden since week one: a C string is nothing more than a pointer to its first character, sitting in memory next to its neighbors until a null byte says "stop here."</p>
 <blockquote>
@@ -431,278 +417,9 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <blockquote>
 <p>🔑 <strong>The single most important takeaway of this part.</strong> A pointer is a completely ordinary variable: it just so happens that the value it stores is a memory address rather than a "normal" value. <code>&amp;x</code> gets you that address; <code>int *p</code> gives you somewhere to keep it.</p>
 </blockquote>
-<hr />
-<h2 id="part-2-dereferencing-using-to-go-to-the-address">Part 2: Dereferencing, using <code>*</code> to go to the address</h2>
-<p>Declaring <code>p</code> and printing it out (as in Part 1) shows you a big, mostly-useless hexadecimal number. The genuinely useful move is to follow that address back to the value sitting there: what Malan calls, using the mailbox-and-arrow picture, "opening the mailbox you're pointing at."</p>
-<p>That's the <em>second</em> job of the <code>*</code> symbol: the dereference operator. Used on a pointer <strong>variable</strong> (not in a declaration), <code>*p</code> means "go to the address stored in <code>p</code>, and give me what's there."</p>
-<blockquote>
-<p>"If you simply prefix your variable name with a star, that is the so-called dereference operator, which means go to the address in P." (David Malan)</p>
-</blockquote>
-<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50</span><span class="p">;</span>
-<span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">n</span><span class="p">;</span>
-<span class="n">printf</span><span class="p">(</span><span class="s">&quot;%i</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="p">);</span><span class="w">   </span><span class="c1">// prints 50 -- goes to p&#39;s address, reads what&#39;s there</span>
-</code></pre></div>
-
-<p>Walk through it line by line, exactly as it happens in memory:</p>
-<div class="codehilite"><pre><span></span><code>line              what happens                          memory afterward
-----              ------------                          -----------------
-int n = 50;       n gets 4 bytes, value 50               n=50 @ 0x123
-int *p = &amp;n;      p gets 8 bytes, value = n&#39;s address     p=0x123 @ (somewhere)
-*p                &quot;go to 0x123&quot; -&gt; finds 50               (nothing changes)
-</code></pre></div>
-
-<p><code>*p</code> and <code>n</code> refer to the exact same byte of memory, seen through two different names. That means dereferencing isn't just for reading: you can <strong>write</strong> through a pointer too, and it changes the original variable, because there is no "copy" involved; you went straight to <code>n</code>'s own address:</p>
-<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50</span><span class="p">;</span>
-<span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">n</span><span class="p">;</span>
-<span class="o">*</span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span><span class="w">                 </span><span class="c1">// go to the address in p, and store 100 there</span>
-<span class="n">printf</span><span class="p">(</span><span class="s">&quot;%i</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">);</span><span class="w">        </span><span class="c1">// prints 100 -- n itself changed, even though</span>
-<span class="w">                           </span><span class="c1">// we never wrote the word &quot;n&quot; on this line</span>
-</code></pre></div>
-
-<blockquote>
-<p>💡 <strong>Nuance worth sitting with.</strong> <code>p = 100;</code> (no star) would be a completely different, almost certainly wrong, instruction: it would try to make <code>p</code> point at address <code>100</code> (a nonsense location), instead of changing the value at the address <code>p</code> already points to. The star is what says "go there," not "change what I'm pointing at."</p>
-<p>✅ <strong>What to do about it:</strong> whenever you're unsure what a line involving <code>*</code> and a pointer does, ask yourself first: "is the star in a declaration (means: this variable is a pointer), or is it in front of an already-declared pointer variable being used (means: go to that address)?" Those are the only two jobs that symbol has.</p>
-</blockquote>
-<hr />
-<h2 id="part-3-strings-revealed-a-string-is-a-char">Part 3: Strings revealed, a string is a <code>char *</code></h2>
-<p>Here is the string program you've written since week one:</p>
-<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cs50.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
-
-<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="n">string</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_string</span><span class="p">(</span><span class="s">&quot;s: &quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>You've always been told <code>s</code> is "a string", a sequence of characters. That was, in Malan's words, a "white lie", a simplification to keep week one from also having to teach hexadecimal, addresses, and pointers on day one. Today the lie comes off.</p>
-<p>Suppose the human typed <code>HI!</code>. In memory, the three characters plus the mandatory null terminator (<code>\0</code>) sit back-to-back-to-back, always contiguous, always in that order:</p>
-<div class="codehilite"><pre><span></span><code>address    value
--------    -----
-0x123      &#39;H&#39;    &lt;- s[0]
-0x124      &#39;I&#39;    &lt;- s[1]
-0x125      &#39;!&#39;    &lt;- s[2]
-0x126      &#39;\0&#39;   &lt;- s[3], the null terminator (&quot;stop here&quot;)
-</code></pre></div>
-
-<p>Given that layout, what is <code>s</code> itself, the variable, actually storing? Not the letters themselves. Just one thing: the address where the first letter begins.</p>
-<blockquote>
-<p>"But this is also incorrect conceptually because yes, S is the string, but more technically today S is the address of the first character in the string." (David Malan)</p>
-</blockquote>
-<p>That's it. That's the whole reveal. A string variable is a pointer: an 8-byte box holding the address of character number zero, plus nothing else. It doesn't need to store where the string <em>ends</em>, because of the convention you already know:</p>
-<blockquote>
-<p>"That's why humans decades ago decided to just terminate every string in memory with the backslash zero or null terminator, because if you give me the beginning of the string and the end, I can obviously with a loop find everything else in between." (David Malan)</p>
-</blockquote>
-<p>Drawn as two separate boxes: <code>s</code> the 8-byte pointer variable, and the characters it points at, living somewhere else entirely:</p>
-<div class="codehilite"><pre><span></span><code>s (8 bytes, lives at some other address)      the characters s points at
-+------------------+                          +-----+-----+-----+------+
-|      0x123       |  -------------------&gt;    | &#39;H&#39; | &#39;I&#39; | &#39;!&#39; | &#39;\0&#39; |
-+------------------+                          +-----+-----+-----+------+
-                                                0x123 0x124 0x125 0x126
-</code></pre></div>
-
-<h3 id="the-typedef-behind-the-curtain">The <code>typedef</code> behind the curtain</h3>
-<p>If <code>string</code> is really just "the address of a <code>char</code>," what actually <em>is</em> <code>string</code>? It turns out CS50's library never invented a new kind of data. It just gave an existing type a friendlier name:</p>
-<blockquote>
-<p>"The type you know as string since week one, all this time has simply been a synonym for char star s." (David Malan)</p>
-</blockquote>
-<p>In code, that "synonym" is written <code>char *s</code>: a pointer to a <code>char</code>, exactly the same tool from Part 1, just pointing at a character instead of an <code>int</code>. CS50's header uses a keyword called <code>typedef</code> (short for "type definition") to make <code>string</code> mean "<code>char *</code>" everywhere in your program, the same trick you used in earlier modules to build your own <code>person</code> struct type. Remove <code>#include &lt;cs50.h&gt;</code> from a program that uses <code>string</code>, and the compiler will complain it has never heard of <code>string</code>, because, strictly speaking, C itself has no such keyword. Write <code>char *s</code> instead of <code>string s</code>, and the exact same program compiles and runs, training wheels fully off.</p>
-<h3 id="printing-s-s-1-and-si-three-ways-to-say-the-same-address">Printing <code>S</code>, <code>S + 1</code>, and <code>&amp;S[i]</code>, three ways to say the same address</h3>
-<p>Because a string is just an address, everything you can do with a pointer, you can do with a string. Malan demonstrates this by printing several different addresses side by side and showing they line up exactly:</p>
-<div class="codehilite"><pre><span></span><code><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;HI!&quot;</span><span class="p">;</span>
-<span class="n">printf</span><span class="p">(</span><span class="s">&quot;%p</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">);</span><span class="w">        </span><span class="c1">// the address s stores</span>
-<span class="n">printf</span><span class="p">(</span><span class="s">&quot;%p</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span><span class="w">    </span><span class="c1">// the address-of operator applied to the first character</span>
-</code></pre></div>
-
-<p>These two lines print <strong>the exact same address</strong>. <code>s</code> already <em>is</em> the address of the first character, so asking for <code>&amp;s[0]</code> ("the address of character zero") just recomputes the number <code>s</code> was storing all along.</p>
-<p>The same idea extends down the string. <code>s</code>, <code>s + 1</code>, <code>s + 2</code> are the addresses of the 1st, 2nd, and 3rd characters, and Malan shows you can even hand those addresses straight to <code>%s</code> and get a valid (if slightly odd) printed string starting from each point:</p>
-<div class="codehilite"><pre><span></span><code>printf(&quot;%s\n&quot;, s);         -&gt;  HI!    (starts reading at s[0], stops at &#39;\0&#39;)
-printf(&quot;%s\n&quot;, s + 1);     -&gt;  I!     (starts reading at s[1], stops at the same &#39;\0&#39;)
-printf(&quot;%s\n&quot;, s + 2);     -&gt;  !      (starts reading at s[2], stops at the same &#39;\0&#39;)
-</code></pre></div>
-
-<p>Each call still finds the same null terminator: it just starts counting from a different byte, which is exactly what Malan calls <strong>pointer arithmetic</strong>:</p>
-<blockquote>
-<p>"There is a concept known as pointer arithmetic, which means given an address you can add to it, subtract to it." (David Malan)</p>
-</blockquote>
-<h3 id="pointer-arithmetic-vs-array-syntax-two-spellings-one-answer">Pointer arithmetic vs. array syntax, two spellings, one answer</h3>
-<p>This brings you to the last piece: <code>s[i]</code> (the array-bracket notation you've used since Module 3) and <code>*(s + i)</code> (pointer arithmetic plus a dereference) are two different ways of writing the <em>identical instruction</em>. <code>s[i]</code> means "go <code>i</code> steps past where <code>s</code> points, and give me the byte there", which is exactly what <code>*(s + i)</code> spells out longhand.</p>
-<table>
-<thead>
-<tr>
-<th>Bracket syntax</th>
-<th>Pointer-arithmetic equivalent</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>s[0]</code></td>
-<td><code>*(s + 0)</code>, i.e. <code>*s</code></td>
-<td>the 1st character</td>
-</tr>
-<tr>
-<td><code>s[1]</code></td>
-<td><code>*(s + 1)</code></td>
-<td>the 2nd character</td>
-</tr>
-<tr>
-<td><code>s[i]</code></td>
-<td><code>*(s + i)</code></td>
-<td>the (i+1)-th character</td>
-</tr>
-<tr>
-<td><code>&amp;s[0]</code></td>
-<td><code>s</code></td>
-<td>the address of the 1st character</td>
-</tr>
-<tr>
-<td><code>&amp;s[i]</code></td>
-<td><code>s + i</code></td>
-<td>the address of the (i+1)-th character</td>
-</tr>
-</tbody>
-</table>
-<p>The bracket version exists purely for human convenience:</p>
-<blockquote>
-<p>🔑 <strong>The single most important takeaway of this part.</strong> <code>s[i]</code> and <code>*(s + i)</code> always produce the same value, because the compiler quietly rewrites the first into the second for you. Array syntax is what programmers call <em>syntactic sugar</em>, a nicer-looking spelling of the exact same underlying operation. Nobody's forcing you to write <code>*(s + i)</code>; it's worth being able to read it, because it's the truth the bracket notation is hiding.</p>
-</blockquote>
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong>A pointer is a variable that stores an address, nothing more exotic.</strong> <code>int *p</code> declares one; <code>&amp;n</code> gets you the address to put in it.</li>
-<li><strong><code>*</code> has two unrelated jobs, and context tells them apart.</strong> In a declaration (<code>int *p</code>), it means "this is a pointer." On an existing pointer variable (<code>*p</code>), it means "go to that address": to read the value there, or to write a new one.</li>
-<li><strong>Pointers are 8 bytes (64 bits) on modern machines</strong>, regardless of what type they point to, because computers now have far more than the ~4 billion bytes a 32-bit address could reach.</li>
-<li><strong>A C string is a <code>char *</code></strong>, the address of its first character, nothing else. <code>string</code> (from <code>cs50.h</code>) is just a friendlier <code>typedef</code> name for exactly that type.</li>
-<li><strong><code>s[i]</code> and <code>*(s + i)</code> are the same instruction in two spellings.</strong> Bracket notation is syntactic sugar the compiler translates into pointer arithmetic behind the scenes.</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ Forgetting the <code>*</code> in a pointer declaration (<code>int p = &amp;n;</code> instead of <code>int *p = &amp;n;</code>): the compiler will reject it with an "incompatible pointer to integer conversion" error, because you tried to squeeze an 8-byte address into a 4-byte <code>int</code>.</li>
-<li>❌ Confusing the two meanings of <code>*</code>: writing <code>*p</code> when you meant to declare a new pointer, or forgetting the <code>*</code> when you meant to dereference one and go to that address.</li>
-<li>❌ Writing <code>p = 100;</code> when you meant <code>*p = 100;</code>: the first repoints <code>p</code> at a bogus address; the second changes the value <code>p</code> already points to.</li>
-<li>❌ Assuming <code>&amp;</code> belongs before every variable you pass around. You need <code>&amp;n</code> to get the address of an <code>int</code>, but a string variable <code>s</code> is <em>already</em> an address: writing <code>&amp;s</code> gives you the address of the pointer itself (a different, more advanced idea, "a pointer to a pointer," not needed here).</li>
-<li>❌ Expecting this to click on the first read. It is famously the hardest lesson in the course: reread the diagrams and lean on the capstone before judging yourself against a single pass.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: The Pointer Field Trip</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. You will declare a plain <code>int</code> and a pointer to it, predict what a whole page of <code>printf</code> calls will output <em>before you ever run the program</em>, and then prove, character by character, that array syntax and pointer arithmetic agree on a string. Every row you'll eventually pull out of a database table at the end of this course is, underneath, just bytes sitting at an address: this is the field trip where you finally see that terrain up close.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>A single file, <code>pointer_trip.c</code>, on cs50.dev, in two parts:</p>
-<ol>
-<li><strong>Part A, an int and a pointer to it.</strong> Declare an <code>int</code> and a pointer to it, then print every meaningful combination of value, address, and dereference, after writing down your prediction for each line first.</li>
-<li><strong>Part B, a string, two ways.</strong> Walk a string character-by-character using <code>s[i]</code>, and again using <code>*(s + i)</code>, printing both side by side to prove, for every index, that they match.</li>
-</ol>
-<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in the Pointer Field Trip</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Declaring a pointer (<code>int *p = &amp;n;</code>)</td>
-<td>Part A, milestone 2.</td>
-</tr>
-<tr>
-<td><code>&amp;</code> to get an address, <code>%p</code> to print one</td>
-<td>Part A, milestones 2-3.</td>
-</tr>
-<tr>
-<td><code>*p</code> to read and write through a pointer</td>
-<td>Part A, milestone 3.</td>
-</tr>
-<tr>
-<td>Pointers are 8 bytes regardless of type</td>
-<td>Part A, milestone 4 (stretch).</td>
-</tr>
-<tr>
-<td>String is <code>char *</code>; <code>s[i]</code> vs. <code>*(s + i)</code></td>
-<td>Part B, milestones 5-6.</td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>Set up.</strong> On cs50.dev, create <code>pointer_trip.c</code> with <code>#include &lt;stdio.h&gt;</code> at the top and an empty <code>int main(void)</code>.</li>
-<li><strong>Predict before you print.</strong> Inside <code>main</code>, declare <code>int n = 50;</code> then <code>int *p = &amp;n;</code>. Before writing a single <code>printf</code>, write down (in a comment, or on paper) what you expect each of the following to print: <code>n</code>, <code>&amp;n</code>, <code>p</code>, <code>*p</code>. Note which format code each needs: <code>%i</code> for a value, <code>%p</code> for an address.</li>
-<li><strong>Reveal and compare.</strong> Now add the four <code>printf</code> calls from your prediction list, compile with <code>make pointer_trip</code>, and run it. Confirm <code>&amp;n</code> and <code>p</code> print the <em>same</em> address, and <code>n</code> and <code>*p</code> print the <em>same</em> value. Then add one more line, <code>*p = 100;</code>, followed by <code>printf("%i\n", n);</code>, predict what it prints <em>before</em> running, then confirm.</li>
-<li><strong>Measure a pointer (stretch).</strong> Add <code>printf("%zu\n", sizeof(p));</code> (the <code>z u</code> format code prints an unsigned size). Confirm it prints <code>8</code>. Then declare a second pointer to a different type, such as <code>char *c;</code>, and confirm <code>sizeof(c)</code> is also <code>8</code>, even though a <code>char</code> and an <code>int</code> are different sizes.</li>
-<li><strong>Walk a string two ways.</strong> In the same file (or a new one, <code>string_walk.c</code>), declare <code>char *s = "computer";</code>. Write a <code>for</code> loop from <code>i = 0</code> up to (and including) <code>strlen(s)</code> that prints, on each pass, both <code>s[i]</code> and <code>*(s + i)</code> as characters (<code>%c</code>) side by side. Confirm every single row matches, including the final row at the null terminator.</li>
-<li><strong>Prove the address equivalence (stretch).</strong> Add one line printing <code>%p</code> for both <code>s</code> and <code>&amp;s[0]</code>. Confirm they are identical: this is the concrete proof that a string variable <em>is</em> the address of its first character.</li>
-</ol>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ You wrote your predictions for <code>n</code>, <code>&amp;n</code>, <code>p</code>, <code>*p</code> <em>before</em> compiling, and can say whether each one matched.</li>
-<li>✅ <code>&amp;n</code> and <code>p</code> print identical addresses; <code>n</code> and <code>*p</code> print identical values.</li>
-<li>✅ After <code>*p = 100;</code>, printing <code>n</code> shows <code>100</code>, proving you changed <code>n</code> by going through <code>p</code>, not by touching <code>n</code> directly.</li>
-<li>✅ <code>sizeof(p)</code> and <code>sizeof(c)</code> (or any other pointer type) both print <code>8</code>.</li>
-<li>✅ Your character-by-character walk shows <code>s[i]</code> and <code>*(s + i)</code> matching for every index from <code>0</code> through the null terminator.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> don't peek at the output before writing your prediction down. The entire point of this capstone is catching the moment your mental model and the computer's actual behavior either agree or don't: that gap is exactly where the learning happens.</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-sizeof-roulette-foundational">Exercise 1: <code>sizeof</code> roulette (foundational)</h3>
-<p>Declare a few different pointer variables (<code>int *a;</code>, <code>char *b;</code>, and if you're comfortable, <code>double *c;</code>) and print <code>sizeof</code> each one with <code>%zu</code>. Confirm they're all <code>8</code>, no matter what they point to. Then print <code>sizeof(int)</code>, <code>sizeof(char)</code>, and <code>sizeof(double)</code> themselves, and notice those numbers <em>do</em> differ. Write one sentence explaining, in your own words, why the pointer sizes don't change but the pointed-to sizes do.</p>
-<h3 id="exercise-2-string-detective-intermediate">Exercise 2: String detective (intermediate)</h3>
-<p>Given <code>char *s = "hello";</code>, predict, then print, <code>s</code>, <code>s + 1</code>, and <code>s + 2</code> using <code>%s</code> for each. In one sentence per line, explain why each one prints what it does, and why all three, despite starting from different characters, still know exactly when to stop.</p>
-<h3 id="exercise-3-write-through-a-pointer-from-a-function-advanced">Exercise 3: Write through a pointer, from a function (advanced)</h3>
-<p>Write a small function <code>void bump(int *p)</code> that adds <code>1</code> to whatever <code>p</code> points to (<code>*p = *p + 1;</code>). In <code>main</code>, declare an <code>int</code> set to any starting value, print it, call <code>bump</code> by passing its <em>address</em> (<code>bump(&amp;n);</code>), then print it again. Confirm the value changed, even though you never reassigned <code>n</code> directly in <code>main</code>. This is your first hint at why functions ever need pointers at all, a thread this course picks back up soon.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>DECLARING A POINTER
-  int *p;          p can store the address of an int (not yet pointing anywhere valid)
-  int *p = &amp;n;      p now stores n&#39;s actual address
-
-THE TWO JOBS OF *
-  int *p            (in a declaration) -&gt; &quot;p is a pointer to an int&quot;
-  *p                 (on an existing pointer) -&gt; &quot;go to the address in p&quot;
-  *p                 on the right of =  -&gt; READ the value there
-  *p = 100;          on the left of =   -&gt; WRITE a new value there
-
-THE ONE JOB OF &amp;
-  &amp;n                &quot;the address of n&quot;
-
-POINTER SIZE
-  sizeof(any pointer) == 8 bytes (64 bits) on a modern machine, ALWAYS,
-  no matter what type it points to.
-
-STRING = CHAR *
-  string s            (cs50.h)  is just a friendlier name for...
-  char *s              ...the address of s&#39;s first character.
-  s                    the address of the first character
-  &amp;s[0]                same address as s
-  s + i                the address of the (i+1)-th character
-  &amp;s[i]                same address as s + i
-  s[i]                 the (i+1)-th character itself
-  *(s + i)             same character as s[i]  &lt;- array syntax is sugar for this
-
-FORMAT CODES USED TODAY
-  %i    an int value          %p    a memory address
-  %s    a string (until \0)   %c    a single character
-  %zu   an unsigned size (from sizeof)
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 5 · Lesson 17:</strong> "Pixels, hexadecimal, and memory addresses" taught you to read a hex address like <code>0x123</code>: today you finally got a variable that can <em>hold</em> one.</li>
-<li><strong>Next, Module 5 · Lesson 19:</strong> "malloc, free, and hunting memory bugs": once you can store and follow addresses, the natural next question is "can I ask the computer for a brand-new chunk of memory of my own?" That's <code>malloc</code>, and it comes with new ways to get it wrong (and new tools, like Valgrind, to catch them).</li>
-<li><strong>Later, Module 6:</strong> linked lists, and every other pointer-based structure you'll build, are, in Malan's own framing, nothing but structs and pointers wired together. Everything you practiced here is the entire prerequisite for that leap.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 4 - Memory" by David J. Malan, Harvard University (CS50x 2026). Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+<hr /><div class="pager bottom"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="18-pointers-and-strings.html" class="cur" title="Start here">1</a><a href="18-pointers-and-strings-2.html" class="" title="Parts 2-3">2</a><a href="18-pointers-and-strings-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="18-pointers-and-strings-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="18" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="17-pixels-hex-addresses.html"><span class="dir">&#8592; Previous</span><b>Pixels, Hexadecimal, and Memory Addresses</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="19-malloc-free-valgrind.html"><span class="dir">Next &#8594;</span><b>malloc, free, and Hunting Memory Bugs</b></a></nav>
+    <div class="ls-marker" data-lesson-id="18" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="17-pixels-hex-addresses.html"><span class="dir">&#8592; Previous lesson</span><b>Pixels, Hexadecimal, and Memory Addresses</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 
@@ -820,13 +537,16 @@ document.querySelectorAll('.codehilite, pre').forEach(block=>{
 const map={'\u{1F511}':'cl-key','\u{1F4A1}':'cl-tip','✅':'cl-ok','❌':'cl-no','\u{1F3AF}':'cl-goal','\u{1F6E0}':'cl-goal'};
 document.querySelectorAll('blockquote').forEach(q=>{const t=(q.textContent||'').trim();for(const e in map){if(t.startsWith(e)){q.classList.add(map[e]);break}}});
 // check-off
+function wireList(el){if(el.dataset.wired)return;el.dataset.wired='1';el.classList.add('checkable');
+  el.querySelectorAll(':scope>li').forEach(li=>{const key='cwc:'+location.pathname+':'+li.textContent.slice(0,60);
+    if(localStorage.getItem(key))li.classList.add('checked');
+    li.addEventListener('click',ev=>{if(ev.target.tagName==='A')return;li.classList.toggle('checked');
+      li.classList.contains('checked')?localStorage.setItem(key,'1'):localStorage.removeItem(key)});});}
 function makeCheckable(rx){document.querySelectorAll('h2,h3').forEach(h=>{if(!rx.test(h.textContent))return;let el=h.nextElementSibling;
-  while(el&&!/^H[1-3]$/.test(el.tagName)){if(el.tagName==='OL'||el.tagName==='UL'){el.classList.add('checkable');
-    el.querySelectorAll(':scope>li').forEach(li=>{const key='cwc:'+location.pathname+':'+li.textContent.slice(0,60);
-      if(localStorage.getItem(key))li.classList.add('checked');
-      li.addEventListener('click',ev=>{if(ev.target.tagName==='A')return;li.classList.toggle('checked');
-        li.classList.contains('checked')?localStorage.setItem(key,'1'):localStorage.removeItem(key)});});}el=el.nextElementSibling;}});}
-makeCheckable(/learning objectives|milestones/i);
+  while(el&&!/^H[1-3]$/.test(el.tagName)){if(el.tagName==='OL'||el.tagName==='UL')wireList(el);el=el.nextElementSibling;}});}
+makeCheckable(/learning objectives|milestones|done when/i);
+// lists written as `- [ ] thing` are check-off lists wherever they appear
+document.querySelectorAll('ul.checkable,ol.checkable').forEach(wireList);
 // scrollspy
 const links=[...document.querySelectorAll('.toc a')];
 const heads=links.map(a=>a.getAttribute('href')).filter(h=>h&&h.startsWith('#')).map(h=>document.getElementById(h.slice(1))).filter(Boolean);

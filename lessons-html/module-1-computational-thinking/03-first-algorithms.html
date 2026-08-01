@@ -3,9 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 1 · Lesson 3: Your First Algorithms: Search and Pseudocode | Self-Paced CS50x</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iIzBhMWEyZiIvPjx0ZXh0IHg9IjE2IiB5PSIyMiIgZm9udC1mYW1pbHk9InVpLW1vbm9zcGFjZSxNZW5sbyxDb25zb2xhcyxtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjZjI0ZDYzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj4mZ3Q7XzwvdGV4dD48L3N2Zz4=">
-
+<title>Module 1 · Lesson 3: Your First Algorithms: Search and Pseudocode (p1/3) | Self-Paced CS50x</title>
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="shortcut icon" href="../assets/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -51,6 +53,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -142,13 +167,13 @@ code{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.86em;b
 .copy-btn.done{background:var(--teal);color:#04231c;border-color:var(--teal)}
 
 /* callouts */
-blockquote{margin:24px 0;padding:16px 20px;border-radius:14px;background:var(--soft);border:1px solid var(--line);border-left:5px solid var(--teal)}
+blockquote{margin:24px 0;padding:18px 22px;border-radius:14px;background:var(--soft);border:1px solid var(--line);box-shadow:var(--shadow)}
 blockquote p{margin:7px 0}blockquote p:first-child{margin-top:0}blockquote p:last-child{margin-bottom:0}
-blockquote.cl-key{background:var(--k-bg);border-left-color:var(--k);border-color:transparent}
-blockquote.cl-tip{background:var(--tip-bg);border-left-color:var(--tip);border-color:transparent}
-blockquote.cl-ok{background:var(--ok-bg);border-left-color:var(--ok);border-color:transparent}
-blockquote.cl-no{background:var(--no-bg);border-left-color:var(--no);border-color:transparent}
-blockquote.cl-goal{background:var(--goal-bg);border-left-color:var(--goal);border-color:transparent}
+blockquote.cl-key{background:var(--k-bg);border-color:transparent}
+blockquote.cl-tip{background:var(--tip-bg);border-color:transparent}
+blockquote.cl-ok{background:var(--ok-bg);border-color:transparent}
+blockquote.cl-no{background:var(--no-bg);border-color:transparent}
+blockquote.cl-goal{background:var(--goal-bg);border-color:transparent}
 
 /* capstone banner */
 h2.capstone-h{background:linear-gradient(115deg,var(--navy),var(--navy-3));color:#fff;border-radius:20px;padding:30px 28px 26px;margin-top:64px;box-shadow:0 20px 50px rgba(10,26,47,.3);overflow:hidden;position:relative}
@@ -203,42 +228,27 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <body>
 <div id="progress"></div>
 
-<div class="topbar"><div class="wrap">
-  <div>&#10024; Welcome to <b>Self-Paced CS50x</b> &middot; a self-paced course</div>
-  <div class="right"><span>CS50x 2026 · Harvard University · David J. Malan</span></div>
-</div></div>
+<div class="topbar"><div class="wrap"><div>&#10024; Welcome to <b>Self-Paced CS50x</b> &middot; a self-paced course</div><div class="right"><span>CS50x 2026 · Harvard University · David J. Malan</span></div></div></div>
 
 <nav class="bar"><div class="wrap">
   <button class="btn btn-outline" id="menuBtn" style="padding:8px 14px">&#9776;</button>
   <a class="logo" href="../index.html">Self-Paced CS50x<span class="dot">.</span></a>
   <div class="navlinks">
-    <a href="../index.html">All lessons</a>
-    <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="../index.html">All lessons</a><a href="#overview">Overview</a><a href="03-first-algorithms-3.html#capstone">Capstone</a>
   </div>
-  <div class="nav-cta">
-    <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
-  </div>
+<div class="nav-cta"><a class="btn btn-primary" href="#start">Start the lesson &#8594;</a></div>
 </div></nav>
 
 <header class="hero">
   <span class="blob t"></span><span class="blob c"></span>
-  <svg class="squiggle" style="top:120px;left:46%;" width="90" height="26" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#18c4a0" stroke-width="4" stroke-linecap="round"/></svg>
-  <svg class="squiggle" style="bottom:60px;right:40%;" width="70" height="22" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#f24d63" stroke-width="4" stroke-linecap="round"/></svg>
+<svg class="squiggle" style="top:120px;left:46%;" width="90" height="26" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#18c4a0" stroke-width="4" stroke-linecap="round"/></svg><svg class="squiggle" style="bottom:60px;right:40%;" width="70" height="22" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#f24d63" stroke-width="4" stroke-linecap="round"/></svg>
   <div class="wrap" id="overview">
     <div>
       <span class="eyebrow">&#10022; Module 1 · Lesson 3</span>
       <h1>Your First Algorithms: Search and <span class="accent">Pseudocode</span></h1>
       <p class="lead">An algorithm is just a step-by-step recipe for solving a problem, and the same problem, finding a name in a phone book, can be solved by a slow recipe or a dramatically faster one, which is why computer scientists write that recipe down first as plain-English pseudocode, built from just four ingredients: functions, conditionals, Boolean expressions, and loops.</p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
-        <a class="play" href="https://www.youtube.com/watch?v=UuIEbpQms8o" target="_blank" rel="noopener"><span class="circ">&#9654;</span> Watch the talk</a>
-      </div>
-      <div class="chips">
-        <span class="chip">&#127908; <b>David J. Malan</b></span>
-        <span class="chip">&#9201; <b>45-60 minutes</b></span>
-        <span class="chip">&#128296; <b>Hands-on capstone</b></span>
-      </div>
+<div class="hero-actions"><a class="btn btn-primary" href="#start">Start the lesson &#8594;</a><a class="play" href="https://www.youtube.com/watch?v=UuIEbpQms8o" target="_blank" rel="noopener"><span class="circ">&#9654;</span> Watch the talk</a></div>
+<div class="chips"><span class="chip">&#127908; <b>David J. Malan</b></span><span class="chip">&#9201; <b>45-60 minutes</b></span><span class="chip">&#128296; <b>Hands-on capstone</b></span></div>
     </div>
     <div style="position:relative">
       <div class="hero-card">
@@ -253,7 +263,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="03-first-algorithms-3.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -275,35 +285,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <li><a href="#why-the-difference-matters-so-much-n-vs-log-n">Why the difference matters so much: n vs. log n</a></li>
 </ul>
 </li>
-<li><a href="#part-2-pseudocode-and-the-four-building-blocks">Part 2: Pseudocode and the four building blocks</a><ul>
-<li><a href="#the-step-everybody-forgets">The step everybody forgets</a></li>
-</ul>
-</li>
-<li><a href="#part-3-machine-code-compilers-and-abstraction">Part 3: Machine code, compilers, and abstraction</a></li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: The Phone-Book Experiment</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
-<li><a href="#milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-pseudocode-for-a-shopping-list-foundational">Exercise 1: Pseudocode for a shopping list (foundational)</a></li>
-<li><a href="#exercise-2-the-doubling-effect-by-hand-intermediate">Exercise 2: The doubling effect, by hand (intermediate)</a></li>
-<li><a href="#exercise-3-count-and-report-advanced">Exercise 3: Count and report (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="03-first-algorithms.html" class="cur" title="Start here">1</a><a href="03-first-algorithms-2.html" class="" title="Parts 2-3">2</a><a href="03-first-algorithms-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="03-first-algorithms-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>An algorithm is just a step-by-step recipe for solving a problem, and the same problem, finding a name in a phone book, can be solved by a slow recipe or a dramatically faster one, which is why computer scientists write that recipe down first as plain-English pseudocode, built from just four ingredients: functions, conditionals, Boolean expressions, and loops.</p>
 <blockquote>
@@ -430,211 +418,9 @@ find it
 <blockquote>
 <p>🔑 <strong>The single most important takeaway of this part.</strong> Linear search's cost grows in direct proportion to the size of the problem (n). Binary search's cost grows in proportion to how many times you can cut n in half (log₂ n), which grows so slowly that doubling the problem barely moves the needle. That is the difference between an algorithm that scales and one that doesn't.</p>
 </blockquote>
-<hr />
-<h2 id="part-2-pseudocode-and-the-four-building-blocks">Part 2: Pseudocode and the four building blocks</h2>
-<p>Before Malan writes a single line of real code (that starts next lesson, in Scratch), he translates the "jump to the middle" phone-book algorithm into words: what programmers call pseudocode.</p>
-<blockquote>
-<p>"Pseudo code is not one formal thing, but every human will come up with their own way of representing pseudo code. It's an English-like or human-like formulation of step by step instructions just using terse correct English or whatever human language."</p>
-</blockquote>
-<p>Here is a reconstruction of the pseudocode he talks through on stage:</p>
-<div class="codehilite"><pre><span></span><code>1. Pick up the phone book.
-2. Open to the middle of the phone book.
-3. Look at the page.
-4. If the person is on the page,
-       call them.
-5. Else if the person is earlier in the book,
-       open to the middle of the left half,
-       and go back to step 3.
-6. Else if the person is later in the book,
-       open to the middle of the right half,
-       and go back to step 3.
-7. Else,
-       quit. (The person is not in the book.)
-</code></pre></div>
-
-<p>Notice this pseudocode is built from just four ingredients, and every algorithm you'll ever write (in Scratch, in C, in Python, in SQL) is built from the same four:</p>
-<p><strong>Functions.</strong> Each numbered step ("pick up," "open to," "look at," "call") is a small, self-contained piece of work.</p>
-<blockquote>
-<p>"Functions are verbs or actions that really get some small piece of work done for you."</p>
-</blockquote>
-<p><strong>Conditionals.</strong> Steps 4-7 are a fork in the road: depending on the answer to a question, you go down a different path.</p>
-<p><strong>Boolean expressions.</strong> The question at each fork, "is the person on this page?", has to have a yes-or-no answer.</p>
-<blockquote>
-<p>"A boolean expression is just a question that has a yes or no answer or a true or false answer or a 1 or zero answer."</p>
-</blockquote>
-<p><strong>Loops.</strong> Steps 5 and 6 both say "go back to step 3." That's not a mistake: it's deliberate repetition, and it's safe <em>because</em> each trip through it works on a smaller half of the book than the last:</p>
-<blockquote>
-<p>"A loop which somehow induces cyclical behavior again and again."</p>
-</blockquote>
-<h3 id="the-step-everybody-forgets">The step everybody forgets</h3>
-<p>Look closely at step 7 above. It isn't in the original three-step version of this algorithm. Malan adds it on stage, after pointing out a "perverse corner case": what if John Harvard simply isn't in the phone book at all? Without an explicit rule for that case, the loop in steps 5-6 has nothing to stop it, and the algorithm never terminates. Malan connects this directly to real-world software failures:</p>
-<blockquote>
-<p>"Some human at Google or Microsoft or Apple or the like made a mistake."</p>
-</blockquote>
-<p>That is, when your phone or laptop freezes or crashes for no obvious reason, it's very often because some programmer, somewhere, forgot to handle exactly this kind of "uncommon but possible" case.</p>
-<blockquote>
-<p>✅ <strong>What to do about it:</strong> whenever you write a loop, ask yourself "what condition makes this stop?" <em>and</em> "what happens if the thing I'm looking for was never there?" Write pseudocode for both before you write any real code.</p>
-</blockquote>
-<hr />
-<h2 id="part-3-machine-code-compilers-and-abstraction">Part 3: Machine code, compilers, and abstraction</h2>
-<p>Pseudocode is written for humans. Eventually, though, every algorithm has to run on a computer that, as you learned in Lesson 2, only ever understands 0s and 1s. Malan shows this gap directly on stage with a slide of raw 0s and 1s that, translated, just prints "hello world":</p>
-<blockquote>
-<p>"It turns out that not only do computers standardize information, data like numbers and letters and colors and other things, they also standardize instructions."</p>
-</blockquote>
-<p>Chip makers (Intel, AMD, Nvidia, and others) agree in advance on which patterns of 0s and 1s mean "add these two numbers," "load this from memory," or "print this to the screen." That raw language of 0s and 1s is <strong>machine code</strong>, and writing it by hand (the way the very earliest programmers did, literally punching holes in cards) is exactly as tedious as it sounds. So someone built a translator:</p>
-<blockquote>
-<p>"A compiler is just a program that translates one language to another."</p>
-</blockquote>
-<p>A <strong>compiler</strong> takes code written in a more human-friendly language (Malan uses C as the example) and turns it into the machine code a processor can run. And it doesn't stop there: languages like Python exist so you don't have to write C either; something else (an interpreter, which you'll meet properly when this course covers Python) converts Python for you, layer upon layer, all the way down to 0s and 1s.</p>
-<p>This layering is the idea Malan calls <strong>abstraction</strong>:</p>
-<blockquote>
-<p>"In computing there's this principle of abstraction where we start with the basics and thank God we can all trust that someone else solved these really hard problems way long ago."</p>
-</blockquote>
-<p>You never had to invent machine code, or write a compiler, or design ASCII, to write the pseudocode in Part 2. And starting next lesson, you won't have to invent Scratch's building blocks either, to use them. That's the whole point:</p>
-<blockquote>
-<p>"We can stand on the shoulders of others so long as we know how to use and assemble these kinds of building blocks."</p>
-</blockquote>
-<div class="codehilite"><pre><span></span><code>your pseudocode / your program
-            |
-            v
-   a higher-level language (Python, C, ...)
-            |
-            v
-      compiler / interpreter
-            |
-            v
-        machine code (0s and 1s)
-            |
-            v
-      transistors switching on/off
-</code></pre></div>
-
-<p>Each layer hides the one below it. That's exactly why you were able to follow the phone-book pseudocode in Part 2 without knowing anything about compilers, and it's why, starting in Lesson 4, you'll be able to snap together Scratch's building blocks without knowing how MIT implemented any of them underneath.</p>
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong>An algorithm is just step-by-step instructions for solving a problem.</strong> Correctness is necessary, but it isn't sufficient. A slow, correct algorithm and a fast, correct algorithm can solve the exact same problem.</li>
-<li><strong>Linear search's cost grows with n; binary search's cost grows with log₂ n.</strong> That difference barely matters for a 10-item list, and matters enormously for a million-item one.</li>
-<li><strong>Binary search only works on sorted data.</strong> Jumping to the middle only tells you which half to search next because the phone book was alphabetized first.</li>
-<li><strong>All pseudocode (and all real code) is built from four ingredients:</strong> functions (small pieces of work), conditionals (forks in the road), Boolean expressions (yes/no questions), and loops (deliberate repetition).</li>
-<li><strong>Abstraction is what lets you build without rebuilding.</strong> Compilers hide machine code from you; pseudocode hides real syntax from you; every layer of computing exists so the layer above doesn't have to reinvent it.</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ <strong>Forgetting the "not found" case.</strong> A loop that only knows how to keep searching, with no rule for "the item isn't here," can run forever or crash. Always write the failure branch.</li>
-<li>❌ <strong>Running binary search on unsorted data.</strong> If the list isn't ordered, "the middle" tells you nothing about which half to search next: the whole trick collapses.</li>
-<li>❌ <strong>Skipping items without a safety check.</strong> Malan's "check every 2nd page" approach is faster than checking every page, but it can walk right past the target; any shortcut like this needs an explicit rule for catching what it might skip.</li>
-<li>❌ <strong>Assuming "correct" means "good enough."</strong> A correct-but-slow algorithm can still be a bad choice once the problem gets big: always ask how the algorithm behaves as n grows, not just whether it works on today's small example.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: The Phone-Book Experiment</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. You'll physically run both search algorithms on a real, sorted list, count your own steps instead of a computer's, and then write down the faster one as pseudocode, proving to yourself, with your own hands, why n vs. log n is not just a theory.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>A small paper (or plain-text) experiment with three parts: step-count data comparing linear search to binary search, a simple graph of that data, and pseudocode for the binary search you performed, written using the four building blocks from Part 2.</p>
-<ul>
-<li>A sorted list you search by hand</li>
-<li>A table of how many items you had to check, for both methods, across a few targets</li>
-<li>Pseudocode for the binary-search algorithm, including its "not found" case</li>
-</ul>
-<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it in the Phone-Book Experiment</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Linear vs. binary search</td>
-<td>You physically perform both, on the same list</td>
-</tr>
-<tr>
-<td>n vs. log n</td>
-<td>Your own step counts become the data points on the graph</td>
-</tr>
-<tr>
-<td>Functions, conditionals, Boolean expressions, loops</td>
-<td>You write the binary-search pseudocode using exactly these four ingredients</td>
-</tr>
-<tr>
-<td>Handling the "not found" corner case</td>
-<td>Your pseudocode must say what happens when the target isn't in the list</td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-build-them-in-order-each-one-works-on-its-own">Milestones (build them in order, each one works on its own)</h3>
-<ol>
-<li><strong>Build your sorted list.</strong> Use a real dictionary, a printed phone book if you have one, or write out about 100 names, words, or numbers on paper and alphabetize (or numerically sort) them yourself.</li>
-<li><strong>Time linear search.</strong> Pick 5 target entries at random. For each one, search from the very first entry, checking one at a time, and count how many entries you looked at before you found it.</li>
-<li><strong>Time binary search.</strong> Using the same 5 targets, search by jumping to the middle of the list, deciding which half the target must be in, and repeating on that half only. Count how many entries you checked for each target.</li>
-<li><strong>Graph it.</strong> Make a simple table or hand-drawn plot of list size (or step count) for linear search vs. binary search, side by side. You should see linear search's numbers climb steadily while binary search's barely move.</li>
-<li><strong>Write the pseudocode.</strong> Using only the four building blocks, no real programming language, write down the exact steps of the binary search you just performed by hand, including the step for "the target isn't in the list at all."</li>
-<li><strong>Stretch goal.</strong> Repeat the experiment with a much bigger source (an actual dictionary with tens of thousands of entries works well) and see how few <em>additional</em> checks binary search needs even though the list is far bigger: Malan's "doubling" effect from Part 1, in your own numbers.</li>
-</ol>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ You have step counts for at least 5 targets under both linear search and binary search.</li>
-<li>✅ You can explain, in your own words, why the binary-search line stays nearly flat while the linear-search line keeps climbing.</li>
-<li>✅ Your pseudocode includes at least one conditional, one Boolean expression, and one loop, and it explicitly handles the case where the item is not found.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> don't peek at where the target is before you start each search. The whole point of an algorithm is that it works mechanically, step by step, even when you already know the answer: that discipline of writing precise, corner-case-aware steps is exactly what you'll lean on later when you design a database lookup for your own final project's web app, long before you write a single line of SQL.</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-pseudocode-for-a-shopping-list-foundational">Exercise 1: Pseudocode for a shopping list (foundational)</h3>
-<p>Write pseudocode, using functions, conditionals, and a loop, for linearly searching a shopping list of 20 items for one specific item. Make sure your pseudocode says what to do if the item isn't on the list.</p>
-<h3 id="exercise-2-the-doubling-effect-by-hand-intermediate">Exercise 2: The doubling effect, by hand (intermediate)</h3>
-<p>Without physically doing it, trace by hand roughly how many "cuts" binary search needs for a sorted list of 1,000 items, and then for 1,000,000 items. (Hint: each cut roughly doubles what you can rule out: how many times do you have to double 1 to pass 1,000? To pass 1,000,000?) Write a sentence or two explaining why the second answer isn't a thousand times bigger than the first.</p>
-<h3 id="exercise-3-count-and-report-advanced">Exercise 3: Count and report (advanced)</h3>
-<p>Extend the binary-search pseudocode you wrote in the Capstone so that it also keeps a running count of how many times it looked at a page, and reports that count once it finds (or fails to find) the target. Make sure the "not found" branch reports its count too.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>ALGORITHM = step-by-step instructions for solving a problem.
-
-THREE WAYS TO SEARCH A 1,000-PAGE PHONE BOOK:
-  check every page .......... ~1,000 checks .... grows with n
-  check every 2nd page ....... ~500 checks ..... still grows with n
-  jump to the middle, repeat . ~10 checks ...... grows with log2(n)
-
-DOUBLE THE PHONE BOOK (1,000 -&gt; 2,000 pages):
-  linear search:  doubles too       (~1,000 -&gt; ~2,000)
-  binary search:  barely changes    (~10 -&gt; ~11)
-
-BINARY SEARCH NEEDS SORTED DATA. No sort, no shortcut.
-
-PSEUDOCODE&#39;S FOUR BUILDING BLOCKS:
-  function            = one small verb/action (&quot;open to the middle&quot;)
-  conditional          = a fork in the road (&quot;if / else if / else&quot;)
-  Boolean expression    = a yes/no question (&quot;is the target on this page?&quot;)
-  loop                 = deliberate repetition (&quot;go back to step 3&quot;)
-
-ALWAYS WRITE THE &quot;NOT FOUND&quot; CASE. A loop with no exit for &quot;it isn&#39;t here&quot;
-can run forever.
-
-ABSTRACTION, layer by layer:
-  your pseudocode -&gt; higher-level language -&gt; compiler/interpreter
-  -&gt; machine code (0s and 1s) -&gt; transistors switching on/off
-  Each layer hides the one below it. That&#39;s why you can use a layer
-  without rebuilding it.
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 1 · Lesson 2:</strong> you learned that computers represent everything as 0s and 1s. This lesson used that fact directly: the phone book's names, and even the instructions that search it, are all just patterns of bits underneath.</li>
-<li><strong>Next, Module 1 · Lesson 4 (Programming in Scratch):</strong> you'll take the exact same four building blocks (functions, conditionals, Boolean expressions, and loops) and start snapping them together as real, runnable puzzle pieces for the first time.</li>
-<li><strong>Later, Module 4 (Algorithms):</strong> this lesson's informal n-vs-log n graph gets a formal name (Big O notation), and you'll implement linear search and binary search yourself in real C code, complete with running-time analysis.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 0 - Scratch" by David J. Malan, Harvard University. Pseudocode, diagrams, and step counts are illustrative reconstructions of the demonstrations described in the talk.</em></p>
+<hr /><div class="pager bottom"><span class="pcount">Page 1 of 3 &middot; Start here</span><div class="seg"><a href="03-first-algorithms.html" class="cur" title="Start here">1</a><a href="03-first-algorithms-2.html" class="" title="Parts 2-3">2</a><a href="03-first-algorithms-3.html" class="" title="Capstone &amp; wrap-up">3</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="03-first-algorithms-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="3" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="02-bits-and-binary.html"><span class="dir">&#8592; Previous</span><b>Bits and Binary: How Computers Represent Everything</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="04-programming-in-scratch.html"><span class="dir">Next &#8594;</span><b>Programming in Scratch</b></a></nav>
+    <div class="ls-marker" data-lesson-id="3" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="02-bits-and-binary.html"><span class="dir">&#8592; Previous lesson</span><b>Bits and Binary: How Computers Represent Everything</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 
@@ -752,13 +538,16 @@ document.querySelectorAll('.codehilite, pre').forEach(block=>{
 const map={'\u{1F511}':'cl-key','\u{1F4A1}':'cl-tip','✅':'cl-ok','❌':'cl-no','\u{1F3AF}':'cl-goal','\u{1F6E0}':'cl-goal'};
 document.querySelectorAll('blockquote').forEach(q=>{const t=(q.textContent||'').trim();for(const e in map){if(t.startsWith(e)){q.classList.add(map[e]);break}}});
 // check-off
+function wireList(el){if(el.dataset.wired)return;el.dataset.wired='1';el.classList.add('checkable');
+  el.querySelectorAll(':scope>li').forEach(li=>{const key='cwc:'+location.pathname+':'+li.textContent.slice(0,60);
+    if(localStorage.getItem(key))li.classList.add('checked');
+    li.addEventListener('click',ev=>{if(ev.target.tagName==='A')return;li.classList.toggle('checked');
+      li.classList.contains('checked')?localStorage.setItem(key,'1'):localStorage.removeItem(key)});});}
 function makeCheckable(rx){document.querySelectorAll('h2,h3').forEach(h=>{if(!rx.test(h.textContent))return;let el=h.nextElementSibling;
-  while(el&&!/^H[1-3]$/.test(el.tagName)){if(el.tagName==='OL'||el.tagName==='UL'){el.classList.add('checkable');
-    el.querySelectorAll(':scope>li').forEach(li=>{const key='cwc:'+location.pathname+':'+li.textContent.slice(0,60);
-      if(localStorage.getItem(key))li.classList.add('checked');
-      li.addEventListener('click',ev=>{if(ev.target.tagName==='A')return;li.classList.toggle('checked');
-        li.classList.contains('checked')?localStorage.setItem(key,'1'):localStorage.removeItem(key)});});}el=el.nextElementSibling;}});}
-makeCheckable(/learning objectives|milestones/i);
+  while(el&&!/^H[1-3]$/.test(el.tagName)){if(el.tagName==='OL'||el.tagName==='UL')wireList(el);el=el.nextElementSibling;}});}
+makeCheckable(/learning objectives|milestones|done when/i);
+// lists written as `- [ ] thing` are check-off lists wherever they appear
+document.querySelectorAll('ul.checkable,ol.checkable').forEach(wireList);
 // scrollspy
 const links=[...document.querySelectorAll('.toc a')];
 const heads=links.map(a=>a.getAttribute('href')).filter(h=>h&&h.startsWith('#')).map(h=>document.getElementById(h.slice(1))).filter(Boolean);

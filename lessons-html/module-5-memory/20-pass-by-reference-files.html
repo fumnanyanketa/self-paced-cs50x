@@ -3,9 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Module 5 · Lesson 20: Pass-by-Reference and File I/O | Self-Paced CS50x</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iIzBhMWEyZiIvPjx0ZXh0IHg9IjE2IiB5PSIyMiIgZm9udC1mYW1pbHk9InVpLW1vbm9zcGFjZSxNZW5sbyxDb25zb2xhcyxtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMTYiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjZjI0ZDYzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj4mZ3Q7XzwvdGV4dD48L3N2Zz4=">
-
+<title>Module 5 · Lesson 20: Pass-by-Reference and File I/O (p1/4) | Self-Paced CS50x</title>
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="shortcut icon" href="../assets/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -51,6 +53,29 @@ a.logo:hover{color:var(--teal)}
 .lessonnav .ln.home{flex:0 0 auto;justify-content:center;align-items:center;text-align:center;background:var(--soft)}
 .lessonnav .ln.home b{color:var(--teal-d)}
 .logo .dot{color:var(--teal)}
+
+/* in-lesson pager + compact header (multi-page lessons) */
+.lp-head{background:radial-gradient(120% 120% at 85% 0%,var(--navy-3),var(--navy) 62%);color:#eaf1f8;position:relative;overflow:hidden}
+.lp-head::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.3px,transparent 1.3px);background-size:22px 22px;opacity:.22;mask:radial-gradient(60% 60% at 20% 30%,#000,transparent)}
+.lp-head .wrap{position:relative;z-index:2;padding:34px 28px 30px}
+.lp-head .eyebrow{margin-bottom:12px}
+.lp-head h1{font-family:Poppins;font-weight:800;font-size:30px;line-height:1.12;margin:0;color:#fff}
+.lp-head .part{color:#b9c6d6;font-size:15px;margin:10px 0 0}
+.pager{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 30px;padding:14px 16px;background:var(--soft);border:1px solid var(--line);border-radius:14px}
+.pager .seg{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:150px}
+.pager .seg a{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12.5px;font-weight:700;font-family:Poppins;color:var(--muted);background:#fff;border:1px solid var(--line);transition:.15s}
+.pager .seg a:hover{border-color:var(--teal);color:var(--teal-d)}
+.pager .seg a.cur{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pager .pcount{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.pager .pbtns{display:flex;gap:9px;margin-left:auto}
+.pbtn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;transition:.15s;text-decoration:none}
+.pbtn:hover{border-color:var(--teal);color:var(--teal-d);transform:translateY(-1px)}
+.pbtn.disabled{opacity:.4;pointer-events:none}
+.pbtn.next{background:var(--teal);border-color:var(--teal);color:#04231c}
+.pbtn.next:hover{background:var(--teal-d);color:#fff}
+.pager.bottom{margin:44px 0 0}
+@media(max-width:920px){.lp-head .wrap{padding:26px 20px 24px}.lp-head h1{font-size:24px}.pager .pbtns{margin-left:0;width:100%}.pbtn{flex:1;justify-content:center}}
+
 .navlinks{display:flex;gap:24px;margin-left:8px}
 .navlinks a{color:#dde6ef;font-weight:500;font-size:15px}
 .navlinks a:hover{color:var(--teal)}
@@ -142,13 +167,13 @@ code{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:.86em;b
 .copy-btn.done{background:var(--teal);color:#04231c;border-color:var(--teal)}
 
 /* callouts */
-blockquote{margin:24px 0;padding:16px 20px;border-radius:14px;background:var(--soft);border:1px solid var(--line);border-left:5px solid var(--teal)}
+blockquote{margin:24px 0;padding:18px 22px;border-radius:14px;background:var(--soft);border:1px solid var(--line);box-shadow:var(--shadow)}
 blockquote p{margin:7px 0}blockquote p:first-child{margin-top:0}blockquote p:last-child{margin-bottom:0}
-blockquote.cl-key{background:var(--k-bg);border-left-color:var(--k);border-color:transparent}
-blockquote.cl-tip{background:var(--tip-bg);border-left-color:var(--tip);border-color:transparent}
-blockquote.cl-ok{background:var(--ok-bg);border-left-color:var(--ok);border-color:transparent}
-blockquote.cl-no{background:var(--no-bg);border-left-color:var(--no);border-color:transparent}
-blockquote.cl-goal{background:var(--goal-bg);border-left-color:var(--goal);border-color:transparent}
+blockquote.cl-key{background:var(--k-bg);border-color:transparent}
+blockquote.cl-tip{background:var(--tip-bg);border-color:transparent}
+blockquote.cl-ok{background:var(--ok-bg);border-color:transparent}
+blockquote.cl-no{background:var(--no-bg);border-color:transparent}
+blockquote.cl-goal{background:var(--goal-bg);border-color:transparent}
 
 /* capstone banner */
 h2.capstone-h{background:linear-gradient(115deg,var(--navy),var(--navy-3));color:#fff;border-radius:20px;padding:30px 28px 26px;margin-top:64px;box-shadow:0 20px 50px rgba(10,26,47,.3);overflow:hidden;position:relative}
@@ -203,42 +228,27 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <body>
 <div id="progress"></div>
 
-<div class="topbar"><div class="wrap">
-  <div>&#10024; Welcome to <b>Self-Paced CS50x</b> &middot; a self-paced course</div>
-  <div class="right"><span>CS50x 2026 · Harvard University · David J. Malan</span></div>
-</div></div>
+<div class="topbar"><div class="wrap"><div>&#10024; Welcome to <b>Self-Paced CS50x</b> &middot; a self-paced course</div><div class="right"><span>CS50x 2026 · Harvard University · David J. Malan</span></div></div></div>
 
 <nav class="bar"><div class="wrap">
   <button class="btn btn-outline" id="menuBtn" style="padding:8px 14px">&#9776;</button>
   <a class="logo" href="../index.html">Self-Paced CS50x<span class="dot">.</span></a>
   <div class="navlinks">
-    <a href="../index.html">All lessons</a>
-    <a href="#overview">Overview</a>
-    <a href="#capstone">Capstone</a>
+    <a href="../index.html">All lessons</a><a href="#overview">Overview</a><a href="20-pass-by-reference-files-4.html#capstone">Capstone</a>
   </div>
-  <div class="nav-cta">
-    <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
-  </div>
+<div class="nav-cta"><a class="btn btn-primary" href="#start">Start the lesson &#8594;</a></div>
 </div></nav>
 
 <header class="hero">
   <span class="blob t"></span><span class="blob c"></span>
-  <svg class="squiggle" style="top:120px;left:46%;" width="90" height="26" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#18c4a0" stroke-width="4" stroke-linecap="round"/></svg>
-  <svg class="squiggle" style="bottom:60px;right:40%;" width="70" height="22" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#f24d63" stroke-width="4" stroke-linecap="round"/></svg>
+<svg class="squiggle" style="top:120px;left:46%;" width="90" height="26" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#18c4a0" stroke-width="4" stroke-linecap="round"/></svg><svg class="squiggle" style="bottom:60px;right:40%;" width="70" height="22" viewBox="0 0 90 26" fill="none"><path d="M2 13c8-14 16 14 24 0s16 14 24 0 16 14 24 0" stroke="#f24d63" stroke-width="4" stroke-linecap="round"/></svg>
   <div class="wrap" id="overview">
     <div>
       <span class="eyebrow">&#10022; Module 5 · Lesson 20</span>
       <h1>Pass-by-Reference and File <span class="accent">I/O</span></h1>
       <p class="lead">A C function normally only gets copies of the variables you hand it, so it cannot change your originals, unless you hand it their addresses instead (pass by reference), which is also exactly how you read keyboard input safely with scanf and how you read and write actual files on disk with fopen, fprintf, and fread/fwrite.</p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="#start">Start the lesson &#8594;</a>
-        <a class="play" href="https://www.youtube.com/watch?v=db0H0U13YsA" target="_blank" rel="noopener"><span class="circ">&#9654;</span> Watch the talk</a>
-      </div>
-      <div class="chips">
-        <span class="chip">&#127908; <b>David J. Malan</b></span>
-        <span class="chip">&#9201; <b>60 minutes</b></span>
-        <span class="chip">&#128296; <b>Hands-on capstone</b></span>
-      </div>
+<div class="hero-actions"><a class="btn btn-primary" href="#start">Start the lesson &#8594;</a><a class="play" href="https://www.youtube.com/watch?v=db0H0U13YsA" target="_blank" rel="noopener"><span class="circ">&#9654;</span> Watch the talk</a></div>
+<div class="chips"><span class="chip">&#127908; <b>David J. Malan</b></span><span class="chip">&#9201; <b>60 minutes</b></span><span class="chip">&#128296; <b>Hands-on capstone</b></span></div>
     </div>
     <div style="position:relative">
       <div class="hero-card">
@@ -253,7 +263,7 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
           <li><span class="ic">&#128296;</span><span>A hands-on capstone you build step by step</span></li>
           <li><span class="ic">&#127919;</span><span>Optional practice drills to reinforce each skill</span></li>
         </ul>
-        <a class="btn btn-coral" href="#capstone" style="width:100%;justify-content:center">Jump to the project</a>
+        <a class="btn btn-coral" href="20-pass-by-reference-files-4.html#capstone" style="width:100%;justify-content:center">Jump to the project</a>
       </div>
     </div>
   </div>
@@ -273,34 +283,13 @@ footer.site .fnote{max-width:46em;font-size:13.5px;line-height:1.7}
 <li><a href="#prerequisites">Prerequisites</a></li>
 <li><a href="#part-1-the-glass-swap-demo-translated-into-broken-code">Part 1: The glass-swap demo, translated into broken code</a></li>
 <li><a href="#part-2-where-variables-actually-live-the-stack-and-the-heap">Part 2: Where variables actually live: the stack and the heap</a></li>
-<li><a href="#part-3-fixing-swap-with-pointers-pass-by-reference">Part 3: Fixing swap with pointers: pass by reference</a></li>
-<li><a href="#part-4-scanf-an-uninitialized-pointer-and-buffer-overflows">Part 4: scanf, an uninitialized pointer, and buffer overflows</a></li>
-<li><a href="#part-5-a-file-that-outlives-the-program-fopen-fprintf-fclose">Part 5: A file that outlives the program: fopen, fprintf, fclose</a></li>
-<li><a href="#part-6-copying-bytes-directly-fread-fwrite-and-a-teaser-for-image-filters">Part 6: Copying bytes directly: fread, fwrite, and a teaser for image filters</a></li>
-<li><a href="#key-takeaways">Key takeaways</a></li>
-<li><a href="#common-pitfalls">Common pitfalls</a></li>
-<li><a href="#capstone" class="toc-capstone">🛠️ Capstone Project: Swap it, save it, copy it</a><ul>
-<li><a href="#what-you-will-build">What you will build</a></li>
-<li><a href="#why-this-is-the-perfect-practice">Why this is the perfect practice</a></li>
-<li><a href="#milestones-each-one-works-and-proves-something-on-its-own">Milestones (each one works and proves something on its own)</a></li>
-<li><a href="#how-you-will-know-you-are-done">How you will know you are done</a></li>
-</ul>
-</li>
-<li><a href="#practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</a><ul>
-<li><a href="#exercise-1-increment-by-reference-foundational">Exercise 1: Increment by reference (foundational)</a></li>
-<li><a href="#exercise-2-a-phonebook-that-loops-intermediate">Exercise 2: A phonebook that loops (intermediate)</a></li>
-<li><a href="#exercise-3-count-the-bytes-without-copying-them-advanced">Exercise 3: Count the bytes without copying them (advanced)</a></li>
-</ul>
-</li>
-<li><a href="#cheat-sheet">Cheat sheet</a></li>
-<li><a href="#how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</a></li>
 </ul>
 </div>
 
   </div></aside>
   <main id="start">
     <article>
-      <hr />
+      <div class="pager top"><span class="pcount">Page 1 of 4 &middot; Start here</span><div class="seg"><a href="20-pass-by-reference-files.html" class="cur" title="Start here">1</a><a href="20-pass-by-reference-files-2.html" class="" title="Parts 3-5">2</a><a href="20-pass-by-reference-files-3.html" class="" title="Part 6">3</a><a href="20-pass-by-reference-files-4.html" class="" title="Capstone &amp; wrap-up">4</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="20-pass-by-reference-files-2.html">Next &#8594;</a></div></div><hr />
 <h2 id="in-one-sentence">In one sentence</h2>
 <p>A C function normally only gets <em>copies</em> of the variables you hand it, so it cannot change your originals, unless you hand it their addresses instead (pass by reference), which is also exactly how you read keyboard input safely with <code>scanf</code> and how you read and write actual files on disk with <code>fopen</code>, <code>fprintf</code>, and <code>fread</code>/<code>fwrite</code>.</p>
 <blockquote>
@@ -444,359 +433,9 @@ x is 1, y is 2
 <blockquote>
 <p>🔑 <strong>The single most important takeaway of this part.</strong> Every function call gets its own frame of stack memory that disappears when the function returns; <code>malloc</code> hands out separate memory from a different region, the heap. That's the real reason <code>swap</code>'s <code>a</code> and <code>b</code> are physically different memory from <code>main</code>'s <code>x</code> and <code>y</code>.</p>
 </blockquote>
-<hr />
-<h2 id="part-3-fixing-swap-with-pointers-pass-by-reference">Part 3: Fixing swap with pointers: pass by reference</h2>
-<p>Now that pass by value has an actual mechanism behind it (separate stack frames), the fix becomes concrete: instead of giving <code>swap</code> copies of the values, give it a "treasure map" to where the real values live.</p>
-<blockquote>
-<p>"We now have the ability to pass by reference, that is use pointers and addresses more generally to tell the function how to go to an address and do something there, how to go to another address and do something there." (David Malan)</p>
-</blockquote>
-<p>In practice, that means three small changes to the broken program from Part 1: make the parameters pointers (<code>int *a</code>, <code>int *b</code>), dereference them everywhere you used to use them directly, and pass in <em>addresses</em> (<code>&amp;x</code>, <code>&amp;y</code>) at the call site instead of the values themselves.</p>
-<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
-
-<span class="kt">void</span><span class="w"> </span><span class="nf">swap</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">b</span><span class="p">);</span>
-
-<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
-
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;x is %i, y is %i</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">);</span>
-<span class="w">    </span><span class="n">swap</span><span class="p">(</span><span class="o">&amp;</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">y</span><span class="p">);</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;x is %i, y is %i</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="kt">void</span><span class="w"> </span><span class="nf">swap</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">b</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">temp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="p">;</span>
-<span class="w">    </span><span class="o">*</span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">b</span><span class="p">;</span>
-<span class="w">    </span><span class="o">*</span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">temp</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>Run it now, and:</p>
-<div class="codehilite"><pre><span></span><code>x is 1, y is 2
-x is 2, y is 1
-</code></pre></div>
-
-<p>It works. Pictorially, <code>a</code> no longer holds a copy of <code>1</code>. It holds the <em>address</em> of <code>x</code>, so <code>a</code> points at <code>x</code> the way a foam finger points at something across the room. <code>*a</code> (the dereference operator, recapped from Lesson 19: <code>*</code> on an existing pointer means "go to the address it holds") means "go to wherever <code>a</code> is pointing and use the value that's actually there." So <code>*a = *b</code> genuinely means "go to <code>x</code>'s address and put what's at <code>y</code>'s address there", not a copy-of-a-copy, but the real thing.</p>
-<blockquote>
-<p>✅ <strong>What to do about it:</strong> any time you want a function to modify a caller's variable, give the function a pointer to that variable (<code>&amp;variable</code> at the call site, <code>type *parameter</code> in the function signature), and use <code>*parameter</code> inside the function to read or write the real value.</p>
-</blockquote>
-<hr />
-<h2 id="part-4-scanf-an-uninitialized-pointer-and-buffer-overflows">Part 4: scanf, an uninitialized pointer, and buffer overflows</h2>
-<p>Pass by reference is not just for fixing your own functions: it's <em>why</em> a built-in C function called <code>scanf</code> ("scan formatted input") needs an address, too. <code>scanf</code> is one of the functions the CS50 library's <code>get_int</code> is quietly built on top of, and you can rewrite <code>get_int</code> yourself with it:</p>
-<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
-
-<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;n: &quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%i&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">n</span><span class="p">);</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;n: %i</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>Malan explains why the <code>&amp;</code> is required here:</p>
-<blockquote>
-<p>"If scanf exists and it comes with C, its purpose in life is to scan an integer from the keyboard and put it somewhere you want. You can't just give it the variable name because it's going to get a copy of whatever garbage value is in there." (David Malan)</p>
-</blockquote>
-<p>In other words: <code>scanf</code> is a function like any other, and functions receive their arguments by value. If you handed it <code>n</code> directly, <code>scanf</code> would only get a worthless copy of whatever garbage was already sitting in <code>n</code>: it needs <code>n</code>'s <em>address</em> so it can reach back and actually store your keystrokes there, exactly like the fixed <code>swap</code> above.</p>
-<p>Strings, though, are where this gets genuinely dangerous. Since (from Lesson 19) a <code>char *</code> variable <em>is already an address</em>, you might reasonably try this, and it will very often seem to work at first:</p>
-<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
-
-<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">s</span><span class="p">;</span><span class="w">              </span><span class="c1">// BUG: s has never been given any memory</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;s: &quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%s&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">);</span><span class="w">        </span><span class="c1">// writes wherever s HAPPENS to point, anywhere at all</span>
-<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;s: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>No <code>&amp;</code> is used here (a <code>char *</code> is already an address, so adding <code>&amp;</code> would ask for the address of an address, a different concept entirely). The real bug is subtler and worse: <code>s</code> was declared but never pointed anywhere. It holds a <strong>garbage value</strong>: whatever leftover bits happened to already be in that spot of stack memory. Running Valgrind on this program surfaces the problem immediately: <em>"use of uninitialized value of size 8."</em> Every character <code>scanf</code> "successfully" stores is being written to a random, unallocated address:</p>
-<blockquote>
-<p>"You're touching memory that you yourself did not allocate as an array via malloc or some other mechanism." (David Malan)</p>
-</blockquote>
-<p>The program might appear to work on a short input purely by luck (the random address <code>s</code> points to happens to be unused at that moment) and then crash unpredictably on a longer one, or corrupt something else in memory silently. This is a <strong>buffer overflow</strong> in its most basic form:</p>
-<blockquote>
-<p>"A buffer overflow is generally just a chunk of memory like an array that actually just gets overflowed with too many values." (David Malan)</p>
-</blockquote>
-<p>The deeper problem is that you cannot know in advance how many characters a human is about to type (3, 30, or 3 million), so any fixed-size buffer you allocate yourself has to draw a line somewhere, and typing past that line corrupts memory C will not stop you from touching. <code>get_string</code> sidesteps this entirely by calling <code>malloc</code> again and again as you type, one more byte at a time, growing its buffer to fit, which is real, non-trivial work the CS50 library was quietly doing for you since week one.</p>
-<table>
-<thead>
-<tr>
-<th>Format code</th>
-<th>What you're handing <code>scanf</code></th>
-<th>Do you need <code>&amp;</code>?</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>%i</code> into an <code>int n</code></td>
-<td>the address of an already-existing <code>int</code></td>
-<td>Yes: <code>&amp;n</code>, because <code>n</code> itself is just a value</td>
-</tr>
-<tr>
-<td><code>%s</code> into a <code>char *s</code></td>
-<td>the address <code>s</code> already holds</td>
-<td>No: <code>s</code> <em>is</em> the address, but only if it was already pointed at real, allocated memory</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>❌ <strong>The trap:</strong> declaring a <code>char *</code> and using it with <code>scanf("%s", ...)</code> before it has ever been pointed at real memory (via <code>malloc</code>, or by making it an array like <code>char s[5]</code>). It will compile without complaint and may even run without complaint, right up until the moment it corrupts something you care about.</p>
-</blockquote>
-<hr />
-<h2 id="part-5-a-file-that-outlives-the-program-fopen-fprintf-fclose">Part 5: A file that outlives the program: fopen, fprintf, fclose</h2>
-<p>Every program you've written so far, Malan points out, even last week's in-memory phonebook, loses everything the instant it quits. Its variables lived only on the stack and the heap, both of which are <strong>RAM</strong>: fast, but volatile (wiped the moment power is lost). To make data survive, you need to write it to <strong>persistent storage</strong> (a hard drive or SSD) using a new set of tools called <strong>file I/O</strong>:</p>
-<blockquote>
-<p>"A file is just a bunch of bytes that are stored on disk." (David Malan)</p>
-<p>"With file I/O though, we have the ability now to start creating, saving, editing, deleting files, much like you would from the File menu of Google Docs, Microsoft Word, or the like." (David Malan)</p>
-</blockquote>
-<p>Let's build a real one: a phonebook that saves to <code>phonebook.csv</code>, a <strong>CSV</strong> ("comma-separated values") file, a plain-text way of storing rows and columns where each column is separated by a comma, openable in Excel, Numbers, or Google Sheets.</p>
-<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cs50.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
-
-<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="s">&quot;phonebook.csv&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;a&quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">file</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="w">    </span><span class="p">}</span>
-
-<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_string</span><span class="p">(</span><span class="s">&quot;Name: &quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_string</span><span class="p">(</span><span class="s">&quot;Number: &quot;</span><span class="p">);</span>
-
-<span class="w">    </span><span class="n">fprintf</span><span class="p">(</span><span class="n">file</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;%s,%s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">number</span><span class="p">);</span>
-
-<span class="w">    </span><span class="n">fclose</span><span class="p">(</span><span class="n">file</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p><code>fopen</code> opens (creating it, if needed) the file named <code>"phonebook.csv"</code>, and hands back a pointer, a <code>FILE *</code>, that every other file function needs, so they know which file to act on:</p>
-<blockquote>
-<p>"This is giving me a pointer to essentially the contents of that file. It's a bit of a white lie, technically giving you a pointer to a chunk of memory that represents that file, but for all intents and purposes it's a pointer to the file for now." (David Malan)</p>
-</blockquote>
-<p><code>fprintf</code> works exactly like <code>printf</code>, except its very first argument tells it <em>which</em> open file to write to. <code>fclose</code> then saves and releases the file: skip it, and your data may never actually make it to disk.</p>
-<p>There's one live bug Malan makes and fixes on stage that matters more than it looks: he first opens the file with mode <code>"w"</code> (write), runs the program twice, and finds only the <em>second</em> entry survives. The first is gone. That's because <code>"w"</code> mode means "start writing from byte 0 every time," silently erasing whatever was already there. The fix is mode <code>"a"</code> (append): start writing from the <em>end</em> of the existing file, keeping everything already saved. Every run after that adds one more line, and the phonebook genuinely accumulates:</p>
-<table>
-<thead>
-<tr>
-<th>Mode</th>
-<th>Meaning</th>
-<th>What happens to existing content</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>"r"</code></td>
-<td>read</td>
-<td>file must already exist; nothing is erased</td>
-</tr>
-<tr>
-<td><code>"w"</code></td>
-<td>write</td>
-<td>file is created if missing: <strong>erased and started over from byte 0</strong> if it already exists</td>
-</tr>
-<tr>
-<td><code>"a"</code></td>
-<td>append</td>
-<td>file is created if missing; existing content is <strong>kept</strong>, new writes go to the end</td>
-</tr>
-</tbody>
-</table>
-<p>And just like every pointer you've met since Lesson 19, <code>fopen</code> can fail (disk full, permissions wrong, path invalid) and signals that by returning <code>NULL</code>, the same sentinel value <code>malloc</code> returns on failure. Checking <code>file == NULL</code> before you do anything else with it is not optional politeness; it's the difference between a clean error and a crash.</p>
-<blockquote>
-<p>✅ <strong>What to do about it:</strong> open files you intend to keep adding to with <code>"a"</code>, not <code>"w"</code>, and always check the return value of <code>fopen</code> against <code>NULL</code> before you touch the file it (maybe) gave you.</p>
-</blockquote>
-<hr />
-<h2 id="part-6-copying-bytes-directly-fread-fwrite-and-a-teaser-for-image-filters">Part 6: Copying bytes directly: fread, fwrite, and a teaser for image filters</h2>
-<p>Text files like <code>phonebook.csv</code> are one thing; not every file is text. A photo, a song, a program, all of them are, underneath everything, just a sequence of raw bytes. To handle <em>any</em> file, C gives you two lower-level functions that read and write bytes directly, rather than formatted text: <code>fread</code> and <code>fwrite</code>.</p>
-<p>Malan builds a tiny, from-scratch version of the <code>cp</code> (copy) command every terminal already has, to show exactly how it works:</p>
-<blockquote>
-<p>"I want to copy this file from source to destination byte by byte, similar in spirit to a buffer like this where you're just grabbing from the internet one byte of the video at a time so as to watch it. In this case, I want to copy it." (David Malan)</p>
-</blockquote>
-<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
-
-<span class="k">typedef</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">byte</span><span class="p">;</span>
-
-<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
-<span class="p">{</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">argc</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="w">    </span><span class="p">}</span>
-
-<span class="w">    </span><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">src</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="s">&quot;rb&quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">dst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="s">&quot;wb&quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">src</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">NULL</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">dst</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="w">    </span><span class="p">}</span>
-
-<span class="w">    </span><span class="n">byte</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
-<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">fread</span><span class="p">(</span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">byte</span><span class="p">),</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">src</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="n">fwrite</span><span class="p">(</span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">byte</span><span class="p">),</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">dst</span><span class="p">);</span>
-<span class="w">    </span><span class="p">}</span>
-
-<span class="w">    </span><span class="n">fclose</span><span class="p">(</span><span class="n">dst</span><span class="p">);</span>
-<span class="w">    </span><span class="n">fclose</span><span class="p">(</span><span class="n">src</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div>
-
-<p>A few new pieces, each small: <code>typedef unsigned char byte;</code> gives the plain-old <code>char</code> type a more honest name for this job: a <strong>byte</strong> is 8 bits, and <code>unsigned</code> just means "don't interpret these bits as a possibly-negative number; they're raw data." The <code>"rb"</code> and <code>"wb"</code> modes are the same read/write modes from Part 5 with a <code>b</code> added, telling <code>fopen</code> this is <strong>binary</strong> data, not text, so nothing gets reinterpreted along the way. The loop itself is the whole idea in two lines: <code>fread</code> grabs the next single byte from the source file into <code>b</code> and reports back how many bytes it actually got (0 means "end of file, stop"); <code>fwrite</code> immediately writes that same byte to the destination. One byte, then the next, then the next, the exact same rhythm as a video player's buffer filling in while you watch.</p>
-<p>This is also, finally, the full, honest answer to a question the class asked back in Part 4, why pointers are unavoidable for files:</p>
-<blockquote>
-<p>"In C without pointers you just can't do file IO unless it's abstracted away for you by some library." (David Malan)</p>
-</blockquote>
-<p>Because <code>fread</code> and <code>fwrite</code> need to know <em>where</em> to put or get each byte, they take an address (<code>&amp;b</code>) as their target, pass by reference, the same mechanism from Part 3, doing real work on real files.</p>
-<p>And because this technique works byte by byte, on <em>any</em> file, it scales directly to something more fun than copying a phonebook: images. A photo is just a grid of pixels, each one a red, green, and blue value, stored back to back as bytes exactly like this. Once you can read and mutate a file's bytes, you can build actual photo filters:</p>
-<blockquote>
-<p>"You might be able to make it all grayscale by changing the R's, the G's, and the B's to... simpler values that are just black and white and gray tones. You might take that same photo as input and give it more of a sepia tone like an old school photograph instead." (David Malan)</p>
-</blockquote>
-<p>That's this week's problem set, in one sentence: apply grayscale, sepia, reflection, and blur filters to real photographs, all of it built on nothing more than the <code>fread</code>/<code>fwrite</code> byte-copying loop you just wrote.</p>
-<blockquote>
-<p>🎯 <strong>The goal of this part:</strong> notice that <code>fread</code>/<code>fwrite</code> don't care what the bytes <em>mean</em>: they'll copy a <code>.csv</code>, a <code>.bmp</code>, or any other file with the exact same eight-line loop. That generality is the whole point.</p>
-</blockquote>
-<hr />
-<h2 id="key-takeaways">Key takeaways</h2>
-<ol>
-<li><strong>Pass by value copies; pass by reference points.</strong> A plain <code>int x</code> argument gives a function a copy it can't use to change your original; an <code>int *x</code> argument (with <code>&amp;x</code> at the call site) gives it the real address, so <code>*x = ...</code> changes your actual variable.</li>
-<li><strong>The stack and the heap are different neighborhoods of memory.</strong> Function calls and local variables live on the stack (one frame per call, freed on return); <code>malloc</code>'d memory lives on the heap. Growing either one without bound risks a stack or heap overflow.</li>
-<li><strong><code>scanf</code> needs an address for the same reason your own functions do.</strong> <code>%i</code> needs <code>&amp;n</code>; <code>%s</code> into a <code>char *</code> doesn't need <code>&amp;</code>, but only if that pointer already points at real, allocated memory.</li>
-<li><strong>An uninitialized pointer is a loaded gun.</strong> A <code>char *</code> that's never been pointed at allocated memory holds a garbage address; writing through it (via <code>scanf</code> or otherwise) is a buffer overflow waiting to happen, and it may not crash until much later.</li>
-<li><strong><code>fopen</code> returns a pointer you must check.</strong> <code>NULL</code> means it failed; <code>"w"</code> erases existing content from byte 0, <code>"a"</code> appends to the end: pick <code>"a"</code> for anything meant to persist across runs.</li>
-<li><strong><code>fread</code>/<code>fwrite</code> move raw bytes, not text.</strong> Open with <code>"rb"</code>/<code>"wb"</code>, and the exact same copy loop works on a CSV, an image, or any other file at all.</li>
-</ol>
-<h2 id="common-pitfalls">Common pitfalls</h2>
-<ul>
-<li>❌ Writing a function that takes plain values when you actually need it to modify the caller's variables: you'll get correct-looking code that silently does nothing to your originals.</li>
-<li>❌ Forgetting the <code>&amp;</code> on a plain variable passed to <code>scanf</code> (for example, <code>scanf("%i", n)</code> instead of <code>scanf("%i", &amp;n)</code>): it compiles, but writes to a garbage address instead of your variable.</li>
-<li>❌ Declaring <code>char *s;</code> and using it with <code>scanf</code> or <code>strcpy</code> before it has ever been pointed at real, allocated memory: run it through Valgrind before you trust it.</li>
-<li>❌ Opening a file you want to keep growing with <code>"w"</code> instead of <code>"a"</code>: every run silently erases what was there before.</li>
-<li>❌ Skipping the <code>NULL</code> check after <code>fopen</code> (or <code>malloc</code>): the one time it fails silently is the one time your program crashes somewhere confusing, far from the real cause.</li>
-<li>❌ Forgetting <code>fclose</code>: your writes may never actually be saved to disk.</li>
-</ul>
-<hr />
-<h2 id="capstone" class="capstone-h">🛠️ Capstone Project: Swap it, save it, copy it</h2>
-<blockquote>
-<p>This is the main hands-on project for the lesson. You'll build three small, independent programs on cs50.dev, each one proving a single new power: mutating a caller's variables through a pointer, and reading and writing a persistent file. A CSV phonebook may look like a toy, but it's a database in embryo, and Module 8 grows this exact idea into a real Python-backed web app.</p>
-</blockquote>
-<h3 id="what-you-will-build">What you will build</h3>
-<p>Three short C programs, each a self-contained milestone:</p>
-<ol>
-<li><strong><code>swap.c</code></strong>: first the broken pass-by-value version (and proof, from its own output, that it fails), then the pass-by-reference fix.</li>
-<li><strong><code>phonebook.c</code></strong>: appends a name and number you type in to <code>phonebook.csv</code> every time you run it, and the file survives across runs.</li>
-<li><strong>(Stretch) <code>cp.c</code></strong>: your own byte-for-byte file copier using <code>fread</code>/<code>fwrite</code>, verified against any real file on your system.</li>
-</ol>
-<h3 id="why-this-is-the-perfect-practice">Why this is the perfect practice</h3>
-<table>
-<thead>
-<tr>
-<th>Lesson idea</th>
-<th>Where you use it</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Pass by value vs. pass by reference (Parts 1 and 3)</td>
-<td>Writing, breaking, and fixing <code>swap.c</code></td>
-</tr>
-<tr>
-<td>The stack and function frames (Part 2)</td>
-<td>Explaining out loud why the broken version fails before you fix it</td>
-</tr>
-<tr>
-<td><code>scanf</code> and pointer safety (Part 4)</td>
-<td>Getting a name and number safely with <code>get_string</code>, understanding why it's safer than raw <code>scanf</code></td>
-</tr>
-<tr>
-<td><code>fopen</code>/<code>fprintf</code>/<code>fclose</code> and <code>NULL</code> checks (Part 5)</td>
-<td>Building <code>phonebook.c</code></td>
-</tr>
-<tr>
-<td><code>fread</code>/<code>fwrite</code> and binary mode (Part 6)</td>
-<td>The stretch-goal <code>cp.c</code></td>
-</tr>
-</tbody>
-</table>
-<h3 id="milestones-each-one-works-and-proves-something-on-its-own">Milestones (each one works and proves something on its own)</h3>
-<ol>
-<li><strong>Build the broken swap.</strong> On cs50.dev, create <code>swap.c</code> with the pass-by-value version from Part 1 exactly as shown. Compile with <code>make swap</code> and run <code>./swap</code>. Confirm the printed output shows <code>x</code> and <code>y</code> <em>unchanged</em>: this is proof of the bug, not a mistake to hide.</li>
-<li><strong>Fix it with pointers.</strong> Change <code>swap</code>'s prototype and definition to take <code>int *a, int *b</code>, dereference them with <code>*</code> inside the function body, and pass <code>&amp;x, &amp;y</code> at the call site. Recompile and rerun; confirm the second <code>printf</code> now shows <code>x</code> and <code>y</code> genuinely swapped.</li>
-<li><strong>Build a persistent phonebook.</strong> Create <code>phonebook.c</code> using the code from Part 5: <code>fopen("phonebook.csv", "a")</code>, a <code>NULL</code> check, <code>get_string</code> for a name and a number, <code>fprintf</code> to save them as one CSV line, and <code>fclose</code>. Run it two or three times with different names and numbers.</li>
-<li><strong>Prove it persists.</strong> Open <code>phonebook.csv</code> directly (in the cs50.dev file explorer, or <code>cat phonebook.csv</code> in the terminal) and confirm every entry from every run is still there, in order: nothing got erased between runs.</li>
-<li><strong>(Stretch) Byte-copy any file.</strong> Write <code>cp.c</code> from Part 6 using <code>fread</code>/<code>fwrite</code> in binary mode. Run it on <code>phonebook.csv</code> (or any other small file you have) to produce a copy, then open the copy and confirm its contents match the original exactly.</li>
-<li><strong>(Stretch) Verify without trusting your eyes.</strong> Compare the original and the copy with the terminal's own <code>diff original copy</code> (or <code>cmp</code>). No output means the files are byte-for-byte identical: the strongest proof your <code>fread</code>/<code>fwrite</code> loop is correct.</li>
-</ol>
-<h3 id="how-you-will-know-you-are-done">How you will know you are done</h3>
-<ul>
-<li>✅ <code>./swap</code>'s output visibly changes between the broken version (Milestone 1) and the fixed version (Milestone 2): you have the "before" and "after" to compare.</li>
-<li>✅ <code>phonebook.csv</code> contains every entry from every run of <code>phonebook.c</code>, not just the most recent one.</li>
-<li>✅ Your <code>fopen</code> calls in both <code>phonebook.c</code> and (if attempted) <code>cp.c</code> check for <code>NULL</code> before doing anything else with the file.</li>
-<li>✅ (Stretch) <code>diff</code> reports no differences between your original file and <code>cp.c</code>'s copy of it.</li>
-</ul>
-<blockquote>
-<p>💡 <strong>Keep yourself honest:</strong> actually run the broken <code>swap.c</code> and look at its wrong output before you fix it. Skipping straight to the fixed version means you never see the exact failure pass by value causes, and that failure is the whole reason pass by reference exists.</p>
-</blockquote>
-<hr />
-<h2 id="practice-exercises-optional-extra-reps">Practice exercises (optional extra reps)</h2>
-<blockquote>
-<p><strong>What these are:</strong> small, self-contained tasks, each giving focused practice on one idea. Optional and independent; the Capstone already touches all of them, so feel free to skip straight to it.</p>
-</blockquote>
-<h3 id="exercise-1-increment-by-reference-foundational">Exercise 1: Increment by reference (foundational)</h3>
-<p>Write a function <code>void increment(int *n)</code> that adds one to whatever integer <code>n</code> points to. In <code>main</code>, declare an <code>int</code> set to some starting value, print it, call <code>increment</code> on its address, and print it again to confirm it actually changed.</p>
-<h3 id="exercise-2-a-phonebook-that-loops-intermediate">Exercise 2: A phonebook that loops (intermediate)</h3>
-<p>Modify <code>phonebook.c</code> from the Capstone so that, instead of quitting after one entry, it asks "Add another? (y/n)" in a loop, appending a new name and number to <code>phonebook.csv</code> each time you answer <code>y</code>, all within a single run of the program.</p>
-<h3 id="exercise-3-count-the-bytes-without-copying-them-advanced">Exercise 3: Count the bytes without copying them (advanced)</h3>
-<p>Write a program that takes one filename as a command-line argument, opens it in binary read mode, and uses <code>fread</code> in a loop (like <code>cp.c</code>'s) to count how many total bytes the file contains, without writing anything to a second file. Print the final count. Check your answer against the file size your operating system reports.</p>
-<hr />
-<h2 id="cheat-sheet">Cheat sheet</h2>
-<div class="codehilite"><pre><span></span><code>PASS BY VALUE vs PASS BY REFERENCE
-  void f(int a)     // gets a COPY of the caller&#39;s value: can&#39;t change the original
-  void f(int *a)    // gets the caller&#39;s ADDRESS: *a = ... changes the real thing
-  call: f(x)        // pass by value
-  call: f(&amp;x)        // pass by reference
-
-STACK vs HEAP
-  STACK  - local variables + function call frames, one frame per call, freed on return
-  HEAP   - malloc()&#39;d memory, lives until you free() it
-  Both share one finite pool of memory; let them collide -&gt; stack/heap overflow
-
-scanf
-  scanf(&quot;%i&quot;, &amp;n);     // n is an int  -&gt; need &amp; to get its address
-  scanf(&quot;%s&quot;, s);      // s is char *  -&gt; already an address, but MUST already
-                        //                 point at real, allocated memory first
-
-FILE I/O
-  FILE *file = fopen(&quot;name.csv&quot;, &quot;a&quot;);   // &quot;r&quot; read, &quot;w&quot; write (ERASES!), &quot;a&quot; append
-  if (file == NULL) { return 1; }         // always check
-  fprintf(file, &quot;%s,%s\n&quot;, name, number); // like printf, but to a file
-  fclose(file);                            // saves it, don&#39;t skip this
-
-BYTE COPYING
-  typedef unsigned char byte;
-  FILE *src = fopen(argv[1], &quot;rb&quot;);   // &quot;b&quot; = binary mode
-  FILE *dst = fopen(argv[2], &quot;wb&quot;);
-  byte b;
-  while (fread(&amp;b, sizeof(byte), 1, src) != 0)
-  {
-      fwrite(&amp;b, sizeof(byte), 1, dst);
-  }
-</code></pre></div>
-
-<h2 id="how-this-connects-to-the-rest-of-the-course">How this connects to the rest of the course</h2>
-<ul>
-<li><strong>Earlier, Module 5 · Lesson 19 (malloc, free, and hunting memory bugs):</strong> gave you the <code>*</code>/<code>&amp;</code> vocabulary, <code>malloc</code>/<code>free</code>, and Valgrind. This lesson spends that vocabulary on two new jobs: mutating a caller's variables and reading/writing files.</li>
-<li><strong>Next, Module 6 · Lesson 21 (Stacks, queues, and resizable arrays):</strong> be careful not to confuse "the stack" (this lesson's region of memory) with "a stack" (a data structure you'll build next lesson): they share a name because the data structure behaves the same way (last in, first out), which is exactly why memory's stack is called that.</li>
-<li><strong>Later, Module 8 · Lesson 28:</strong> reopens this exact <code>phonebook.csv</code> idea, rebuilt in Python, proof that the <em>concept</em> of a persistent, row-and-column file survives even when the language and the syntax around pointers disappears.</li>
-</ul>
-<hr />
-<p><em>Source: "CS50x 2026 - Lecture 4 - Memory" by David J. Malan, Harvard University (CS50x 2026). Code snippets and diagrams are illustrative reconstructions of the patterns described in the talk. Adapt them to the current SDK.</em></p>
+<hr /><div class="pager bottom"><span class="pcount">Page 1 of 4 &middot; Start here</span><div class="seg"><a href="20-pass-by-reference-files.html" class="cur" title="Start here">1</a><a href="20-pass-by-reference-files-2.html" class="" title="Parts 3-5">2</a><a href="20-pass-by-reference-files-3.html" class="" title="Part 6">3</a><a href="20-pass-by-reference-files-4.html" class="" title="Capstone &amp; wrap-up">4</a></div><div class="pbtns"><a class="pbtn prev disabled" href="#">&#8592; Prev</a><a class="pbtn next " href="20-pass-by-reference-files-2.html">Next &#8594;</a></div></div>
     </article>
-    <section class="lesson-sync" data-lesson-id="20" data-home="../index.html"><div class="ls-inner"><button type="button" class="ls-btn" data-lesson-complete>Mark this lesson complete</button><span class="ls-status" data-sync-status></span></div><a class="ls-track" href="../index.html">Your progress &#8594;</a></section><nav class="lessonnav"><a class="ln prev" href="19-malloc-free-valgrind.html"><span class="dir">&#8592; Previous</span><b>malloc, free, and Hunting Memory Bugs</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a><a class="ln next" href="../module-6-data-structures/21-stacks-queues-arrays.html"><span class="dir">Next &#8594;</span><b>Stacks, Queues, and Resizable Arrays</b></a></nav>
+    <div class="ls-marker" data-lesson-id="20" data-home="../index.html" style="display:none"></div><nav class="lessonnav"><a class="ln prev" href="19-malloc-free-valgrind.html"><span class="dir">&#8592; Previous lesson</span><b>malloc, free, and Hunting Memory Bugs</b></a><a class="ln home" href="../index.html"><b>All lessons</b></a></nav>
   </main>
 </div>
 
@@ -914,13 +553,16 @@ document.querySelectorAll('.codehilite, pre').forEach(block=>{
 const map={'\u{1F511}':'cl-key','\u{1F4A1}':'cl-tip','✅':'cl-ok','❌':'cl-no','\u{1F3AF}':'cl-goal','\u{1F6E0}':'cl-goal'};
 document.querySelectorAll('blockquote').forEach(q=>{const t=(q.textContent||'').trim();for(const e in map){if(t.startsWith(e)){q.classList.add(map[e]);break}}});
 // check-off
+function wireList(el){if(el.dataset.wired)return;el.dataset.wired='1';el.classList.add('checkable');
+  el.querySelectorAll(':scope>li').forEach(li=>{const key='cwc:'+location.pathname+':'+li.textContent.slice(0,60);
+    if(localStorage.getItem(key))li.classList.add('checked');
+    li.addEventListener('click',ev=>{if(ev.target.tagName==='A')return;li.classList.toggle('checked');
+      li.classList.contains('checked')?localStorage.setItem(key,'1'):localStorage.removeItem(key)});});}
 function makeCheckable(rx){document.querySelectorAll('h2,h3').forEach(h=>{if(!rx.test(h.textContent))return;let el=h.nextElementSibling;
-  while(el&&!/^H[1-3]$/.test(el.tagName)){if(el.tagName==='OL'||el.tagName==='UL'){el.classList.add('checkable');
-    el.querySelectorAll(':scope>li').forEach(li=>{const key='cwc:'+location.pathname+':'+li.textContent.slice(0,60);
-      if(localStorage.getItem(key))li.classList.add('checked');
-      li.addEventListener('click',ev=>{if(ev.target.tagName==='A')return;li.classList.toggle('checked');
-        li.classList.contains('checked')?localStorage.setItem(key,'1'):localStorage.removeItem(key)});});}el=el.nextElementSibling;}});}
-makeCheckable(/learning objectives|milestones/i);
+  while(el&&!/^H[1-3]$/.test(el.tagName)){if(el.tagName==='OL'||el.tagName==='UL')wireList(el);el=el.nextElementSibling;}});}
+makeCheckable(/learning objectives|milestones|done when/i);
+// lists written as `- [ ] thing` are check-off lists wherever they appear
+document.querySelectorAll('ul.checkable,ol.checkable').forEach(wireList);
 // scrollspy
 const links=[...document.querySelectorAll('.toc a')];
 const heads=links.map(a=>a.getAttribute('href')).filter(h=>h&&h.startsWith('#')).map(h=>document.getElementById(h.slice(1))).filter(Boolean);

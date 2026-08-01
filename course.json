@@ -2,23 +2,69 @@
   "title": "Self-Paced CS50x",
   "accent_word": "CS50x",
   "tagline": "Back to basics: the CS50x 2026 lectures re-taught as a self-paced path, with every term defined and every lesson ending in something you build.",
-  "source_label": "CS50x 2026 · Harvard University · David J. Malan",
+  "source_label": "CS50x 2026 \u00b7 Harvard University \u00b7 David J. Malan",
   "start_here": "module-0-preflight/00-pre-flight.html",
-  "sync": {"provider": "firebase"},
+  "sync": {
+    "provider": "firebase"
+  },
   "footer_note": "An unofficial self-paced companion generated from the CS50x 2026 lecture transcripts. CS50 is created by David J. Malan and Harvard University. Watch the original lectures and do the official problem sets at cs50.harvard.edu/x. Code snippets are illustrative reconstructions.",
   "modules": {
-    "0": {"name": "Pre-flight: getting set up", "blurb": "Optional on-ramp: cs50.dev, Scratch account, and your first terminal command before Lesson 1."},
-    "1": {"name": "Computational thinking", "blurb": "Inputs, outputs, binary, algorithms, and your first programs in Scratch."},
-    "2": {"name": "First real programs in C", "blurb": "Write, compile, run, and fix real code in a terminal."},
-    "3": {"name": "Debugging and what the compiler hides", "blurb": "Debug systematically; see how C really stores arrays and strings."},
-    "4": {"name": "Algorithms", "blurb": "Search, sort, recursion, and Big O: measure algorithms, don't just write them."},
-    "5": {"name": "Memory", "blurb": "Pointers, hexadecimal, the heap, and files: see the bytes."},
-    "6": {"name": "Data structures", "blurb": "Linked lists, trees, hash tables, and tries: trade speed for memory deliberately."},
-    "7": {"name": "Python", "blurb": "The same ideas, ten times less code."},
-    "8": {"name": "SQL and databases", "blurb": "Store data properly and query it declaratively."},
-    "9": {"name": "Artificial intelligence", "blurb": "Use AI well, and know how it works underneath."},
-    "10": {"name": "The web", "blurb": "From packets to pages: internet plumbing, HTML, CSS, JavaScript."},
-    "11": {"name": "Web apps with Flask", "blurb": "Everything so far becomes one real application."},
-    "12": {"name": "The finish line", "blurb": "Abstraction, precision, and shipping your own final project."}
+    "0": {
+      "name": "Pre-flight: getting set up",
+      "blurb": "Optional on-ramp: cs50.dev, Scratch account, and your first terminal command before Lesson 1."
+    },
+    "1": {
+      "name": "Computational thinking",
+      "blurb": "Inputs, outputs, binary, algorithms, and your first programs in Scratch."
+    },
+    "2": {
+      "name": "First real programs in C",
+      "blurb": "Write, compile, run, and fix real code in a terminal."
+    },
+    "3": {
+      "name": "Debugging and what the compiler hides",
+      "blurb": "Debug systematically; see how C really stores arrays and strings."
+    },
+    "4": {
+      "name": "Algorithms",
+      "blurb": "Search, sort, recursion, and Big O: measure algorithms, don't just write them."
+    },
+    "5": {
+      "name": "Memory",
+      "blurb": "Pointers, hexadecimal, the heap, and files: see the bytes."
+    },
+    "6": {
+      "name": "Data structures",
+      "blurb": "Linked lists, trees, hash tables, and tries: trade speed for memory deliberately."
+    },
+    "7": {
+      "name": "Python",
+      "blurb": "The same ideas, ten times less code."
+    },
+    "8": {
+      "name": "SQL and databases",
+      "blurb": "Store data properly and query it declaratively."
+    },
+    "9": {
+      "name": "Artificial intelligence",
+      "blurb": "Use AI well, and know how it works underneath."
+    },
+    "10": {
+      "name": "The web",
+      "blurb": "From packets to pages: internet plumbing, HTML, CSS, JavaScript."
+    },
+    "11": {
+      "name": "Web apps with Flask",
+      "blurb": "Everything so far becomes one real application."
+    },
+    "12": {
+      "name": "The finish line",
+      "blurb": "Abstraction, precision, and shipping your own final project."
+    }
+  },
+  "chrome": {
+    "compact_progress": true,
+    "account_strip": false,
+    "backup_actions": false
   }
 }

@@ -120,16 +120,13 @@ dialog button{background:var(--navy-3);color:#e8eef6;border:1px solid #1e3a5a;bo
   </div>
 </header>
 <div class="panel-wrap">
-<section class="progress-panel" data-progress-home>
-  <div class="pp-head">
-    <span class="pp-title">&#10022; Your progress</span>
-    <div class="account" id="account"><span class="dot"></span><span id="acct-msg">Starting up&hellip;</span><button id="acct-btn" style="display:none"></button></div>
-  </div>
-  <div class="stats"><div class="tile accent"><div class="big" id="s-count">0/0</div><div class="lbl">core lessons done</div></div><div class="tile"><div class="big" id="s-pct">0%</div><div class="lbl">of the course</div></div><div class="tile streak"><div class="big" id="s-streak">0</div><div class="lbl">day streak</div></div><div class="tile finish"><div class="big" id="s-finish">set a pace</div><div class="lbl">projected finish</div></div></div>
+<section class="progress-panel compact" data-progress-home>
+  <span class="cp-label">&#10022; Your progress</span>
   <div class="barwrap"><div id="bar"></div></div>
-  <div class="barrow"><span id="b-left"></span><span id="b-week">0 done in the last 7 days</span></div>
-  <div class="pace"><span>My pace:</span><button data-p="1">1 / day</button><button data-p="2">2 / day</button><button data-p="3">3 / day</button><button data-p="5">5 / day</button><span id="pace-note"></span></div>
-  <div class="actions"><button id="backup">Back up my progress</button><button id="restore">Restore from backup</button><button class="danger" id="reset">Reset all</button></div>
+  <span class="cp-pct" id="s-pct">0%</span>
+  <span class="cp-count" id="s-count"></span>
+
+
 </section>
 </div>
 <main class="wrap">
